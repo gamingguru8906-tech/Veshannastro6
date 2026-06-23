@@ -1,0 +1,79 @@
+/* ============================================================
+   smooth-scroll.css  —  Veshannastro
+   Production-ready smooth scrolling with fixed-header support
+   ============================================================
+
+   WHAT THIS FILE DOES:
+   1. Enables native CSS smooth scrolling on the <html> element
+   2. Adds scroll-padding-top so anchors land BELOW your 52px
+      fixed nav (not hidden under it)
+   3. Adds scroll-margin-top to every section so any browser
+      that needs it also gets the offset
+   4. Respects the OS "Reduce Motion" accessibility setting
+      by turning smooth scrolling OFF for users who need it
+   5. Adds a subtle momentum-like feel on iOS via -webkit-overflow-scrolling
+
+   HOW TO ADD THIS TO YOUR SITE:
+   Paste the ONE line below in your index.html <head>, just
+   before </head>:
+
+       <link rel="stylesheet" href="smooth-scroll.css">
+
+   Or paste the CSS directly — see setup-instructions.txt.
+   ============================================================ */
+
+
+/* ── 1. Global smooth scroll behaviour ──────────────────────
+   scroll-behavior:smooth tells the browser to animate any
+   programmatic scroll (anchor clicks, history.scrollTo, etc.)
+   using the browser's native scroll physics.                */
+html {
+  scroll-behavior: smooth;
+
+  /* ── 2. Fixed-header offset ───────────────────────────────
+     Your #site-nav is 52 px tall and position:fixed.
+     Without scroll-padding-top, clicking a nav link scrolls
+     the target section UNDER the nav bar.
+     We add 68 px (52 nav + 16 px breathing room).           */
+  scroll-padding-top: 68px;
+}
+
+/* ── 3. Per-section margin fallback ─────────────────────────
+   Some older browsers honour scroll-margin-top on the target
+   element instead of scroll-padding-top on <html>.
+   This covers both approaches.                              */
+section[id],
+div[id] {
+  scroll-margin-top: 68px;
+}
+
+/* ── 4. iOS momentum scrolling ──────────────────────────────
+   On Safari/iOS, -webkit-overflow-scrolling:touch gives a
+   native momentum / rubber-band feel to any scrollable
+   container (including the page itself).                    */
+html,
+body {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── 5. Accessibility: Reduce Motion ────────────────────────
+   Users who set "Reduce Motion" in their OS (common for
+   vestibular disorders, epilepsy, or plain preference) have
+   scroll animations turned OFF. This is the correct,
+   accessible behaviour.                                     */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;   /* instant jump, no animation */
+  }
+
+  *,
+  *::before,
+  *::after {
+    /* Also silence any CSS transition/animation that might
+       feel jarring for motion-sensitive users.             */
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

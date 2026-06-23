@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Your Report · Veshannastro</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1423451529588621');
+fbq('track', 'PageView');
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init({publicKey:'i35OrY8mtgVZMIQU8'});</script>
+<script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+
+<style>
+:root{
+  --deep:#04020a;
+  --bg:#0B0814;
+  --panel:#110D1D;
+  --gold:#c9a84c;
+  --gold-light:#f0d080;
+  --gold-pale:#e8d090;
+  --gold-dim:#7a5f28;
+  --cream:#f5efe0;
+  --ink:#F0EDE8;
+  --muted:#9A9088;
+  --err:#e07070;
+  --ok:#4caf7d;
+  --rule:rgba(201,168,76,0.16);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Jost',sans-serif;background:var(--bg);color:var(--ink);
+  min-height:100vh;line-height:1.6;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 50% -10%,rgba(201,168,76,0.08),transparent 70%),
+    radial-gradient(1.5px 1.5px at 12% 28%,rgba(245,239,224,0.3),transparent 100%),
+    radial-gradient(1px 1px at 80% 16%,rgba(245,239,224,0.25),transparent 100%),
+    radial-gradient(1.5px 1.5px at 88% 60%,rgba(201,168,76,0.25),transparent 100%),
+    radial-gradient(1px 1px at 26% 76%,rgba(245,239,224,0.2),transparent 100%);
+  background-attachment:fixed;
+}
+.rb-shell{max-width:680px;margin:0 auto;padding:2.2rem 1.2rem 5rem;}
+.rb-back{
+  display:inline-flex;align-items:center;gap:8px;color:var(--muted);text-decoration:none;
+  font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;font-family:'Cinzel',serif;
+  margin-bottom:2rem;transition:color .3s;
+}
+.rb-back:hover{color:var(--gold);}
+.rb-back svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8;}
+
+/* ── Service summary card ── */
+.rb-svc{
+  position:relative;background:linear-gradient(160deg,rgba(201,168,76,0.1),rgba(201,168,76,0.02) 60%);
+  border:1px solid rgba(201,168,76,0.35);border-radius:4px;
+  padding:1.7rem 1.6rem 1.5rem;margin-bottom:2.2rem;overflow:hidden;
+}
+.rb-svc::before{
+  content:'';position:absolute;top:0;left:8%;right:8%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.rb-svc-eyebrow{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.5rem;}
+.rb-svc-name{font-family:'Cormorant Garamond',serif;font-size:1.75rem;font-weight:500;color:var(--cream);line-height:1.2;}
+.rb-svc-desc{font-size:.8rem;color:var(--muted);margin-top:.55rem;max-width:46ch;}
+.rb-svc-meta{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin-top:1.1rem;}
+.rb-chip{
+  display:inline-flex;align-items:center;gap:6px;font-size:.66rem;letter-spacing:.05em;color:#B5AA9A;
+  border:0.5px solid var(--rule);border-radius:20px;padding:4px 11px;background:rgba(201,168,76,0.05);
+}
+.rb-chip svg{width:11px;height:11px;stroke:var(--gold);fill:none;stroke-width:1.6;flex-shrink:0;}
+.rb-price{
+  margin-left:auto;font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--gold-light);
+  display:flex;align-items:baseline;gap:6px;
+}
+.rb-price small{font-family:'Jost',sans-serif;font-size:.6rem;letter-spacing:.1em;color:var(--muted);}
+
+/* ── Form ── */
+.rb-form{
+  background:var(--panel);border:0.5px solid var(--rule);border-radius:4px;
+  padding:2rem 1.6rem 2.2rem;
+}
+.rb-step{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);display:block;margin:1.8rem 0 .9rem;}
+.rb-step:first-child{margin-top:0;}
+.rb-group{margin-bottom:1.15rem;}
+.rb-label{display:block;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#B5AA9A;margin-bottom:.45rem;}
+.rb-label .req{color:var(--gold);margin-left:2px;}
+.rb-input,.rb-select{
+  width:100%;background:rgba(255,255,255,0.03);border:0.5px solid var(--rule);border-radius:3px;
+  color:var(--ink);font-family:'Jost',sans-serif;font-size:.92rem;padding:13px 14px;
+  outline:none;transition:border-color .3s,box-shadow .3s;appearance:none;
+}
+.rb-input::placeholder{color:#5E574F;}
+.rb-input:focus,.rb-select:focus{border-color:rgba(201,168,76,0.6);box-shadow:0 0 0 3px rgba(201,168,76,0.08);}
+.rb-input.err{border-color:var(--err);}
+input[type=date].rb-input{color-scheme:dark;}
+.rb-err{display:none;color:var(--err);font-size:.7rem;margin-top:.35rem;letter-spacing:.03em;}
+.rb-hint{color:var(--muted);font-size:.68rem;margin-top:.35rem;letter-spacing:.03em;}
+.rb-phone-row{display:flex;gap:.6rem;}
+.rb-phone-row .rb-select{width:96px;flex-shrink:0;text-align:center;}
+.rb-row2{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;}
+@media(max-width:560px){.rb-row2{grid-template-columns:1fr;}}
+
+/* OTP */
+.rb-otp-btn{
+  width:100%;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--gold);background:rgba(201,168,76,0.07);border:0.5px solid rgba(201,168,76,0.45);
+  border-radius:3px;padding:13px;cursor:pointer;transition:background .3s,color .3s;
+}
+.rb-otp-btn:hover:not(:disabled){background:rgba(201,168,76,0.14);}
+.rb-otp-btn:disabled{opacity:.5;cursor:not-allowed;}
+#otp-input-section{display:none;margin-top:.9rem;}
+#otp-code{letter-spacing:.5em;text-align:center;font-size:1.15rem;}
+#otp-status{font-size:.74rem;margin-top:.55rem;letter-spacing:.03em;}
+#verified-strip{
+  display:none;align-items:center;gap:9px;background:rgba(76,175,125,0.08);
+  border:0.5px solid rgba(76,175,125,0.35);border-radius:3px;padding:11px 14px;
+  color:var(--ok);font-size:.8rem;letter-spacing:.04em;
+}
+#verified-strip svg{width:15px;height:15px;stroke:var(--ok);fill:none;stroke-width:2;}
+
+/* ── Palm upload ── */
+.rb-palm{display:none;}
+.rb-hands{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;}
+@media(max-width:560px){.rb-hands{grid-template-columns:1fr;}}
+.rb-upload{
+  position:relative;border:1px dashed rgba(201,168,76,0.35);border-radius:4px;
+  background:rgba(201,168,76,0.03);min-height:148px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:.5rem;text-align:center;cursor:pointer;
+  padding:1rem;transition:border-color .3s,background .3s;overflow:hidden;
+}
+.rb-upload:hover{border-color:rgba(201,168,76,0.65);background:rgba(201,168,76,0.06);}
+.rb-upload.err{border-color:var(--err);}
+.rb-upload input{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.rb-upload svg{width:26px;height:26px;stroke:var(--gold);fill:none;stroke-width:1.4;}
+.rb-upload-t{font-size:.78rem;color:var(--cream);letter-spacing:.04em;}
+.rb-upload-s{font-size:.64rem;color:var(--muted);}
+.rb-upload img.preview{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;
+}
+.rb-upload .redo{
+  position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:none;
+  font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cream);
+  background:rgba(4,2,10,0.78);border:0.5px solid rgba(201,168,76,0.5);border-radius:20px;padding:4px 12px;
+}
+.rb-upload.done img.preview{display:block;}
+.rb-upload.done .redo{display:block;}
+.rb-upload.done svg,.rb-upload.done .rb-upload-t,.rb-upload.done .rb-upload-s{visibility:hidden;}
+.rb-handopt{display:flex;gap:.7rem;}
+.rb-handopt label{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;
+  border:0.5px solid var(--rule);border-radius:3px;padding:12px;font-size:.82rem;color:#B5AA9A;
+  transition:border-color .3s,background .3s,color .3s;letter-spacing:.04em;
+}
+.rb-handopt input{display:none;}
+.rb-handopt label:has(input:checked){border-color:rgba(201,168,76,0.7);background:rgba(201,168,76,0.08);color:var(--gold-pale);}
+
+/* ── Submit ── */
+.rb-submit{
+  width:100%;margin-top:1.6rem;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--deep);background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  border:none;border-radius:3px;padding:17px;cursor:pointer;
+  transition:transform .3s,box-shadow .3s,opacity .3s;opacity:.55;
+}
+.rb-submit:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(201,168,76,0.3);}
+.rb-secure{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:.9rem;color:var(--muted);font-size:.66rem;letter-spacing:.08em;}
+.rb-secure svg{width:11px;height:11px;stroke:var(--gold-dim);fill:none;stroke-width:1.8;}
+
+/* ── Success ── */
+#rb-success{
+  display:none;text-align:center;background:var(--panel);border:1px solid rgba(201,168,76,0.4);
+  border-radius:4px;padding:3rem 1.6rem;
+}
+#rb-success.show{display:block;animation:rbIn .5s cubic-bezier(.34,1.28,.64,1);}
+@keyframes rbIn{from{opacity:0;transform:scale(.95) translateY(18px);}to{opacity:1;transform:none;}}
+.rb-okring{
+  width:64px;height:64px;border-radius:50%;margin:0 auto 1.3rem;display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(76,175,125,0.5);background:rgba(76,175,125,0.08);
+}
+.rb-okring svg{width:28px;height:28px;stroke:var(--ok);fill:none;stroke-width:2;}
+#rb-success h2{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:500;color:var(--cream);}
+#rb-success p{font-size:.84rem;color:var(--muted);max-width:44ch;margin:.8rem auto 0;}
+.rb-wa{
+  display:inline-flex;align-items:center;gap:9px;margin-top:1.6rem;text-decoration:none;
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--deep);background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  border-radius:3px;padding:14px 24px;transition:transform .3s,box-shadow .3s;
+}
+.rb-wa:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(201,168,76,0.3);}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+</style>
+</head>
+<body>
+<div class="rb-shell">
+
+  <a class="rb-back" href="https://www.veshannastro.co.in/index.html#guidance-paths">
+    <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Back to all services
+  </a>
+
+  <!-- Service summary -->
+  <div class="rb-svc">
+    <span class="rb-svc-eyebrow" id="svc-eyebrow">Veshannastro · Report Booking</span>
+    <div class="rb-svc-name" id="svc-name">Loading…</div>
+    <p class="rb-svc-desc" id="svc-desc"></p>
+    <div class="rb-svc-meta">
+      <span class="rb-chip" id="svc-delivery"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg><span></span></span>
+      <span class="rb-price"><s id="svc-orig" style="font-size:1rem;color:var(--muted);text-decoration-color:rgba(201,168,76,0.6);margin-right:2px;"></s>₹<span id="svc-price">—</span><small>all-inclusive</small></span>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="rb-form" id="rb-form-wrap">
+
+    <span class="rb-step">Step 1 · Your Details</span>
+
+    <div class="rb-group">
+      <label class="rb-label" for="rb-name">Full Name <span class="req">*</span></label>
+      <input type="text" class="rb-input" id="rb-name" placeholder="Your full name (as used daily)" autocomplete="name">
+      <div class="rb-err" id="rb-name-err">Please enter your full name</div>
+    </div>
+
+    <div class="rb-group">
+      <label class="rb-label" for="rb-dob">Date of Birth <span class="req">*</span></label>
+      <input type="date" class="rb-input" id="rb-dob" max="">
+      <div class="rb-err" id="rb-dob-err">Please select your date of birth</div>
+    </div>
+
+    <div class="rb-group" id="rb-analyze-group" style="display:none;">
+      <label class="rb-label" for="rb-analyze">Mobile Number to Analyse <span class="req">*</span></label>
+      <input type="tel" class="rb-input" id="rb-analyze" placeholder="The 10-digit number you want analysed" maxlength="10" inputmode="numeric">
+      <div class="rb-hint">This can be different from your contact number below.</div>
+      <div class="rb-err" id="rb-analyze-err">Please enter the 10-digit number to analyse</div>
+    </div>
+
+    <!-- Palm section -->
+    <div class="rb-palm" id="rb-palm-section">
+      <span class="rb-step">Step 2 · Your Palms</span>
+      <div class="rb-group">
+        <label class="rb-label">Upload Clear Photos of Both Palms <span class="req">*</span></label>
+        <div class="rb-hands">
+          <div class="rb-upload" id="up-left">
+            <input type="file" id="rb-left" accept="image/*" capture="environment">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span class="rb-upload-t">Left Palm</span>
+            <span class="rb-upload-s">Tap to upload or take photo</span>
+            <img class="preview" alt="Left palm preview">
+            <span class="redo">Tap to change</span>
+          </div>
+          <div class="rb-upload" id="up-right">
+            <input type="file" id="rb-right" accept="image/*" capture="environment">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span class="rb-upload-t">Right Palm</span>
+            <span class="rb-upload-s">Tap to upload or take photo</span>
+            <img class="preview" alt="Right palm preview">
+            <span class="redo">Tap to change</span>
+          </div>
+        </div>
+        <div class="rb-hint">Use daylight, open your palm fully, keep fingers slightly apart.</div>
+        <div class="rb-err" id="rb-palm-err">Please upload photos of both palms</div>
+      </div>
+      <div class="rb-group">
+        <label class="rb-label">Which is your dominant hand? <span class="req">*</span></label>
+        <div class="rb-handopt">
+          <label><input type="radio" name="rb-hand" value="Right">✋ Right Hand</label>
+          <label><input type="radio" name="rb-hand" value="Left">🤚 Left Hand</label>
+        </div>
+        <div class="rb-err" id="rb-hand-err">Please select your dominant hand</div>
+      </div>
+    </div>
+
+    <span class="rb-step" id="contact-step-label">Step 2 · Contact &amp; Verification</span>
+
+    <div class="rb-group">
+      <label class="rb-label" for="rb-phone">WhatsApp / Phone Number <span class="req">*</span></label>
+      <div class="rb-phone-row">
+        <select class="rb-select" id="rb-cc">
+          <option value="+91" selected>+91</option>
+          <option value="+971">+971</option>
+          <option value="+1">+1</option>
+          <option value="+44">+44</option>
+          <option value="+61">+61</option>
+          <option value="+65">+65</option>
+        </select>
+        <input type="tel" class="rb-input" id="rb-phone" placeholder="10-digit number" inputmode="numeric" autocomplete="tel">
+      </div>
+      <div class="rb-err" id="rb-phone-err">Please enter a valid phone number</div>
+    </div>
+
+    <div class="rb-group">
+      <label class="rb-label" for="rb-email">Email Address <span class="req">*</span></label>
+      <input type="email" class="rb-input" id="rb-email" placeholder="Your report will be delivered here" autocomplete="email">
+      <div class="rb-err" id="rb-email-err">Please enter a valid email address</div>
+    </div>
+
+    <div class="rb-group">
+      <button type="button" class="rb-otp-btn" id="otp-send-btn" onclick="_sendOTP()">Send OTP to Email →</button>
+      <div id="otp-input-section">
+        <input type="text" class="rb-input" id="otp-code" placeholder="••••••" maxlength="6" inputmode="numeric" autocomplete="one-time-code">
+        <button type="button" class="rb-otp-btn" id="otp-verify-btn" style="margin-top:.6rem;" onclick="_verifyOTP()">Verify OTP ✓</button>
+      </div>
+      <div id="otp-status"></div>
+      <div id="verified-strip">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        Email verified — you're all set.
+      </div>
+    </div>
+
+    <button type="button" class="rb-submit" id="rb-submit">Verify Email to Continue</button>
+    <div class="rb-secure">
+      <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      Secured by Razorpay · UPI, Cards, Netbanking accepted
+    </div>
+  </div>
+
+  <!-- Success -->
+  <div id="rb-success">
+    <div class="rb-okring"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <h2>Booking Confirmed ✦</h2>
+    <p id="rb-success-msg">Thank you! Payment received. Your report is being generated now and will arrive in your inbox within a few minutes (do check spam too).</p>
+    <a class="rb-wa" id="rb-wa-btn" href="#" target="_blank" rel="noopener">
+      Continue on WhatsApp →
+    </a>
+  </div>
+
+</div>
+
+<script>
+'use strict';
+/* ══════════ Service catalogue ══════════ */
+/* Prices below are kept STRICTLY in sync with the live homepage cards.
+   `extra` = the optional second input this report needs (mobile no., business name, etc.). */
+const SERVICES={
+  'name-numerology':{
+    name:'Name Numerology Report',price:299,orig:999,palm:false,noCoupon:true,
+    desc:'How your name\u2019s vibration shapes fortune and relationships — with practical correction suggestions if needed.',
+    delivery:'Delivered by email within 2–3 hours'
+  },
+  'mobile-numerology':{
+    name:'Mobile Number Analysis',price:299,orig:999,palm:false,noCoupon:true,
+    desc:'Is your mobile number working for you or against you? A complete vibration analysis with lucky-number recommendations.',
+    delivery:'Delivered by email within 2–3 hours',
+    extra:{label:'Mobile Number to Analyse',placeholder:'The 10-digit number you want analysed',hint:'This can be different from your contact number below.',type:'mobile',required:true}
+  },
+  'complete-numerology':{
+    name:'Complete Numerology Report',price:999,orig:3996,palm:false,noCoupon:true,
+    desc:'Life Path, Destiny, Soul Urge, name and mobile vibrations — your entire numeric blueprint in one detailed document.',
+    delivery:'Delivered by email within 2–3 hours'
+  },
+  'forecast-numerology':{
+    name:'Personal Year Forecast',price:499,orig:1996,palm:false,noCoupon:true,
+    desc:'Your Personal Year number unlocks the dominant theme of the year ahead — when to act, when to pause, and what the universe is asking of you right now.',
+    delivery:'12-month PDF · email within 2–3 hours'
+  },
+  'love-numerology':{
+    name:'Numerology Compatibility',price:299,orig:999,palm:false,noCoupon:true,
+    desc:'Two names, two birth dates — one complete picture. Discover whether your numbers harmonise or clash, and how to navigate your relationship\u2019s deepest patterns.',
+    delivery:'PDF report · email within 2–3 hours',
+    extra:{label:'Partner\u2019s Full Name & Date of Birth',placeholder:'e.g. Riya Sharma, 14 Aug 1996',hint:'Needed to compare both numerology charts.',type:'text',required:true}
+  },
+  'baby-name':{
+    name:'Baby Name Report',price:299,orig:999,palm:false,noCoupon:true,
+    desc:'Give your child a name that resonates with their soul\u2019s numbers. Receive 5+ name options aligned to their birth date, each explained with its numerological meaning and energy.',
+    delivery:'5+ name options · email within 24 hours',
+    extra:{label:'Preferred initial, sound or gender (optional)',placeholder:'e.g. start with \u201cA\u201d, or \u201cbaby girl\u201d',hint:'Optional — leave blank for fully open suggestions. Use the Date of Birth field above for the child\u2019s birth date.',type:'text',required:false}
+  },
+  'business-name':{
+    name:'Business Name Report',price:499,orig:1996,palm:false,noCoupon:true,
+    desc:'Your business name is its energetic foundation. Get a detailed analysis of your current name\u2019s vibration and 3–5 numerologically aligned alternatives for growth and prosperity.',
+    delivery:'3–5 name options · email within 24 hours',
+    extra:{label:'Current or Proposed Business Name',placeholder:'Your existing or planned business name',hint:'I\u2019ll analyse this name\u2019s vibration and suggest aligned alternatives.',type:'text',required:true}
+  },
+  'astrology-life-path-report':{
+    name:'Premium Vedic Life Path Report',price:699,orig:932,palm:false,noCoupon:true,
+    desc:'A premium written Vedic astrology report using birth chart, Moon, Nakshatra, Mahadasha, divisional support and five-year timing for career, marriage, money and life direction.',
+    delivery:'25-30 page PDF report',
+    extra:{label:'Birth Time, Birth Place, Gender & Focus Area',placeholder:'e.g. 14:35, Bhopal, Madhya Pradesh, Male, Career and marriage',hint:'Needed for accurate chart calculation and personalised report focus.',type:'text',required:true}
+  },
+  'divorce-separation-report':{
+    name:'Divorce & Separation Report',price:599,orig:799,palm:false,noCoupon:true,
+    desc:'A private written report combining Vedic relationship timing with numerology compatibility, emotional pattern analysis and practical do / avoid guidance.',
+    delivery:'Private astrology + numerology PDF report',
+    extra:{label:'Partner Details & Relationship Concern',placeholder:'Partner name, DOB, birth time/place if known, and your main concern',hint:'Share as much detail as available. If partner birth time is unknown, write unknown.',type:'text',required:true}
+  },
+  'palmistry-report':{
+    name:'Palmistry Report',price:149,orig:199,palm:true,noCoupon:true,
+    desc:'A detailed written analysis of your lines, mounts and life patterns, read from the photos of your palms.',
+    delivery:'Detailed report by email'
+  },
+  'palmistry-voice':{
+    name:'Palmistry Voice Consultation',price:374,orig:499,palm:true,noCoupon:true,
+    desc:'Everything in the written report, plus a personalised 10-minute voice consultation to walk through your palms together.',
+    delivery:'Report + 10-min voice session'
+  }
+};
+const qs=new URLSearchParams(location.search);
+const SERVICE_ALIASES={
+  'personal-year-forecast':'forecast-numerology',
+  'baby-name-report':'baby-name',
+  'business-name-report':'business-name',
+  'numerology-compatibility':'love-numerology',
+  'divorce_separation_report':'divorce-separation-report',
+  'premium_astrology_life_path':'astrology-life-path-report'
+};
+const rawKey=qs.get('service')||qs.get('product');
+const key=SERVICE_ALIASES[rawKey]||rawKey;
+const SVC=SERVICES[key]||SERVICES['complete-numerology'];
+SVC.final=SVC.noCoupon?SVC.price:Math.round(SVC.price*0.9); // 10% new-user coupon (skipped where price is already final)
+
+/* ── Which services are auto-generated by the report backend (service key -> report product) ── */
+const AUTO_REPORT={
+  'name-numerology':'name',
+  'mobile-numerology':'mobile',
+  'complete-numerology':'complete',
+  'forecast-numerology':'forecast',
+  'love-numerology':'love',
+  'baby-name':'baby',
+  'business-name':'business',
+  'astrology-life-path-report':'premium_astrology_life_path',
+  'divorce-separation-report':'premium_divorce_separation'
+};  /* service key -> report product the engine (Code.gs) builds */
+
+/* ── Where the customer's details are logged on successful payment ──
+   Routed to TWO separate destinations depending on the service:
+
+   1) Premium Vedic Life Path Report + Divorce & Separation Report
+      -> the "Premium Reports" tab on the main Bookings spreadsheet
+         (docs.google.com/spreadsheets/d/1szUQVdkLnQ-3v0VqntabwT-ZE-AIMwG8jZs7vdq0D50)
+         via a dedicated Apps Script Web App (does not touch the
+         existing Bookings tab or its script).
+
+   2) Every other report on this page (all numerology reports +
+      both palmistry products)
+      -> the report archive sheet
+         (docs.google.com/spreadsheets/d/1dKaSZpQT9MgtsIZWnkU6vBoeWMvz0O_kK49gL_4TmTc)
+         via its own Apps Script Web App.
+
+   Paste in the /exec URLs once each script is deployed. */
+const SHEET_A2_LOG_URL='https://script.google.com/macros/s/AKfycbx82o6EC1UOXqy6Qb4COBaaSR4ZAtT75_6VQtJjETT7gkqBFqI_cBlZtL_gGN7Y6hwp/exec';
+const SHEET_B_LOG_URL='https://script.google.com/macros/s/AKfycbyqlvGLsnrkX8SFV628FamzArfHBkV-_00XPE9rBlzzdFz1BwmbIy0ho3zs0PUtRmds/exec';
+
+/* Services that go to the Premium Reports tab instead of the report archive */
+const PREMIUM_TAB_KEYS=['astrology-life-path-report','divorce-separation-report'];
+
+/* ── Report backend — auto-generates & emails the PDF after payment ── */
+const BACKEND_URL='https://report-generator-vjwc.onrender.com';
+
+/* ── Populate UI ── */
+document.title='Book '+SVC.name+' · Veshannastro';
+document.getElementById('svc-name').textContent=SVC.name;
+document.getElementById('svc-desc').textContent=SVC.desc;
+document.getElementById('svc-price').textContent=SVC.price.toLocaleString('en-IN');
+document.querySelector('#svc-delivery span').textContent=SVC.delivery;
+document.getElementById('svc-orig').textContent='₹'+SVC.orig.toLocaleString('en-IN');
+(function(){
+  var meta=document.querySelector('.rb-svc-meta');
+  var off=document.createElement('span');
+  off.className='rb-chip';
+  off.style.cssText='border-color:rgba(201,168,76,0.6);color:#F0D080;background:rgba(201,168,76,0.14);font-family:Cinzel,serif;font-size:8px;letter-spacing:.22em;text-transform:uppercase;';
+  off.textContent=Math.round((1-SVC.price/SVC.orig)*100)+'% OFF · Auto-Applied';
+  meta.insertBefore(off,meta.querySelector('.rb-price'));
+  if(!SVC.noCoupon){
+    var off2=off.cloneNode();
+    off2.textContent='Extra 10% New-User Coupon ✓';
+    meta.insertBefore(off2,meta.querySelector('.rb-price'));
+  }
+  var pay=document.createElement('div');
+  pay.style.cssText='width:100%;margin-top:.6rem;font-size:.74rem;letter-spacing:.04em;color:var(--ok);';
+  pay.innerHTML='You pay only <b style="font-family:Cormorant Garamond,serif;font-size:1.05rem;">\u20B9'+SVC.final.toLocaleString('en-IN')+'</b> — '+(SVC.noCoupon?'discount auto-applied at checkout.':'both discounts auto-applied at checkout.');
+  meta.parentNode.appendChild(pay);
+})();
+if(SVC.palm){
+  document.getElementById('rb-palm-section').style.display='block';
+  document.getElementById('contact-step-label').innerHTML='Step 3 · Contact &amp; Verification';
+}
+if(SVC.extra){
+  var grp=document.getElementById('rb-analyze-group');
+  grp.style.display='block';
+  var lbl=document.querySelector('#rb-analyze-group .rb-label');
+  lbl.innerHTML=SVC.extra.label+(SVC.extra.required?' <span class="req">*</span>':(/optional/i.test(SVC.extra.label)?'':' <span style="color:var(--muted);font-size:.8em;">(optional)</span>'));
+  var inp=document.getElementById('rb-analyze');
+  inp.placeholder=SVC.extra.placeholder||'';
+  if(SVC.extra.type==='mobile'){inp.type='tel';inp.setAttribute('inputmode','numeric');inp.setAttribute('maxlength','10');}
+  else{inp.type='text';inp.removeAttribute('inputmode');inp.removeAttribute('maxlength');}
+  document.querySelector('#rb-analyze-group .rb-hint').textContent=SVC.extra.hint||'';
+}
+document.getElementById('rb-dob').max=new Date().toISOString().split('T')[0];
+
+/* ══════════ Palm photo handling (client-side compression) ══════════ */
+const palmData={left:null,right:null};
+function bindUpload(boxId,inputId,side){
+  const box=document.getElementById(boxId),inp=document.getElementById(inputId);
+  inp.addEventListener('change',function(){
+    const f=this.files&&this.files[0];if(!f)return;
+    const img=new Image();
+    img.onload=function(){
+      const MAX=900;let w=img.width,h=img.height;
+      if(Math.max(w,h)>MAX){const r=MAX/Math.max(w,h);w=Math.round(w*r);h=Math.round(h*r);}
+      const c=document.createElement('canvas');c.width=w;c.height=h;
+      c.getContext('2d').drawImage(img,0,0,w,h);
+      palmData[side]=c.toDataURL('image/jpeg',0.62);
+      box.querySelector('img.preview').src=palmData[side];
+      box.classList.add('done');box.classList.remove('err');
+      URL.revokeObjectURL(img.src);
+    };
+    img.src=URL.createObjectURL(f);
+  });
+}
+if(SVC.palm){bindUpload('up-left','rb-left','left');bindUpload('up-right','rb-right','right');}
+
+/* ══════════ Email OTP (EmailJS) ══════════ */
+(function(){
+  const OTP_EXPIRY_MS=10*60*1000;
+  let _otpCode=null,_otpExpiry=null;
+  window._emailVerified=false;
+
+  function generateOTP(){return String(Math.floor(100000+Math.random()*900000));}
+  function expectedLen(){return document.getElementById('rb-cc').value==='+91'?10:{'+971':9,'+1':10,'+44':10,'+61':9,'+65':8}[document.getElementById('rb-cc').value]||10;}
+  window._expectedLen=expectedLen;
+
+  window._sendOTP=function(){
+    const emailEl=document.getElementById('rb-email');
+    const btn=document.getElementById('otp-send-btn');
+    const statusEl=document.getElementById('otp-status');
+    const email=emailEl.value.trim();
+    if(!email||!/^[^@]+@[^@]+\.[^@]+$/.test(email)){
+      document.getElementById('rb-email-err').style.display='block';
+      emailEl.classList.add('err');
+      statusEl.textContent='Please enter a valid email address above first.';
+      statusEl.style.color='var(--err)';
+      emailEl.scrollIntoView({behavior:'smooth',block:'center'});
+      return;
+    }
+    document.getElementById('rb-email-err').style.display='none';
+    emailEl.classList.remove('err');
+    const ph=(document.getElementById('rb-phone').value||'').replace(/\D/g,'');
+    if(ph.length!==expectedLen()){
+      document.getElementById('rb-phone-err').textContent='Please enter exactly '+expectedLen()+' digits first';
+      document.getElementById('rb-phone-err').style.display='block';
+      document.getElementById('rb-phone').classList.add('err');
+      return;
+    }
+    document.getElementById('rb-phone-err').style.display='none';
+    document.getElementById('rb-phone').classList.remove('err');
+
+    btn.disabled=true;btn.textContent='Sending…';statusEl.textContent='';
+    _otpCode=generateOTP();_otpExpiry=Date.now()+OTP_EXPIRY_MS;
+
+    emailjs.send('service_3oqwdr2','template_otp_verify',{
+      to_email:email,otp_code:_otpCode,
+      user_name:document.getElementById('rb-name').value.trim()||'Valued Customer',
+      expiry_min:'10'
+    }).then(function(){
+      document.getElementById('otp-input-section').style.display='block';
+      document.getElementById('otp-code').value='';
+      document.getElementById('otp-code').focus();
+      statusEl.textContent='✓ OTP sent to '+email+'. Check inbox (and spam folder).';
+      statusEl.style.color='var(--ok)';
+      startCountdown(btn);
+    }).catch(function(err){
+      console.error('EmailJS OTP error:',err);
+      btn.disabled=false;btn.textContent='Send OTP to Email →';
+      statusEl.textContent='Failed to send OTP. Check your connection and try again.';
+      statusEl.style.color='var(--err)';
+      _otpCode=null;
+    });
+  };
+
+  function startCountdown(btn){
+    let s=60;btn.textContent='Resend OTP in '+s+'s';
+    const t=setInterval(function(){
+      s--;
+      if(s<=0){clearInterval(t);btn.disabled=false;btn.textContent='Resend OTP →';}
+      else btn.textContent='Resend OTP in '+s+'s';
+    },1000);
+  }
+
+  window._verifyOTP=function(){
+    const code=(document.getElementById('otp-code').value||'').trim();
+    const statusEl=document.getElementById('otp-status');
+    if(!code||code.length!==6){statusEl.textContent='Please enter the 6-digit OTP sent to your email.';statusEl.style.color='var(--err)';return;}
+    if(!_otpCode){statusEl.textContent='Please request an OTP first.';statusEl.style.color='var(--err)';return;}
+    if(Date.now()>_otpExpiry){statusEl.textContent='OTP expired. Please resend a new one.';statusEl.style.color='var(--err)';_otpCode=null;return;}
+    if(code!==_otpCode){statusEl.textContent='Incorrect OTP. Please check your email and try again.';statusEl.style.color='var(--err)';return;}
+    window._emailVerified=true;
+    try{fbq('track','Lead');}catch(e){}
+    _otpCode=null;
+    document.getElementById('otp-input-section').style.display='none';
+    document.getElementById('otp-send-btn').style.display='none';
+    document.getElementById('verified-strip').style.display='flex';
+    statusEl.textContent='';
+    const sub=document.getElementById('rb-submit');
+    sub.textContent='Proceed to Pay ₹'+SVC.final.toLocaleString('en-IN')+' (Coupons Applied)';
+    sub.style.opacity='1';
+  };
+})();
+
+/* ══════════ Validation + Razorpay ══════════ */
+function buildWhatsAppMessage(p){
+  let m='Hi, I have booked: '+SVC.name+' (₹'+SVC.final+' — coupons applied).%0AName: '+encodeURIComponent(p.from_name)+'%0ADOB: '+encodeURIComponent(p.dob);
+  if(p.payment_id)m+='%0APayment ID: '+p.payment_id;
+  if(SVC.palm)m+='%0ADominant hand: '+encodeURIComponent(p.dominant_hand||'')+'%0A(I will also send my palm photos here.)';
+  return m;
+}
+
+function collectFormData(){
+  const dob=document.getElementById('rb-dob').value;
+  const d=dob?new Date(dob+'T00:00:00'):null;
+  const dobStr=d?d.toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'}):'';
+  const p={
+    from_name:document.getElementById('rb-name').value.trim(),
+    email:document.getElementById('rb-email').value.trim(),
+    phone:(document.getElementById('rb-cc').value||'+91')+' '+document.getElementById('rb-phone').value.trim(),
+    dob:dobStr,
+    tob:'Not required',
+    pob:'Not required',
+    query:'',
+    consult_date:'',consult_time:'',
+    service:SVC.name,
+    amount:'₹'+SVC.final.toLocaleString('en-IN')+(SVC.noCoupon?' (discount applied)':' (discount + 10% coupon applied)')
+  };
+  if(SVC.extra){
+    var exVal=document.getElementById('rb-analyze').value.trim();
+    p.extra=exVal;
+    if(exVal)p.query=SVC.extra.label+': '+exVal;
+  }
+  if(SVC.palm){
+    const hand=document.querySelector('input[name="rb-hand"]:checked');
+    p.dominant_hand=hand?hand.value:'';
+    p.query='Dominant hand: '+p.dominant_hand+'. Palm photos: attached / to follow on WhatsApp.';
+  }
+  return p;
+}
+
+function sendEmailAndShowSuccess(params){
+  function showSuccess(){
+    document.getElementById('rb-form-wrap').style.display='none';
+    const s=document.getElementById('rb-success');
+    s.classList.add('show');
+    if(SVC.palm){
+      document.getElementById('rb-success-msg').textContent='Payment successful! Final step: tap below and send the photos of both palms on WhatsApp so your reading can begin.';
+      document.getElementById('rb-wa-btn').textContent='Send Palm Photos on WhatsApp →';
+    }
+    document.getElementById('rb-wa-btn').href='https://wa.me/918827684725?text='+buildWhatsAppMessage(params);
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  emailjs.send('service_3oqwdr2','template_ruq37kg',params)
+    .then(showSuccess)
+    .catch(function(err){console.warn('EmailJS notification skipped:',err.text||err.message||err);showSuccess();});
+
+  /* Palm photos: best-effort second email with compressed images */
+  if(SVC.palm&&palmData.left&&palmData.right){
+    emailjs.send('service_3oqwdr2','template_ruq37kg',{
+      from_name:params.from_name+' (PALM PHOTOS)',
+      email:params.email,phone:params.phone,dob:params.dob,
+      tob:'-',pob:'-',consult_date:'',consult_time:'',
+      service:SVC.name+' — Palm Photos',amount:params.amount,
+      query:'Dominant hand: '+(params.dominant_hand||'')+'\nLEFT PALM:\n'+palmData.left.substring(0,40000)+'\n\nRIGHT PALM:\n'+palmData.right.substring(0,40000)
+    }).catch(function(e){console.warn('Palm photo email skipped (size limits) — customer will send via WhatsApp.',e&&(e.text||e.message));});
+  }
+}
+
+document.getElementById('rb-submit').addEventListener('click',function(){
+  if(!window._emailVerified){
+    const st=document.getElementById('otp-status');
+    st.textContent='Please verify your email first — click "Send OTP to Email" above.';
+    st.style.color='var(--err)';
+    document.getElementById('otp-send-btn').scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  let valid=true;
+  function check(id,errId,fn){
+    const el=document.getElementById(id),err=document.getElementById(errId);
+    if(!fn(el?el.value:'')){if(el)el.classList.add('err');if(err)err.style.display='block';valid=false;}
+    else{if(el)el.classList.remove('err');if(err)err.style.display='none';}
+  }
+  check('rb-name','rb-name-err',v=>v.trim().length>2);
+  check('rb-dob','rb-dob-err',v=>!!v);
+  check('rb-email','rb-email-err',v=>/^[^@]+@[^@]+\.[^@]+$/.test(v));
+  check('rb-phone','rb-phone-err',v=>v.replace(/\D/g,'').length===window._expectedLen());
+  if(SVC.extra&&SVC.extra.required){
+    if(SVC.extra.type==='mobile')check('rb-analyze','rb-analyze-err',v=>v.replace(/\D/g,'').length===10);
+    else check('rb-analyze','rb-analyze-err',v=>v.trim().length>1);
+  }
+  if(SVC.palm){
+    if(!palmData.left||!palmData.right){
+      document.getElementById('rb-palm-err').style.display='block';
+      if(!palmData.left)document.getElementById('up-left').classList.add('err');
+      if(!palmData.right)document.getElementById('up-right').classList.add('err');
+      valid=false;
+    }else document.getElementById('rb-palm-err').style.display='none';
+    if(!document.querySelector('input[name="rb-hand"]:checked')){
+      document.getElementById('rb-hand-err').style.display='block';valid=false;
+    }else document.getElementById('rb-hand-err').style.display='none';
+  }
+  if(!valid){
+    const firstErr=document.querySelector('.rb-err[style*="block"],.rb-input.err,.rb-upload.err');
+    if(firstErr)firstErr.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+
+  const params=collectFormData();
+  const btn=this;
+  function resetBtn(){btn.disabled=false;btn.textContent='Proceed to Pay ₹'+SVC.final.toLocaleString('en-IN')+' (Coupons Applied)';}
+
+  if(window.location.protocol==='file:'){
+    alert('⚠ Payment cannot run from a local file.\n\nUpload this page to your hosting and open via https:// — payments will then work.');
+    return;
+  }
+  if(typeof Razorpay==='undefined'){
+    const waUrl='https://wa.me/918827684725?text='+buildWhatsAppMessage(params);
+    if(confirm('Payment gateway could not be reached (possibly blocked by an ad-blocker).\n\nClick OK to complete your booking via WhatsApp instead.')){window.open(waUrl,'_blank');}
+    return;
+  }
+  btn.disabled=true;btn.textContent='Opening Payment…';
+
+  try{
+    const options={
+      key:'rzp_live_T0NA0F3UpQiZxl',
+      amount:SVC.final*100,
+      currency:'INR',
+      name:'Veshannastro',
+      description:SVC.name+' ('+Math.round((1-SVC.price/SVC.orig)*100)+'% OFF applied)',
+      prefill:{name:params.from_name,email:params.email,contact:(document.getElementById('rb-cc').value||'+91')+document.getElementById('rb-phone').value.replace(/\D/g,'')},
+      theme:{color:'#c9a84c'},
+      notes:(AUTO_REPORT[key]?{name:params.from_name,dob:document.getElementById('rb-dob').value,email:params.email,phone:params.phone,gender:'',extra:(SVC.extra?document.getElementById('rb-analyze').value.trim():''),source:'veshann_report',product:AUTO_REPORT[key],report_type:AUTO_REPORT[key]}:{}),
+      modal:{ondismiss:resetBtn},
+      handler:function(response){
+        params.payment_id=response.razorpay_payment_id;
+        try{fbq('track','Purchase',{value:SVC.final,currency:'INR'});}catch(e){}
+
+        /* ── Auto-generate & email PDF report via backend ── */
+        /* The Razorpay webhook handles this automatically.
+           This fetch is a belt-and-suspenders trigger in case the webhook is slow. */
+        if(AUTO_REPORT[key]){
+          fetch(BACKEND_URL+'/trigger-report',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({
+              name:params.from_name,
+              dob:document.getElementById('rb-dob').value,
+              email:params.email,
+              gender:'',
+              report_type:AUTO_REPORT[key],
+              extra:SVC.extra?document.getElementById('rb-analyze').value.trim():'',
+              payment_id:response.razorpay_payment_id,
+              order_id:response.razorpay_order_id||response.razorpay_payment_id
+            })
+          }).catch(function(e){console.warn('Direct trigger skipped (webhook will handle):',e);});
+        }
+
+        try{
+          if(PREMIUM_TAB_KEYS.indexOf(key)!==-1){
+            /* Premium Reports tab — same spreadsheet as Bookings, separate tab */
+            fetch(SHEET_A2_LOG_URL,{
+              method:'POST',
+              body:JSON.stringify({
+                timestamp:new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}),
+                name:params.from_name,phone:params.phone,email:params.email,
+                category:'Premium Report',focus:SVC.name,duration:'',
+                service:params.service,amount:params.amount,
+                dob:params.dob,birthTime:'',birthPlace:'',
+                sessionDate:'',sessionTime:'',
+                message:params.query||'',extra:params.extra||'',
+                report_type:AUTO_REPORT[key]||'',
+                source:'Website - Paid',payment_id:params.payment_id
+              }),
+              mode:'no-cors'
+            });
+          } else {
+            /* Report archive sheet — all numerology reports + palmistry */
+            fetch(SHEET_B_LOG_URL,{
+              method:'POST',
+              body:JSON.stringify({
+                timestamp:new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}),
+                order_id:params.payment_id,
+                name:params.from_name,
+                dob:params.dob,
+                email:params.email,
+                gender:'',
+                report_type:AUTO_REPORT[key]||key,
+                extra:params.extra||params.query||'',
+                drive_url:'',
+                status:'Paid'
+              }),
+              mode:'no-cors'
+            });
+          }
+        }catch(e){console.warn('Sheet log failed:',e);}
+        sendEmailAndShowSuccess(params);
+      }
+    };
+    const rzp=new Razorpay(options);
+    rzp.on('payment.failed',function(response){
+      resetBtn();
+      const msg=response&&response.error&&response.error.description?response.error.description:'Unknown error';
+      alert('Payment failed: '+msg+'\nPlease try again.');
+    });
+    try{fbq('track','InitiateCheckout',{value:SVC.final,currency:'INR'});}catch(e){}
+    rzp.open();
+  }catch(err){
+    resetBtn();
+    console.error('Razorpay error:',err);
+    alert('Could not open payment gateway: '+err.message+'\nPlease reload and try again.');
+  }
+});
+</script>
+<style id="index-match-pass">
+/* ════════ MATCH INDEX VIBE — light form · navy ink · MAROON accents ════════
+   Token remap (dark→light) + form/input/button fixes. Delete to revert.       */
+:root{
+  --bg:#F4EFE6; --panel:#FFFFFF; --ink:#23201D; --muted:#6A615A; --cream:#23201D;
+  --gold:#8C1C2E; --gold-light:#6E1423; --gold-pale:#8C1C2E; --gold-dim:#A8823C;
+  --rule:rgba(35,32,29,.14);
+  --maroon-t:#6E1423; --maroon-t2:#8C1C2E;
+}
+body{background:#F4EFE6!important;
+  background-image:radial-gradient(ellipse 90% 55% at 50% 0%,#FBF8F2,transparent 62%)!important;
+  color:var(--ink)!important;}
+.rb-svc,.rb-form{background:#FFFFFF!important;border:1px solid rgba(35,32,29,.12)!important;
+  box-shadow:0 1px 2px rgba(35,32,29,.05),0 12px 32px rgba(35,32,29,.05)!important;}
+.rb-back{color:var(--maroon-t)!important;}
+.rb-svc-eyebrow{color:var(--maroon-t)!important;font-weight:600!important;}
+.rb-svc-name{color:var(--ink)!important;font-weight:500!important;}
+.rb-svc-name em{color:var(--maroon-t2)!important;}
+.rb-svc-desc,.rb-hint,.rb-secure,.rb-secure *{color:var(--muted)!important;}
+.rb-chip{color:var(--maroon-t)!important;border-color:rgba(110,20,35,.3)!important;background:rgba(110,20,35,.05)!important;}
+.rb-chip svg{stroke:var(--maroon-t)!important;}
+.rb-price,.rb-price #svc-price{color:var(--maroon-t)!important;font-weight:600!important;}
+#svc-orig{color:#9A8F86!important;}
+.rb-label{color:var(--ink)!important;}
+.rb-input{background:#FBFAF7!important;color:var(--ink)!important;border:1px solid rgba(35,32,29,.18)!important;color-scheme:light!important;}
+.rb-input:focus{border-color:var(--maroon-t2)!important;outline:none!important;}
+.rb-input::placeholder{color:#9A9088!important;}
+.rb-submit{background:var(--maroon-t)!important;color:#FDF6EE!important;}
+.rb-otp-btn{color:var(--maroon-t)!important;background:rgba(110,20,35,.06)!important;border:1px solid rgba(110,20,35,.3)!important;}
+h2{color:var(--ink)!important;}
+</style>
+
+</body>
+</html>
