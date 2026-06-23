@@ -223,6 +223,28 @@
   .rev .who b{color:var(--ink);font-weight:600}
   .rev .verified{font-size:.7rem;color:var(--ok)}
 
+  /* ── more from the collection (related) ── */
+  .rel-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem}
+  .rel-card{display:flex;flex-direction:column;background:var(--paper2);border:1px solid var(--line);
+    border-radius:10px;overflow:hidden;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s}
+  .rel-card:hover{transform:translateY(-3px);box-shadow:0 22px 50px rgba(35,29,25,.14)}
+  .rel-media{position:relative;aspect-ratio:1/1;cursor:pointer;
+    background:radial-gradient(circle at 50% 45%,rgba(255,255,255,.9),transparent 38%),linear-gradient(135deg,#f4e7d5,#e7d4b8 46%,#f9f1e3)}
+  .rel-media img{width:100%;height:100%;object-fit:cover}
+  .rel-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:var(--serif);font-size:2.6rem;color:rgba(110,20,35,.28)}
+  .rel-badge{position:absolute;top:.5rem;left:.5rem;background:var(--maroon);color:#fff6e5;
+    font-family:var(--body);font-size:.62rem;font-weight:600;border-radius:999px;padding:.22rem .46rem}
+  .rel-body{display:flex;flex-direction:column;gap:.3rem;padding:.65rem .7rem .75rem;flex:1}
+  .rel-name{font-family:var(--serif);font-size:1rem;font-weight:600;line-height:1.12;color:var(--ink);margin:0;cursor:pointer}
+  .rel-price{display:flex;align-items:baseline;gap:.35rem;margin-top:.05rem}
+  .rel-price strong{font-family:var(--serif);font-size:1.05rem;font-weight:600;color:var(--maroon)}
+  .rel-price s{font-family:var(--body);font-size:.74rem;color:#9a8e84}
+  .rel-view{margin-top:auto;border:1px solid rgba(110,20,35,.32);background:transparent;color:var(--maroon);
+    border-radius:5px;font-family:var(--label);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;
+    font-weight:600;cursor:pointer;padding:.55rem;transition:background .2s,color .2s}
+  .rel-view:hover{background:var(--maroon);color:#fff6e5}
+
   /* ── checkout modal ── */
   .co-modal{position:fixed;inset:0;z-index:10000;display:none;background:rgba(12,10,8,.66);backdrop-filter:blur(4px);
     align-items:center;justify-content:center;padding:1rem}
@@ -284,6 +306,7 @@
   .footer-copy{font-size:.7rem;color:var(--ink3);letter-spacing:.05em;font-family:var(--body)}
 
   /* ── responsive ── */
+  @media(max-width:1080px){ .rel-grid{grid-template-columns:repeat(4,1fr)} }
   @media(max-width:880px){
     .product{grid-template-columns:1fr;gap:1.8rem}
     .gallery{position:static}
@@ -291,10 +314,12 @@
     .benefit-grid,.rev-grid,.care{grid-template-columns:1fr}
     .about{grid-template-columns:1fr}
     .co-body{grid-template-columns:1fr}
+    .rel-grid{grid-template-columns:repeat(3,1fr);gap:.7rem}
   }
   @media(max-width:520px){
     .co-grid{grid-template-columns:1fr}
     .announce{gap:.4rem 1rem;font-size:.7rem}
+    .rel-grid{grid-template-columns:repeat(2,1fr)}
   }
   @media(prefers-reduced-motion:reduce){
     .gallery-glow,.gallery-main img,.faq-a{transition:none;animation:none}
@@ -494,6 +519,14 @@
     </div>
   </div>
   <div class="rev-grid" id="rev-grid"></div>
+</section>
+
+<!-- ═══ MORE FROM THE COLLECTION ═══ -->
+<section class="section" id="related">
+  <span class="section-eyebrow">Explore more</span>
+  <h2>More from the <em>collection</em></h2>
+  <p class="section-sub">Other energy bands people pair with this one. Tap any to see its full details.</p>
+  <div class="rel-grid" id="rel-grid"></div>
 </section>
 
 <!-- ═══ CHECKOUT MODAL ═══ -->
@@ -775,6 +808,7 @@ function init(){
   buildAbout();
   buildFaq();
   buildReviews();
+  buildRelated();
   injectJsonLd();
   renderTotals();
   bind();
@@ -858,6 +892,50 @@ function buildReviews(){
     return '<div class="rev"><div class="stars">'+stars+'</div><p>'+esc(r.text)+'</p>'+
       '<div class="who"><b>'+esc(r.name)+'</b><span class="verified">✓ Verified</span></div></div>';
   }).join("");
+}
+
+/* fallback for related-card thumbnails: cycle extensions, then show a glyph */
+window.relImgFallback = function(img){
+  var i = parseInt(img.getAttribute("data-ext")||"0", 10) + 1;
+  if(i < IMG_EXT.length){
+    img.setAttribute("data-ext", i);
+    img.src = img.getAttribute("data-base") + "." + IMG_EXT[i];
+  } else {
+    img.style.display = "none";
+    var fb = img.parentElement.querySelector(".rel-fallback");
+    if(fb) fb.style.display = "flex";
+  }
+};
+
+function buildRelated(){
+  var host = $("rel-grid");
+  if(!host) return;
+  // every other band, in catalog order — add more to PRODUCTS and they appear here automatically
+  var others = Object.keys(PRODUCTS).filter(function(k){ return k !== sku; });
+  host.innerHTML = others.map(function(k){
+    var p = PRODUCTS[k];
+    var off = Math.round((1 - p.price / p.mrp) * 100);
+    var base = "images/bracelets/" + k;
+    return [
+      '<article class="rel-card" data-sku="'+k+'">',
+      '  <div class="rel-media" data-go="'+k+'">',
+      '    <img src="'+base+'.'+IMG_EXT[0]+'" data-base="'+base+'" data-ext="0" alt="'+esc(p.name)+'" loading="lazy" onerror="relImgFallback(this)">',
+      '    <div class="rel-fallback" style="display:none">◈</div>',
+      '    <span class="rel-badge">'+off+'% OFF</span>',
+      '  </div>',
+      '  <div class="rel-body">',
+      '    <h3 class="rel-name" data-go="'+k+'">'+esc(p.name)+'</h3>',
+      '    <div class="rel-price"><strong>'+money(p.price)+'</strong><s>'+money(p.mrp)+'</s></div>',
+      '    <button type="button" class="rel-view" data-go="'+k+'">View details</button>',
+      '  </div>',
+      '</article>'
+    ].join("");
+  }).join("");
+
+  host.addEventListener("click", function(e){
+    var el = e.target.closest("[data-go]");
+    if(el) window.location.href = "shop-product.html?sku=" + encodeURIComponent(el.getAttribute("data-go"));
+  });
 }
 
 function injectJsonLd(){

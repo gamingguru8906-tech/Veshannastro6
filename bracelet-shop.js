@@ -157,22 +157,18 @@
       return state.activeFilter === "all" || product.tags.indexOf(state.activeFilter) > -1;
     });
     els["br-grid"].innerHTML = products.map(function (product) {
-      var tags = product.tags.slice(0, 3).map(function (tag) { return "<span>" + esc(tag) + "</span>"; }).join("");
       return [
         '<article class="br-card" data-sku="' + product.sku + '">',
         '  <div class="br-media" data-view="' + product.sku + '" style="cursor:pointer">',
         '    <img src="' + imageFor(product) + '" data-img-base="images/bracelets/' + product.sku + '" data-img-ext-index="0" alt="' + esc(product.name) + '" loading="lazy" decoding="async" onerror="window.braceletImageFallback(this);">',
-        '    <span class="br-badge">' + product.discount + '% OFF</span><span class="br-stock">' + esc(product.stock) + '</span>',
+        '    <span class="br-badge">' + product.discount + '% OFF</span>',
         '  </div>',
         '  <div class="br-body">',
-        '    <div class="br-sku">' + esc(product.sku) + ' - Free size</div>',
         '    <h3 class="br-name" data-view="' + product.sku + '" style="cursor:pointer">' + esc(product.name) + '</h3>',
-        '    <p class="br-desc">' + esc(product.description) + '</p>',
-        '    <p class="br-meta"><strong>Gemstones:</strong> ' + esc(product.gemstones) + '</p>',
-        '    <p class="br-meta"><strong>Purpose:</strong> ' + esc(product.benefits) + '</p>',
-        '    <div class="br-tags">' + tags + '</div>',
-        '    <div class="br-buy-row">',
-        '      <div class="br-price"><strong>' + money(product.price) + '</strong><span><s>' + money(product.mrp) + '</s> launch price</span></div>',
+        '    <p class="br-stone">' + esc(product.gemstones) + '</p>',
+        '    <div class="br-price"><strong>' + money(product.price) + '</strong><s>' + money(product.mrp) + '</s></div>',
+        '    <div class="br-actions">',
+        '      <button type="button" class="br-view" data-view="' + product.sku + '">View details</button>',
         '      <button type="button" class="br-add" data-add="' + product.sku + '" aria-label="Add ' + esc(product.name) + ' to cart"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>',
         '    </div>',
         '  </div>',
