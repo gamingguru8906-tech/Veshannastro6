@@ -1,27 +1,49 @@
 (function () {
   var PRODUCTS = [
-    { sku: "VA-BR-TP-001", name: "Triple Protection Bracelet", mrp: 999, price: 699, discount: 30, gemstones: "Tiger Eye + Black Obsidian + Hematite", stock: "In Stock", description: "A bold mixed-stone protection bracelet designed for daily wear and grounding.", benefits: "Protection, grounding, confidence, negativity shielding", tags: ["protection", "career", "strength", "grounding"] },
-    { sku: "VA-BR-AM-002", name: "Amethyst Bracelet", mrp: 899, price: 599, discount: 33, gemstones: "Amethyst", stock: "In Stock", description: "A calming purple crystal bracelet for peace, clarity, and spiritual balance.", benefits: "Calm mind, stress relief, intuition, spiritual growth", tags: ["peace", "intuition", "spirituality", "healing"] },
-    { sku: "VA-BR-CQ-003", name: "Clear Quartz Bracelet", mrp: 799, price: 549, discount: 31, gemstones: "Clear Quartz", stock: "In Stock", description: "A clean transparent crystal bracelet known as a universal energy amplifier.", benefits: "Energy amplification, clarity, focus, cleansing", tags: ["clarity", "focus", "healing", "energy"] },
-    { sku: "VA-BR-BT-004", name: "Black Tourmaline Bracelet", mrp: 899, price: 649, discount: 28, gemstones: "Black Tourmaline", stock: "In Stock", description: "A deep black protection bracelet for grounding and energetic shielding.", benefits: "Protection, grounding, negativity removal, stability", tags: ["protection", "grounding", "negativity", "stability"] },
-    { sku: "VA-BR-CT-005", name: "Citrine Bracelet", mrp: 999, price: 699, discount: 30, gemstones: "Citrine", stock: "In Stock", description: "A bright golden bracelet associated with abundance, confidence, and motivation.", benefits: "Wealth, abundance, confidence, success mindset", tags: ["wealth", "success", "confidence", "manifestation"] },
-    { sku: "VA-BR-YA-006", name: "Yellow Aventurine Bracelet", mrp: 799, price: 499, discount: 38, gemstones: "Yellow Aventurine", stock: "In Stock", description: "A warm yellow bracelet for optimism, personal power, and positive action.", benefits: "Confidence, optimism, willpower, decision-making", tags: ["confidence", "positivity", "career", "motivation"] },
-    { sku: "VA-BR-RJ-007", name: "Red Jasper Bracelet", mrp: 799, price: 499, discount: 38, gemstones: "Red Jasper", stock: "In Stock", description: "An earthy red bracelet for stamina, courage, and grounded strength.", benefits: "Strength, stamina, courage, stability", tags: ["health", "strength", "grounding", "courage"] },
-    { sku: "VA-BR-TE-008", name: "Tiger Eye Bracelet", mrp: 899, price: 599, discount: 33, gemstones: "Tiger Eye", stock: "In Stock", description: "A glossy golden-brown bracelet for confidence, focus, and practical success.", benefits: "Confidence, focus, courage, protection", tags: ["career", "success", "protection", "confidence"] },
-    { sku: "VA-BR-RQ-009", name: "Rose Quartz Bracelet", mrp: 799, price: 549, discount: 31, gemstones: "Rose Quartz", stock: "In Stock", description: "A soft pink bracelet for emotional healing, self-love, and harmony.", benefits: "Love, emotional healing, self-love, relationship harmony", tags: ["love", "relationships", "healing", "peace"] },
-    { sku: "VA-BR-GA-010", name: "Green Aventurine Bracelet", mrp: 799, price: 499, discount: 38, gemstones: "Green Aventurine", stock: "In Stock", description: "A soothing green bracelet linked with luck, growth, and heart-centered balance.", benefits: "Luck, growth, opportunity, heart balance", tags: ["wealth", "luck", "growth", "heart"] },
-    { sku: "VA-BR-LL-011", name: "Lapis Lazuli Bracelet", mrp: 999, price: 699, discount: 30, gemstones: "Lapis Lazuli", stock: "In Stock", description: "A royal blue bracelet for wisdom, communication, and inner truth.", benefits: "Wisdom, communication, truth, self-awareness", tags: ["wisdom", "communication", "study", "intuition"] },
-    { sku: "VA-BR-MN-012", name: "Moonstone Bracelet", mrp: 1099, price: 749, discount: 32, gemstones: "White / Rainbow Moonstone", stock: "In Stock", description: "A gentle luminous bracelet associated with emotional balance and intuition.", benefits: "Emotional balance, intuition, feminine energy, calmness", tags: ["moon", "intuition", "peace", "emotional healing"] },
-    { sku: "VA-BR-7C-013", name: "7 Chakra Bracelet", mrp: 899, price: 599, discount: 33, gemstones: "7 Chakra mixed gemstones", stock: "In Stock", description: "A multi-color chakra bracelet designed for energetic balance and alignment.", benefits: "Chakra balance, energy alignment, positivity, overall wellness", tags: ["chakra", "healing", "balance", "spirituality"] },
-    { sku: "VA-BR-IO-014", name: "Iolite Bracelet", mrp: 1099, price: 799, discount: 27, gemstones: "Iolite", stock: "In Stock", description: "A deep blue-grey bracelet for intuition, vision, and inner direction.", benefits: "Intuition, vision, inner guidance, mental clarity", tags: ["intuition", "clarity", "spirituality", "focus"] }
+    { sku: "VA-BR-TP-001", name: "Triple Protection Bracelet", mrp: 1139, price: 799, discount: 30, gemstones: "Tiger Eye + Black Obsidian + Hematite", stock: "In Stock", description: "A bold mixed-stone protection bracelet designed for daily wear and grounding.", benefits: "Protection, grounding, confidence, negativity shielding", tags: ["protection", "career", "strength", "grounding"] },
+    { sku: "VA-BR-AM-002", name: "Amethyst Bracelet", mrp: 1429, price: 999, discount: 30, gemstones: "Amethyst", stock: "In Stock", description: "A calming purple crystal bracelet for peace, clarity, and spiritual balance.", benefits: "Calm mind, stress relief, intuition, spiritual growth", tags: ["peace", "intuition", "spirituality", "healing"] },
+    { sku: "VA-BR-CQ-003", name: "Clear Quartz Bracelet", mrp: 1429, price: 999, discount: 30, gemstones: "Clear Quartz", stock: "In Stock", description: "A clean transparent crystal bracelet known as a universal energy amplifier.", benefits: "Energy amplification, clarity, focus, cleansing", tags: ["clarity", "focus", "healing", "energy"] },
+    { sku: "VA-BR-BT-004", name: "Black Tourmaline Bracelet", mrp: 1279, price: 899, discount: 30, gemstones: "Black Tourmaline", stock: "In Stock", description: "A deep black protection bracelet for grounding and energetic shielding.", benefits: "Protection, grounding, negativity removal, stability", tags: ["protection", "grounding", "negativity", "stability"] },
+    { sku: "VA-BR-CT-005", name: "Citrine Natural Bracelet", mrp: 1709, price: 1199, discount: 30, gemstones: "Natural Citrine", stock: "In Stock", description: "A bright natural-citrine bracelet associated with abundance, confidence, and motivation.", benefits: "Wealth, abundance, confidence, success mindset", tags: ["wealth", "success", "confidence", "manifestation"] },
+    { sku: "VA-BR-YA-006", name: "Yellow Aventurine Bracelet", mrp: 1139, price: 799, discount: 30, gemstones: "Yellow Aventurine", stock: "In Stock", description: "A warm yellow bracelet for optimism, personal power, and positive action.", benefits: "Confidence, optimism, willpower, decision-making", tags: ["confidence", "positivity", "career", "motivation"] },
+    { sku: "VA-BR-RJ-007", name: "Red Jasper Bracelet", mrp: 1139, price: 799, discount: 30, gemstones: "Red Jasper", stock: "In Stock", description: "An earthy red bracelet for stamina, courage, and grounded strength.", benefits: "Strength, stamina, courage, stability", tags: ["health", "strength", "grounding", "courage"] },
+    { sku: "VA-BR-TE-008", name: "Tiger Eye Bracelet", mrp: 1139, price: 799, discount: 30, gemstones: "Tiger Eye", stock: "In Stock", description: "A glossy golden-brown bracelet for confidence, focus, and practical success.", benefits: "Confidence, focus, courage, protection", tags: ["career", "success", "protection", "confidence"] },
+    { sku: "VA-BR-RQ-009", name: "Rose Quartz Bracelet", mrp: 1279, price: 899, discount: 30, gemstones: "Rose Quartz", stock: "In Stock", description: "A soft pink bracelet for emotional healing, self-love, and harmony.", benefits: "Love, emotional healing, self-love, relationship harmony", tags: ["love", "relationships", "healing", "peace"] },
+    { sku: "VA-BR-GA-010", name: "Green Aventurine Bracelet", mrp: 1279, price: 899, discount: 30, gemstones: "Green Aventurine", stock: "In Stock", description: "A soothing green bracelet linked with luck, growth, and heart-centered balance.", benefits: "Luck, growth, opportunity, heart balance", tags: ["wealth", "luck", "growth", "heart"] },
+    { sku: "VA-BR-LL-011", name: "Lapis Lazuli Bracelet", mrp: 1279, price: 899, discount: 30, gemstones: "Lapis Lazuli", stock: "In Stock", description: "A royal blue bracelet for wisdom, communication, and inner truth.", benefits: "Wisdom, communication, truth, self-awareness", tags: ["wisdom", "communication", "study", "intuition"] },
+    { sku: "VA-BR-MN-012", name: "Peach Moonstone Bracelet", mrp: 1139, price: 799, discount: 30, gemstones: "Peach Moonstone", stock: "In Stock", description: "A warm peach-glow bracelet for emotional balance, gentle confidence and intuition.", benefits: "Emotional balance, intuition, soothing energy, self-acceptance", tags: ["moon", "intuition", "peace", "emotional healing"] }
   ];
+
+  /* ── Premium collection (signature stones & yog bracelets) ── */
+  var PREMIUM_PRODUCTS = [
+    { sku: "VA-BR-WM-015", name: "White Moonstone Bracelet", mrp: 1999, price: 1399, discount: 30, premium: true, gemstones: "White Moonstone", stock: "In Stock", description: "A luminous milk-white moonstone bracelet for emotional steadiness and heightened intuition.", benefits: "Emotional balance, intuition, calm, feminine energy", tags: ["moon", "intuition", "peace", "healing"] },
+    { sku: "VA-BR-7C-013", name: "7 Chakra Bracelet", mrp: 1569, price: 1099, discount: 30, premium: true, gemstones: "7 Chakra mixed gemstones", stock: "In Stock", description: "Seven stones tuned to the body's energy centres for full-spectrum alignment.", benefits: "Chakra balance, energy alignment, positivity, overall wellness", tags: ["chakra", "healing", "balance", "spirituality"] },
+    { sku: "VA-BR-IO-014", name: "Iolite Bracelet (Neeli)", mrp: 2279, price: 1599, discount: 30, premium: true, gemstones: "Iolite (Neeli — Saturn substitute)", stock: "In Stock", description: "A violet-blue Saturn substitute (Neeli) for vision, discipline and inner direction.", benefits: "Intuition, vision, inner guidance, Saturn support", tags: ["intuition", "clarity", "spirituality", "focus"] },
+    { sku: "VA-BR-LK-016", name: "Lakshmi's Loom — Dhan Yog Bracelet", mrp: 1859, price: 1299, discount: 30, premium: true, gemstones: "Citrine + Pyrite + Green Aventurine", stock: "In Stock", description: "A dhan-yog wealth weave of citrine, pyrite and green aventurine to invite steady abundance.", benefits: "Wealth, abundance, money flow, opportunity", tags: ["wealth", "luck", "success", "manifestation"] },
+    { sku: "VA-BR-RE-017", name: "The Rose Embrace — Love Bracelet", mrp: 1859, price: 1299, discount: 30, premium: true, gemstones: "Rose Quartz + Rhodonite", stock: "In Stock", description: "A tender rose-quartz and rhodonite pairing to open the heart and draw warm, lasting love.", benefits: "Love, attraction, self-worth, relationship harmony", tags: ["love", "relationships", "healing", "heart"] },
+    { sku: "VA-BR-PY-018", name: "Sunforge Pyrite Bracelet", mrp: 1429, price: 999, discount: 30, premium: true, gemstones: "Pyrite", stock: "In Stock", description: "A golden pyrite band with real fire — for drive, money magnetism and bold confidence.", benefits: "Wealth, willpower, confidence, protection", tags: ["wealth", "confidence", "success", "protection"] }
+  ];
+
+  /* what the shop rail renders (core + premium); STORE_PRODUCTS is for lookups/cart */
+  var RENDER_PRODUCTS = PRODUCTS.concat(PREMIUM_PRODUCTS);
 
   var BOOK_PRODUCTS = [
     { sku: "VA-BK-ASTRO-001", productType: "Book", name: "Veshannastro Astrology Book", mrp: 799, price: 499, discount: 38, stock: "In Stock", externalLink: "https://amzn.in/d/0iBlqI7H", description: "A practical astrology book for readers who want timing, chart logic and spiritual guidance in one grounded volume.", benefits: "Birth-chart learning, planetary timing, practical remedies", tags: ["book", "astrology", "kundli"], bookKicker: "Astrology manual", bookMark: "☉", bookColors: ["#111827", "#1D4ED8", "#C9A84C"] },
     { sku: "VA-BK-MANI-002", productType: "Journal", name: "Manifestation Journal", mrp: 699, price: 399, discount: 43, stock: "In Stock", externalLink: "", description: "A guided journal for intentions, affirmations, gratitude, moon-cycle reflections and daily manifestation practice.", benefits: "Manifestation, gratitude, clarity, daily ritual", tags: ["journal", "manifestation", "moon"], bookKicker: "Guided journal", bookMark: "☾", bookColors: ["#2A1217", "#8C1C2E", "#F0D080"] }
   ];
 
-  var STORE_PRODUCTS = PRODUCTS.concat(BOOK_PRODUCTS);
+  var STORE_PRODUCTS = PRODUCTS.concat(PREMIUM_PRODUCTS).concat(BOOK_PRODUCTS);
+
+  /* representative colour per stone — drives card tint + glow */
+  var STONE_COLORS = {
+    "VA-BR-TP-001":"#5c4327","VA-BR-AM-002":"#7e57c2","VA-BR-CQ-003":"#9fb0c0","VA-BR-BT-004":"#2f2f36",
+    "VA-BR-CT-005":"#d9a521","VA-BR-YA-006":"#e0b73a","VA-BR-RJ-007":"#a83232","VA-BR-TE-008":"#b07d2a",
+    "VA-BR-RQ-009":"#e3a0b4","VA-BR-GA-010":"#4f9e6a","VA-BR-LL-011":"#2b4a8c","VA-BR-MN-012":"#e8b89a",
+    "VA-BR-WM-015":"#d7deec","VA-BR-7C-013":"#8a5a9e","VA-BR-IO-014":"#4a5a9e","VA-BR-LK-016":"#c9a24a",
+    "VA-BR-RE-017":"#e08aa0","VA-BR-PY-018":"#c79a3a"
+  };
+  function stoneColor(sku){ return STONE_COLORS[sku] || "#c9a84c"; }
+  function hexA(h,a){ var n=parseInt(h.slice(1),16); return "rgba("+(n>>16&255)+","+(n>>8&255)+","+(n&255)+","+a+")"; }
 
   var CONFIG = {
     razorpayKey: "rzp_live_T0NA0F3UpQiZxl",
@@ -145,23 +167,28 @@
   }
 
   function buildFilters() {
-    var filters = ["all", "protection", "wealth", "love", "intuition", "healing", "career"];
+    var filters = ["all", "premium", "protection", "wealth", "love", "intuition", "healing", "career"];
     els["br-filters"].innerHTML = filters.map(function (filter) {
-      var label = filter === "all" ? "All" : filter.charAt(0).toUpperCase() + filter.slice(1);
+      var label = filter === "all" ? "All" : (filter === "premium" ? "✦ Premium" : filter.charAt(0).toUpperCase() + filter.slice(1));
       return '<button type="button" class="br-filter' + (filter === state.activeFilter ? " active" : "") + '" data-filter="' + filter + '">' + label + "</button>";
     }).join("");
   }
 
   function renderProducts() {
-    var products = PRODUCTS.filter(function (product) {
-      return state.activeFilter === "all" || product.tags.indexOf(state.activeFilter) > -1;
+    var products = RENDER_PRODUCTS.filter(function (product) {
+      if (state.activeFilter === "all") return true;
+      if (state.activeFilter === "premium") return !!product.premium;
+      return product.tags.indexOf(state.activeFilter) > -1;
     });
     els["br-grid"].innerHTML = products.map(function (product) {
+      var col = stoneColor(product.sku);
+      var glow = "radial-gradient(circle at 50% 42%," + hexA(col, .5) + "," + hexA(col, .08) + " 70%)";
       return [
-        '<article class="br-card" data-sku="' + product.sku + '">',
-        '  <div class="br-media" data-view="' + product.sku + '" style="cursor:pointer">',
+        '<article class="br-card' + (product.premium ? ' br-card--premium' : '') + '" data-sku="' + product.sku + '" style="--scol:' + col + '">',
+        '  <div class="br-media" data-view="' + product.sku + '" style="cursor:pointer;background:' + glow + '">',
         '    <img src="' + imageFor(product) + '" data-img-base="images/bracelets/' + product.sku + '" data-img-ext-index="0" alt="' + esc(product.name) + '" loading="lazy" decoding="async" onerror="window.braceletImageFallback(this);">',
         '    <span class="br-badge">' + product.discount + '% OFF</span>',
+        (product.premium ? '    <span class="br-premium-ribbon">Premium</span>' : ''),
         '  </div>',
         '  <div class="br-body">',
         '    <h3 class="br-name" data-view="' + product.sku + '" style="cursor:pointer">' + esc(product.name) + '</h3>',

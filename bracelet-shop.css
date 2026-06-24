@@ -789,6 +789,38 @@
   border: 1px solid rgba(110, 20, 35, .12);
 }
 
+/* stone-tinted card accent + hover lift (matches product page) */
+.br-card {
+  border-top: 3px solid var(--scol, #c9a84c);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.br-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 50px rgba(35, 29, 25, .16);
+}
+.br-card--premium {
+  border-color: rgba(201, 168, 76, .55);
+  box-shadow: 0 18px 46px rgba(110, 20, 35, .12);
+}
+.br-premium-ribbon {
+  position: absolute;
+  top: .72rem;
+  right: .72rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .28rem;
+  background: linear-gradient(135deg, #6e1423, #9a2336);
+  color: #f6e3b0;
+  font-family: "Cinzel", serif;
+  font-size: .58rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  border: 1px solid rgba(201, 168, 76, .55);
+  border-radius: 999px;
+  padding: .3rem .55rem;
+}
+
 .br-body {
   padding: 1rem .95rem 1.05rem;
   display: flex;
