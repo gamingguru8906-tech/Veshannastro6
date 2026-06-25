@@ -71,6 +71,7 @@
   function init() {
     if (!document.getElementById("bracelet-shop")) return;
     window.braceletImageFallback = braceletImageFallback;
+    window.braceletAltOk = braceletAltOk;
     injectCheckoutShell();
     cacheEls();
     buildFilters();
@@ -186,7 +187,8 @@
       return [
         '<article class="br-card' + (product.premium ? ' br-card--premium' : '') + '" data-sku="' + product.sku + '" style="--scol:' + col + '">',
         '  <div class="br-media" data-view="' + product.sku + '" style="cursor:pointer;background:' + glow + '">',
-        '    <img src="' + imageFor(product) + '" data-img-base="images/bracelets/' + product.sku + '" data-img-ext-index="0" alt="' + esc(product.name) + '" loading="lazy" decoding="async" onerror="window.braceletImageFallback(this);">',
+        '    <img class="br-img-main" src="' + imageFor(product) + '" data-img-base="images/bracelets/' + product.sku + '" data-img-ext-index="0" alt="' + esc(product.name) + '" loading="lazy" decoding="async" onerror="window.braceletImageFallback(this);">',
+        '    <img class="br-img-alt" src="images/bracelets/' + product.sku + '-1.' + IMAGE_EXTENSIONS[0] + '" data-img-base="images/bracelets/' + product.sku + '-1" data-img-ext-index="0" alt="" loading="lazy" decoding="async" onload="window.braceletAltOk &amp;&amp; window.braceletAltOk(this)" onerror="window.braceletImageFallback(this);">',
         '    <span class="br-badge">' + product.discount + '% OFF</span>',
         (product.premium ? '    <span class="br-premium-ribbon">Premium</span>' : ''),
         '  </div>',
@@ -666,6 +668,12 @@
       return '<div class="br-line-img ac-cart-book" style="--book-a:' + colors[0] + ';--book-b:' + colors[1] + ';--book-c:' + colors[2] + ';">' + esc(product.bookMark || "☉") + '</div>';
     }
     return '<img class="br-line-img" src="' + imageFor(product) + '" data-img-base="images/bracelets/' + product.sku + '" data-img-ext-index="0" alt="" onerror="window.braceletImageFallback(this);">';
+  }
+
+  function braceletAltOk(img) {
+    if (img.classList.contains("br-missing")) return;
+    var card = img.closest(".br-card");
+    if (card) card.classList.add("has-alt");
   }
 
   function braceletImageFallback(img) {

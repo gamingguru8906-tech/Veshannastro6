@@ -15,7 +15,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <style>
@@ -27,7 +27,7 @@
     --gold:#c9a84c; --gold2:#b8943a; --navy:#1f2a44;
     --line:rgba(110,20,35,.13); --ok:#2f7d4f;
     --shadow:0 16px 42px rgba(35,29,25,.08); --shadow-lg:0 24px 80px rgba(35,29,25,.18);
-    --serif:"Fraunces",serif; --label:"Cinzel",serif; --body:"Jost",sans-serif;
+    --serif:"Anton",sans-serif; --label:"Cinzel",serif; --body:"Cormorant Garamond",serif; --body-ui:"Jost",sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
@@ -92,7 +92,11 @@
   /* buy box */
   .buybox{min-width:0}
   .eyebrow{font-family:var(--label);font-size:.66rem;letter-spacing:.3em;text-transform:uppercase;color:var(--maroon);font-weight:600;}
-  .buybox h1{font-family:var(--serif);font-weight:600;letter-spacing:-.015em;font-size:clamp(1.45rem,2.5vw,1.9rem);line-height:1.1;margin:.35rem 0 .35rem;color:var(--ink);font-optical-sizing:auto;}
+  .buybox h1{font-family:var(--serif);font-weight:400;letter-spacing:.012em;font-size:clamp(2.05rem,3.7vw,2.95rem);line-height:1.06;margin:.45rem 0 .5rem;color:var(--ink);}
+  body{font-weight:700;font-size:1.2rem;letter-spacing:.003em;color:var(--ink);}
+  .lede,.meta-line,.delivery-msg,.assurance span,.offers-box li,.tax-note,.acc .acc-body,.rich-head p,.why-card p,.ingr p,.cmp-row,.mantra .tip,.br-stone,.rstep p,.ingr h4{font-weight:700;}
+  .lede,.meta-line{color:var(--ink);font-size:1.18rem;line-height:1.55;}
+  .acc .acc-body,.rich-head p,.why-card p,.ingr p,.cmp-row{font-size:1.12rem;color:#3f352e;}
   .rating .rating-num{font-family:var(--body);font-weight:600;color:var(--ink)}
   .rating{display:flex;align-items:center;gap:.55rem;font-family:var(--body);font-size:.82rem;color:var(--ink2);margin-bottom:1rem}
   .stars{color:var(--gold2);letter-spacing:.08em;font-size:.95rem}
@@ -411,6 +415,137 @@
     color:#3a2a08;border-radius:999px;font-size:.6rem;font-weight:700;padding:0 4px;margin-left:.15rem}
   .cart-count.show{display:inline-flex}
 
+  /* ═══ MAROON ASSURANCE STRIP ═══ */
+  .assure-strip{width:100vw;max-width:none;margin:0 calc(50% - 50vw);background:linear-gradient(90deg,#5c0f1e,#6e1423 50%,#5c0f1e);color:#f7e7c8;}
+  .assure-strip .inner{max-width:1160px;margin:0 auto;padding:.95rem 1.5rem;display:flex;align-items:center;justify-content:center;gap:2.2rem;flex-wrap:wrap;}
+  .assure-strip .ai{display:flex;align-items:center;gap:.55rem;font-family:var(--body-ui);font-size:.82rem;letter-spacing:.02em;}
+  .assure-strip .ai svg{width:18px;height:18px;stroke:#e9c877;fill:none;stroke-width:1.7;flex:0 0 auto;}
+  .assure-strip .ai b{color:#fff6e5;font-weight:600;}
+  .assure-strip .sep{width:1px;height:26px;background:rgba(233,200,119,.3);}
+  @media(max-width:680px){.assure-strip .sep{display:none}.assure-strip .inner{gap:.9rem 1.4rem}}
+
+  /* ═══ ACCORDIONS ═══ */
+  .pinfo{max-width:980px;margin:3.2rem auto 0;padding:0 1.3rem;}
+  .acc{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fffdf8;margin-bottom:.7rem;}
+  .acc summary{list-style:none;cursor:pointer;padding:1.05rem 1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:var(--label);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--maroon);font-weight:600;}
+  .acc summary::-webkit-details-marker{display:none}
+  .acc summary .chev{width:14px;height:14px;border-right:2px solid var(--maroon);border-bottom:2px solid var(--maroon);transform:rotate(45deg);transition:transform .25s;flex:0 0 auto;}
+  .acc[open] summary .chev{transform:rotate(-135deg);}
+  .acc .acc-body{padding:0 1.2rem 1.2rem;font-family:var(--body);font-size:1.04rem;line-height:1.6;color:var(--ink2);}
+  .acc .acc-body ul{list-style:none;margin:.3rem 0 0;}
+  .acc .acc-body li{padding:.32rem 0 .32rem 1.4rem;position:relative;}
+  .acc .acc-body li::before{content:"✦";position:absolute;left:0;color:var(--gold);font-size:.8rem;top:.5rem;}
+  .acc .acc-body b{color:var(--ink);font-weight:600;}
+
+  /* ═══ RICH SECTION SHELL ═══ */
+  .rich{max-width:1100px;margin:4rem auto 0;padding:0 1.3rem;}
+  .rich-head{text-align:center;margin-bottom:1.8rem;}
+  .rich-head .eye{font-family:var(--label);font-size:.66rem;letter-spacing:.3em;text-transform:uppercase;color:#a9842f;}
+  .rich-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(2rem,4.4vw,3.1rem);color:var(--ink);line-height:1.12;margin:.35rem 0 .45rem;}
+  .rich-head p{font-family:var(--body);font-size:1.12rem;color:var(--ink2);max-width:560px;margin:0 auto;}
+
+  .why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;}
+  .why-card{position:relative;border-radius:14px;padding:1.5rem 1.3rem;background:#fffdf8;border:1px solid var(--line);overflow:hidden;transition:transform .25s,box-shadow .25s;}
+  .why-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(35,29,25,.13);}
+  .why-card::before{content:"";position:absolute;top:0;bottom:0;left:0;width:5px;background:var(--accent,#c9a84c);}
+  .why-card .ic{font-size:1.9rem;line-height:1;margin-bottom:.7rem;display:block;}
+  .why-card h3{font-family:var(--label);font-size:.92rem;letter-spacing:.03em;color:var(--ink);margin-bottom:.45rem;font-weight:600;}
+  .why-card p{font-family:var(--body);font-size:1.02rem;line-height:1.5;color:var(--ink2);}
+  .why-card .pill{display:inline-block;margin-top:.8rem;font-family:var(--body-ui);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:#fff;background:var(--accent,#c9a84c);border-radius:999px;padding:.24rem .6rem;}
+
+  .ingr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:.9rem;}
+  .ingr{display:flex;gap:.8rem;align-items:flex-start;padding:.95rem;border:1px solid var(--line);border-radius:12px;background:#fffdf8;}
+  .ingr .dot{width:34px;height:34px;border-radius:50%;flex:0 0 auto;background:radial-gradient(circle at 38% 32%,#fff,var(--accent,#c9a84c) 78%);box-shadow:0 4px 12px var(--accent-a,rgba(201,168,76,.4));}
+  .ingr h4{font-family:var(--label);font-size:.78rem;color:var(--ink);margin-bottom:.25rem;font-weight:600;}
+  .ingr p{font-family:var(--body);font-size:.98rem;line-height:1.4;color:var(--ink2);}
+
+  .ritual-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.9rem;margin-top:.5rem;}
+  .rstep{position:relative;border:1px solid var(--line);border-radius:12px;padding:1.5rem 1rem 1.1rem;background:#fffdf8;text-align:center;}
+  .rstep .num{position:absolute;top:-14px;left:50%;transform:translateX(-50%);width:30px;height:30px;border-radius:50%;background:var(--maroon);color:#fff6e5;font-family:var(--label);font-size:.85rem;display:flex;align-items:center;justify-content:center;font-weight:600;}
+  .rstep .ic{font-size:1.5rem;display:block;margin:.4rem 0 .5rem;}
+  .rstep h4{font-family:var(--label);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--maroon);margin-bottom:.3rem;font-weight:600;}
+  .rstep p{font-family:var(--body);font-size:.98rem;color:var(--ink2);line-height:1.4;}
+
+  .mantra{margin-top:1.4rem;border-radius:16px;padding:2.2rem 1.5rem;text-align:center;position:relative;overflow:hidden;background:radial-gradient(120% 140% at 50% 0%,#3a0f1a,#1c1330 60%,#0c1024);border:1px solid rgba(201,168,76,.4);}
+  .mantra .eye{font-family:var(--label);font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:#e0c070;}
+  .mantra .sanskrit{font-family:var(--body);font-weight:600;font-size:clamp(1.3rem,3.2vw,2rem);color:#fbf4e6;margin:.65rem 0 .3rem;letter-spacing:.01em;}
+  .mantra .count{font-family:var(--body-ui);font-size:.8rem;color:#cbb58a;letter-spacing:.04em;}
+  .mantra .tip{margin-top:1rem;font-family:var(--body);font-size:1rem;color:#d8cfc4;max-width:520px;margin-left:auto;margin-right:auto;}
+  .mantra .copy-m{margin-top:1.1rem;border:1px solid rgba(240,208,128,.5);background:transparent;color:#f0d080;border-radius:6px;padding:.6rem 1.15rem;font-family:var(--label);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background .2s;}
+  .mantra .copy-m:hover{background:rgba(240,208,128,.12);}
+
+  .cmp{margin-top:1.4rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .cmp-col{border-radius:14px;padding:1.5rem 1.3rem;border:1px solid var(--line);}
+  .cmp-ordinary{background:#f1ede4;}
+  .cmp-us{background:linear-gradient(160deg,#fffaf0,#fff);border-color:rgba(201,168,76,.55);box-shadow:0 14px 36px rgba(110,20,35,.1);}
+  .cmp-col h3{font-family:var(--label);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem;font-weight:600;display:flex;align-items:center;gap:.5rem;}
+  .cmp-ordinary h3{color:#8a7569;}
+  .cmp-us h3{color:var(--maroon);}
+  .cmp-row{display:flex;gap:.6rem;align-items:flex-start;padding:.65rem 0;border-top:1px dashed rgba(110,20,35,.14);font-family:var(--body);font-size:1.02rem;line-height:1.4;color:var(--ink2);opacity:0;transform:translateY(8px);}
+  .cmp-row:first-of-type{border-top:none;}
+  .cmp.in .cmp-row{animation:cmpIn .5s ease forwards;}
+  .cmp.in .cmp-row:nth-child(2){animation-delay:.09s}.cmp.in .cmp-row:nth-child(3){animation-delay:.18s}.cmp.in .cmp-row:nth-child(4){animation-delay:.27s}
+  @keyframes cmpIn{to{opacity:1;transform:none}}
+  .cmp-row .mk{width:20px;height:20px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;margin-top:.08rem;}
+  .cmp-ordinary .mk{background:rgba(138,117,105,.2);color:#8a7569;}
+  .cmp-us .mk{background:var(--maroon);color:#fff6e5;}
+  @media(max-width:620px){.cmp{grid-template-columns:1fr}}
+  @media(prefers-reduced-motion:reduce){.cmp-row{opacity:1;transform:none}}
+
+  /* ═══ PREMIUM ADD-TO-CART ANIMATION ═══ */
+  .cart-btn{position:relative;overflow:hidden;}
+  .cart-btn .cart-btn-label{transition:opacity .18s ease;}
+  .cart-btn .cart-btn-spinner{position:absolute;inset:0;margin:auto;width:20px;height:20px;border:2.5px solid rgba(110,20,35,.25);border-top-color:var(--maroon);border-radius:50%;opacity:0;}
+  .cart-btn .cart-btn-tick{position:absolute;inset:0;margin:auto;width:24px;height:24px;fill:none;stroke:#fff6e5;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;opacity:0;}
+  .cart-btn .cart-btn-tick path{stroke-dasharray:26;stroke-dashoffset:26;}
+  .cart-btn.is-loading{pointer-events:none;background:#efe7da;border-color:#d9cdba;color:transparent;}
+  .cart-btn.is-loading .cart-btn-label{opacity:0;}
+  .cart-btn.is-loading .cart-btn-spinner{opacity:1;animation:cbtnspin .7s linear infinite;}
+  .cart-btn.is-done{pointer-events:none;background:var(--maroon);border-color:var(--maroon);color:#fff6e5;}
+  .cart-btn.is-done .cart-btn-label{opacity:0;}
+  .cart-btn.is-done .cart-btn-tick{opacity:1;animation:cbtnpop .34s ease;}
+  .cart-btn.is-done .cart-btn-tick path{animation:cbtndraw .42s .06s ease forwards;}
+  @keyframes cbtnspin{to{transform:rotate(360deg);}}
+  @keyframes cbtndraw{to{stroke-dashoffset:0;}}
+  @keyframes cbtnpop{0%{transform:scale(.55);}60%{transform:scale(1.18);}100%{transform:scale(1);}}
+
+  .cart-count.pop{animation:badgepop .42s ease;}
+  @keyframes badgepop{0%{transform:scale(1);}40%{transform:scale(1.55);}100%{transform:scale(1);}}
+
+  .fly-dot{position:fixed;z-index:9998;width:18px;height:18px;border-radius:50%;
+    background:radial-gradient(circle at 38% 32%,#F4DD9B,var(--maroon) 80%);
+    box-shadow:0 6px 16px rgba(110,20,35,.4);pointer-events:none;
+    transition:transform .75s cubic-bezier(.5,-0.25,.4,1.1),opacity .75s ease;}
+
+  /* slide-in cart confirmation */
+  .cart-confirm{position:fixed;top:84px;right:18px;z-index:9999;width:330px;max-width:calc(100vw - 36px);
+    background:#fffdf8;border:1px solid rgba(201,168,76,.5);border-radius:14px;overflow:hidden;
+    box-shadow:0 24px 60px rgba(35,29,25,.26);transform:translateX(130%);opacity:0;
+    transition:transform .5s cubic-bezier(.2,.8,.25,1),opacity .4s ease;pointer-events:none;}
+  .cart-confirm.show{transform:translateX(0);opacity:1;pointer-events:auto;}
+  .cart-confirm .cc-head{display:flex;align-items:center;gap:.55rem;background:linear-gradient(135deg,#6e1423,#9a2336);
+    color:#fff6e5;font-family:var(--label);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;padding:.7rem .9rem;}
+  .cart-confirm .cc-tick{width:18px;height:18px;border-radius:50%;background:#fff6e5;color:var(--maroon);
+    display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800;flex:0 0 auto;}
+  .cart-confirm .cc-body{display:flex;gap:.75rem;padding:.9rem;}
+  .cart-confirm .cc-thumb{width:58px;height:58px;border-radius:10px;flex:0 0 auto;background-size:cover;background-position:center;
+    border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.3rem;}
+  .cart-confirm .cc-name{font-family:var(--body);font-weight:700;font-size:1.05rem;color:var(--ink);line-height:1.2;}
+  .cart-confirm .cc-meta{font-family:var(--body-ui);font-size:.82rem;color:var(--ink2);margin-top:.25rem;font-weight:600;}
+  .cart-confirm .cc-actions{display:flex;gap:.5rem;padding:0 .9rem .9rem;}
+  .cart-confirm .cc-btn{flex:1;border-radius:7px;font-family:var(--label);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
+    font-weight:600;padding:.7rem .5rem;cursor:pointer;transition:background .2s,color .2s;}
+  .cart-confirm .cc-primary{background:var(--maroon);color:#fff6e5;border:1px solid var(--maroon);}
+  .cart-confirm .cc-primary:hover{background:var(--maroon2);}
+  .cart-confirm .cc-ghost{background:transparent;color:var(--maroon);border:1px solid rgba(110,20,35,.4);}
+  .cart-confirm .cc-ghost:hover{background:var(--maroon-soft);}
+  @media(prefers-reduced-motion:reduce){
+    .cart-btn .cart-btn-spinner{animation:none!important;}
+    .cart-btn.is-done .cart-btn-tick,.cart-btn.is-done .cart-btn-tick path{animation:none!important;stroke-dashoffset:0!important;}
+    .fly-dot{display:none!important;}
+    .cart-confirm{transition:opacity .3s ease;transform:none;}
+  }
+
   /* ── responsive ── */
   @media(max-width:1080px){ .rel-grid{grid-template-columns:repeat(4,1fr)} }
   @media(max-width:880px){
@@ -501,7 +636,11 @@
       </div>
       <div class="cta-row">
         <button class="buy-btn" id="buy-btn">Buy now · <span id="buy-amt">₹0</span></button>
-        <button class="cart-btn" id="cart-btn">Add to cart</button>
+        <button class="cart-btn" id="cart-btn" type="button">
+          <span class="cart-btn-label">Add to cart</span>
+          <span class="cart-btn-spinner" aria-hidden="true"></span>
+          <svg class="cart-btn-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>
+        </button>
       </div>
       <button class="ai-btn" id="ai-btn">
         <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2zM9 21h6M10 19h4"/></svg>
@@ -575,6 +714,27 @@
     </div>
   </div>
 </main>
+
+<!-- ═══ ASSURANCE STRIP ═══ -->
+<div class="assure-strip">
+  <div class="inner">
+    <span class="ai"><svg viewBox="0 0 24 24" fill="none"><rect x="1" y="6" width="15" height="12" rx="2"/><path d="M16 9h3l3 3v6h-6"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg> <b>Free shipping</b>&nbsp;across India</span>
+    <span class="sep"></span>
+    <span class="ai"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 4v4h4"/></svg> <b>7-day</b>&nbsp;easy returns</span>
+    <span class="sep"></span>
+    <span class="ai"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2l8 4v6c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg> <b>Lab-tested</b>&nbsp;authentic stones</span>
+    <span class="sep"></span>
+    <span class="ai"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.5 2.5M16.5 16.5 19 19M19 5l-2.5 2.5M7.5 16.5 5 19"/><circle cx="12" cy="12" r="3"/></svg> <b>Energised</b>&nbsp;before dispatch</span>
+    <span class="sep"></span>
+    <span class="ai"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> <b>Secure</b>&nbsp;Razorpay checkout</span>
+  </div>
+</div>
+
+<!-- ═══ PRODUCT INFO ACCORDIONS ═══ -->
+<div class="pinfo" id="pinfo"></div>
+
+<!-- ═══ RICH SECTIONS (premium / multi-stone) ═══ -->
+<div id="rich-sections"></div>
 
 <!-- ═══ MADE IN INDIA ═══ -->
 <section class="india-strip">
@@ -733,6 +893,18 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<div class="cart-confirm" id="cart-confirm" role="status" aria-live="polite">
+  <div class="cc-head"><span class="cc-tick">&#10003;</span> Added to your cart</div>
+  <div class="cc-body">
+    <div class="cc-thumb" id="cc-thumb">&#9670;</div>
+    <div class="cc-info"><div class="cc-name" id="cc-name"></div><div class="cc-meta" id="cc-meta"></div></div>
+  </div>
+  <div class="cc-actions">
+    <button type="button" class="cc-btn cc-primary" id="cc-checkout">View cart &amp; checkout</button>
+    <button type="button" class="cc-btn cc-ghost" id="cc-continue">Keep shopping</button>
+  </div>
+</div>
+
 <!-- ═══ FOOTER ═══ -->
 <footer class="site-footer">
   <span class="footer-logo">Veshan<em>nastro</em></span>
@@ -781,7 +953,7 @@ var CONFIG = {
 
   // Where "Get recommendation" sends people to unlock NEW15 (your Maaya AI recommender).
   // It should send buyers back to a product URL with ?coupon=NEW15 (or ?rec=1) appended.
-  recommendationUrl: "https://new-ai-chatbot-bv0n.onrender.com",
+  recommendationUrl: "index.html#vesha-chat",
 
   // OPTIONAL — flexible Razorpay Payment Links for ANY amount (coupons, quantities).
   // Deploy the create-payment-link endpoint (see create_payment_link.py) and put its
@@ -904,16 +1076,60 @@ function toast(msg){
 }
 
 /* single-configuration cart (matches the one-product-per-page flow) */
-var cartCount=0;
-function updateCartBadge(){
+var cartCount=0, cartBusy=false, ccTimer;
+function updateCartBadge(pop){
   var b=$("cart-count"); if(!b) return;
   b.textContent=cartCount;
   b.classList.toggle("show", cartCount>0);
+  if(pop){ b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop"); }
+}
+function flyToCart(btn){
+  var target=$("nav-cart"); if(!target||!btn) return;
+  var b=btn.getBoundingClientRect(), t=target.getBoundingClientRect();
+  var dot=document.createElement("div"); dot.className="fly-dot";
+  dot.style.left=(b.left+b.width/2-9)+"px";
+  dot.style.top=(b.top+b.height/2-9)+"px";
+  document.body.appendChild(dot);
+  void dot.offsetWidth;
+  var dx=(t.left+t.width/2)-(b.left+b.width/2);
+  var dy=(t.top+t.height/2)-(b.top+b.height/2);
+  dot.style.transform="translate("+dx+"px,"+dy+"px) scale(.3)";
+  dot.style.opacity="0.15";
+  setTimeout(function(){ if(dot.parentNode) dot.parentNode.removeChild(dot); }, 820);
+}
+function showCartConfirm(){
+  var p=$("cart-confirm"); if(!p) return;
+  var nm=$("cc-name"), mt=$("cc-meta"), th=$("cc-thumb");
+  if(nm) nm.textContent=product.name;
+  if(mt) mt.textContent=qty+" \u00D7 "+money(product.price)+"  \u00B7  "+money(product.price*qty);
+  if(th){
+    var img=document.querySelector("#main-img, #gallery-main img");
+    var src=img && img.getAttribute("src");
+    if(src && img.naturalWidth>0){ th.style.backgroundImage="url('"+src+"')"; th.textContent=""; th.style.background=""; th.style.backgroundImage="url('"+src+"')"; th.style.backgroundSize="cover"; th.style.backgroundPosition="center"; }
+    else { var c=(typeof STONE_COLORS!=="undefined" && STONE_COLORS[sku]) || "#c9a84c"; th.style.backgroundImage="none"; th.style.background="radial-gradient(circle at 40% 35%,"+hexA(c,.9)+","+hexA(c,.4)+")"; th.textContent="\u25C8"; }
+  }
+  p.classList.add("show");
+  clearTimeout(ccTimer); ccTimer=setTimeout(function(){ p.classList.remove("show"); }, 5200);
 }
 function addToCart(){
-  cartCount=qty;
-  updateCartBadge();
-  toast("Added to cart · "+product.name+" ×"+qty);
+  if(cartBusy) return;
+  var btn=$("cart-btn");
+  if(!btn){ cartCount+=qty; updateCartBadge(true); return; }
+  cartBusy=true;
+  btn.classList.remove("is-done");
+  btn.classList.add("is-loading");
+  setTimeout(function(){ flyToCart(btn); }, 260);
+  setTimeout(function(){
+    btn.classList.remove("is-loading");
+    btn.classList.add("is-done");
+    cartCount+=qty;
+    updateCartBadge(true);
+    showCartConfirm();
+  }, 760);
+  setTimeout(function(){
+    btn.classList.remove("is-done");
+    cartBusy=false;
+  }, 1950);
 }
 
 /* delivery estimate from pincode — dispatch 1–2 working days + regional transit */
@@ -1010,6 +1226,199 @@ function discount(){ return couponState().discount; }
 function total(){ return Math.max(0, product.price*qty - discount()); }
 
 /* ---------- init ---------- */
+/* ════════ RICH PRODUCT CONTENT (accordions + premium sections) ════════ */
+function uiEsc(s){ return esc(s); }
+function isRich(p){ return !!(p && (p.premium || (p.gemstones && p.gemstones.indexOf("+") > -1) || /7 chakra/i.test(p.gemstones||""))); }
+
+function richIntent(p){
+  var t = (p.tags||[]).join(" ");
+  if (/chakra/.test(t)) return "chakra";
+  if (/wealth|success|luck|growth|manifestation|abundance/.test(t)) return "wealth";
+  if (/love|relationship|heart/.test(t)) return "love";
+  if (/protection|grounding|negativity|stability|strength|courage/.test(t)) return "protection";
+  if (/intuition|spiritual|wisdom|vision|communication/.test(t)) return "intuition";
+  if (/peace|healing|moon|emotional/.test(t)) return "calm";
+  if (/focus|clarity|confidence|career|motivation/.test(t)) return "focus";
+  return "default";
+}
+
+var MANTRAS = {
+  wealth:    { s:"Om Shreem Hreem Kleem Maha Lakshmi Namaha", c:"Chant 108 times", t:"Touch the bracelet and repeat each morning for 21 days to anchor a steady money mindset." },
+  love:      { s:"Om Shreem Kleem Kamadevaya Namaha",          c:"Chant 108 times", t:"Repeat softly while wearing it on your left wrist, holding an open and willing heart." },
+  protection:{ s:"Om Gam Ganapataye Namaha",                   c:"Chant 108 times", t:"Recite each morning to clear the path ahead and seal your energy for the day." },
+  intuition: { s:"Om Aim Saraswatyai Namaha",                  c:"Chant 108 times", t:"Chant in a quiet moment to sharpen inner vision and trust your own knowing." },
+  calm:      { s:"Om Namah Shivaya",                            c:"Chant 108 times", t:"Repeat slowly with the breath to settle the mind and steady the emotions." },
+  focus:     { s:"Om Gam Ganapataye Namaha",                   c:"Chant 108 times", t:"Recite before important work to gather your focus and remove obstacles." },
+  chakra:    { s:"Om Namah Shivaya",                            c:"Chant 108 times", t:"Move attention from the base to the crown as you chant, balancing each centre." },
+  "default": { s:"Om Gam Ganapataye Namaha",                   c:"Chant 108 times", t:"Repeat each morning with a clear intention and a moment of gratitude." }
+};
+var RITUAL_DAY = { wealth:"Friday (Venus) or Thursday (Jupiter)", love:"Friday (Venus)", protection:"Saturday (Saturn) or Tuesday (Mars)", intuition:"Monday (Moon)", calm:"Monday (Moon)", focus:"Wednesday (Mercury)", chakra:"Sunday (Sun)", "default":"Sunday or Thursday" };
+var RITUAL_INTENT = { wealth:"\u201CI attract abundance with clarity and ease.\u201D", love:"\u201CI am open to love and worthy of receiving it.\u201D", protection:"\u201CI am grounded, safe and protected.\u201D", intuition:"\u201CI trust my inner knowing.\u201D", calm:"\u201CI am calm, balanced and at peace.\u201D", focus:"\u201CI move with focus and quiet confidence.\u201D", chakra:"\u201CMy energy is aligned and flowing.\u201D", "default":"\u201CI align with my highest good.\u201D" };
+
+var STONE_NOTES = {
+  "tiger eye":"Courage, focus and grounded confidence.",
+  "black obsidian":"A protective shield that absorbs negativity.",
+  "obsidian":"A protective shield that absorbs negativity.",
+  "hematite":"Grounds scattered energy and steadies the mind.",
+  "citrine":"The merchant's stone of wealth and bold optimism.",
+  "natural citrine":"The merchant's stone of wealth and bold optimism.",
+  "pyrite":"Magnetises money and guards your drive.",
+  "green aventurine":"The stone of opportunity, luck and growth.",
+  "rose quartz":"Opens the heart to love and gentle healing.",
+  "rhodonite":"Heals the heart and restores self-worth.",
+  "amethyst":"Calms the mind and deepens intuition.",
+  "clear quartz":"Amplifies intention and clears the energy field.",
+  "quartz":"Amplifies intention and clears the energy field.",
+  "black tourmaline":"Deflects negativity and steadies you.",
+  "lapis lazuli":"Wisdom, truth and clear expression.",
+  "peach moonstone":"Soothes emotion and awakens gentle intuition.",
+  "white moonstone":"Soothes emotion and awakens intuition.",
+  "moonstone":"Soothes emotion and awakens intuition.",
+  "iolite":"The vision stone \u2014 inner direction and Saturn's discipline.",
+  "yellow aventurine":"Optimism, willpower and clear decisions.",
+  "red jasper":"Stamina, courage and grounded strength."
+};
+function stoneNote(name){ return STONE_NOTES[name.trim().toLowerCase()] || "A natural energy stone, polished for daily wear."; }
+
+var BENEFIT_CARDS = [
+  { re:/wealth|abundance|money|prosper|success/i, ic:"\uD83D\uDCB0", accent:"#c9a24a", blurb:"Draws steady abundance and a confident money mindset.", pill:"Wealth" },
+  { re:/luck|opportunity|growth/i,                ic:"\uD83C\uDF40", accent:"#4f9e6a", blurb:"Opens doors to luck, growth and new opportunity.", pill:"Growth" },
+  { re:/protection|shield|negativity/i,           ic:"\uD83D\uDEE1\uFE0F", accent:"#6e1423", blurb:"Shields your energy and keeps negativity out.", pill:"Protection" },
+  { re:/ground|stability|strength|stamina|courage/i, ic:"\u2693", accent:"#5c4327", blurb:"Grounds scattered energy and steadies you.", pill:"Grounding" },
+  { re:/love|relationship|heart/i,                ic:"\uD83D\uDC97", accent:"#e08aa0", blurb:"Opens the heart to love and warm connection.", pill:"Love" },
+  { re:/calm|peace|stress|emotional|soothing/i,   ic:"\uD83C\uDF19", accent:"#7e8bbf", blurb:"Soothes the mind and brings emotional calm.", pill:"Calm" },
+  { re:/intuition|vision|spiritual|wisdom/i,      ic:"\uD83D\uDD2E", accent:"#7e57c2", blurb:"Deepens intuition and inner clarity.", pill:"Intuition" },
+  { re:/focus|clarity|decision|confidence|willpower|motivation/i, ic:"\uD83C\uDFAF", accent:"#b07d2a", blurb:"Sharpens focus and steady confidence.", pill:"Focus" },
+  { re:/chakra|balance|alignment|wellness/i,      ic:"\uD83C\uDF00", accent:"#8a5a9e", blurb:"Balances and aligns your energy centres.", pill:"Balance" }
+];
+function whyCards(p){
+  var benefits = (p.benefits||"").split(",").map(function(b){ return b.trim(); }).filter(Boolean);
+  var seen = {}, cards = [];
+  benefits.forEach(function(b){
+    for (var i=0;i<BENEFIT_CARDS.length;i++){
+      if (BENEFIT_CARDS[i].re.test(b) && !seen[BENEFIT_CARDS[i].pill]){
+        seen[BENEFIT_CARDS[i].pill] = 1;
+        cards.push(BENEFIT_CARDS[i]);
+        break;
+      }
+    }
+  });
+  return cards.slice(0,4);
+}
+
+function buildPinfo(){
+  var host = $("pinfo"); if(!host) return;
+  var primary = (product.gemstones||"").split("+")[0].trim() || "natural";
+  var acc = function(title, bodyHtml, open){
+    return '<details class="acc"'+(open?' open':'')+'><summary>'+uiEsc(title)+'<span class="chev"></span></summary><div class="acc-body">'+bodyHtml+'</div></details>';
+  };
+  var feat = ['Natural '+uiEsc(primary)+' beads, polished smooth and skin-friendly',
+    '8mm beads on a stretchable, free-size band',
+    'Unisex design \u2014 made for everyday wear',
+    'Cleansed and energised before dispatch',
+    'Lab-tested for authenticity \u2014 never dyed or synthetic'];
+  var care = ['Wear it on your left wrist, the receiving side.',
+    'Cleanse it now and then under moonlight or with incense smoke.',
+    'Keep away from water, perfume and harsh chemicals; remove before bathing.',
+    'Hold a clear intention each time you put it on.'];
+  host.innerHTML =
+    acc('Description', '<p>'+uiEsc(product.description)+' Every band is cleansed and energised by hand before it reaches you, then shipped free across India.</p>', true) +
+    acc('Key Features', '<ul>'+feat.map(function(f){return '<li>'+f+'</li>';}).join('')+'</ul>') +
+    acc('How to Wear &amp; Care', '<ul>'+care.map(function(c){return '<li>'+uiEsc(c)+'</li>';}).join('')+'</ul>');
+}
+
+function buildRich(){
+  var host = $("rich-sections"); if(!host) return;
+  if(!isRich(product)){ host.innerHTML = ""; return; }
+  var intent = richIntent(product);
+  var col = STONE_COLORS[sku] || "#c9a84c";
+
+  /* why-wear cards */
+  var cards = whyCards(product);
+  var whyHtml = cards.map(function(c,i){
+    return '<article class="why-card" style="--accent:'+c.accent+'"><span class="ic">'+c.ic+'</span>'+
+      '<h3>'+uiEsc(c.pill)+'</h3><p>'+uiEsc(c.blurb)+'</p>'+
+      '<span class="pill">'+(i===0?'Most loved':uiEsc(c.pill))+'</span></article>';
+  }).join("");
+
+  /* ingredient chips */
+  var stones = (product.gemstones||"").split("+").map(function(s){return s.trim();}).filter(Boolean);
+  if (stones.length===1 && /7 chakra/i.test(stones[0])){
+    stones = ["Amethyst","Lapis Lazuli","Clear Quartz","Green Aventurine","Citrine","Red Jasper","Black Tourmaline"];
+  }
+  var palette = ["#c9a24a","#4f9e6a","#7e57c2","#2b4a8c","#a83232","#b07d2a","#e08aa0"];
+  var ingrHtml = stones.map(function(s,i){
+    var a = palette[i % palette.length];
+    return '<div class="ingr" style="--accent:'+a+';--accent-a:'+hexA(a,.4)+'"><span class="dot"></span>'+
+      '<div><h4>'+uiEsc(s)+'</h4><p>'+uiEsc(stoneNote(s))+'</p></div></div>';
+  }).join("");
+
+  /* ritual */
+  var steps = [
+    { ic:"\uD83D\uDCC5", h:"Best Day", p:RITUAL_DAY[intent] },
+    { ic:"\uD83D\uDCA7", h:"Cleanse", p:"Rinse 30s or pass through incense smoke" },
+    { ic:"\uD83E\uDDD8", h:"Center", p:"Take three slow, deep breaths" },
+    { ic:"\u2728", h:"Intention", p:RITUAL_INTENT[intent] },
+    { ic:"\uD83D\uDC50", h:"Wear", p:"On the left wrist, with gratitude" }
+  ];
+  var ritualHtml = steps.map(function(s,i){
+    return '<div class="rstep"><span class="num">'+(i+1)+'</span><span class="ic">'+s.ic+'</span><h4>'+uiEsc(s.h)+'</h4><p>'+uiEsc(s.p)+'</p></div>';
+  }).join("");
+
+  /* mantra */
+  var m = MANTRAS[intent] || MANTRAS["default"];
+  var mantraHtml = '<div class="mantra"><div class="eye">Activation Mantra</div>'+
+    '<div class="sanskrit" id="mantra-text">'+uiEsc(m.s)+'</div>'+
+    '<div class="count">'+uiEsc(m.c)+'</div>'+
+    '<p class="tip">'+uiEsc(m.t)+'</p>'+
+    '<button type="button" class="copy-m" id="copy-mantra">Copy mantra</button></div>';
+
+  /* comparison (allowed claims only — lab-tested + Pran Pratishtha energised; no govt certificate) */
+  var ord = [
+    "Synthetic glass or dyed stone \u2014 dull and lifeless.",
+    "Machine-made and never energised.",
+    "No clarity on what you're actually buying.",
+    "No support once the sale is done."
+  ];
+  var us = [
+    "100% natural crystal, lab-tested for authenticity.",
+    "Energised by hand through Pran Pratishtha before dispatch.",
+    "Cleansed, inspected and shipped free across India.",
+    "Backed by a 7-day easy-return promise."
+  ];
+  var cmpHtml = '<div class="cmp" id="cmp-block">'+
+    '<div class="cmp-col cmp-ordinary"><h3>\uD83E\uDEA8 An Ordinary Stone</h3>'+
+      ord.map(function(r){return '<div class="cmp-row"><span class="mk">\u2715</span><span>'+uiEsc(r)+'</span></div>';}).join('')+'</div>'+
+    '<div class="cmp-col cmp-us"><h3>\uD83D\uDC8E The Veshannastro Bracelet</h3>'+
+      us.map(function(r){return '<div class="cmp-row"><span class="mk">\u2713</span><span>'+uiEsc(r)+'</span></div>';}).join('')+'</div>'+
+  '</div>';
+
+  host.innerHTML =
+    (whyHtml ? '<section class="rich"><div class="rich-head"><span class="eye">Why wear it</span><h2>Why the '+uiEsc(product.name.replace(/ Bracelet.*/,''))+'</h2><p>Nature\u2019s finest stones, chosen for one intention.</p></div><div class="why-grid">'+whyHtml+'</div></section>' : '') +
+    '<section class="rich"><div class="rich-head"><span class="eye">Inside the band</span><h2>The Stones</h2><p>Every bead is a natural crystal, each carrying its own purpose.</p></div><div class="ingr-grid">'+ingrHtml+'</div></section>' +
+    '<section class="rich"><div class="rich-head"><span class="eye">Make it yours</span><h2>Activate Your Bracelet</h2><p>A simple ritual to wake the stones and set your intention.</p></div><div class="ritual-steps">'+ritualHtml+'</div>'+mantraHtml+'</section>' +
+    '<section class="rich"><div class="rich-head"><span class="eye">The difference</span><h2>Ordinary vs. Veshannastro</h2><p>Why a real, energised bracelet is worth it.</p></div>'+cmpHtml+'</section>';
+
+  /* copy mantra */
+  var cm = $("copy-mantra");
+  if(cm) cm.addEventListener("click", function(){
+    var txt = (m.s||"");
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(function(){ toast("Mantra copied"); }, function(){ toast("Mantra: "+txt); }); }
+    else { toast("Mantra: "+txt); }
+  });
+
+  /* animate comparison on scroll */
+  var cmp = $("cmp-block");
+  if(cmp){
+    if("IntersectionObserver" in window){
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+      }, { threshold:.25 });
+      io.observe(cmp);
+    } else { cmp.classList.add("in"); }
+  }
+}
+
 function init(){
   sku = new URLSearchParams(location.search).get("sku") || DEFAULT_SKU;
   product = PRODUCTS[sku] || PRODUCTS[DEFAULT_SKU];
@@ -1053,6 +1462,8 @@ function init(){
   buildFaq();
   buildReviews();
   buildRelated();
+  buildPinfo();
+  buildRich();
   injectJsonLd();
   renderTotals();
   bind();
@@ -1061,7 +1472,7 @@ function init(){
 /* gallery: try sku, sku-2, sku-3, sku-4; show thumbs only for images that load */
 function setupGallery(){
   var base = "images/bracelets/";
-  var candidates = [sku, sku+"-2", sku+"-3", sku+"-4"];
+  var candidates = [sku, sku+"-1", sku+"-2", sku+"-3", sku+"-4", sku+"-5"];
   var mainEl = $("main-img"), wrap = $("gallery-main"), thumbs = $("gallery-thumbs");
   var loaded = [];
   var firstSet = false;
@@ -1514,6 +1925,9 @@ function bind(){
   $("buy-btn").addEventListener("click", openCheckout);
   var sbb = $("sb-buy"); if(sbb) sbb.addEventListener("click", openCheckout);
   var cb = $("cart-btn"); if(cb) cb.addEventListener("click", addToCart);
+  var ccc = $("cc-checkout"); if(ccc) ccc.addEventListener("click", function(){ var p=$("cart-confirm"); if(p) p.classList.remove("show"); openCheckout(); });
+  var cck = $("cc-continue"); if(cck) cck.addEventListener("click", function(){ var p=$("cart-confirm"); if(p) p.classList.remove("show"); });
+  var ccp = $("cart-confirm"); if(ccp){ ccp.addEventListener("mouseenter", function(){ clearTimeout(ccTimer); }); ccp.addEventListener("mouseleave", function(){ clearTimeout(ccTimer); ccTimer=setTimeout(function(){ ccp.classList.remove("show"); }, 2500); }); }
   var ab = $("ai-btn"); if(ab) ab.addEventListener("click", function(){ window.location.href = CONFIG.recommendationUrl; });
   var nc = $("nav-cart"); if(nc) nc.addEventListener("click", function(e){ if(cartCount>0){ e.preventDefault(); openCheckout(); } });
   var pc = $("pin-check"); if(pc) pc.addEventListener("click", estimateDelivery);

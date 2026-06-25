@@ -142,8 +142,7 @@ src="https://www.facebook.com/tr?id=1423451529588621&ev=PageView&noscript=1"
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>emailjs.init({publicKey:'i35OrY8mtgVZMIQU8'});</script>
 <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
-<link rel="stylesheet" href="bracelet-shop.css?v=20260623-2">
-<script src="bracelet-shop.js?v=20260623-2" defer></script>
+<!-- old bracelet-shop.css / bracelet-shop.js removed: gemstone shop is now the embedded bracelet-fusion.html -->
 <!-- Email OTP System -->
 <script>
 (function(){
@@ -3048,7 +3047,7 @@ canvas#sc{background:#050507!important;z-index:0!important;}
       <p class="lsb-sub">Every bracelet in the first batch is cleansed, energised and shipped free across India — at <b>30% off</b> while the launch lasts. Once this batch is gone, the founders' price goes with it.</p>
       <div class="lsb-cta">
         <a class="lsb-btn lsb-btn-gold" href="#bracelet-shop">Shop the launch sale &rarr;</a>
-        <a class="lsb-btn lsb-btn-ghost" href="https://new-ai-chatbot-bv0n.onrender.com" target="_blank" rel="noopener">Ask Maaya which stone fits you</a>
+        <a class="lsb-btn lsb-btn-ghost" href="#vesha-chat" onclick="var s=document.getElementById('vesha-chat');if(s){s.scrollIntoView({behavior:'smooth'});return false;}">Ask Maaya which stone fits you</a>
       </div>
     </div>
   </div>
@@ -3250,7 +3249,7 @@ canvas#sc{background:#050507!important;z-index:0!important;}
 </div>
 <!-- ══ END PRE-SERVICE TRUST BAR ══ -->
 
-<section id="vesha-chat" class="vo-host" aria-label="Veshannastro readings — choose Kundli, Numerology or Palm">
+<section id="vesha-chat" class="vo-host" style="scroll-margin-top:96px;" aria-label="Veshannastro readings — choose Kundli, Numerology or Palm">
 <section class="vo-wrap" aria-label="Veshannastro services">
   <header class="vo-head">
     <p class="vo-eyebrow">Your chart already has the answer</p>
@@ -4687,42 +4686,11 @@ canvas#sc{background:#050507!important;z-index:0!important;}
   </div>
 </section>
 
-<section id="bracelet-shop" aria-label="Veshannastro gemstone bracelet catalog">
-  <div class="br-shop-wrap">
-    <div class="br-shop-head" data-reveal>
-      <div>
-        <div class="br-eyebrow">New launch catalog</div>
-        <h2 class="br-title">Gemstone <em>Bracelets</em></h2>
-        <p class="br-sub">Curated gemstone bracelets for protection, clarity, love, growth, and daily spiritual support. Every bracelet is prepaid-only, shipped across India, and listed as free size.</p>
-      </div>
-      <button type="button" class="br-cart-open" id="br-cart-open">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="20" r="1.8"/><circle cx="18" cy="20" r="1.8"/><path d="M3 4h2l2.6 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 1.9-1.4L21 8H7"/></svg>
-        Cart <span class="br-cart-count" id="br-cart-count">0</span>
-      </button>
-    </div>
-    <div class="br-tool-row">
-      <div class="br-filters" id="br-filters" aria-label="Bracelet filters"></div>
-      <div class="br-shop-note"><b>HAPPY10</b> gives 10% off on any two bracelet order.</div>
-    </div>
-    <div class="br-scroll-controls" aria-label="Bracelet catalog scroll controls">
-      <button type="button" class="br-scroll-btn" id="br-scroll-prev" aria-label="Previous bracelets">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
-      </button>
-      <span>Scroll the bracelet catalog side by side</span>
-      <button type="button" class="br-scroll-btn" id="br-scroll-next" aria-label="Next bracelets">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
-      </button>
-    </div>
-    <div class="br-rail-wrap">
-      <div class="br-grid" id="br-grid"></div>
-    </div>
-    <div class="br-payline">
-      <span><b>Prepaid only</b> through Razorpay</span>
-      <span>Currency: <b>INR</b></span>
-      <span>Delivery target: <b>India only</b></span>
-      <span>Size: <b>Free size</b></span>
-    </div>
-  </div>
+<!-- GEMSTONE BRACELET SHOP — embedded self-contained app (bracelet-fusion.html) -->
+<section id="bracelet-shop" aria-label="Veshannastro gemstone bracelet catalog" style="background:#F4EFE6;">
+  <iframe id="fx-bracelet-frame" src="bracelet-fusion.html?v=20260626" title="Gemstone Bracelets — Veshannastro"
+    loading="lazy"
+    style="display:block;width:100%;border:0;height:88vh;min-height:600px;background:#F4EFE6;"></iframe>
 </section>
 
 <section id="consultation-deliverables" aria-label="What you receive after booking a consultation with Veshannastro">
@@ -7932,7 +7900,7 @@ document.querySelectorAll('.process-step').forEach(el=>stepIO.observe(el));
 @media(max-width:480px){.maaya-fab span.maaya-label{display:none;}.maaya-fab{padding:13px;border-radius:50%;bottom:84px;}}
 @media(prefers-reduced-motion:reduce){.maaya-fab .maaya-orb{animation:none;}}
 </style>
-<a href="https://new-ai-chatbot-bv0n.onrender.com" class="maaya-fab" target="_blank" rel="noopener" aria-label="Chat free with Maaya, the Veshannastro AI astrologer">
+<a href="#vesha-chat" onclick="var s=document.getElementById('vesha-chat');if(s){s.scrollIntoView({behavior:'smooth'});return false;}" class="maaya-fab" aria-label="Chat free with Maaya, the Veshannastro AI astrologer">
   <span class="maaya-orb" aria-hidden="true"></span>
   <span class="maaya-label">Chat with Maaya <span class="maaya-free">Free</span></span>
 </a>
@@ -8073,7 +8041,7 @@ document.querySelectorAll('.process-step').forEach(el=>stepIO.observe(el));
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
       veshannastro@gmail.com
     </a>
-    <a href="https://new-ai-chatbot-bv0n.onrender.com" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.5rem;font-family:'Cinzel',serif;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:#F0D080;border:1px solid rgba(240,208,128,.45);padding:.62rem 1.15rem;border-radius:7px;text-decoration:none;">
+    <a href="#vesha-chat" onclick="var s=document.getElementById('vesha-chat');if(s){s.scrollIntoView({behavior:'smooth'});return false;}" style="display:inline-flex;align-items:center;gap:.5rem;font-family:'Cinzel',serif;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:#F0D080;border:1px solid rgba(240,208,128,.45);padding:.62rem 1.15rem;border-radius:7px;text-decoration:none;">
       ✦ Chat free with Maaya — our AI astrologer
     </a>
   </div>
@@ -8372,6 +8340,21 @@ html{background:#050507!important;}
   window.VESHANN_MAYA_API_BASE = "https://new-ai-chatbot-bv0n.onrender.com";
 </script>
 <script src="https://new-ai-chatbot-bv0n.onrender.com/widget.js?v=maaya-oracle-v3-compact-gemstone" defer></script>
+<script>
+/* Open the Maaya overlay automatically when linked in with ?openMaaya=1 (e.g. from shop-product.html) */
+(function(){
+  try{
+    if(new URLSearchParams(window.location.search).get("openMaaya")==="1"){
+      var tries=0;
+      var timer=setInterval(function(){
+        tries++;
+        if(typeof window.openMaaya==="function"){ window.openMaaya(); clearInterval(timer); }
+        else if(tries>60){ clearInterval(timer); }
+      },250);
+    }
+  }catch(e){}
+})();
+</script>
 
 <!-- ══ MOTION · lightweight scroll reveal (motion.dev) ══ -->
 <script type="module">

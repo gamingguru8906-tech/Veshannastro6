@@ -753,6 +753,19 @@
   opacity: 0;
 }
 
+/* ── hover second-image cross-fade (only when a -1 image loaded) ── */
+.br-media .br-img-alt {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+.br-card.has-alt:hover .br-img-alt { opacity: 1; }
+.br-card.has-alt:hover .br-img-main { opacity: 0; }
+.br-card.has-alt:hover .br-media img { transform: scale(1.04); }
+@media (prefers-reduced-motion: reduce) {
+  .br-card.has-alt:hover .br-media img { transform: none; }
+}
+
 .br-fallback {
   position: absolute;
   inset: 0;
