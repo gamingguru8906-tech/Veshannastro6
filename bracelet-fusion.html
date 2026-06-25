@@ -458,6 +458,51 @@ body{background:var(--page-bg);color:var(--ink);min-height:100vh;font-weight:500
 .fx-cd-success h4{font-family:'Anton',sans-serif;font-weight:400;font-size:1.5rem;color:var(--ink);letter-spacing:.03em;text-transform:uppercase;margin-bottom:.5rem;}
 .fx-cd-success p{font-family:'Jost',sans-serif;font-size:.92rem;color:var(--muted);line-height:1.6;margin-bottom:1.3rem;}
 .fx-cd-success .fx-cd-checkout{display:block;text-decoration:none;text-align:center;}
+
+/* ═══════════ COUPON TOTALS ═══════════ */
+.fx-coupon-tag{background:rgba(79,158,106,.14);color:#2e7d4f;border:1px solid rgba(79,158,106,.4);border-radius:8px;padding:.5rem .7rem;font-family:'Jost',sans-serif;font-size:.82rem;font-weight:600;margin-bottom:.7rem;text-align:center;}
+.fx-cd-subline,.fx-cd-discline{display:flex;justify-content:space-between;font-family:'Jost',sans-serif;font-size:.88rem;color:var(--muted);margin-bottom:.35rem;}
+.fx-cd-discline{color:#2e7d4f;font-weight:600;}
+
+/* ═══════════ 2-ITEM CELEBRATION ═══════════ */
+.fx-celebrate{position:fixed;inset:0;z-index:160;display:flex;align-items:center;justify-content:center;background:rgba(20,12,16,.55);opacity:0;visibility:hidden;transition:opacity .35s;}
+.fx-celebrate.show{opacity:1;visibility:visible;}
+.fx-celebrate-card{position:relative;width:340px;max-width:90vw;background:var(--page-bg);border:1px solid var(--gold);border-radius:18px;padding:2rem 1.5rem;text-align:center;box-shadow:0 30px 80px rgba(20,12,16,.4);transform:scale(.85);transition:transform .4s cubic-bezier(.3,.9,.3,1.3);overflow:hidden;}
+.fx-celebrate.show .fx-celebrate-card{transform:scale(1);}
+.fx-confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.fx-conf-piece{position:absolute;top:42%;width:9px;height:14px;border-radius:2px;opacity:0;transform:translate(-50%,0);animation:fxconf 1.5s ease-out forwards;}
+@keyframes fxconf{0%{opacity:1;transform:translate(-50%,0) rotate(0);}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),var(--dy)) rotate(var(--rot));}}
+.fx-gift{position:relative;width:96px;height:84px;margin:0 auto 1.2rem;}
+.fx-gift-box{position:absolute;bottom:0;left:8px;width:80px;height:58px;background:linear-gradient(135deg,#7d1828,#6E1423);border-radius:6px;}
+.fx-gift-ribbon{position:absolute;left:50%;top:0;width:12px;height:100%;background:var(--gold);transform:translateX(-50%);}
+.fx-gift-lid{position:absolute;top:6px;left:0;width:96px;height:24px;background:linear-gradient(135deg,#9a2336,#7d1828);border-radius:6px;transform-origin:center bottom;transition:transform .55s cubic-bezier(.4,-.5,.5,1.4),opacity .55s;z-index:2;}
+.fx-gift-bow{position:absolute;left:50%;top:-11px;width:24px;height:16px;background:var(--gold);border-radius:50% 50% 0 0;transform:translateX(-50%);}
+.fx-gift-bow::before,.fx-gift-bow::after{content:"";position:absolute;top:1px;width:12px;height:15px;background:var(--gold);border-radius:50%;}
+.fx-gift-bow::before{left:-7px;transform:rotate(-25deg);} .fx-gift-bow::after{right:-7px;transform:rotate(25deg);}
+.fx-celebrate.opened .fx-gift-lid{transform:translateY(-42px) rotate(-20deg);opacity:0;}
+.fx-celebrate.opened .fx-gift-box{animation:fxgiftpop .4s ease;}
+@keyframes fxgiftpop{0%{transform:scale(1);}50%{transform:scale(1.12);}100%{transform:scale(1);}}
+.fx-reward{display:none;}
+.fx-celebrate.reward .fx-gift{display:none;}
+.fx-celebrate.reward .fx-reward{display:block;animation:fxrewardin .4s ease;}
+@keyframes fxrewardin{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+.fx-reward-badge{display:inline-block;background:var(--gold);color:#2a1d05;font-family:'Anton',sans-serif;font-size:1.05rem;letter-spacing:.05em;padding:.3rem 1rem;border-radius:50px;margin-bottom:.7rem;}
+.fx-reward h3{font-family:'Anton',sans-serif;font-weight:400;font-size:1.5rem;color:var(--maroon);letter-spacing:.03em;text-transform:uppercase;margin-bottom:.4rem;}
+.fx-reward>p{font-family:'Jost',sans-serif;font-size:.92rem;color:var(--ink2);margin-bottom:1.1rem;}
+.fx-upsell{background:#fff;border:1px dashed var(--gold);border-radius:12px;padding:1rem;margin-bottom:1rem;}
+.fx-upsell-head{font-family:'Jost',sans-serif;font-size:1rem;color:var(--ink);margin-bottom:.3rem;}
+.fx-upsell-head b{color:var(--maroon);}
+.fx-upsell p{font-family:'Jost',sans-serif;font-size:.82rem;color:var(--muted);margin-bottom:.8rem;}
+.fx-upsell p b{color:var(--maroon);}
+.fx-maya-btn{width:100%;background:linear-gradient(135deg,#6E1423,#9a2336);color:#F4DD9B;border:1px solid var(--gold);border-radius:8px;padding:.85rem;font-family:'Cinzel',serif;font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:transform .2s;}
+.fx-maya-btn:hover{transform:translateY(-2px);}
+.fx-reward-continue{background:transparent;border:none;color:var(--muted);font-family:'Jost',sans-serif;font-size:.85rem;cursor:pointer;text-decoration:underline;}
+.fx-reward-continue:hover{color:var(--maroon);}
+@media(prefers-reduced-motion:reduce){
+  .fx-conf-piece{display:none;}
+  .fx-gift-lid{transition:opacity .3s;} .fx-celebrate.opened .fx-gift-lid{transform:none;}
+  .fx-celebrate-card{transition:none;transform:none;}
+}
 @media(max-width:560px){.fx-card-actions{flex-wrap:wrap;}.fx-card-view{flex:1 1 100%;justify-content:center;padding:.5rem;}}
 @media(prefers-reduced-motion:reduce){
   .fx-card-cta.is-loading .cta-spin{animation:none;}
@@ -847,7 +892,15 @@ var FX_CONFIG={
   // Leave "" to use the in-frame Razorpay popup fallback.
   cartLinkEndpoint:""
 };
-function fxTotal(){var t=0;for(var s in fxCart){var r=ALL_PRODUCTS[s];if(r)t+=r.p.price*fxCart[s];}return t;}
+var fxCoupon='', fxCelebrated=false;
+function fxSubtotal(){var t=0;for(var s in fxCart){var r=ALL_PRODUCTS[s];if(r)t+=r.p.price*fxCart[s];}return t;}
+function fxDiscountRate(){
+  if(fxCoupon==='HAPPY10' && cartCountTotal()>=2) return 0.10;   // 2+ bracelets
+  if(fxCoupon==='NEW15') return 0.15;
+  return 0;
+}
+function fxDiscountAmt(){return Math.round(fxSubtotal()*fxDiscountRate());}
+function fxTotal(){return Math.max(0, fxSubtotal()-fxDiscountAmt());}
 function fxItems(){var a=[];for(var s in fxCart){var r=ALL_PRODUCTS[s];if(r)a.push({sku:s,name:r.p.name,qty:fxCart[s],unit_price:r.p.price,line_total:r.p.price*fxCart[s],gemstones:r.p.gemstones});}return a;}
 function fxBuildOrder(c,paymentId,status){
   var items=fxItems();
@@ -858,7 +911,7 @@ function fxBuildOrder(c,paymentId,status){
     payment_status:status, payment_id:paymentId||"", payment_method:"Razorpay prepaid",
     currency:"INR", customer:c, items:items,
     item_summary:items.map(function(i){return i.name+" \u00D7 "+i.qty;}).join(", "),
-    subtotal:fxTotal(), coupon:"", discount:0, total:fxTotal(), shipping_country:"India"
+    subtotal:fxSubtotal(), coupon:fxCoupon||"", discount:fxDiscountAmt(), total:fxTotal(), shipping_country:"India"
   };
 }
 function fxLogOrder(order){
@@ -887,6 +940,9 @@ function injectCartUI(){
       /* ── cart pane ── */
       '<div class="fx-cd-items" id="fx-cd-items"></div>'+
       '<div class="fx-cd-foot" id="fx-cd-foot" style="display:none">'+
+        '<div class="fx-coupon-tag" id="fx-coupon-tag" style="display:none"></div>'+
+        '<div class="fx-cd-subline" id="fx-cd-subline" style="display:none"><span>Subtotal</span><span id="fx-cd-sub-val"></span></div>'+
+        '<div class="fx-cd-discline" id="fx-cd-discline" style="display:none"><span id="fx-cd-disc-label">Discount</span><span id="fx-cd-disc-val"></span></div>'+
         '<div class="fx-cd-total"><span>Total</span><b id="fx-cd-total-val">Rs. 0</b></div>'+
         '<button class="fx-cd-checkout" id="fx-cd-checkout">Proceed to Checkout</button>'+
       '</div>'+
@@ -913,6 +969,27 @@ function injectCartUI(){
         '<a id="fx-success-wa" class="fx-cd-checkout" target="_top" rel="noopener">Share order on WhatsApp</a>'+
         '<button class="fx-cd-back" id="fx-success-close" type="button" style="margin-top:.8rem">Close</button>'+
       '</div>'+
+    '</div>'+
+    /* ── 2-item celebration overlay ── */
+    '<div class="fx-celebrate" id="fx-celebrate">'+
+      '<div class="fx-celebrate-card">'+
+        '<div class="fx-confetti" id="fx-confetti"></div>'+
+        '<div class="fx-gift" id="fx-gift">'+
+          '<div class="fx-gift-lid"><span class="fx-gift-bow"></span></div>'+
+          '<div class="fx-gift-box"><span class="fx-gift-ribbon"></span></div>'+
+        '</div>'+
+        '<div class="fx-reward">'+
+          '<div class="fx-reward-badge">10% OFF</div>'+
+          '<h3>HAPPY10 unlocked!</h3>'+
+          '<p>Your 2-bracelet discount has been applied automatically.</p>'+
+          '<div class="fx-upsell">'+
+            '<div class="fx-upsell-head">Want <b>15% OFF</b> instead?</div>'+
+            '<p>Ask Maya for a free reading and unlock <b>NEW15</b> \u2014 an even bigger discount.</p>'+
+            '<button class="fx-maya-btn" id="fx-maya-btn">\u2728 Chat with Maya \u2014 get 15% off</button>'+
+          '</div>'+
+          '<button class="fx-reward-continue" id="fx-reward-continue">Continue with 10% off</button>'+
+        '</div>'+
+      '</div>'+
     '</div>';
   document.body.insertAdjacentHTML('beforeend',html);
   var co=document.getElementById('fx-cd-checkout'); if(co)co.addEventListener('click',fxStartCheckout);
@@ -921,6 +998,8 @@ function injectCartUI(){
   var sc=document.getElementById('fx-success-close'); if(sc)sc.addEventListener('click',function(){ fxResetPanes(); closeCart(); });
   var pin=document.getElementById('fx-pin'); if(pin)pin.addEventListener('input',function(){this.value=this.value.replace(/\D/g,'');});
   var ph=document.getElementById('fx-phone'); if(ph)ph.addEventListener('input',function(){this.value=this.value.replace(/\D/g,'');});
+  var mb=document.getElementById('fx-maya-btn'); if(mb)mb.addEventListener('click',function(){ try{(window.top||window).location.href='index.html?openMaaya=1&coupon=NEW15#vesha-chat';}catch(e){window.location.href='index.html#vesha-chat';} });
+  var rc=document.getElementById('fx-reward-continue'); if(rc)rc.addEventListener('click',fxCelebrateClose);
 }
 function openCart(){var o=document.getElementById('fx-cart-overlay'),d=document.getElementById('fx-cart-drawer');if(o)o.classList.add('open');if(d)d.classList.add('open');}
 function closeCart(){var o=document.getElementById('fx-cart-overlay'),d=document.getElementById('fx-cart-drawer');if(o)o.classList.remove('open');if(d)d.classList.remove('open');}
@@ -952,7 +1031,23 @@ function renderCart(){
       '</div>';
   });
   box.innerHTML=rows;
-  if(foot){foot.style.display='block';var tv=document.getElementById('fx-cd-total-val');if(tv)tv.textContent=money(total);}
+  if(foot){
+    foot.style.display='block';
+    var sub=fxSubtotal(), disc=fxDiscountAmt(), tot=fxTotal();
+    var subline=document.getElementById('fx-cd-subline'), subVal=document.getElementById('fx-cd-sub-val'),
+        discline=document.getElementById('fx-cd-discline'), discVal=document.getElementById('fx-cd-disc-val'),
+        discLabel=document.getElementById('fx-cd-disc-label'), tv=document.getElementById('fx-cd-total-val'),
+        tag=document.getElementById('fx-coupon-tag');
+    if(disc>0){
+      if(subline){subline.style.display='flex';} if(subVal)subVal.textContent=money(sub);
+      if(discline){discline.style.display='flex';} if(discVal)discVal.textContent='\u2212 '+money(disc);
+      if(discLabel)discLabel.textContent=fxCoupon+' ('+(fxCoupon==='NEW15'?'15':'10')+'% off)';
+      if(tag){tag.style.display='block';tag.textContent='\uD83C\uDF89 '+fxCoupon+' applied \u2014 you saved '+money(disc)+'!';}
+    }else{
+      if(subline)subline.style.display='none'; if(discline)discline.style.display='none'; if(tag)tag.style.display='none';
+    }
+    if(tv)tv.textContent=money(tot);
+  }
 }
 function cartQty(sku,delta){fxCart[sku]=(fxCart[sku]||0)+delta;if(fxCart[sku]<=0)delete fxCart[sku];updateFab(true);renderCart();}
 function cartRemove(sku){delete fxCart[sku];updateFab(true);renderCart();}
@@ -1021,6 +1116,7 @@ function fxPay(){
       body:JSON.stringify({
         order_id:pendingOrder.order_id,
         items:fxItems().map(function(i){return {sku:i.sku,qty:i.qty};}),
+        coupon:fxCoupon||'',
         description:pendingOrder.item_summary.slice(0,250),
         customer:{name:c.name,email:c.email,contact:'+91'+c.phone,
           address:c.address1,city:c.city,state:c.state,pincode:c.pincode},
@@ -1087,8 +1183,41 @@ function addToCart(sku,btn){
     renderCart();
     if(typeof fxResetPanes==='function')fxResetPanes();
     openCart();
+    /* TRIGGER: exactly two bracelets in the cart → celebrate once */
+    if(cartCountTotal()===2 && !fxCelebrated){ fxCelebrated=true; setTimeout(fxCelebrate,420); }
   },720);
 }
+
+/* ── celebration: gift box + confetti, then auto-apply HAPPY10 ── */
+function fxConfettiBurst(){
+  var c=document.getElementById('fx-confetti'); if(!c)return;
+  if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var colors=['#c9a24a','#6E1423','#4f9e6a','#e08aa0','#2b4a8c','#F4DD9B'];
+  for(var i=0;i<30;i++){
+    var p=document.createElement('span'); p.className='fx-conf-piece';
+    p.style.left=(50+(Math.random()*60-30))+'%';
+    p.style.background=colors[i%colors.length];
+    p.style.setProperty('--dx',(Math.random()*220-110)+'px');
+    p.style.setProperty('--dy',(-130-Math.random()*170)+'px');
+    p.style.setProperty('--rot',(Math.random()*720-360)+'deg');
+    p.style.animationDelay=(Math.random()*0.15)+'s';
+    c.appendChild(p);
+    (function(el){ setTimeout(function(){ if(el.parentNode)el.parentNode.removeChild(el); },1700); })(p);
+  }
+}
+function fxCelebrate(){
+  var ov=document.getElementById('fx-celebrate'); if(!ov)return;
+  ov.classList.remove('opened','reward');
+  ov.classList.add('show');
+  fxConfettiBurst();
+  setTimeout(function(){ ov.classList.add('opened'); fxConfettiBurst(); },650);   // lid pops off
+  setTimeout(function(){                                                          // reward + auto-discount
+    fxCoupon='HAPPY10';
+    renderCart();
+    ov.classList.add('reward');
+  },1500);
+}
+function fxCelebrateClose(){ var ov=document.getElementById('fx-celebrate'); if(ov)ov.classList.remove('show','opened','reward'); }
 
 /* ── Init ── */
 injectCartUI();
@@ -1100,7 +1229,7 @@ document.querySelectorAll('.fx-sb-item').forEach(function(item){
     if(e.key==='Enter'||e.key===' '){e.preventDefault();item.click();}
   });
 });
-document.addEventListener('keydown',function(e){ if(e.key==='Escape')closeCart(); });
+document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ fxCelebrateClose(); closeCart(); } });
 </script>
 </body>
 </html>
