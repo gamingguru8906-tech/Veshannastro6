@@ -51,6 +51,10 @@ KEY_SECRET = os.environ.get("RAZORPAY_KEY_SECRET", "")
 WEBHOOK_SECRET = os.environ.get("RAZORPAY_WEBHOOK_SECRET", "")
 ALLOWED_ORIGIN = os.environ.get("ALLOWED_ORIGIN", "*")
 DB_PATH = os.environ.get("DB_PATH", "welcome.db")
+# Optional: your Google Apps Script web-app URL. When set, the webhook logs each
+# VERIFIED-paid order to your sheet server-side (trustworthy, unlike the client's
+# optimistic logging). Leave unset to skip server-side sheet logging.
+APPS_SCRIPT_URL = os.environ.get("APPS_SCRIPT_URL", "")
 
 client = razorpay.Client(auth=(KEY_ID, KEY_SECRET)) if KEY_ID and KEY_SECRET else None
 
@@ -65,10 +69,16 @@ app.add_middleware(
 # ── price guard ──────────────────────────────────────────────────────────────
 TRUST_CLIENT_AMOUNT = False     # ON: recompute every amount server-side
 PRICES = {
-    "VA-BR-TP-001": 699, "VA-BR-AM-002": 599, "VA-BR-CQ-003": 549, "VA-BR-BT-004": 649,
-    "VA-BR-CT-005": 699, "VA-BR-YA-006": 499, "VA-BR-RJ-007": 499, "VA-BR-TE-008": 599,
-    "VA-BR-RQ-009": 549, "VA-BR-GA-010": 499, "VA-BR-LL-011": 699, "VA-BR-MN-012": 749,
-    "VA-BR-7C-013": 599, "VA-BR-IO-014": 799,
+    # core collection (current sale prices)
+    "VA-BR-TP-001": 799, "VA-BR-AM-002": 999, "VA-BR-CQ-003": 999, "VA-BR-BT-004": 899,
+    "VA-BR-CT-005": 1199, "VA-BR-YA-006": 799, "VA-BR-RJ-007": 799, "VA-BR-TE-008": 799,
+    "VA-BR-RQ-009": 899, "VA-BR-GA-010": 899, "VA-BR-LL-011": 899, "VA-BR-MN-012": 799,
+    # premium collection
+    "VA-BR-WM-015": 1399, "VA-BR-7C-013": 1099, "VA-BR-IO-014": 1599,
+    "VA-BR-LK-016": 1299, "VA-BR-RE-017": 1299, "VA-BR-PY-018": 999,
+    # zodiac (placeholders)
+    "ZO-001": 949, "ZO-002": 999, "ZO-003": 879, "ZO-004": 949, "ZO-005": 999, "ZO-006": 879,
+    "ZO-007": 949, "ZO-008": 1099, "ZO-009": 949, "ZO-010": 999, "ZO-011": 949, "ZO-012": 879,
 }
 
 def round_half_up(x: float) -> int:
@@ -122,6 +132,21 @@ def mark_welcome_used(email: str, phone: str, order_id: str):
     except Exception:
         pass
 
+def log_order_to_sheet(order: dict):
+    """POST a verified-paid order to the Google Apps Script web app (if configured).
+    Sends the same JSON shape the client logs, so your existing doPost handles it."""
+    if not APPS_SCRIPT_URL:
+        return
+    try:
+        import urllib.request
+        data = json.dumps(order).encode("utf-8")
+        req = urllib.request.Request(
+            APPS_SCRIPT_URL, data=data,
+            headers={"Content-Type": "application/json"}, method="POST")
+        urllib.request.urlopen(req, timeout=10).read()
+    except Exception:
+        pass   # never let logging break the webhook response
+
 # ── models ────────────────────────────────────────────────────────────────────
 class Customer(BaseModel):
     name: str = ""
@@ -135,6 +160,40 @@ class OrderIn(BaseModel):
     customer: Customer = Customer()
     notes: Dict[str, str] = {}
     callback_url: Optional[str] = None
+
+# ── multi-item cart models ────────────────────────────────────────────────────
+class CartItem(BaseModel):
+    sku: str
+    qty: int = 1
+
+class CartCustomer(BaseModel):
+    name: str = ""
+    email: str = ""
+    contact: str = ""
+    address: str = ""
+    city: str = ""
+    state: str = ""
+    pincode: str = ""
+
+class CartIn(BaseModel):
+    order_id: str
+    items: list = []                  # list of {sku, qty}
+    description: str = "Veshannastro gemstone order"
+    customer: CartCustomer = CartCustomer()
+    callback_url: Optional[str] = None
+
+def compute_cart_amount(items) -> int:
+    """Sum line totals from the SERVER price table — never trust the browser."""
+    total = 0
+    for it in items or []:
+        sku = (it.get("sku") if isinstance(it, dict) else getattr(it, "sku", "")) or ""
+        qty = (it.get("qty") if isinstance(it, dict) else getattr(it, "qty", 1)) or 1
+        try:
+            qty = max(1, int(qty))
+        except Exception:
+            qty = 1
+        total += PRICES.get(sku, 0) * qty
+    return max(0, total)
 
 # ── routes ──────────────────────────────────────────────────────────────────
 @app.get("/")
@@ -194,6 +253,53 @@ def create_payment_link(order: OrderIn):
 
     return {"short_url": link.get("short_url"), "id": link.get("id"), "amount": amount_rupees}
 
+@app.post("/create-cart-link")
+def create_cart_link(cart: CartIn):
+    """Multi-item cart → exact-amount Razorpay payment link (full-page hosted checkout).
+    The amount is recomputed from the SERVER price table, so the browser can't tamper."""
+    if client is None:
+        raise HTTPException(500, "Razorpay keys not configured on the server.")
+
+    amount_rupees = compute_cart_amount(cart.items)
+    if amount_rupees <= 0:
+        raise HTTPException(400, "Invalid cart / empty amount.")
+
+    # compact human summary for the dashboard + webhook
+    summary = ", ".join(
+        f"{(it.get('sku') if isinstance(it, dict) else it.sku)}x"
+        f"{(it.get('qty') if isinstance(it, dict) else it.qty)}"
+        for it in cart.items
+    )[:240]
+
+    c = cart.customer
+    payload = {
+        "amount": amount_rupees * 100,            # paise
+        "currency": "INR",
+        "accept_partial": False,
+        "description": (cart.description or "Veshannastro gemstone order")[:2048],
+        "reference_id": f"{cart.order_id}-{int(time.time())}",
+        "customer": {"name": c.name, "email": c.email, "contact": c.contact},
+        "notify": {"sms": False, "email": False},
+        "reminder_enable": False,
+        # everything the webhook needs to log a verified order to the sheet
+        "notes": {
+            "order_id": cart.order_id, "items": summary, "kind": "cart",
+            "buyer_name": c.name, "buyer_email": c.email, "buyer_phone": c.contact,
+            "address": c.address[:240], "city": c.city, "state": c.state, "pincode": c.pincode,
+            "amount": str(amount_rupees),
+        },
+    }
+    if cart.callback_url:
+        payload["callback_url"] = cart.callback_url
+        payload["callback_method"] = "get"
+
+    try:
+        link = client.payment_link.create(payload)
+    except Exception as exc:
+        raise HTTPException(502, f"Razorpay error: {exc}")
+
+    return {"short_url": link.get("short_url"), "id": link.get("id"), "amount": amount_rupees}
+
 @app.post("/razorpay-webhook")
 async def razorpay_webhook(request: Request):
     body = await request.body()
@@ -211,10 +317,37 @@ async def razorpay_webhook(request: Request):
         try:
             pl = event["payload"]["payment_link"]["entity"]
             notes = pl.get("notes", {}) or {}
+            payment_id = ""
+            try:
+                payment_id = event["payload"]["payment"]["entity"]["id"]
+            except Exception:
+                payment_id = ""
+
+            # WELCOME: record one-per-customer redemption only on real payment
             if (notes.get("coupon", "") or "").upper() == "WELCOME":
                 mark_welcome_used(notes.get("buyer_email", ""),
                                   notes.get("buyer_phone", ""),
                                   notes.get("order_id", pl.get("reference_id", "")))
+
+            # Cart orders: log the VERIFIED-paid order to the Google Sheet
+            if (notes.get("kind", "") == "cart") and APPS_SCRIPT_URL:
+                order = {
+                    "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+                    "order_id": notes.get("order_id", pl.get("reference_id", "")),
+                    "category": "Product Store", "source": "Gemstone Shop Cart (verified)",
+                    "payment_status": "Paid", "payment_id": payment_id,
+                    "payment_method": "Razorpay payment link", "currency": "INR",
+                    "customer": {
+                        "name": notes.get("buyer_name", ""), "email": notes.get("buyer_email", ""),
+                        "phone": notes.get("buyer_phone", ""), "address1": notes.get("address", ""),
+                        "city": notes.get("city", ""), "state": notes.get("state", ""),
+                        "pincode": notes.get("pincode", ""), "country": "India",
+                    },
+                    "item_summary": notes.get("items", ""),
+                    "total": int(notes.get("amount", "0") or 0),
+                    "shipping_country": "India",
+                }
+                log_order_to_sheet(order)
         except Exception:
             pass
     return {"ok": True}

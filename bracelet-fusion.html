@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gemstone Bracelets — Veshannastro</title>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Cinzel:wght@400;500;600&family=Vollkorn:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -408,15 +409,19 @@ body{background:var(--page-bg);color:var(--ink);min-height:100vh;font-weight:500
 /* ═══════════ CART DRAWER ═══════════ */
 .fx-cart-overlay{position:fixed;inset:0;z-index:130;background:rgba(20,12,16,.45);opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s ease;}
 .fx-cart-overlay.open{opacity:1;visibility:visible;}
-.fx-cart-drawer{position:fixed;top:0;right:0;bottom:0;z-index:140;width:380px;max-width:92vw;background:var(--page-bg);box-shadow:-18px 0 50px rgba(20,12,16,.3);transform:translateX(100%);transition:transform .42s cubic-bezier(.3,.8,.3,1);display:flex;flex-direction:column;}
+.fx-cart-drawer{position:fixed;top:0;right:0;bottom:0;z-index:140;width:400px;max-width:92vw;background:var(--page-bg);border-left:3px solid var(--gold);box-shadow:-26px 0 64px rgba(20,12,16,.34);transform:translateX(100%);transition:transform .42s cubic-bezier(.3,.8,.3,1);display:flex;flex-direction:column;}
 .fx-cart-drawer.open{transform:translateX(0);}
-.fx-cd-head{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.3rem;background:linear-gradient(135deg,#6E1423,#9a2336);color:#F4DD9B;}
-.fx-cd-head h3{font-family:'Anton',sans-serif;font-weight:400;font-size:1.3rem;letter-spacing:.04em;text-transform:uppercase;color:#fff;}
+.fx-cd-head{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.35rem;background:linear-gradient(135deg,#6E1423,#9a2336);color:#F4DD9B;box-shadow:0 4px 18px rgba(110,20,35,.22);}
+.fx-cd-head-tt{display:flex;flex-direction:column;gap:.15rem;}
+.fx-cd-head h3{font-family:'Anton',sans-serif;font-weight:400;font-size:1.35rem;letter-spacing:.05em;text-transform:uppercase;color:#fff;line-height:1;}
+.fx-cd-count{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:#F0D4BE;opacity:.85;}
 .fx-cd-close{background:transparent;border:none;color:#F4DD9B;font-size:1.6rem;cursor:pointer;line-height:1;}
 .fx-cd-items{flex:1;overflow-y:auto;padding:1rem 1.1rem;}
 .fx-cd-empty{text-align:center;color:var(--muted);font-family:'Jost',sans-serif;padding:3rem 1rem;font-size:.95rem;line-height:1.6;}
-.fx-cd-line{display:flex;gap:.8rem;padding:.85rem 0;border-bottom:1px solid var(--sidebar-border);}
-.fx-cd-thumb{width:58px;height:58px;border-radius:10px;flex:0 0 auto;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;font-size:1.4rem;border:1px solid var(--sidebar-border);}
+.fx-cd-empty-ic{font-size:2.6rem;margin-bottom:.8rem;opacity:.55;}
+.fx-cd-line{display:flex;gap:.85rem;padding:.85rem;margin-bottom:.4rem;border-radius:12px;border:1px solid transparent;transition:background .2s,border-color .2s,transform .2s;}
+.fx-cd-line:hover{background:#fff;border-color:var(--sidebar-border);transform:translateY(-1px);box-shadow:0 8px 22px rgba(35,29,25,.07);}
+.fx-cd-thumb{width:60px;height:60px;border-radius:12px;flex:0 0 auto;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;font-size:1.4rem;border:1px solid var(--sidebar-border);box-shadow:0 4px 12px rgba(35,29,25,.1),inset 0 0 0 2px rgba(255,255,255,.5);}
 .fx-cd-info{flex:1;min-width:0;}
 .fx-cd-name{font-family:'Jost',sans-serif;font-weight:600;font-size:.92rem;color:var(--ink);line-height:1.2;}
 .fx-cd-price{font-family:'Jost',sans-serif;font-size:.82rem;color:var(--maroon);font-weight:700;margin-top:.2rem;}
@@ -432,6 +437,27 @@ body{background:var(--page-bg);color:var(--ink);min-height:100vh;font-weight:500
 .fx-cd-total b{font-family:'Anton',sans-serif;font-weight:400;font-size:1.5rem;color:var(--maroon);}
 .fx-cd-checkout{width:100%;background:var(--maroon);color:#F4DD9B;border:none;border-radius:8px;padding:1rem;font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:background .2s;}
 .fx-cd-checkout:hover{background:var(--maroon-soft);}
+
+/* ── checkout form pane ── */
+.fx-cd-form{flex:1;overflow-y:auto;padding:1.1rem 1.3rem 1.4rem;}
+.fx-cd-back{background:transparent;border:none;color:var(--maroon);font-family:'Jost',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;padding:0;margin-bottom:1rem;}
+.fx-cd-back:hover{text-decoration:underline;}
+.fx-cd-form-grid{display:flex;flex-direction:column;gap:.6rem;}
+.fx-cd-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;}
+.fx-cd-form input{width:100%;border:1px solid var(--sidebar-border);border-radius:8px;padding:.78rem .85rem;font-family:'Jost',sans-serif;font-size:.92rem;color:var(--ink);background:#fff;}
+.fx-cd-form input:focus{outline:none;border-color:var(--maroon);box-shadow:0 0 0 2px rgba(110,20,35,.12);}
+.fx-cd-form input::placeholder{color:var(--muted2);}
+.fx-form-err{display:none;color:#c0392b;font-family:'Jost',sans-serif;font-size:.82rem;font-weight:600;margin:.7rem 0 0;}
+.fx-form-err.show{display:block;}
+.fx-cd-form .fx-cd-checkout{margin-top:1rem;}
+.fx-form-note{font-family:'Jost',sans-serif;font-size:.74rem;color:var(--muted);text-align:center;margin-top:.7rem;}
+
+/* ── success pane ── */
+.fx-cd-success{flex:1;overflow-y:auto;padding:2.4rem 1.5rem;text-align:center;}
+.fx-cd-success-ic{width:62px;height:62px;border-radius:50%;margin:0 auto 1.1rem;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#6E1423,#9a2336);color:#F4DD9B;font-size:1.8rem;font-weight:700;box-shadow:0 10px 26px rgba(110,20,35,.3);animation:fxpop .4s ease;}
+.fx-cd-success h4{font-family:'Anton',sans-serif;font-weight:400;font-size:1.5rem;color:var(--ink);letter-spacing:.03em;text-transform:uppercase;margin-bottom:.5rem;}
+.fx-cd-success p{font-family:'Jost',sans-serif;font-size:.92rem;color:var(--muted);line-height:1.6;margin-bottom:1.3rem;}
+.fx-cd-success .fx-cd-checkout{display:block;text-decoration:none;text-align:center;}
 @media(max-width:560px){.fx-card-actions{flex-wrap:wrap;}.fx-card-view{flex:1 1 100%;justify-content:center;padding:.5rem;}}
 @media(prefers-reduced-motion:reduce){
   .fx-card-cta.is-loading .cta-spin{animation:none;}
@@ -810,6 +836,42 @@ var ALL_PRODUCTS={};
   });
 });
 var fxCart={};
+var FX_CONFIG={
+  brand:"Veshannastro", currency:"INR", razorpayKey:"rzp_live_T0NA0F3UpQiZxl",
+  whatsapp:"918827684725",
+  orderWebhook:"https://script.google.com/macros/s/AKfycbzceyZBf_55PIJzJPb7WqmDab-rPRC74YeWprUZEaL6GHD7AuVvuC3XD0NYt5lHLg8o/exec",
+  thankYouUrl:"https://www.veshannastro.co.in/thank-you.html",
+  // When set to your deployed backend's /create-cart-link URL, checkout creates a
+  // Razorpay-hosted payment link and redirects the FULL page to it (not boxed in the
+  // iframe) — and the backend webhook verifies the payment server-side.
+  // Leave "" to use the in-frame Razorpay popup fallback.
+  cartLinkEndpoint:""
+};
+function fxTotal(){var t=0;for(var s in fxCart){var r=ALL_PRODUCTS[s];if(r)t+=r.p.price*fxCart[s];}return t;}
+function fxItems(){var a=[];for(var s in fxCart){var r=ALL_PRODUCTS[s];if(r)a.push({sku:s,name:r.p.name,qty:fxCart[s],unit_price:r.p.price,line_total:r.p.price*fxCart[s],gemstones:r.p.gemstones});}return a;}
+function fxBuildOrder(c,paymentId,status){
+  var items=fxItems();
+  return {
+    timestamp:new Date().toLocaleString("en-IN",{timeZone:"Asia/Kolkata"}),
+    order_id:"VA-CART-"+Date.now(),
+    category:"Product Store", source:"Gemstone Shop Cart",
+    payment_status:status, payment_id:paymentId||"", payment_method:"Razorpay prepaid",
+    currency:"INR", customer:c, items:items,
+    item_summary:items.map(function(i){return i.name+" \u00D7 "+i.qty;}).join(", "),
+    subtotal:fxTotal(), coupon:"", discount:0, total:fxTotal(), shipping_country:"India"
+  };
+}
+function fxLogOrder(order){
+  try{ fetch(FX_CONFIG.orderWebhook,{method:"POST",body:JSON.stringify(order),mode:"no-cors"}); }catch(e){}
+  try{ sessionStorage.setItem("va_last_cart_order",JSON.stringify(order)); }catch(e){}
+}
+function fxWaLink(order){
+  var lines=["Hi Veshannastro, I've placed a gemstone bracelet order.","","Order ID: "+order.order_id];
+  if(order.payment_id) lines.push("Payment ID: "+order.payment_id);
+  lines.push("Items: "+order.item_summary,"Total: "+money(order.total),"Name: "+order.customer.name,
+    "Address: "+order.customer.address1+", "+order.customer.city+", "+order.customer.state+" - "+order.customer.pincode);
+  return "https://wa.me/"+FX_CONFIG.whatsapp+"?text="+encodeURIComponent(lines.filter(Boolean).join("\n"));
+}
 function fxHexA(h,a){var n=parseInt(h.slice(1),16);return'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')';}
 
 function injectCartUI(){
@@ -821,16 +883,44 @@ function injectCartUI(){
     '</button>'+
     '<div class="fx-cart-overlay" id="fx-cart-overlay" onclick="closeCart()"></div>'+
     '<div class="fx-cart-drawer" id="fx-cart-drawer" role="dialog" aria-label="Your cart">'+
-      '<div class="fx-cd-head"><h3>Your Cart</h3><button class="fx-cd-close" onclick="closeCart()" aria-label="Close cart">&times;</button></div>'+
+      '<div class="fx-cd-head"><div class="fx-cd-head-tt"><h3 id="fx-cd-title">Your Cart</h3><span class="fx-cd-count" id="fx-cd-count">0 items</span></div><button class="fx-cd-close" onclick="closeCart()" aria-label="Close cart">&times;</button></div>'+
+      /* ── cart pane ── */
       '<div class="fx-cd-items" id="fx-cd-items"></div>'+
       '<div class="fx-cd-foot" id="fx-cd-foot" style="display:none">'+
         '<div class="fx-cd-total"><span>Total</span><b id="fx-cd-total-val">Rs. 0</b></div>'+
         '<button class="fx-cd-checkout" id="fx-cd-checkout">Proceed to Checkout</button>'+
       '</div>'+
+      /* ── checkout form pane ── */
+      '<div class="fx-cd-form" id="fx-cd-form" style="display:none">'+
+        '<button class="fx-cd-back" id="fx-cd-back" type="button">&larr; Back to cart</button>'+
+        '<div class="fx-cd-form-grid">'+
+          '<input id="fx-name" type="text" placeholder="Full name" autocomplete="name">'+
+          '<input id="fx-phone" type="tel" inputmode="numeric" maxlength="10" placeholder="Phone (10-digit)" autocomplete="tel">'+
+          '<input id="fx-email" type="email" placeholder="Email" autocomplete="email">'+
+          '<input id="fx-addr" type="text" placeholder="Address (house, street, area)" autocomplete="street-address">'+
+          '<div class="fx-cd-row"><input id="fx-city" type="text" placeholder="City"><input id="fx-state" type="text" placeholder="State"></div>'+
+          '<input id="fx-pin" type="text" inputmode="numeric" maxlength="6" placeholder="Pincode" autocomplete="postal-code">'+
+        '</div>'+
+        '<div class="fx-form-err" id="fx-form-err">Please fill every field with valid details.</div>'+
+        '<button class="fx-cd-checkout" id="fx-pay">Pay with Razorpay</button>'+
+        '<p class="fx-form-note">\uD83D\uDD12 Secure prepaid via Razorpay \u00B7 UPI, cards &amp; net-banking</p>'+
+      '</div>'+
+      /* ── success pane ── */
+      '<div class="fx-cd-success" id="fx-cd-success" style="display:none">'+
+        '<div class="fx-cd-success-ic">\u2713</div>'+
+        '<h4>Order placed</h4>'+
+        '<p id="fx-success-msg"></p>'+
+        '<a id="fx-success-wa" class="fx-cd-checkout" target="_top" rel="noopener">Share order on WhatsApp</a>'+
+        '<button class="fx-cd-back" id="fx-success-close" type="button" style="margin-top:.8rem">Close</button>'+
+      '</div>'+
     '</div>';
   document.body.insertAdjacentHTML('beforeend',html);
-  var co=document.getElementById('fx-cd-checkout');
-  if(co)co.addEventListener('click',fxCheckout);
+  var co=document.getElementById('fx-cd-checkout'); if(co)co.addEventListener('click',fxStartCheckout);
+  var bk=document.getElementById('fx-cd-back'); if(bk)bk.addEventListener('click',fxBackToCart);
+  var pay=document.getElementById('fx-pay'); if(pay)pay.addEventListener('click',fxPay);
+  var sc=document.getElementById('fx-success-close'); if(sc)sc.addEventListener('click',function(){ fxResetPanes(); closeCart(); });
+  var pin=document.getElementById('fx-pin'); if(pin)pin.addEventListener('input',function(){this.value=this.value.replace(/\D/g,'');});
+  var ph=document.getElementById('fx-phone'); if(ph)ph.addEventListener('input',function(){this.value=this.value.replace(/\D/g,'');});
 }
 function openCart(){var o=document.getElementById('fx-cart-overlay'),d=document.getElementById('fx-cart-drawer');if(o)o.classList.add('open');if(d)d.classList.add('open');}
 function closeCart(){var o=document.getElementById('fx-cart-overlay'),d=document.getElementById('fx-cart-drawer');if(o)o.classList.remove('open');if(d)d.classList.remove('open');}
@@ -842,8 +932,9 @@ function updateFab(pop){
 }
 function renderCart(){
   var box=document.getElementById('fx-cd-items'),foot=document.getElementById('fx-cd-foot');if(!box)return;
+  var cnt=document.getElementById('fx-cd-count'); if(cnt){var n=cartCountTotal();cnt.textContent=n+(n===1?' item':' items');}
   var skus=Object.keys(fxCart);
-  if(!skus.length){box.innerHTML='<div class="fx-cd-empty">Your cart is empty.<br>Add a bracelet to begin.</div>';if(foot)foot.style.display='none';return;}
+  if(!skus.length){box.innerHTML='<div class="fx-cd-empty"><div class="fx-cd-empty-ic">\uD83D\uDC8E</div>Your cart is empty.<br>Add a bracelet to begin.</div>';if(foot)foot.style.display='none';return;}
   var total=0,rows='';
   skus.forEach(function(s){
     var rec=ALL_PRODUCTS[s];if(!rec)return;var p=rec.p,q=fxCart[s];total+=p.price*q;
@@ -865,12 +956,122 @@ function renderCart(){
 }
 function cartQty(sku,delta){fxCart[sku]=(fxCart[sku]||0)+delta;if(fxCart[sku]<=0)delete fxCart[sku];updateFab(true);renderCart();}
 function cartRemove(sku){delete fxCart[sku];updateFab(true);renderCart();}
-function fxCheckout(){
-  /* No unified multi-item payment yet — send to the first real product's detail page (Razorpay works there). */
-  var first=null,s;
-  for(s in fxCart){ if(/^VA-BR-/.test(s)){ first=s; break; } }
-  if(!first){ for(s in fxCart){ first=s; break; } }
-  if(first){ try{ (window.top||window).location.href='shop-product.html?sku='+encodeURIComponent(first); }catch(e){ window.location.href='shop-product.html?sku='+encodeURIComponent(first); } }
+function fxResetPanes(){
+  var items=document.getElementById('fx-cd-items'),foot=document.getElementById('fx-cd-foot'),
+      form=document.getElementById('fx-cd-form'),succ=document.getElementById('fx-cd-success'),
+      title=document.getElementById('fx-cd-title');
+  if(items)items.style.display='';
+  if(foot)foot.style.display=Object.keys(fxCart).length?'block':'none';
+  if(form)form.style.display='none';
+  if(succ)succ.style.display='none';
+  if(title)title.textContent='Your Cart';
+}
+function fxStartCheckout(){
+  if(!Object.keys(fxCart).length)return;
+  var items=document.getElementById('fx-cd-items'),foot=document.getElementById('fx-cd-foot'),
+      form=document.getElementById('fx-cd-form'),title=document.getElementById('fx-cd-title'),
+      pay=document.getElementById('fx-pay'),err=document.getElementById('fx-form-err');
+  if(items)items.style.display='none';
+  if(foot)foot.style.display='none';
+  if(form)form.style.display='block';
+  if(title)title.textContent='Checkout';
+  if(err)err.classList.remove('show');
+  if(pay)pay.textContent='Pay '+money(fxTotal())+' with Razorpay';
+}
+function fxBackToCart(){ fxResetPanes(); }
+function fxField(id){var el=document.getElementById(id);return el?String(el.value||'').trim():'';}
+function fxValidate(){
+  var ok=true;
+  [['fx-name',/.+/],['fx-phone',/^[6-9]\d{9}$/],['fx-email',/^[^@\s]+@[^@\s]+\.[^@\s]+$/],
+   ['fx-addr',/.+/],['fx-city',/.+/],['fx-state',/.+/],['fx-pin',/^\d{6}$/]].forEach(function(p){
+    var el=document.getElementById(p[0]),v=el?String(el.value||'').trim():'',valid=p[1].test(v);
+    if(el)el.style.borderColor=valid?'':'#c0392b';
+    if(!valid)ok=false;
+  });
+  var err=document.getElementById('fx-form-err'); if(err)err.classList.toggle('show',!ok);
+  return ok;
+}
+function fxCustomer(){
+  return {name:fxField('fx-name'),phone:fxField('fx-phone'),email:fxField('fx-email'),
+    address1:fxField('fx-addr'),address2:'',city:fxField('fx-city'),state:fxField('fx-state'),
+    pincode:fxField('fx-pin'),country:'India',notes:''};
+}
+function fxShowSuccess(order,msg){
+  var form=document.getElementById('fx-cd-form'),succ=document.getElementById('fx-cd-success'),
+      m=document.getElementById('fx-success-msg'),wa=document.getElementById('fx-success-wa'),
+      title=document.getElementById('fx-cd-title');
+  if(form)form.style.display='none';
+  if(succ)succ.style.display='block';
+  if(m)m.textContent=msg;
+  if(wa)wa.href=fxWaLink(order);
+  if(title)title.textContent='Thank you';
+}
+function fxPay(){
+  if(!fxValidate())return;
+  var c=fxCustomer(), pay=document.getElementById('fx-pay');
+
+  /* ── FULL-PAGE + SERVER-VERIFIED: create a Razorpay-hosted payment link on the
+       backend and redirect the whole window to it. Razorpay's page is full screen
+       (never boxed in the iframe) and the backend webhook verifies the payment. ── */
+  if(FX_CONFIG.cartLinkEndpoint){
+    if(pay){pay.disabled=true;pay.textContent='Creating secure checkout\u2026';}
+    var pendingOrder=fxBuildOrder(c,'','Pending payment'); fxLogOrder(pendingOrder);
+    fetch(FX_CONFIG.cartLinkEndpoint,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        order_id:pendingOrder.order_id,
+        items:fxItems().map(function(i){return {sku:i.sku,qty:i.qty};}),
+        description:pendingOrder.item_summary.slice(0,250),
+        customer:{name:c.name,email:c.email,contact:'+91'+c.phone,
+          address:c.address1,city:c.city,state:c.state,pincode:c.pincode},
+        callback_url:FX_CONFIG.thankYouUrl
+      })
+    })
+    .then(function(r){return r.json().then(function(d){return {status:r.status,data:d};});})
+    .then(function(res){
+      if(res.data&&res.data.short_url){ try{(window.top||window).location.href=res.data.short_url;}catch(e){window.location.href=res.data.short_url;} return; }
+      throw new Error('no link');
+    })
+    .catch(function(){
+      if(pay){pay.disabled=false;pay.textContent='Pay '+money(fxTotal())+' with Razorpay';}
+      alert('Couldn\u2019t start secure checkout. Please try again, or contact us on WhatsApp.');
+    });
+    return;
+  }
+
+  /* ── FALLBACK: in-frame Razorpay popup (used until the backend URL is set) ── */
+  if(location.protocol==='file:'){ alert('Payment can\u2019t run from a local file. Open the live https site to pay.'); return; }
+  if(typeof Razorpay==='undefined'){
+    var o=fxBuildOrder(c,'','Pending payment'); fxLogOrder(o);
+    fxShowSuccess(o,'Payment couldn\u2019t load here. Tap below to send your order on WhatsApp and we\u2019ll share a secure payment link.');
+    return;
+  }
+  if(pay){pay.disabled=true;pay.textContent='Opening Razorpay\u2026';}
+  try{
+    var rzp=new Razorpay({
+      key:FX_CONFIG.razorpayKey, amount:fxTotal()*100, currency:FX_CONFIG.currency,
+      name:FX_CONFIG.brand, description:fxItems().map(function(i){return i.name+' \u00D7 '+i.qty;}).join(', ').slice(0,250),
+      prefill:{name:c.name,email:c.email,contact:'+91'+c.phone},
+      notes:{category:'Gemstone Bracelet Cart',items:fxItems().map(function(i){return i.sku+'x'+i.qty;}).join(',')},
+      theme:{color:'#6E1423'},
+      modal:{ondismiss:function(){ if(pay){pay.disabled=false;pay.textContent='Pay '+money(fxTotal())+' with Razorpay';} }},
+      handler:function(resp){
+        var order=fxBuildOrder(c,resp.razorpay_payment_id,'Paid');
+        fxLogOrder(order);
+        try{ if(window.top&&window.top.fbq)window.top.fbq('track','Purchase',{value:fxTotal(),currency:'INR'}); }catch(e){}
+        fxCart={}; updateFab(false); renderCart();
+        fxShowSuccess(order,'Thank you for your order. We\u2019ll ship within 1\u20132 working days. A copy of your order is saved.');
+      }
+    });
+    rzp.on('payment.failed',function(r){
+      if(pay){pay.disabled=false;pay.textContent='Pay '+money(fxTotal())+' with Razorpay';}
+      alert('Payment failed: '+((r&&r.error&&r.error.description)||'please try again.'));
+    });
+    rzp.open();
+  }catch(e){
+    if(pay){pay.disabled=false;pay.textContent='Pay '+money(fxTotal())+' with Razorpay';}
+    alert('Could not open Razorpay: '+e.message);
+  }
 }
 
 function addToCart(sku,btn){
@@ -884,6 +1085,7 @@ function addToCart(sku,btn){
     fxCart[sku]=(fxCart[sku]||0)+1;
     updateFab(true);
     renderCart();
+    if(typeof fxResetPanes==='function')fxResetPanes();
     openCart();
   },720);
 }

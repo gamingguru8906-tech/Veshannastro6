@@ -15,7 +15,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Vollkorn:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <style>
@@ -27,7 +27,7 @@
     --gold:#c9a84c; --gold2:#b8943a; --navy:#1f2a44;
     --line:rgba(110,20,35,.13); --ok:#2f7d4f;
     --shadow:0 16px 42px rgba(35,29,25,.08); --shadow-lg:0 24px 80px rgba(35,29,25,.18);
-    --serif:"Vollkorn",serif; --label:"Cinzel",serif; --body:"Jost",sans-serif;
+    --serif:"Anton",sans-serif; --label:"Cinzel",serif; --body:"Cormorant Garamond",serif; --body-ui:"Jost",sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
@@ -92,7 +92,12 @@
   /* buy box */
   .buybox{min-width:0}
   .eyebrow{font-family:var(--label);font-size:.66rem;letter-spacing:.3em;text-transform:uppercase;color:var(--maroon);font-weight:600;}
-  .buybox h1{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;font-size:clamp(2rem,4.6vw,3rem);line-height:1.06;margin:.5rem 0 .4rem;color:var(--ink);}
+  .buybox h1{font-family:var(--serif);font-weight:400;letter-spacing:.012em;font-size:clamp(2.05rem,3.7vw,2.95rem);line-height:1.06;margin:.45rem 0 .5rem;color:var(--ink);}
+  body{font-weight:700;font-size:1.2rem;letter-spacing:.003em;color:var(--ink);}
+  .lede,.meta-line,.delivery-msg,.assurance span,.offers-box li,.tax-note,.acc .acc-body,.rich-head p,.why-card p,.ingr p,.cmp-row,.mantra .tip,.br-stone,.rstep p,.ingr h4{font-weight:700;}
+  .lede,.meta-line{color:var(--ink);font-size:1.18rem;line-height:1.55;}
+  .acc .acc-body,.rich-head p,.why-card p,.ingr p,.cmp-row{font-size:1.12rem;color:#3f352e;}
+  .rating .rating-num{font-family:var(--body);font-weight:600;color:var(--ink)}
   .rating{display:flex;align-items:center;gap:.55rem;font-family:var(--body);font-size:.82rem;color:var(--ink2);margin-bottom:1rem}
   .stars{color:var(--gold2);letter-spacing:.08em;font-size:.95rem}
   .rating a{color:var(--ink2);text-decoration:underline;text-underline-offset:2px}
@@ -305,6 +310,242 @@
   .footer-nav a:hover{color:var(--maroon)}
   .footer-copy{font-size:.7rem;color:var(--ink3);letter-spacing:.05em;font-family:var(--body)}
 
+  /* ── intent selector (find your stone) ── */
+  .intent-bar{display:flex;flex-wrap:wrap;gap:.45rem;justify-content:center;margin-bottom:.8rem}
+  .intent-chip{font-family:var(--label);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;
+    border-radius:999px;padding:.5rem .85rem;border:1px solid rgba(110,20,35,.22);background:transparent;color:#6b3b31;
+    font-weight:600;transition:background .2s,color .2s,border-color .2s}
+  .intent-chip:hover{border-color:var(--maroon)}
+  .intent-chip.active{background:var(--maroon);color:#fff6e5;border-color:var(--maroon)}
+  .maaya-pick{display:flex;justify-content:center;margin:-.1rem 0 2rem}
+  .maaya-pick a{display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;font-family:var(--label);
+    font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--navy);
+    border:1px solid rgba(31,42,68,.38);border-radius:999px;padding:.55rem .95rem;transition:background .2s,color .2s}
+  .maaya-pick a:hover{background:var(--navy);color:#fff6e5}
+  .maaya-pick svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6}
+
+  /* ── assurance line near price ── */
+  .assurance{display:flex;align-items:center;gap:.5rem;font-family:var(--body);font-size:.8rem;color:#235c39;
+    background:rgba(47,125,79,.08);border:1px solid rgba(47,125,79,.22);border-radius:6px;padding:.5rem .7rem;margin:0 0 1.1rem}
+  .assurance svg{width:15px;height:15px;stroke:var(--ok);fill:none;stroke-width:1.6;flex:0 0 auto}
+  .assurance b{color:#1c4a2e;font-weight:600}
+
+  /* ── stone-tinted collection cards ── */
+  .rel-card{border-top:3px solid var(--scol,var(--gold))}
+  .rel-current{position:absolute;bottom:.5rem;left:.5rem;background:rgba(35,29,25,.82);color:#fff6e5;
+    font-family:var(--body);font-size:.6rem;border-radius:999px;padding:.2rem .5rem}
+
+  /* ── sticky mobile buy bar ── */
+  .stickybuy{position:fixed;left:0;right:0;bottom:0;z-index:9500;display:none;align-items:center;gap:.8rem;
+    background:rgba(248,244,235,.97);backdrop-filter:blur(10px);border-top:1px solid var(--line);
+    padding:.6rem .9rem;box-shadow:0 -10px 30px rgba(35,29,25,.1)}
+  .stickybuy .sb-price{display:flex;flex-direction:column;line-height:1.1}
+  .stickybuy .sb-price small{font-family:var(--body);font-size:.62rem;color:var(--ink3);letter-spacing:.02em}
+  .stickybuy .sb-price b{font-family:var(--serif);font-size:1.25rem;color:var(--maroon);font-weight:600}
+  .stickybuy button{flex:1;border:none;border-radius:6px;background:var(--maroon);color:#fff6e5;
+    font-family:var(--label);font-weight:500;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;
+    padding:.95rem;cursor:pointer}
+  .stickybuy button:hover{background:var(--maroon2)}
+  @media(max-width:760px){ .stickybuy{display:flex} body{padding-bottom:76px} }
+
+  /* ── smaller, centered gallery so CTAs share the first screen ── */
+  .gallery{position:sticky;top:80px;max-width:400px;width:100%;justify-self:center}
+
+  /* ── launch sale highlight ── */
+  .launch-sale{display:flex;align-items:center;gap:.6rem;margin:.1rem 0 .85rem;padding:.55rem .7rem;border-radius:8px;
+    background:linear-gradient(90deg,rgba(110,20,35,.10),rgba(201,168,76,.16));border:1px solid rgba(201,168,76,.55)}
+  .launch-sale .ls-tag{font-family:var(--label);font-size:.58rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+    color:#fff6e5;background:var(--maroon);border-radius:4px;padding:.32rem .5rem;flex:0 0 auto}
+  .launch-sale .ls-text{font-family:var(--body);font-size:.82rem;color:#5a2230;line-height:1.35}
+  .launch-sale .ls-text b{color:var(--maroon);font-weight:700}
+
+  /* ── buy actions: qty + dual CTA + AI ── */
+  .buy-actions{margin:.2rem 0 .9rem}
+  .cta-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:.7rem}
+  .cart-btn{border:1.5px solid var(--maroon);background:#fff;color:var(--maroon);border-radius:6px;cursor:pointer;
+    font-family:var(--label);font-weight:600;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+    padding:1.05rem .6rem;transition:background .2s,color .2s}
+  .cart-btn:hover{background:var(--maroon-soft)}
+  .ai-btn{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;margin-top:.6rem;cursor:pointer;
+    border:1px solid rgba(31,42,68,.4);background:transparent;color:var(--navy);border-radius:6px;text-decoration:none;
+    font-family:var(--label);font-weight:600;font-size:.63rem;letter-spacing:.16em;text-transform:uppercase;padding:.85rem;transition:background .2s,color .2s}
+  .ai-btn:hover{background:var(--navy);color:#fff6e5}
+  .ai-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6}
+
+  /* ── delivery estimate ── */
+  .delivery{margin:0 0 1.2rem;padding:.9rem 1rem;border:1px solid var(--line);border-radius:9px;background:var(--paper2)}
+  .delivery .dl-head{display:flex;align-items:center;gap:.5rem;font-family:var(--label);font-size:.62rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--maroon);font-weight:600;margin-bottom:.55rem}
+  .delivery .dl-head svg{width:15px;height:15px;stroke:var(--maroon);fill:none;stroke-width:1.6}
+  .delivery .dl-row{display:grid;grid-template-columns:1fr auto;gap:.5rem;max-width:360px}
+  .delivery input{border:1px solid var(--line);border-radius:6px;padding:.7rem .8rem;font-family:var(--body);font-size:.9rem;
+    background:#fff;color:var(--ink);letter-spacing:.08em}
+  .delivery input:focus{outline:none;border-color:var(--maroon);box-shadow:0 0 0 2px rgba(110,20,35,.12)}
+  .delivery button{border:1px solid var(--maroon);background:transparent;color:var(--maroon);border-radius:6px;padding:.7rem 1.1rem;
+    font-family:var(--label);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:background .2s,color .2s}
+  .delivery button:hover{background:var(--maroon);color:#fff6e5}
+  .delivery-msg{font-family:var(--body);font-size:.84rem;margin-top:.55rem;min-height:1.1rem;line-height:1.45}
+  .delivery-msg.ok{color:#235c39} .delivery-msg.bad{color:var(--maroon2)}
+  .delivery-msg b{color:var(--ink);font-weight:600}
+
+  /* ── exclusive offers box ── */
+  .offers-box{border:1px solid rgba(201,168,76,.55);background:#fffaf0;border-radius:10px;padding:1rem 1.1rem;margin:0 0 1.2rem}
+  .offers-box h4{font-family:var(--label);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--maroon);
+    font-weight:600;margin-bottom:.6rem;display:flex;align-items:center;gap:.45rem}
+  .offers-box h4 svg{width:15px;height:15px;stroke:var(--maroon);fill:none;stroke-width:1.6}
+  .offers-box ul{list-style:none}
+  .offers-box li{font-family:var(--body);font-size:.82rem;color:var(--ink2);padding:.4rem 0;line-height:1.45;
+    border-bottom:1px dashed rgba(201,168,76,.4);display:flex;gap:.6rem;align-items:flex-start}
+  .offers-box li:last-child{border-bottom:none}
+  .offers-box code{font-family:var(--label);font-size:.64rem;letter-spacing:.05em;background:var(--maroon);color:#fff6e5;
+    border-radius:4px;padding:.2rem .42rem;flex:0 0 auto;margin-top:.05rem}
+
+  /* ── Made in India strip ── */
+  .india-strip{background:#fff8ec;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .india-strip .inner{max-width:1160px;margin:0 auto;padding:.9rem 1.5rem;display:flex;align-items:center;
+    justify-content:center;gap:.7rem;flex-wrap:wrap;text-align:center}
+  .india-flag{display:inline-flex;flex-direction:column;width:26px;height:18px;border-radius:3px;overflow:hidden;
+    border:1px solid rgba(0,0,0,.12);flex:0 0 auto}
+  .india-flag i{display:block;height:6px}
+  .india-strip b{font-family:var(--label);letter-spacing:.18em;text-transform:uppercase;font-size:.72rem;color:var(--maroon)}
+  .india-strip span{font-family:var(--body);font-size:.82rem;color:var(--ink2)}
+
+  /* ── nav cart badge ── */
+  .cart-count{display:none;align-items:center;justify-content:center;min-width:16px;height:16px;background:var(--gold);
+    color:#3a2a08;border-radius:999px;font-size:.6rem;font-weight:700;padding:0 4px;margin-left:.15rem}
+  .cart-count.show{display:inline-flex}
+
+  /* ═══ MAROON ASSURANCE STRIP ═══ */
+  .assure-strip{width:100vw;max-width:none;margin:0 calc(50% - 50vw);background:linear-gradient(90deg,#5c0f1e,#6e1423 50%,#5c0f1e);color:#f7e7c8;}
+  .assure-strip .inner{max-width:1160px;margin:0 auto;padding:.95rem 1.5rem;display:flex;align-items:center;justify-content:center;gap:2.2rem;flex-wrap:wrap;}
+  .assure-strip .ai{display:flex;align-items:center;gap:.55rem;font-family:var(--body-ui);font-size:.82rem;letter-spacing:.02em;}
+  .assure-strip .ai svg{width:18px;height:18px;stroke:#e9c877;fill:none;stroke-width:1.7;flex:0 0 auto;}
+  .assure-strip .ai b{color:#fff6e5;font-weight:600;}
+  .assure-strip .sep{width:1px;height:26px;background:rgba(233,200,119,.3);}
+  @media(max-width:680px){.assure-strip .sep{display:none}.assure-strip .inner{gap:.9rem 1.4rem}}
+
+  /* ═══ ACCORDIONS ═══ */
+  .pinfo{max-width:980px;margin:3.2rem auto 0;padding:0 1.3rem;}
+  .acc{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fffdf8;margin-bottom:.7rem;}
+  .acc summary{list-style:none;cursor:pointer;padding:1.05rem 1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:var(--label);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--maroon);font-weight:600;}
+  .acc summary::-webkit-details-marker{display:none}
+  .acc summary .chev{width:14px;height:14px;border-right:2px solid var(--maroon);border-bottom:2px solid var(--maroon);transform:rotate(45deg);transition:transform .25s;flex:0 0 auto;}
+  .acc[open] summary .chev{transform:rotate(-135deg);}
+  .acc .acc-body{padding:0 1.2rem 1.2rem;font-family:var(--body);font-size:1.04rem;line-height:1.6;color:var(--ink2);}
+  .acc .acc-body ul{list-style:none;margin:.3rem 0 0;}
+  .acc .acc-body li{padding:.32rem 0 .32rem 1.4rem;position:relative;}
+  .acc .acc-body li::before{content:"✦";position:absolute;left:0;color:var(--gold);font-size:.8rem;top:.5rem;}
+  .acc .acc-body b{color:var(--ink);font-weight:600;}
+
+  /* ═══ RICH SECTION SHELL ═══ */
+  .rich{max-width:1100px;margin:4rem auto 0;padding:0 1.3rem;}
+  .rich-head{text-align:center;margin-bottom:1.8rem;}
+  .rich-head .eye{font-family:var(--label);font-size:.66rem;letter-spacing:.3em;text-transform:uppercase;color:#a9842f;}
+  .rich-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(2rem,4.4vw,3.1rem);color:var(--ink);line-height:1.12;margin:.35rem 0 .45rem;}
+  .rich-head p{font-family:var(--body);font-size:1.12rem;color:var(--ink2);max-width:560px;margin:0 auto;}
+
+  .why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;}
+  .why-card{position:relative;border-radius:14px;padding:1.5rem 1.3rem;background:#fffdf8;border:1px solid var(--line);overflow:hidden;transition:transform .25s,box-shadow .25s;}
+  .why-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(35,29,25,.13);}
+  .why-card::before{content:"";position:absolute;top:0;bottom:0;left:0;width:5px;background:var(--accent,#c9a84c);}
+  .why-card .ic{font-size:1.9rem;line-height:1;margin-bottom:.7rem;display:block;}
+  .why-card h3{font-family:var(--label);font-size:.92rem;letter-spacing:.03em;color:var(--ink);margin-bottom:.45rem;font-weight:600;}
+  .why-card p{font-family:var(--body);font-size:1.02rem;line-height:1.5;color:var(--ink2);}
+  .why-card .pill{display:inline-block;margin-top:.8rem;font-family:var(--body-ui);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:#fff;background:var(--accent,#c9a84c);border-radius:999px;padding:.24rem .6rem;}
+
+  .ingr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:.9rem;}
+  .ingr{display:flex;gap:.8rem;align-items:flex-start;padding:.95rem;border:1px solid var(--line);border-radius:12px;background:#fffdf8;}
+  .ingr .dot{width:34px;height:34px;border-radius:50%;flex:0 0 auto;background:radial-gradient(circle at 38% 32%,#fff,var(--accent,#c9a84c) 78%);box-shadow:0 4px 12px var(--accent-a,rgba(201,168,76,.4));}
+  .ingr h4{font-family:var(--label);font-size:.78rem;color:var(--ink);margin-bottom:.25rem;font-weight:600;}
+  .ingr p{font-family:var(--body);font-size:.98rem;line-height:1.4;color:var(--ink2);}
+
+  .ritual-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.9rem;margin-top:.5rem;}
+  .rstep{position:relative;border:1px solid var(--line);border-radius:12px;padding:1.5rem 1rem 1.1rem;background:#fffdf8;text-align:center;}
+  .rstep .num{position:absolute;top:-14px;left:50%;transform:translateX(-50%);width:30px;height:30px;border-radius:50%;background:var(--maroon);color:#fff6e5;font-family:var(--label);font-size:.85rem;display:flex;align-items:center;justify-content:center;font-weight:600;}
+  .rstep .ic{font-size:1.5rem;display:block;margin:.4rem 0 .5rem;}
+  .rstep h4{font-family:var(--label);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--maroon);margin-bottom:.3rem;font-weight:600;}
+  .rstep p{font-family:var(--body);font-size:.98rem;color:var(--ink2);line-height:1.4;}
+
+  .mantra{margin-top:1.4rem;border-radius:16px;padding:2.2rem 1.5rem;text-align:center;position:relative;overflow:hidden;background:radial-gradient(120% 140% at 50% 0%,#3a0f1a,#1c1330 60%,#0c1024);border:1px solid rgba(201,168,76,.4);}
+  .mantra .eye{font-family:var(--label);font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:#e0c070;}
+  .mantra .sanskrit{font-family:var(--body);font-weight:600;font-size:clamp(1.3rem,3.2vw,2rem);color:#fbf4e6;margin:.65rem 0 .3rem;letter-spacing:.01em;}
+  .mantra .count{font-family:var(--body-ui);font-size:.8rem;color:#cbb58a;letter-spacing:.04em;}
+  .mantra .tip{margin-top:1rem;font-family:var(--body);font-size:1rem;color:#d8cfc4;max-width:520px;margin-left:auto;margin-right:auto;}
+  .mantra .copy-m{margin-top:1.1rem;border:1px solid rgba(240,208,128,.5);background:transparent;color:#f0d080;border-radius:6px;padding:.6rem 1.15rem;font-family:var(--label);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background .2s;}
+  .mantra .copy-m:hover{background:rgba(240,208,128,.12);}
+
+  .cmp{margin-top:1.4rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .cmp-col{border-radius:14px;padding:1.5rem 1.3rem;border:1px solid var(--line);}
+  .cmp-ordinary{background:#f1ede4;}
+  .cmp-us{background:linear-gradient(160deg,#fffaf0,#fff);border-color:rgba(201,168,76,.55);box-shadow:0 14px 36px rgba(110,20,35,.1);}
+  .cmp-col h3{font-family:var(--label);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem;font-weight:600;display:flex;align-items:center;gap:.5rem;}
+  .cmp-ordinary h3{color:#8a7569;}
+  .cmp-us h3{color:var(--maroon);}
+  .cmp-row{display:flex;gap:.6rem;align-items:flex-start;padding:.65rem 0;border-top:1px dashed rgba(110,20,35,.14);font-family:var(--body);font-size:1.02rem;line-height:1.4;color:var(--ink2);opacity:0;transform:translateY(8px);}
+  .cmp-row:first-of-type{border-top:none;}
+  .cmp.in .cmp-row{animation:cmpIn .5s ease forwards;}
+  .cmp.in .cmp-row:nth-child(2){animation-delay:.09s}.cmp.in .cmp-row:nth-child(3){animation-delay:.18s}.cmp.in .cmp-row:nth-child(4){animation-delay:.27s}
+  @keyframes cmpIn{to{opacity:1;transform:none}}
+  .cmp-row .mk{width:20px;height:20px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;margin-top:.08rem;}
+  .cmp-ordinary .mk{background:rgba(138,117,105,.2);color:#8a7569;}
+  .cmp-us .mk{background:var(--maroon);color:#fff6e5;}
+  @media(max-width:620px){.cmp{grid-template-columns:1fr}}
+  @media(prefers-reduced-motion:reduce){.cmp-row{opacity:1;transform:none}}
+
+  /* ═══ PREMIUM ADD-TO-CART ANIMATION ═══ */
+  .cart-btn{position:relative;overflow:hidden;}
+  .cart-btn .cart-btn-label{transition:opacity .18s ease;}
+  .cart-btn .cart-btn-spinner{position:absolute;inset:0;margin:auto;width:20px;height:20px;border:2.5px solid rgba(110,20,35,.25);border-top-color:var(--maroon);border-radius:50%;opacity:0;}
+  .cart-btn .cart-btn-tick{position:absolute;inset:0;margin:auto;width:24px;height:24px;fill:none;stroke:#fff6e5;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;opacity:0;}
+  .cart-btn .cart-btn-tick path{stroke-dasharray:26;stroke-dashoffset:26;}
+  .cart-btn.is-loading{pointer-events:none;background:#efe7da;border-color:#d9cdba;color:transparent;}
+  .cart-btn.is-loading .cart-btn-label{opacity:0;}
+  .cart-btn.is-loading .cart-btn-spinner{opacity:1;animation:cbtnspin .7s linear infinite;}
+  .cart-btn.is-done{pointer-events:none;background:var(--maroon);border-color:var(--maroon);color:#fff6e5;}
+  .cart-btn.is-done .cart-btn-label{opacity:0;}
+  .cart-btn.is-done .cart-btn-tick{opacity:1;animation:cbtnpop .34s ease;}
+  .cart-btn.is-done .cart-btn-tick path{animation:cbtndraw .42s .06s ease forwards;}
+  @keyframes cbtnspin{to{transform:rotate(360deg);}}
+  @keyframes cbtndraw{to{stroke-dashoffset:0;}}
+  @keyframes cbtnpop{0%{transform:scale(.55);}60%{transform:scale(1.18);}100%{transform:scale(1);}}
+
+  .cart-count.pop{animation:badgepop .42s ease;}
+  @keyframes badgepop{0%{transform:scale(1);}40%{transform:scale(1.55);}100%{transform:scale(1);}}
+
+  .fly-dot{position:fixed;z-index:9998;width:18px;height:18px;border-radius:50%;
+    background:radial-gradient(circle at 38% 32%,#F4DD9B,var(--maroon) 80%);
+    box-shadow:0 6px 16px rgba(110,20,35,.4);pointer-events:none;
+    transition:transform .75s cubic-bezier(.5,-0.25,.4,1.1),opacity .75s ease;}
+
+  /* slide-in cart confirmation */
+  .cart-confirm{position:fixed;top:84px;right:18px;z-index:9999;width:330px;max-width:calc(100vw - 36px);
+    background:#fffdf8;border:1px solid rgba(201,168,76,.5);border-radius:14px;overflow:hidden;
+    box-shadow:0 24px 60px rgba(35,29,25,.26);transform:translateX(130%);opacity:0;
+    transition:transform .5s cubic-bezier(.2,.8,.25,1),opacity .4s ease;pointer-events:none;}
+  .cart-confirm.show{transform:translateX(0);opacity:1;pointer-events:auto;}
+  .cart-confirm .cc-head{display:flex;align-items:center;gap:.55rem;background:linear-gradient(135deg,#6e1423,#9a2336);
+    color:#fff6e5;font-family:var(--label);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;padding:.7rem .9rem;}
+  .cart-confirm .cc-tick{width:18px;height:18px;border-radius:50%;background:#fff6e5;color:var(--maroon);
+    display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800;flex:0 0 auto;}
+  .cart-confirm .cc-body{display:flex;gap:.75rem;padding:.9rem;}
+  .cart-confirm .cc-thumb{width:58px;height:58px;border-radius:10px;flex:0 0 auto;background-size:cover;background-position:center;
+    border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.3rem;}
+  .cart-confirm .cc-name{font-family:var(--body);font-weight:700;font-size:1.05rem;color:var(--ink);line-height:1.2;}
+  .cart-confirm .cc-meta{font-family:var(--body-ui);font-size:.82rem;color:var(--ink2);margin-top:.25rem;font-weight:600;}
+  .cart-confirm .cc-actions{display:flex;gap:.5rem;padding:0 .9rem .9rem;}
+  .cart-confirm .cc-btn{flex:1;border-radius:7px;font-family:var(--label);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
+    font-weight:600;padding:.7rem .5rem;cursor:pointer;transition:background .2s,color .2s;}
+  .cart-confirm .cc-primary{background:var(--maroon);color:#fff6e5;border:1px solid var(--maroon);}
+  .cart-confirm .cc-primary:hover{background:var(--maroon2);}
+  .cart-confirm .cc-ghost{background:transparent;color:var(--maroon);border:1px solid rgba(110,20,35,.4);}
+  .cart-confirm .cc-ghost:hover{background:var(--maroon-soft);}
+  @media(prefers-reduced-motion:reduce){
+    .cart-btn .cart-btn-spinner{animation:none!important;}
+    .cart-btn.is-done .cart-btn-tick,.cart-btn.is-done .cart-btn-tick path{animation:none!important;stroke-dashoffset:0!important;}
+    .fly-dot{display:none!important;}
+    .cart-confirm{transition:opacity .3s ease;transform:none;}
+  }
+
   /* ── responsive ── */
   @media(max-width:1080px){ .rel-grid{grid-template-columns:repeat(4,1fr)} }
   @media(max-width:880px){
@@ -340,9 +581,9 @@
     <li><a href="https://www.veshannastro.co.in/#bracelet-shop">Bracelets</a></li>
     <li><a href="https://www.veshannastro.co.in/#guidance-paths">Consultations</a></li>
     <li><a href="https://www.veshannastro.co.in/#astral-codex">Products</a></li>
-    <li class="nav-cart-li"><a class="nav-cart" href="#buy">
+    <li class="nav-cart-li"><a class="nav-cart" id="nav-cart" href="#buy">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/><path d="M3 4h2l2.6 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 1.9-1.4L21 8H7"/></svg>
-      Buy now</a></li>
+      Cart<span class="cart-count" id="cart-count">0</span></a></li>
   </ul>
 </nav>
 
@@ -370,8 +611,13 @@
     <h1 id="p-name">Gemstone Band</h1>
     <div class="rating">
       <span class="stars" id="p-stars">★★★★★</span>
-      <span id="p-rating-num">4.8</span>
+      <span class="rating-num" id="p-rating-num">4.8</span>
       <a href="#reviews" id="p-review-link">(read reviews)</a>
+    </div>
+
+    <div class="launch-sale" id="launch-sale">
+      <span class="ls-tag">Launch sale</span>
+      <span class="ls-text" id="ls-text">Founders' pricing — locked in only while our first batch lasts.</span>
     </div>
 
     <div class="price-row">
@@ -379,7 +625,52 @@
       <span class="price-mrp" id="p-mrp">₹0</span>
       <span class="price-off" id="p-off">0% OFF</span>
     </div>
-    <p class="tax-note">Inclusive of all taxes · Launch price</p>
+    <p class="tax-note">Inclusive of all taxes · Free shipping across India</p>
+
+    <div class="buy-actions">
+      <span class="field-label">Quantity</span>
+      <div class="qty">
+        <button type="button" id="qty-dec" aria-label="Decrease quantity">−</button>
+        <span id="qty-val">1</span>
+        <button type="button" id="qty-inc" aria-label="Increase quantity">+</button>
+      </div>
+      <div class="cta-row">
+        <button class="buy-btn" id="buy-btn">Buy now · <span id="buy-amt">₹0</span></button>
+        <button class="cart-btn" id="cart-btn" type="button">
+          <span class="cart-btn-label">Add to cart</span>
+          <span class="cart-btn-spinner" aria-hidden="true"></span>
+          <svg class="cart-btn-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>
+        </button>
+      </div>
+      <button class="ai-btn" id="ai-btn">
+        <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2zM9 21h6M10 19h4"/></svg>
+        Ask Maaya which stone suits you
+      </button>
+    </div>
+
+    <div class="assurance">
+      <svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+      <span><b>Cleansed &amp; energised</b> before dispatch · 100% authentic stones</span>
+    </div>
+
+    <div class="trust-mini">
+      <span><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6z"/></svg> 100% authentic</span>
+      <span><svg viewBox="0 0 24 24"><rect x="1" y="6" width="15" height="12" rx="2"/><path d="M16 9h3l3 3v6h-6"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg> Free shipping</span>
+      <span><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Secure Razorpay</span>
+    </div>
+
+    <!-- delivery estimate by pincode -->
+    <div class="delivery">
+      <div class="dl-head">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="6" width="15" height="12" rx="2"/><path d="M16 9h3l3 3v6h-6"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>
+        Check delivery date
+      </div>
+      <div class="dl-row">
+        <input id="pin-input" type="text" inputmode="numeric" maxlength="6" autocomplete="postal-code" placeholder="Enter 6-digit pincode" />
+        <button type="button" id="pin-check">Check</button>
+      </div>
+      <div class="delivery-msg" id="delivery-msg"></div>
+    </div>
 
     <p class="lede" id="p-lede">A genuine energy gemstone bracelet, finished as a comfortable free-size band.</p>
 
@@ -389,13 +680,6 @@
     <div class="stock" id="p-stock">In stock · ready to ship</div>
 
     <div class="chips" id="p-chips"></div>
-
-    <span class="field-label">Quantity</span>
-    <div class="qty">
-      <button type="button" id="qty-dec" aria-label="Decrease quantity">−</button>
-      <span id="qty-val">1</span>
-      <button type="button" id="qty-inc" aria-label="Increase quantity">+</button>
-    </div>
 
     <span class="field-label">Have a coupon?</span>
     <div class="coupon">
@@ -411,10 +695,14 @@
         <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2zM9 21h6M10 19h4"/></svg> Get a free recommendation
       </a>
     </div>
-    <div class="offers">
-      <p><b>WELCOME</b> — ₹50 off for new customers. Enter the code at checkout (one use per customer).</p>
-      <p><b>HAPPY10</b> — 10% off when you buy 2 or more bands.</p>
-      <p><b>NEW15</b> — 15% off, unlocked after a free AI recommendation from Maaya.</p>
+
+    <div class="offers-box">
+      <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 12v8H4v-8M2 7h20v5H2zM12 7v13M12 7C12 4 9 3 7.5 4.5S6 8 9 8h3M12 7c0-3 3-4 4.5-2.5S18 8 15 8h-3"/></svg> Exclusive offers</h4>
+      <ul>
+        <li><code>WELCOME</code> <span>₹50 off your first order — add the code yourself at checkout.</span></li>
+        <li><code>HAPPY10</code> <span>10% off the moment you add a second band to your order.</span></li>
+        <li><code>NEW15</code> <span>15% off, unlocked after a free stone reading from Maaya.</span></li>
+      </ul>
     </div>
 
     <div class="total-line">
@@ -424,21 +712,38 @@
         <span class="save" id="p-save"></span>
       </span>
     </div>
-
-    <button class="buy-btn" id="buy-btn">Buy now · Pay securely</button>
-
-    <div class="ship-badge">
-      <svg viewBox="0 0 24 24"><rect x="1" y="6" width="15" height="12" rx="2"/><path d="M16 9h3l3 3v6h-6"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>
-      <span><b>Free shipping on every order</b> · delivered across India</span>
-    </div>
-
-    <div class="trust-mini">
-      <span><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6z"/></svg> 100% authentic stones</span>
-      <span><svg viewBox="0 0 24 24"><rect x="1" y="6" width="15" height="12" rx="2"/><path d="M16 9h3l3 3v6h-6"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg> Free shipping</span>
-      <span><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Secure Razorpay</span>
-    </div>
   </div>
 </main>
+
+<!-- ═══ ASSURANCE STRIP ═══ -->
+<div class="assure-strip">
+  <div class="inner">
+    <span class="ai"><svg viewBox="0 0 24 24" fill="none"><rect x="1" y="6" width="15" height="12" rx="2"/><path d="M16 9h3l3 3v6h-6"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg> <b>Free shipping</b>&nbsp;across India</span>
+    <span class="sep"></span>
+    <span class="ai"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 4v4h4"/></svg> <b>7-day</b>&nbsp;easy returns</span>
+    <span class="sep"></span>
+    <span class="ai"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2l8 4v6c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg> <b>Lab-tested</b>&nbsp;authentic stones</span>
+    <span class="sep"></span>
+    <span class="ai"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.5 2.5M16.5 16.5 19 19M19 5l-2.5 2.5M7.5 16.5 5 19"/><circle cx="12" cy="12" r="3"/></svg> <b>Energised</b>&nbsp;before dispatch</span>
+    <span class="sep"></span>
+    <span class="ai"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> <b>Secure</b>&nbsp;Razorpay checkout</span>
+  </div>
+</div>
+
+<!-- ═══ PRODUCT INFO ACCORDIONS ═══ -->
+<div class="pinfo" id="pinfo"></div>
+
+<!-- ═══ RICH SECTIONS (premium / multi-stone) ═══ -->
+<div id="rich-sections"></div>
+
+<!-- ═══ MADE IN INDIA ═══ -->
+<section class="india-strip">
+  <div class="inner">
+    <span class="india-flag" aria-hidden="true"><i style="background:#FF9933"></i><i style="background:#fff"></i><i style="background:#138808"></i></span>
+    <b>Proudly Made in India</b>
+    <span>· strung, cleansed and energised by hand in Bharat, then shipped to your door</span>
+  </div>
+</section>
 
 <!-- ═══ TRUST STRIP ═══ -->
 <section class="trust-strip">
@@ -521,11 +826,18 @@
   <div class="rev-grid" id="rev-grid"></div>
 </section>
 
-<!-- ═══ MORE FROM THE COLLECTION ═══ -->
+<!-- ═══ FIND YOUR STONE — filterable collection ═══ -->
 <section class="section" id="related">
-  <span class="section-eyebrow">Explore more</span>
-  <h2>More from the <em>collection</em></h2>
-  <p class="section-sub">Other energy bands people pair with this one. Tap any to see its full details.</p>
+  <span class="section-eyebrow">Find your stone</span>
+  <h2>Shop the <em>collection</em></h2>
+  <p class="section-sub">Filter by what you're reaching for — or let Maaya read your birth chart and pick the stone aligned to it.</p>
+  <div class="intent-bar" id="intent-bar"></div>
+  <div class="maaya-pick">
+    <a id="maaya-pick-link" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2zM9 21h6M10 19h4"/></svg>
+      Let Maaya pick from my birth chart
+    </a>
+  </div>
   <div class="rel-grid" id="rel-grid"></div>
 </section>
 
@@ -581,6 +893,18 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<div class="cart-confirm" id="cart-confirm" role="status" aria-live="polite">
+  <div class="cc-head"><span class="cc-tick">&#10003;</span> Added to your cart</div>
+  <div class="cc-body">
+    <div class="cc-thumb" id="cc-thumb">&#9670;</div>
+    <div class="cc-info"><div class="cc-name" id="cc-name"></div><div class="cc-meta" id="cc-meta"></div></div>
+  </div>
+  <div class="cc-actions">
+    <button type="button" class="cc-btn cc-primary" id="cc-checkout">View cart &amp; checkout</button>
+    <button type="button" class="cc-btn cc-ghost" id="cc-continue">Keep shopping</button>
+  </div>
+</div>
+
 <!-- ═══ FOOTER ═══ -->
 <footer class="site-footer">
   <span class="footer-logo">Veshan<em>nastro</em></span>
@@ -598,6 +922,12 @@
   </nav>
   <span class="footer-copy">&copy; 2026 Veshannastro · All rights reserved · India</span>
 </footer>
+
+<!-- sticky mobile buy bar -->
+<div class="stickybuy" id="stickybuy" aria-hidden="false">
+  <div class="sb-price"><small>Total</small><b id="sb-total">₹0</b></div>
+  <button type="button" id="sb-buy">Buy now · Pay securely</button>
+</div>
 
 <!-- Product structured data -->
 <script type="application/ld+json" id="product-jsonld"></script>
@@ -623,7 +953,7 @@ var CONFIG = {
 
   // Where "Get recommendation" sends people to unlock NEW15 (your Maaya AI recommender).
   // It should send buyers back to a product URL with ?coupon=NEW15 (or ?rec=1) appended.
-  recommendationUrl: "https://new-ai-chatbot-bv0n.onrender.com",
+  recommendationUrl: "index.html#vesha-chat",
 
   // OPTIONAL — flexible Razorpay Payment Links for ANY amount (coupons, quantities).
   // Deploy the create-payment-link endpoint (see create_payment_link.py) and put its
@@ -642,20 +972,24 @@ var CONFIG = {
      In each link's dashboard settings, set the redirect URL to thank-you.html.
      ───────────────────────────────────────────────────────────────────── */
   paymentLinks: {
-    "VA-BR-TP-001": "https://rzp.io/rzp/REPLACE-VA-BR-TP-001-699",
-    "VA-BR-AM-002": "https://rzp.io/rzp/REPLACE-VA-BR-AM-002-599",
-    "VA-BR-CQ-003": "https://rzp.io/rzp/REPLACE-VA-BR-CQ-003-549",
-    "VA-BR-BT-004": "https://rzp.io/rzp/REPLACE-VA-BR-BT-004-649",
-    "VA-BR-CT-005": "https://rzp.io/rzp/REPLACE-VA-BR-CT-005-699",
-    "VA-BR-YA-006": "https://rzp.io/rzp/REPLACE-VA-BR-YA-006-499",
-    "VA-BR-RJ-007": "https://rzp.io/rzp/REPLACE-VA-BR-RJ-007-499",
-    "VA-BR-TE-008": "https://rzp.io/rzp/REPLACE-VA-BR-TE-008-599",
-    "VA-BR-RQ-009": "https://rzp.io/rzp/REPLACE-VA-BR-RQ-009-549",
-    "VA-BR-GA-010": "https://rzp.io/rzp/REPLACE-VA-BR-GA-010-499",
-    "VA-BR-LL-011": "https://rzp.io/rzp/REPLACE-VA-BR-LL-011-699",
-    "VA-BR-MN-012": "https://rzp.io/rzp/REPLACE-VA-BR-MN-012-749",
-    "VA-BR-7C-013": "https://rzp.io/rzp/REPLACE-VA-BR-7C-013-599",
-    "VA-BR-IO-014": "https://rzp.io/rzp/REPLACE-VA-BR-IO-014-799"
+    "VA-BR-TP-001": "https://rzp.io/rzp/REPLACE-VA-BR-TP-001-799",
+    "VA-BR-AM-002": "https://rzp.io/rzp/REPLACE-VA-BR-AM-002-999",
+    "VA-BR-CQ-003": "https://rzp.io/rzp/REPLACE-VA-BR-CQ-003-999",
+    "VA-BR-BT-004": "https://rzp.io/rzp/REPLACE-VA-BR-BT-004-899",
+    "VA-BR-CT-005": "https://rzp.io/rzp/REPLACE-VA-BR-CT-005-1199",
+    "VA-BR-YA-006": "https://rzp.io/rzp/REPLACE-VA-BR-YA-006-799",
+    "VA-BR-RJ-007": "https://rzp.io/rzp/REPLACE-VA-BR-RJ-007-799",
+    "VA-BR-TE-008": "https://rzp.io/rzp/REPLACE-VA-BR-TE-008-799",
+    "VA-BR-RQ-009": "https://rzp.io/rzp/REPLACE-VA-BR-RQ-009-899",
+    "VA-BR-GA-010": "https://rzp.io/rzp/REPLACE-VA-BR-GA-010-899",
+    "VA-BR-LL-011": "https://rzp.io/rzp/REPLACE-VA-BR-LL-011-899",
+    "VA-BR-MN-012": "https://rzp.io/rzp/REPLACE-VA-BR-MN-012-799",
+    "VA-BR-7C-013": "https://rzp.io/rzp/REPLACE-VA-BR-7C-013-1099",
+    "VA-BR-IO-014": "https://rzp.io/rzp/REPLACE-VA-BR-IO-014-1599",
+    "VA-BR-WM-015": "https://rzp.io/rzp/REPLACE-VA-BR-WM-015-1399",
+    "VA-BR-LK-016": "https://rzp.io/rzp/REPLACE-VA-BR-LK-016-1299",
+    "VA-BR-RE-017": "https://rzp.io/rzp/REPLACE-VA-BR-RE-017-1299",
+    "VA-BR-PY-018": "https://rzp.io/rzp/REPLACE-VA-BR-PY-018-999"
   }
 };
 
@@ -673,24 +1007,146 @@ var COUPONS = {
 
 /* Product catalog (mirrors bracelet-shop.js). */
 var PRODUCTS = {
-  "VA-BR-TP-001": { name:"Triple Protection Band", mrp:999, price:699, gemstones:"Tiger Eye + Black Obsidian + Hematite", benefits:"Protection, grounding, confidence, negativity shielding", description:"A bold mixed-stone protection band designed for daily wear and grounding.", tags:["protection","career","strength","grounding"] },
-  "VA-BR-AM-002": { name:"Amethyst Band", mrp:899, price:599, gemstones:"Amethyst", benefits:"Calm mind, stress relief, intuition, spiritual growth", description:"A calming purple crystal band for peace, clarity and spiritual balance.", tags:["peace","intuition","spirituality","healing"] },
-  "VA-BR-CQ-003": { name:"Clear Quartz Band", mrp:799, price:549, gemstones:"Clear Quartz", benefits:"Energy amplification, clarity, focus, cleansing", description:"A clean transparent crystal band known as a universal energy amplifier.", tags:["clarity","focus","healing","energy"] },
-  "VA-BR-BT-004": { name:"Black Tourmaline Band", mrp:899, price:649, gemstones:"Black Tourmaline", benefits:"Protection, grounding, negativity removal, stability", description:"A deep black protection band for grounding and energetic shielding.", tags:["protection","grounding","negativity","stability"] },
-  "VA-BR-CT-005": { name:"Citrine Band", mrp:999, price:699, gemstones:"Citrine", benefits:"Wealth, abundance, confidence, success mindset", description:"A bright golden band associated with abundance, confidence and motivation.", tags:["wealth","success","confidence","manifestation"] },
-  "VA-BR-YA-006": { name:"Yellow Aventurine Band", mrp:799, price:499, gemstones:"Yellow Aventurine", benefits:"Confidence, optimism, willpower, decision-making", description:"A warm yellow band for optimism, personal power and positive action.", tags:["confidence","positivity","career","motivation"] },
-  "VA-BR-RJ-007": { name:"Red Jasper Band", mrp:799, price:499, gemstones:"Red Jasper", benefits:"Strength, stamina, courage, stability", description:"An earthy red band for stamina, courage and grounded strength.", tags:["health","strength","grounding","courage"] },
-  "VA-BR-TE-008": { name:"Tiger Eye Band", mrp:899, price:599, gemstones:"Tiger Eye", benefits:"Confidence, focus, courage, protection", description:"A glossy golden-brown band for confidence, focus and practical success.", tags:["career","success","protection","confidence"] },
-  "VA-BR-RQ-009": { name:"Rose Quartz Band", mrp:799, price:549, gemstones:"Rose Quartz", benefits:"Love, emotional healing, self-love, relationship harmony", description:"A soft pink band for emotional healing, self-love and harmony.", tags:["love","relationships","healing","peace"] },
-  "VA-BR-GA-010": { name:"Green Aventurine Band", mrp:799, price:499, gemstones:"Green Aventurine", benefits:"Luck, growth, opportunity, heart balance", description:"A soothing green band linked with luck, growth and heart-centered balance.", tags:["wealth","luck","growth","heart"] },
-  "VA-BR-LL-011": { name:"Lapis Lazuli Band", mrp:999, price:699, gemstones:"Lapis Lazuli", benefits:"Wisdom, communication, truth, self-awareness", description:"A royal blue band for wisdom, communication and inner truth.", tags:["wisdom","communication","study","intuition"] },
-  "VA-BR-MN-012": { name:"Moonstone Band", mrp:1099, price:749, gemstones:"White / Rainbow Moonstone", benefits:"Emotional balance, intuition, feminine energy, calmness", description:"A gentle luminous band associated with emotional balance and intuition.", tags:["moon","intuition","peace","emotional healing"] },
-  "VA-BR-7C-013": { name:"7 Chakra Band", mrp:899, price:599, gemstones:"7 Chakra mixed gemstones", benefits:"Chakra balance, energy alignment, positivity, overall wellness", description:"A multi-colour chakra band designed for energetic balance and alignment.", tags:["chakra","healing","balance","spirituality"] },
-  "VA-BR-IO-014": { name:"Iolite Band", mrp:1099, price:799, gemstones:"Iolite", benefits:"Intuition, vision, inner guidance, mental clarity", description:"A deep blue-grey band for intuition, vision and inner direction.", tags:["intuition","clarity","spirituality","focus"] }
+  "VA-BR-TP-001": { name:"Triple Protection Bracelet", mrp:1139, price:799, gemstones:"Tiger Eye + Black Obsidian + Hematite", benefits:"Protection, grounding, confidence, negativity shielding", description:"A bold mixed-stone protection bracelet designed for daily wear and grounding.", tags:["protection","career","strength","grounding"] },
+  "VA-BR-AM-002": { name:"Amethyst Bracelet", mrp:1429, price:999, gemstones:"Amethyst", benefits:"Calm mind, stress relief, intuition, spiritual growth", description:"A calming purple crystal bracelet for peace, clarity and spiritual balance.", tags:["peace","intuition","spirituality","healing"] },
+  "VA-BR-CQ-003": { name:"Clear Quartz Bracelet", mrp:1429, price:999, gemstones:"Clear Quartz", benefits:"Energy amplification, clarity, focus, cleansing", description:"A clean transparent crystal bracelet known as a universal energy amplifier.", tags:["clarity","focus","healing","energy"] },
+  "VA-BR-BT-004": { name:"Black Tourmaline Bracelet", mrp:1279, price:899, gemstones:"Black Tourmaline", benefits:"Protection, grounding, negativity removal, stability", description:"A deep black protection bracelet for grounding and energetic shielding.", tags:["protection","grounding","negativity","stability"] },
+  "VA-BR-CT-005": { name:"Citrine Natural Bracelet", mrp:1709, price:1199, gemstones:"Natural Citrine", benefits:"Wealth, abundance, confidence, success mindset", description:"A bright natural-citrine bracelet associated with abundance, confidence and motivation.", tags:["wealth","success","confidence","manifestation"] },
+  "VA-BR-YA-006": { name:"Yellow Aventurine Bracelet", mrp:1139, price:799, gemstones:"Yellow Aventurine", benefits:"Confidence, optimism, willpower, decision-making", description:"A warm yellow bracelet for optimism, personal power and positive action.", tags:["confidence","positivity","career","motivation"] },
+  "VA-BR-RJ-007": { name:"Red Jasper Bracelet", mrp:1139, price:799, gemstones:"Red Jasper", benefits:"Strength, stamina, courage, stability", description:"An earthy red bracelet for stamina, courage and grounded strength.", tags:["health","strength","grounding","courage"] },
+  "VA-BR-TE-008": { name:"Tiger Eye Bracelet", mrp:1139, price:799, gemstones:"Tiger Eye", benefits:"Confidence, focus, courage, protection", description:"A glossy golden-brown bracelet for confidence, focus and practical success.", tags:["career","success","protection","confidence"] },
+  "VA-BR-RQ-009": { name:"Rose Quartz Bracelet", mrp:1279, price:899, gemstones:"Rose Quartz", benefits:"Love, emotional healing, self-love, relationship harmony", description:"A soft pink bracelet for emotional healing, self-love and harmony.", tags:["love","relationships","healing","peace"] },
+  "VA-BR-GA-010": { name:"Green Aventurine Bracelet", mrp:1279, price:899, gemstones:"Green Aventurine", benefits:"Luck, growth, opportunity, heart balance", description:"A soothing green bracelet linked with luck, growth and heart-centered balance.", tags:["wealth","luck","growth","heart"] },
+  "VA-BR-LL-011": { name:"Lapis Lazuli Bracelet", mrp:1279, price:899, gemstones:"Lapis Lazuli", benefits:"Wisdom, communication, truth, self-awareness", description:"A royal blue bracelet for wisdom, communication and inner truth.", tags:["wisdom","communication","study","intuition"] },
+  "VA-BR-MN-012": { name:"Peach Moonstone Bracelet", mrp:1139, price:799, gemstones:"Peach Moonstone", benefits:"Emotional balance, intuition, soothing energy, self-acceptance", description:"A warm peach-glow bracelet for emotional balance, gentle confidence and intuition.", tags:["moon","intuition","peace","emotional healing"] },
+  "VA-BR-WM-015": { name:"White Moonstone Bracelet", mrp:1999, price:1399, premium:true, gemstones:"White Moonstone", benefits:"Emotional balance, intuition, calm, feminine energy", description:"A luminous milk-white moonstone bracelet for emotional steadiness and heightened intuition.", tags:["moon","intuition","peace","healing"] },
+  "VA-BR-7C-013": { name:"7 Chakra Bracelet", mrp:1569, price:1099, premium:true, gemstones:"7 Chakra mixed gemstones", benefits:"Chakra balance, energy alignment, positivity, overall wellness", description:"Seven stones tuned to the body's energy centres for full-spectrum alignment.", tags:["chakra","healing","balance","spirituality"] },
+  "VA-BR-IO-014": { name:"Iolite Bracelet (Neeli)", mrp:2279, price:1599, premium:true, gemstones:"Iolite (Neeli — Saturn substitute)", benefits:"Intuition, vision, inner guidance, Saturn support", description:"A violet-blue Saturn substitute (Neeli) for vision, discipline and inner direction.", tags:["intuition","clarity","spirituality","focus"] },
+  "VA-BR-LK-016": { name:"Lakshmi's Loom — Dhan Yog Bracelet", mrp:1859, price:1299, premium:true, gemstones:"Citrine + Pyrite + Green Aventurine", benefits:"Wealth, abundance, money flow, opportunity", description:"A dhan-yog wealth weave of citrine, pyrite and green aventurine to invite steady abundance.", tags:["wealth","luck","success","manifestation"] },
+  "VA-BR-RE-017": { name:"The Rose Embrace — Love Bracelet", mrp:1859, price:1299, premium:true, gemstones:"Rose Quartz + Rhodonite", benefits:"Love, attraction, self-worth, relationship harmony", description:"A tender rose-quartz and rhodonite pairing to open the heart and draw warm, lasting love.", tags:["love","relationships","healing","heart"] },
+  "VA-BR-PY-018": { name:"Sunforge Pyrite Bracelet", mrp:1429, price:999, premium:true, gemstones:"Pyrite", benefits:"Wealth, willpower, confidence, protection", description:"A golden pyrite bracelet with real fire — for drive, money magnetism and bold confidence.", tags:["wealth","confidence","success","protection"] }
 };
 
 var DEFAULT_SKU = "VA-BR-GA-010";
 var IMG_EXT = ["webp","jpg","jpeg","png"];
+
+/* Representative colour per stone — drives card tints + gallery glow.
+   Add a band to PRODUCTS and give it a colour here; it flows everywhere. */
+var STONE_COLORS = {
+  "VA-BR-TP-001":"#5c4327", "VA-BR-AM-002":"#7e57c2", "VA-BR-CQ-003":"#9fb0c0",
+  "VA-BR-BT-004":"#2f2f36", "VA-BR-CT-005":"#d9a521", "VA-BR-YA-006":"#e0b73a",
+  "VA-BR-RJ-007":"#a83232", "VA-BR-TE-008":"#b07d2a", "VA-BR-RQ-009":"#e3a0b4",
+  "VA-BR-GA-010":"#4f9e6a", "VA-BR-LL-011":"#2b4a8c", "VA-BR-MN-012":"#e8b89a",
+  "VA-BR-WM-015":"#d7deec", "VA-BR-7C-013":"#8a5a9e", "VA-BR-IO-014":"#4a5a9e",
+  "VA-BR-LK-016":"#c9a24a", "VA-BR-RE-017":"#e08aa0", "VA-BR-PY-018":"#c79a3a"
+};
+
+/* Intent selector: each product tag maps to one shopping intent. */
+var INTENTS = [["all","All bands"],["protection","Protection"],["wealth","Wealth & luck"],
+  ["love","Love"],["calm","Calm & peace"],["focus","Focus & clarity"],["intuition","Intuition"]];
+var INTENT_OF = {
+  protection:"protection", grounding:"protection", negativity:"protection", stability:"protection",
+  strength:"protection", courage:"protection", health:"protection",
+  wealth:"wealth", success:"wealth", luck:"wealth", growth:"wealth", manifestation:"wealth",
+  abundance:"wealth", career:"wealth", motivation:"wealth", confidence:"wealth", positivity:"wealth",
+  love:"love", relationships:"love", heart:"love",
+  peace:"calm", healing:"calm", "emotional healing":"calm", moon:"calm",
+  focus:"focus", clarity:"focus", study:"focus", energy:"focus",
+  intuition:"intuition", spirituality:"intuition", wisdom:"intuition",
+  communication:"intuition", vision:"intuition", chakra:"intuition"
+};
+var activeIntent = "all";
+function hexA(h,a){ var n=parseInt(h.slice(1),16); return "rgba("+(n>>16&255)+","+(n>>8&255)+","+(n&255)+","+a+")"; }
+function productIntents(p){
+  var out={}; (p.tags||[]).forEach(function(t){ var m=INTENT_OF[String(t).toLowerCase()]; if(m) out[m]=1; });
+  return Object.keys(out);
+}
+
+/* deterministic per-band social proof so each page feels distinct yet stable */
+function skuSeed(s){ var n=0; for(var i=0;i<s.length;i++) n=(n*31+s.charCodeAt(i))>>>0; return n; }
+function ratingFor(s){ return (skuSeed(s)%2===0) ? "4.9" : "4.8"; }
+function reviewsFor(s){ return 80 + (skuSeed(s)%181); }   // 80–260
+
+/* lightweight toast */
+var toastTimer;
+function toast(msg){
+  var t=$("toast"); if(!t) return;
+  t.textContent=msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer=setTimeout(function(){ t.classList.remove("show"); },2200);
+}
+
+/* single-configuration cart (matches the one-product-per-page flow) */
+var cartCount=0, cartBusy=false, ccTimer;
+function updateCartBadge(pop){
+  var b=$("cart-count"); if(!b) return;
+  b.textContent=cartCount;
+  b.classList.toggle("show", cartCount>0);
+  if(pop){ b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop"); }
+}
+function flyToCart(btn){
+  var target=$("nav-cart"); if(!target||!btn) return;
+  var b=btn.getBoundingClientRect(), t=target.getBoundingClientRect();
+  var dot=document.createElement("div"); dot.className="fly-dot";
+  dot.style.left=(b.left+b.width/2-9)+"px";
+  dot.style.top=(b.top+b.height/2-9)+"px";
+  document.body.appendChild(dot);
+  void dot.offsetWidth;
+  var dx=(t.left+t.width/2)-(b.left+b.width/2);
+  var dy=(t.top+t.height/2)-(b.top+b.height/2);
+  dot.style.transform="translate("+dx+"px,"+dy+"px) scale(.3)";
+  dot.style.opacity="0.15";
+  setTimeout(function(){ if(dot.parentNode) dot.parentNode.removeChild(dot); }, 820);
+}
+function showCartConfirm(){
+  var p=$("cart-confirm"); if(!p) return;
+  var nm=$("cc-name"), mt=$("cc-meta"), th=$("cc-thumb");
+  if(nm) nm.textContent=product.name;
+  if(mt) mt.textContent=qty+" \u00D7 "+money(product.price)+"  \u00B7  "+money(product.price*qty);
+  if(th){
+    var img=document.querySelector("#main-img, #gallery-main img");
+    var src=img && img.getAttribute("src");
+    if(src && img.naturalWidth>0){ th.style.backgroundImage="url('"+src+"')"; th.textContent=""; th.style.background=""; th.style.backgroundImage="url('"+src+"')"; th.style.backgroundSize="cover"; th.style.backgroundPosition="center"; }
+    else { var c=(typeof STONE_COLORS!=="undefined" && STONE_COLORS[sku]) || "#c9a84c"; th.style.backgroundImage="none"; th.style.background="radial-gradient(circle at 40% 35%,"+hexA(c,.9)+","+hexA(c,.4)+")"; th.textContent="\u25C8"; }
+  }
+  p.classList.add("show");
+  clearTimeout(ccTimer); ccTimer=setTimeout(function(){ p.classList.remove("show"); }, 5200);
+}
+function addToCart(){
+  if(cartBusy) return;
+  var btn=$("cart-btn");
+  if(!btn){ cartCount+=qty; updateCartBadge(true); return; }
+  cartBusy=true;
+  btn.classList.remove("is-done");
+  btn.classList.add("is-loading");
+  setTimeout(function(){ flyToCart(btn); }, 260);
+  setTimeout(function(){
+    btn.classList.remove("is-loading");
+    btn.classList.add("is-done");
+    cartCount+=qty;
+    updateCartBadge(true);
+    showCartConfirm();
+  }, 760);
+  setTimeout(function(){
+    btn.classList.remove("is-done");
+    cartBusy=false;
+  }, 1950);
+}
+
+/* delivery estimate from pincode — dispatch 1–2 working days + regional transit */
+function fmtDate(d){ return d.toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"}); }
+function addDays(base,n){ var d=new Date(base); d.setDate(d.getDate()+n); return d; }
+function estimateDelivery(){
+  var pin=($("pin-input").value||"").replace(/\D/g,"");
+  var msg=$("delivery-msg");
+  if(pin.length!==6){ msg.className="delivery-msg bad"; msg.textContent="Please enter a valid 6-digit pincode."; return; }
+  // transit window (working days) by region, keyed on the leading digit
+  var fast={"1":[2,3],"4":[2,3],"5":[2,4],"6":[3,4],"7":[3,4],"2":[3,5],"3":[3,5],"8":[4,6],"9":[4,6],"0":[5,7]};
+  var t=fast[pin.charAt(0)]||[4,6];
+  var lo=addDays(new Date(), 1+t[0]), hi=addDays(new Date(), 2+t[1]);
+  msg.className="delivery-msg ok";
+  msg.innerHTML="Delivers to <b>"+pin+"</b> between <b>"+fmtDate(lo)+"</b> and <b>"+fmtDate(hi)+"</b> · free shipping. "+
+    "Dispatched within 1–2 working days.";
+}
 
 /* ---------- generic editorial sections built from product data ---------- */
 function aboutCopy(p){
@@ -739,9 +1195,9 @@ function faqList(p){
 }
 /* Sample reviews — replace text/names with your real verified reviews. */
 var SAMPLE_REVIEWS = [
-  { name:"Aishwarya R.", text:"Lovely band, looks even better in person and the stones feel real. Came nicely packed in a pouch.", stars:5 },
-  { name:"Karan M.", text:"Wearing it daily for a few weeks now. Comfortable, doesn't slip, and delivery was quick.", stars:5 },
-  { name:"Sneha P.", text:"Bought it for the intention behind it and I'm happy with the quality for the price. Would order again.", stars:4 }
+  { name:"Aishwarya Reddy", text:"Lovely band, looks even better in person and the stones feel real. Came nicely packed in a pouch.", stars:5 },
+  { name:"Karan Mehta", text:"Wearing it daily for a few weeks now. Comfortable, doesn't slip, and delivery was quick.", stars:5 },
+  { name:"Sneha Patil", text:"Bought it for the intention behind it and I'm happy with the quality for the price. Would order again.", stars:4 }
 ];
 
 /* ---------- state ---------- */
@@ -770,6 +1226,199 @@ function discount(){ return couponState().discount; }
 function total(){ return Math.max(0, product.price*qty - discount()); }
 
 /* ---------- init ---------- */
+/* ════════ RICH PRODUCT CONTENT (accordions + premium sections) ════════ */
+function uiEsc(s){ return esc(s); }
+function isRich(p){ return !!(p && (p.premium || (p.gemstones && p.gemstones.indexOf("+") > -1) || /7 chakra/i.test(p.gemstones||""))); }
+
+function richIntent(p){
+  var t = (p.tags||[]).join(" ");
+  if (/chakra/.test(t)) return "chakra";
+  if (/wealth|success|luck|growth|manifestation|abundance/.test(t)) return "wealth";
+  if (/love|relationship|heart/.test(t)) return "love";
+  if (/protection|grounding|negativity|stability|strength|courage/.test(t)) return "protection";
+  if (/intuition|spiritual|wisdom|vision|communication/.test(t)) return "intuition";
+  if (/peace|healing|moon|emotional/.test(t)) return "calm";
+  if (/focus|clarity|confidence|career|motivation/.test(t)) return "focus";
+  return "default";
+}
+
+var MANTRAS = {
+  wealth:    { s:"Om Shreem Hreem Kleem Maha Lakshmi Namaha", c:"Chant 108 times", t:"Touch the bracelet and repeat each morning for 21 days to anchor a steady money mindset." },
+  love:      { s:"Om Shreem Kleem Kamadevaya Namaha",          c:"Chant 108 times", t:"Repeat softly while wearing it on your left wrist, holding an open and willing heart." },
+  protection:{ s:"Om Gam Ganapataye Namaha",                   c:"Chant 108 times", t:"Recite each morning to clear the path ahead and seal your energy for the day." },
+  intuition: { s:"Om Aim Saraswatyai Namaha",                  c:"Chant 108 times", t:"Chant in a quiet moment to sharpen inner vision and trust your own knowing." },
+  calm:      { s:"Om Namah Shivaya",                            c:"Chant 108 times", t:"Repeat slowly with the breath to settle the mind and steady the emotions." },
+  focus:     { s:"Om Gam Ganapataye Namaha",                   c:"Chant 108 times", t:"Recite before important work to gather your focus and remove obstacles." },
+  chakra:    { s:"Om Namah Shivaya",                            c:"Chant 108 times", t:"Move attention from the base to the crown as you chant, balancing each centre." },
+  "default": { s:"Om Gam Ganapataye Namaha",                   c:"Chant 108 times", t:"Repeat each morning with a clear intention and a moment of gratitude." }
+};
+var RITUAL_DAY = { wealth:"Friday (Venus) or Thursday (Jupiter)", love:"Friday (Venus)", protection:"Saturday (Saturn) or Tuesday (Mars)", intuition:"Monday (Moon)", calm:"Monday (Moon)", focus:"Wednesday (Mercury)", chakra:"Sunday (Sun)", "default":"Sunday or Thursday" };
+var RITUAL_INTENT = { wealth:"\u201CI attract abundance with clarity and ease.\u201D", love:"\u201CI am open to love and worthy of receiving it.\u201D", protection:"\u201CI am grounded, safe and protected.\u201D", intuition:"\u201CI trust my inner knowing.\u201D", calm:"\u201CI am calm, balanced and at peace.\u201D", focus:"\u201CI move with focus and quiet confidence.\u201D", chakra:"\u201CMy energy is aligned and flowing.\u201D", "default":"\u201CI align with my highest good.\u201D" };
+
+var STONE_NOTES = {
+  "tiger eye":"Courage, focus and grounded confidence.",
+  "black obsidian":"A protective shield that absorbs negativity.",
+  "obsidian":"A protective shield that absorbs negativity.",
+  "hematite":"Grounds scattered energy and steadies the mind.",
+  "citrine":"The merchant's stone of wealth and bold optimism.",
+  "natural citrine":"The merchant's stone of wealth and bold optimism.",
+  "pyrite":"Magnetises money and guards your drive.",
+  "green aventurine":"The stone of opportunity, luck and growth.",
+  "rose quartz":"Opens the heart to love and gentle healing.",
+  "rhodonite":"Heals the heart and restores self-worth.",
+  "amethyst":"Calms the mind and deepens intuition.",
+  "clear quartz":"Amplifies intention and clears the energy field.",
+  "quartz":"Amplifies intention and clears the energy field.",
+  "black tourmaline":"Deflects negativity and steadies you.",
+  "lapis lazuli":"Wisdom, truth and clear expression.",
+  "peach moonstone":"Soothes emotion and awakens gentle intuition.",
+  "white moonstone":"Soothes emotion and awakens intuition.",
+  "moonstone":"Soothes emotion and awakens intuition.",
+  "iolite":"The vision stone \u2014 inner direction and Saturn's discipline.",
+  "yellow aventurine":"Optimism, willpower and clear decisions.",
+  "red jasper":"Stamina, courage and grounded strength."
+};
+function stoneNote(name){ return STONE_NOTES[name.trim().toLowerCase()] || "A natural energy stone, polished for daily wear."; }
+
+var BENEFIT_CARDS = [
+  { re:/wealth|abundance|money|prosper|success/i, ic:"\uD83D\uDCB0", accent:"#c9a24a", blurb:"Draws steady abundance and a confident money mindset.", pill:"Wealth" },
+  { re:/luck|opportunity|growth/i,                ic:"\uD83C\uDF40", accent:"#4f9e6a", blurb:"Opens doors to luck, growth and new opportunity.", pill:"Growth" },
+  { re:/protection|shield|negativity/i,           ic:"\uD83D\uDEE1\uFE0F", accent:"#6e1423", blurb:"Shields your energy and keeps negativity out.", pill:"Protection" },
+  { re:/ground|stability|strength|stamina|courage/i, ic:"\u2693", accent:"#5c4327", blurb:"Grounds scattered energy and steadies you.", pill:"Grounding" },
+  { re:/love|relationship|heart/i,                ic:"\uD83D\uDC97", accent:"#e08aa0", blurb:"Opens the heart to love and warm connection.", pill:"Love" },
+  { re:/calm|peace|stress|emotional|soothing/i,   ic:"\uD83C\uDF19", accent:"#7e8bbf", blurb:"Soothes the mind and brings emotional calm.", pill:"Calm" },
+  { re:/intuition|vision|spiritual|wisdom/i,      ic:"\uD83D\uDD2E", accent:"#7e57c2", blurb:"Deepens intuition and inner clarity.", pill:"Intuition" },
+  { re:/focus|clarity|decision|confidence|willpower|motivation/i, ic:"\uD83C\uDFAF", accent:"#b07d2a", blurb:"Sharpens focus and steady confidence.", pill:"Focus" },
+  { re:/chakra|balance|alignment|wellness/i,      ic:"\uD83C\uDF00", accent:"#8a5a9e", blurb:"Balances and aligns your energy centres.", pill:"Balance" }
+];
+function whyCards(p){
+  var benefits = (p.benefits||"").split(",").map(function(b){ return b.trim(); }).filter(Boolean);
+  var seen = {}, cards = [];
+  benefits.forEach(function(b){
+    for (var i=0;i<BENEFIT_CARDS.length;i++){
+      if (BENEFIT_CARDS[i].re.test(b) && !seen[BENEFIT_CARDS[i].pill]){
+        seen[BENEFIT_CARDS[i].pill] = 1;
+        cards.push(BENEFIT_CARDS[i]);
+        break;
+      }
+    }
+  });
+  return cards.slice(0,4);
+}
+
+function buildPinfo(){
+  var host = $("pinfo"); if(!host) return;
+  var primary = (product.gemstones||"").split("+")[0].trim() || "natural";
+  var acc = function(title, bodyHtml, open){
+    return '<details class="acc"'+(open?' open':'')+'><summary>'+uiEsc(title)+'<span class="chev"></span></summary><div class="acc-body">'+bodyHtml+'</div></details>';
+  };
+  var feat = ['Natural '+uiEsc(primary)+' beads, polished smooth and skin-friendly',
+    '8mm beads on a stretchable, free-size band',
+    'Unisex design \u2014 made for everyday wear',
+    'Cleansed and energised before dispatch',
+    'Lab-tested for authenticity \u2014 never dyed or synthetic'];
+  var care = ['Wear it on your left wrist, the receiving side.',
+    'Cleanse it now and then under moonlight or with incense smoke.',
+    'Keep away from water, perfume and harsh chemicals; remove before bathing.',
+    'Hold a clear intention each time you put it on.'];
+  host.innerHTML =
+    acc('Description', '<p>'+uiEsc(product.description)+' Every band is cleansed and energised by hand before it reaches you, then shipped free across India.</p>', true) +
+    acc('Key Features', '<ul>'+feat.map(function(f){return '<li>'+f+'</li>';}).join('')+'</ul>') +
+    acc('How to Wear &amp; Care', '<ul>'+care.map(function(c){return '<li>'+uiEsc(c)+'</li>';}).join('')+'</ul>');
+}
+
+function buildRich(){
+  var host = $("rich-sections"); if(!host) return;
+  if(!isRich(product)){ host.innerHTML = ""; return; }
+  var intent = richIntent(product);
+  var col = STONE_COLORS[sku] || "#c9a84c";
+
+  /* why-wear cards */
+  var cards = whyCards(product);
+  var whyHtml = cards.map(function(c,i){
+    return '<article class="why-card" style="--accent:'+c.accent+'"><span class="ic">'+c.ic+'</span>'+
+      '<h3>'+uiEsc(c.pill)+'</h3><p>'+uiEsc(c.blurb)+'</p>'+
+      '<span class="pill">'+(i===0?'Most loved':uiEsc(c.pill))+'</span></article>';
+  }).join("");
+
+  /* ingredient chips */
+  var stones = (product.gemstones||"").split("+").map(function(s){return s.trim();}).filter(Boolean);
+  if (stones.length===1 && /7 chakra/i.test(stones[0])){
+    stones = ["Amethyst","Lapis Lazuli","Clear Quartz","Green Aventurine","Citrine","Red Jasper","Black Tourmaline"];
+  }
+  var palette = ["#c9a24a","#4f9e6a","#7e57c2","#2b4a8c","#a83232","#b07d2a","#e08aa0"];
+  var ingrHtml = stones.map(function(s,i){
+    var a = palette[i % palette.length];
+    return '<div class="ingr" style="--accent:'+a+';--accent-a:'+hexA(a,.4)+'"><span class="dot"></span>'+
+      '<div><h4>'+uiEsc(s)+'</h4><p>'+uiEsc(stoneNote(s))+'</p></div></div>';
+  }).join("");
+
+  /* ritual */
+  var steps = [
+    { ic:"\uD83D\uDCC5", h:"Best Day", p:RITUAL_DAY[intent] },
+    { ic:"\uD83D\uDCA7", h:"Cleanse", p:"Rinse 30s or pass through incense smoke" },
+    { ic:"\uD83E\uDDD8", h:"Center", p:"Take three slow, deep breaths" },
+    { ic:"\u2728", h:"Intention", p:RITUAL_INTENT[intent] },
+    { ic:"\uD83D\uDC50", h:"Wear", p:"On the left wrist, with gratitude" }
+  ];
+  var ritualHtml = steps.map(function(s,i){
+    return '<div class="rstep"><span class="num">'+(i+1)+'</span><span class="ic">'+s.ic+'</span><h4>'+uiEsc(s.h)+'</h4><p>'+uiEsc(s.p)+'</p></div>';
+  }).join("");
+
+  /* mantra */
+  var m = MANTRAS[intent] || MANTRAS["default"];
+  var mantraHtml = '<div class="mantra"><div class="eye">Activation Mantra</div>'+
+    '<div class="sanskrit" id="mantra-text">'+uiEsc(m.s)+'</div>'+
+    '<div class="count">'+uiEsc(m.c)+'</div>'+
+    '<p class="tip">'+uiEsc(m.t)+'</p>'+
+    '<button type="button" class="copy-m" id="copy-mantra">Copy mantra</button></div>';
+
+  /* comparison (allowed claims only — lab-tested + Pran Pratishtha energised; no govt certificate) */
+  var ord = [
+    "Synthetic glass or dyed stone \u2014 dull and lifeless.",
+    "Machine-made and never energised.",
+    "No clarity on what you're actually buying.",
+    "No support once the sale is done."
+  ];
+  var us = [
+    "100% natural crystal, lab-tested for authenticity.",
+    "Energised by hand through Pran Pratishtha before dispatch.",
+    "Cleansed, inspected and shipped free across India.",
+    "Backed by a 7-day easy-return promise."
+  ];
+  var cmpHtml = '<div class="cmp" id="cmp-block">'+
+    '<div class="cmp-col cmp-ordinary"><h3>\uD83E\uDEA8 An Ordinary Stone</h3>'+
+      ord.map(function(r){return '<div class="cmp-row"><span class="mk">\u2715</span><span>'+uiEsc(r)+'</span></div>';}).join('')+'</div>'+
+    '<div class="cmp-col cmp-us"><h3>\uD83D\uDC8E The Veshannastro Bracelet</h3>'+
+      us.map(function(r){return '<div class="cmp-row"><span class="mk">\u2713</span><span>'+uiEsc(r)+'</span></div>';}).join('')+'</div>'+
+  '</div>';
+
+  host.innerHTML =
+    (whyHtml ? '<section class="rich"><div class="rich-head"><span class="eye">Why wear it</span><h2>Why the '+uiEsc(product.name.replace(/ Bracelet.*/,''))+'</h2><p>Nature\u2019s finest stones, chosen for one intention.</p></div><div class="why-grid">'+whyHtml+'</div></section>' : '') +
+    '<section class="rich"><div class="rich-head"><span class="eye">Inside the band</span><h2>The Stones</h2><p>Every bead is a natural crystal, each carrying its own purpose.</p></div><div class="ingr-grid">'+ingrHtml+'</div></section>' +
+    '<section class="rich"><div class="rich-head"><span class="eye">Make it yours</span><h2>Activate Your Bracelet</h2><p>A simple ritual to wake the stones and set your intention.</p></div><div class="ritual-steps">'+ritualHtml+'</div>'+mantraHtml+'</section>' +
+    '<section class="rich"><div class="rich-head"><span class="eye">The difference</span><h2>Ordinary vs. Veshannastro</h2><p>Why a real, energised bracelet is worth it.</p></div>'+cmpHtml+'</section>';
+
+  /* copy mantra */
+  var cm = $("copy-mantra");
+  if(cm) cm.addEventListener("click", function(){
+    var txt = (m.s||"");
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(function(){ toast("Mantra copied"); }, function(){ toast("Mantra: "+txt); }); }
+    else { toast("Mantra: "+txt); }
+  });
+
+  /* animate comparison on scroll */
+  var cmp = $("cmp-block");
+  if(cmp){
+    if("IntersectionObserver" in window){
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+      }, { threshold:.25 });
+      io.observe(cmp);
+    } else { cmp.classList.add("in"); }
+  }
+}
+
 function init(){
   sku = new URLSearchParams(location.search).get("sku") || DEFAULT_SKU;
   product = PRODUCTS[sku] || PRODUCTS[DEFAULT_SKU];
@@ -785,10 +1434,14 @@ function init(){
   $("p-price").textContent = money(product.price);
   $("p-mrp").textContent = money(product.mrp);
   $("p-off").textContent = Math.round((1 - product.price/product.mrp)*100) + "% OFF";
-  $("p-rating-num").textContent = CONFIG.ratingValue;
-  $("rev-score").textContent = CONFIG.ratingValue;
-  $("rev-count").textContent = "Based on " + CONFIG.reviewCount + "+ verified customer reviews";
-  $("p-review-link").textContent = "(" + CONFIG.reviewCount + "+ reviews)";
+  var rv = ratingFor(sku), rc = reviewsFor(sku);
+  $("p-rating-num").textContent = rv;
+  $("rev-score").textContent = rv;
+  $("rev-count").textContent = "Based on " + rc + "+ verified customer reviews";
+  $("p-review-link").textContent = "(" + rc + " reviews)";
+  var off = Math.round((1 - product.price/product.mrp)*100);
+  $("ls-text").innerHTML = "Founders' pricing — <b>" + off + "% off</b> the regular " + money(product.mrp) +
+    ", held only while our first batch lasts.";
 
   $("p-chips").innerHTML = product.tags.map(function(t){ return "<span>"+esc(t)+"</span>"; }).join("");
 
@@ -809,6 +1462,8 @@ function init(){
   buildFaq();
   buildReviews();
   buildRelated();
+  buildPinfo();
+  buildRich();
   injectJsonLd();
   renderTotals();
   bind();
@@ -817,10 +1472,15 @@ function init(){
 /* gallery: try sku, sku-2, sku-3, sku-4; show thumbs only for images that load */
 function setupGallery(){
   var base = "images/bracelets/";
-  var candidates = [sku, sku+"-2", sku+"-3", sku+"-4"];
+  var candidates = [sku, sku+"-1", sku+"-2", sku+"-3", sku+"-4", sku+"-5"];
   var mainEl = $("main-img"), wrap = $("gallery-main"), thumbs = $("gallery-thumbs");
   var loaded = [];
   var firstSet = false;
+
+  // tint the ambient glow to this stone's colour
+  var gg = document.querySelector(".gallery-glow");
+  if(gg){ var gc = STONE_COLORS[sku] || "#fff7d8";
+    gg.style.background = "radial-gradient(circle at 50% 45%,"+hexA(gc,.5)+",transparent 60%)"; }
 
   candidates.forEach(function(name){
     tryLoad(base+name, 0);
@@ -907,21 +1567,47 @@ window.relImgFallback = function(img){
   }
 };
 
+function renderIntentChips(){
+  var bar = $("intent-bar");
+  if(!bar) return;
+  bar.innerHTML = INTENTS.map(function(it){
+    var on = it[0] === activeIntent;
+    return '<button type="button" class="intent-chip'+(on?' active':'')+'" data-intent="'+it[0]+'">'+esc(it[1])+'</button>';
+  }).join("");
+}
+function filterRelated(){
+  [].forEach.call(document.querySelectorAll("#rel-grid .rel-card"), function(card){
+    var ints = (card.getAttribute("data-intents")||"").split(" ");
+    var show = activeIntent === "all" || ints.indexOf(activeIntent) >= 0;
+    card.style.display = show ? "" : "none";
+  });
+}
+
 function buildRelated(){
   var host = $("rel-grid");
   if(!host) return;
-  // every other band, in catalog order — add more to PRODUCTS and they appear here automatically
-  var others = Object.keys(PRODUCTS).filter(function(k){ return k !== sku; });
-  host.innerHTML = others.map(function(k){
+
+  // wire the Maaya birth-chart picker to your recommender (also unlocks NEW15 on return)
+  var mp = $("maaya-pick-link"); if(mp) mp.setAttribute("href", CONFIG.recommendationUrl);
+
+  renderIntentChips();
+
+  // every band in catalog order — add more to PRODUCTS and they appear here automatically
+  host.innerHTML = Object.keys(PRODUCTS).map(function(k){
     var p = PRODUCTS[k];
     var off = Math.round((1 - p.price / p.mrp) * 100);
     var base = "images/bracelets/" + k;
+    var col = STONE_COLORS[k] || "#c9a84c";
+    var glow = "radial-gradient(circle at 50% 42%,"+hexA(col,.55)+","+hexA(col,.10)+" 70%)";
+    var ints = productIntents(p).join(" ");
+    var current = (k === sku);
     return [
-      '<article class="rel-card" data-sku="'+k+'">',
-      '  <div class="rel-media" data-go="'+k+'">',
+      '<article class="rel-card'+(current?' is-current':'')+'" data-sku="'+k+'" data-intents="'+ints+'" style="--scol:'+col+'">',
+      '  <div class="rel-media" data-go="'+k+'" style="background:'+glow+'">',
       '    <img src="'+base+'.'+IMG_EXT[0]+'" data-base="'+base+'" data-ext="0" alt="'+esc(p.name)+'" loading="lazy" onerror="relImgFallback(this)">',
       '    <div class="rel-fallback" style="display:none">◈</div>',
       '    <span class="rel-badge">'+off+'% OFF</span>',
+      (current ? '    <span class="rel-current">You\u2019re viewing</span>' : ''),
       '  </div>',
       '  <div class="rel-body">',
       '    <h3 class="rel-name" data-go="'+k+'">'+esc(p.name)+'</h3>',
@@ -932,9 +1618,23 @@ function buildRelated(){
     ].join("");
   }).join("");
 
+  // intent filtering (delegated, attached once)
+  var bar = $("intent-bar");
+  if(bar) bar.addEventListener("click", function(e){
+    var b = e.target.closest("[data-intent]");
+    if(!b) return;
+    activeIntent = b.getAttribute("data-intent");
+    renderIntentChips();
+    filterRelated();
+  });
+
+  // card navigation (don't reload the page you're already on)
   host.addEventListener("click", function(e){
     var el = e.target.closest("[data-go]");
-    if(el) window.location.href = "shop-product.html?sku=" + encodeURIComponent(el.getAttribute("data-go"));
+    if(!el) return;
+    var go = el.getAttribute("data-go");
+    if(go === sku){ window.scrollTo({ top:0, behavior:"smooth" }); return; }
+    window.location.href = "shop-product.html?sku=" + encodeURIComponent(go);
   });
 }
 
@@ -947,7 +1647,7 @@ function injectJsonLd(){
     "brand":{"@type":"Brand","name":"Veshannastro"},
     "offers":{"@type":"Offer","priceCurrency":"INR","price":String(product.price),
       "availability":"https://schema.org/InStock","url":location.href},
-    "aggregateRating":{"@type":"AggregateRating","ratingValue":CONFIG.ratingValue,"reviewCount":CONFIG.reviewCount}
+    "aggregateRating":{"@type":"AggregateRating","ratingValue":ratingFor(sku),"reviewCount":String(reviewsFor(sku))}
   };
   $("product-jsonld").textContent = JSON.stringify(data);
 }
@@ -956,6 +1656,8 @@ function injectJsonLd(){
 function renderTotals(){
   $("qty-val").textContent = qty;
   $("p-total").textContent = money(total());
+  var sb = $("sb-total"); if(sb) sb.textContent = money(total());
+  var ba = $("buy-amt"); if(ba) ba.textContent = money(total());
   var d = discount();
   $("p-save").textContent = d > 0 ? "you save " + money(d) : "";
   // if an applied coupon has lapsed (e.g. qty dropped below 2), surface it
@@ -1221,6 +1923,19 @@ function bind(){
   $("make-two-btn").addEventListener("click", function(){ qty = Math.max(2, qty); $("coupon-input").value = "HAPPY10"; coupon = null; applyCoupon(); });
   $("rec-btn").setAttribute("href", CONFIG.recommendationUrl);
   $("buy-btn").addEventListener("click", openCheckout);
+  var sbb = $("sb-buy"); if(sbb) sbb.addEventListener("click", openCheckout);
+  var cb = $("cart-btn"); if(cb) cb.addEventListener("click", addToCart);
+  var ccc = $("cc-checkout"); if(ccc) ccc.addEventListener("click", function(){ var p=$("cart-confirm"); if(p) p.classList.remove("show"); openCheckout(); });
+  var cck = $("cc-continue"); if(cck) cck.addEventListener("click", function(){ var p=$("cart-confirm"); if(p) p.classList.remove("show"); });
+  var ccp = $("cart-confirm"); if(ccp){ ccp.addEventListener("mouseenter", function(){ clearTimeout(ccTimer); }); ccp.addEventListener("mouseleave", function(){ clearTimeout(ccTimer); ccTimer=setTimeout(function(){ ccp.classList.remove("show"); }, 2500); }); }
+  var ab = $("ai-btn"); if(ab) ab.addEventListener("click", function(){ window.location.href = CONFIG.recommendationUrl; });
+  var nc = $("nav-cart"); if(nc) nc.addEventListener("click", function(e){ if(cartCount>0){ e.preventDefault(); openCheckout(); } });
+  var pc = $("pin-check"); if(pc) pc.addEventListener("click", estimateDelivery);
+  var pin = $("pin-input");
+  if(pin){
+    pin.addEventListener("input", function(){ this.value = this.value.replace(/\D/g,""); });
+    pin.addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); estimateDelivery(); } });
+  }
   $("co-close").addEventListener("click", closeCheckout);
   $("co-modal").addEventListener("click", function(e){ if(e.target===$("co-modal")) closeCheckout(); });
   $("co-pay").addEventListener("click", payNow);
