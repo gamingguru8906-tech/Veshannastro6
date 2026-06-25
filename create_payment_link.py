@@ -178,13 +178,16 @@ class CartCustomer(BaseModel):
 class CartIn(BaseModel):
     order_id: str
     items: list = []                  # list of {sku, qty}
+    coupon: str = ""
     description: str = "Veshannastro gemstone order"
     customer: CartCustomer = CartCustomer()
     callback_url: Optional[str] = None
 
-def compute_cart_amount(items) -> int:
-    """Sum line totals from the SERVER price table — never trust the browser."""
+def compute_cart_amount(items, coupon: str = "") -> int:
+    """Sum line totals from the SERVER price table — never trust the browser.
+    Applies cart coupons: HAPPY10 = 10% off on 2+ bracelets, NEW15 = 15% off."""
     total = 0
+    units = 0
     for it in items or []:
         sku = (it.get("sku") if isinstance(it, dict) else getattr(it, "sku", "")) or ""
         qty = (it.get("qty") if isinstance(it, dict) else getattr(it, "qty", 1)) or 1
@@ -193,6 +196,12 @@ def compute_cart_amount(items) -> int:
         except Exception:
             qty = 1
         total += PRICES.get(sku, 0) * qty
+        units += qty
+    coupon = (coupon or "").upper()
+    if coupon == "HAPPY10" and units >= 2:
+        total -= round_half_up(total * 0.10)
+    elif coupon == "NEW15":
+        total -= round_half_up(total * 0.15)
     return max(0, total)
 
 # ── routes ──────────────────────────────────────────────────────────────────
@@ -260,7 +269,7 @@ def create_cart_link(cart: CartIn):
     if client is None:
         raise HTTPException(500, "Razorpay keys not configured on the server.")
 
-    amount_rupees = compute_cart_amount(cart.items)
+    amount_rupees = compute_cart_amount(cart.items, cart.coupon)
     if amount_rupees <= 0:
         raise HTTPException(400, "Invalid cart / empty amount.")
 
@@ -283,7 +292,7 @@ def create_cart_link(cart: CartIn):
         "reminder_enable": False,
         # everything the webhook needs to log a verified order to the sheet
         "notes": {
-            "order_id": cart.order_id, "items": summary, "kind": "cart",
+            "order_id": cart.order_id, "items": summary, "kind": "cart", "coupon": (cart.coupon or ""),
             "buyer_name": c.name, "buyer_email": c.email, "buyer_phone": c.contact,
             "address": c.address[:240], "city": c.city, "state": c.state, "pincode": c.pincode,
             "amount": str(amount_rupees),
