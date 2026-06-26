@@ -140,7 +140,7 @@ src="https://www.facebook.com/tr?id=1423451529588621&ev=PageView&noscript=1"
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Cinzel:wght@400;500;600&family=Vollkorn:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>emailjs.init({publicKey:'i35OrY8mtgVZMIQU8'});</script>
+<script>window.emailjs&&emailjs.init({publicKey:'i35OrY8mtgVZMIQU8'});</script>
 <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
 <!-- old bracelet-shop.css / bracelet-shop.js removed: gemstone shop is now the embedded bracelet-fusion.html -->
 <!-- Email OTP System -->
@@ -8446,6 +8446,125 @@ h1 em,h2 em,h3 em,h4 em,
 }
 h1,h2,.lsb-title,.vo-title,.section-title,.gp-title,.cd-title{
   line-height:1.04 !important;
+}
+</style>
+<style id="brand-name-original-font-restore">
+.nav-logo,
+.hero-title,
+.hero-title em,
+.footer-logo,
+.footer-logo em,
+.footer-strip strong{
+  font-family:'Vollkorn',serif!important;
+}
+.nav-logo{
+  font-family:'Cinzel',serif!important;
+  font-weight:300!important;
+  letter-spacing:.25em!important;
+}
+.footer-strip strong{
+  font-family:inherit!important;
+  font-weight:700!important;
+}
+.hero-title,
+.footer-logo{
+  font-weight:300!important;
+  letter-spacing:.08em!important;
+}
+.hero-title em,
+.footer-logo em{
+  font-style:italic!important;
+  font-weight:300!important;
+  letter-spacing:.08em!important;
+}
+.about-text-col .section-title,
+.about-text-col .section-title em{
+  font-family:'Vollkorn',serif!important;
+  font-weight:300!important;
+  letter-spacing:.05em!important;
+}
+.about-text-col .section-title em{
+  font-style:italic!important;
+}
+</style>
+<style id="receive-section-full-grey-band">
+#consultation-deliverables{
+  width:100vw!important;
+  margin-left:calc(50% - 50vw)!important;
+  margin-right:calc(50% - 50vw)!important;
+  background:
+    linear-gradient(180deg,#424448 0%,#34363a 48%,#2f3135 100%)!important;
+  border-top:0!important;
+  border-bottom:0!important;
+  box-shadow:none!important;
+}
+#consultation-deliverables::before{
+  background:
+    radial-gradient(ellipse 80% 42% at 18% 0%,rgba(255,255,255,.08),transparent 68%),
+    radial-gradient(ellipse 70% 46% at 86% 18%,rgba(201,168,76,.08),transparent 72%)!important;
+}
+#consultation-deliverables::after{
+  opacity:.025!important;
+}
+#consultation-deliverables .cd-panel{
+  width:min(1240px,calc(100% - 3rem))!important;
+  max-width:none!important;
+  margin:0 auto!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  background:transparent!important;
+  overflow:visible!important;
+}
+#consultation-deliverables .cd-panel::before,
+#consultation-deliverables .cd-panel::after{
+  display:none!important;
+}
+#consultation-deliverables .cd-left,
+#consultation-deliverables .cd-right{
+  background:transparent!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+}
+#consultation-deliverables .cd-left::before,
+#consultation-deliverables .cd-left::after,
+#consultation-deliverables .cd-right::before{
+  display:none!important;
+}
+#consultation-deliverables .cd-divider::after{
+  background:#383a3e!important;
+}
+#consultation-deliverables .cd-footer{
+  background:transparent!important;
+  border-top:1px solid rgba(240,224,178,.16)!important;
+  box-shadow:none!important;
+}
+#consultation-deliverables .eyebrow-label,
+#consultation-deliverables .cd-panel-label,
+#consultation-deliverables .cd-step-label,
+#consultation-deliverables .dlv2-idx,
+#consultation-deliverables .dlv2-sub,
+#consultation-deliverables .cd-footer-note,
+#consultation-deliverables .cd-footer-seal{
+  color:rgba(240,208,128,.82)!important;
+}
+#consultation-deliverables .section-title,
+#consultation-deliverables .dlv2-title,
+#consultation-deliverables .cd-step-title{
+  color:#fff8ec!important;
+}
+#consultation-deliverables .section-title em{
+  color:#f0d080!important;
+}
+#consultation-deliverables .section-subtitle,
+#consultation-deliverables .dlv2-desc,
+#consultation-deliverables .cd-step-detail{
+  color:rgba(255,248,236,.74)!important;
+}
+@media(max-width:900px){
+  #consultation-deliverables .cd-panel{
+    width:min(100% - 2rem,760px)!important;
+  }
 }
 </style>
 
