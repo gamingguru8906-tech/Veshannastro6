@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -194,6 +194,7 @@ body{background:var(--page-bg);color:var(--ink);min-height:100vh;font-weight:500
   transition:transform .42s cubic-bezier(.22,1,.36,1),box-shadow .42s,background .3s;
   animation:card-enter .5s cubic-bezier(.22,1,.36,1) both;
 }
+.fx-card:focus-visible{outline:2px solid var(--gold);outline-offset:4px;}
 /* stagger entrance */
 .fx-card:nth-child(1){animation-delay:.04s;}
 .fx-card:nth-child(2){animation-delay:.10s;}
@@ -645,27 +646,27 @@ var STONE_EMOJI={
 };
 
 var CRYSTAL=[
-  {sku:"VA-BR-TP-001",name:"Triple Protection Bracelet",mrp:1139,price:799,discount:30,gemstones:"Tiger Eye + Black Obsidian + Hematite",benefits:"Protection, grounding, confidence",tags:["protection"]},
-  {sku:"VA-BR-AM-002",name:"Amethyst Bracelet",mrp:1429,price:999,discount:30,gemstones:"Amethyst",benefits:"Calm mind, stress relief, intuition",tags:["peace","intuition"]},
   {sku:"VA-BR-CQ-003",name:"Clear Quartz Bracelet",mrp:1429,price:999,discount:30,gemstones:"Clear Quartz",benefits:"Energy amplification, clarity, focus",tags:["clarity","focus"]},
   {sku:"VA-BR-BT-004",name:"Black Tourmaline Bracelet",mrp:1279,price:899,discount:30,gemstones:"Black Tourmaline",benefits:"Protection, grounding, negativity removal",tags:["protection"]},
-  {sku:"VA-BR-CT-005",name:"Citrine Natural Bracelet",mrp:1709,price:1199,discount:30,gemstones:"Natural Citrine",benefits:"Wealth, abundance, confidence, success",tags:["wealth"]},
-  {sku:"VA-BR-YA-006",name:"Yellow Aventurine Bracelet",mrp:1139,price:799,discount:30,gemstones:"Yellow Aventurine",benefits:"Confidence, optimism, willpower",tags:["confidence"]},
   {sku:"VA-BR-RJ-007",name:"Red Jasper Bracelet",mrp:1139,price:799,discount:30,gemstones:"Red Jasper",benefits:"Strength, stamina, courage, stability",tags:["health"]},
+  {sku:"VA-BR-MN-012",name:"Peach Moonstone Bracelet",mrp:1139,price:799,discount:30,gemstones:"Peach Moonstone",benefits:"Emotional balance, intuition, soothing",tags:["moon"]},
+  {sku:"VA-BR-GA-010",name:"Green Aventurine Bracelet",mrp:1279,price:899,discount:30,gemstones:"Green Aventurine",benefits:"Luck, growth, opportunity, heart balance",tags:["wealth"]},
+  {sku:"VA-BR-CT-005",name:"Citrine Natural Bracelet",mrp:1709,price:1199,discount:30,gemstones:"Natural Citrine",benefits:"Wealth, abundance, confidence, success",tags:["wealth"]},
+  {sku:"VA-BR-TP-001",name:"Triple Protection Bracelet",mrp:1139,price:799,discount:30,gemstones:"Tiger Eye + Black Obsidian + Hematite",benefits:"Protection, grounding, confidence",tags:["protection"]},
+  {sku:"VA-BR-AM-002",name:"Amethyst Bracelet",mrp:1429,price:999,discount:30,gemstones:"Amethyst",benefits:"Calm mind, stress relief, intuition",tags:["peace","intuition"]},
+  {sku:"VA-BR-YA-006",name:"Yellow Aventurine Bracelet",mrp:1139,price:799,discount:30,gemstones:"Yellow Aventurine",benefits:"Confidence, optimism, willpower",tags:["confidence"]},
   {sku:"VA-BR-TE-008",name:"Tiger Eye Bracelet",mrp:1139,price:799,discount:30,gemstones:"Tiger Eye",benefits:"Confidence, focus, courage, protection",tags:["career"]},
   {sku:"VA-BR-RQ-009",name:"Rose Quartz Bracelet",mrp:1279,price:899,discount:30,gemstones:"Rose Quartz",benefits:"Love, emotional healing, self-love",tags:["love"]},
-  {sku:"VA-BR-GA-010",name:"Green Aventurine Bracelet",mrp:1279,price:899,discount:30,gemstones:"Green Aventurine",benefits:"Luck, growth, opportunity, heart balance",tags:["wealth"]},
-  {sku:"VA-BR-LL-011",name:"Lapis Lazuli Bracelet",mrp:1279,price:899,discount:30,gemstones:"Lapis Lazuli",benefits:"Wisdom, communication, truth",tags:["wisdom"]},
-  {sku:"VA-BR-MN-012",name:"Peach Moonstone Bracelet",mrp:1139,price:799,discount:30,gemstones:"Peach Moonstone",benefits:"Emotional balance, intuition, soothing",tags:["moon"]}
+  {sku:"VA-BR-LL-011",name:"Lapis Lazuli Bracelet",mrp:1279,price:899,discount:30,gemstones:"Lapis Lazuli",benefits:"Wisdom, communication, truth",tags:["wisdom"]}
 ];
 
 var PREMIUM=[
+  {sku:"VA-BR-LK-016",name:"Lakshmi's Loom - Dhan Yog",mrp:1859,price:1299,discount:30,premium:true,gemstones:"Citrine + Pyrite + Green Aventurine",benefits:"Wealth, abundance, money flow",tags:["wealth"]},
+  {sku:"VA-BR-RE-017",name:"The Rose Embrace - Love",mrp:1859,price:1299,discount:30,premium:true,gemstones:"Rose Quartz + Rhodonite",benefits:"Love, attraction, relationship harmony",tags:["love"]},
+  {sku:"VA-BR-PY-018",name:"Sunforge Pyrite Bracelet",mrp:1429,price:999,discount:30,premium:true,gemstones:"Pyrite",benefits:"Wealth, willpower, confidence",tags:["wealth"]},
   {sku:"VA-BR-WM-015",name:"White Moonstone Bracelet",mrp:1999,price:1399,discount:30,premium:true,gemstones:"White Moonstone",benefits:"Emotional balance, intuition, calm",tags:["moon"]},
   {sku:"VA-BR-7C-013",name:"7 Chakra Bracelet",mrp:1569,price:1099,discount:30,premium:true,gemstones:"7 Chakra mixed gemstones",benefits:"Chakra balance, energy alignment",tags:["chakra"]},
-  {sku:"VA-BR-IO-014",name:"Iolite Bracelet (Neeli)",mrp:2279,price:1599,discount:30,premium:true,gemstones:"Iolite (Neeli — Saturn substitute)",benefits:"Intuition, vision, Saturn support",tags:["intuition"]},
-  {sku:"VA-BR-LK-016",name:"Lakshmi's Loom — Dhan Yog",mrp:1859,price:1299,discount:30,premium:true,gemstones:"Citrine + Pyrite + Green Aventurine",benefits:"Wealth, abundance, money flow",tags:["wealth"]},
-  {sku:"VA-BR-RE-017",name:"The Rose Embrace — Love",mrp:1859,price:1299,discount:30,premium:true,gemstones:"Rose Quartz + Rhodonite",benefits:"Love, attraction, relationship harmony",tags:["love"]},
-  {sku:"VA-BR-PY-018",name:"Sunforge Pyrite Bracelet",mrp:1429,price:999,discount:30,premium:true,gemstones:"Pyrite",benefits:"Wealth, willpower, confidence",tags:["wealth"]}
+  {sku:"VA-BR-IO-014",name:"Iolite Bracelet (Neeli)",mrp:2279,price:1599,discount:30,premium:true,gemstones:"Iolite (Neeli - Saturn substitute)",benefits:"Intuition, vision, Saturn support",tags:["intuition"]}
 ];
 
 // Zodiac — placeholder (not in bracelet-shop.js yet)
@@ -704,6 +705,16 @@ var DATA={
 };
 
 function money(n){return'Rs. '+Number(n||0).toLocaleString('en-IN');}
+function fxOpenProduct(sku){
+  if(!/^VA-BR-/.test(sku))return;
+  window.top.location.href='shop-product.html?sku='+encodeURIComponent(sku);
+}
+function fxCardKey(e,sku){
+  if(e.key==='Enter'||e.key===' '){
+    e.preventDefault();
+    fxOpenProduct(sku);
+  }
+}
 
 /* ═════════════════════════════════════
    IMAGE FALLBACK CHAIN: webp → jpg → jpeg → png
@@ -767,7 +778,7 @@ function buildCard(p,colorMap,emojiMap){
   var emoji=emojiMap[p.sku]||'💎';
   var isPremium=!!p.premium;
   return[
-    '<div class="fx-card" data-sku="'+p.sku+'">',
+    '<div class="fx-card" data-sku="'+p.sku+'" '+(/^VA-BR-/.test(p.sku)?'role="link" tabindex="0" onclick="fxOpenProduct(\''+p.sku+'\')" onkeydown="fxCardKey(event,\''+p.sku+'\')"':'')+'>',
     '  <div class="fx-card-top-line"></div>',
     isPremium?'  <span class="fx-premium-ribbon">Premium</span>':'',
     '  <span class="fx-badge">'+p.discount+'% OFF</span>',
@@ -787,8 +798,8 @@ function buildCard(p,colorMap,emojiMap){
     '      <span class="fx-off">'+p.discount+'% off</span>',
     '    </div>',
     '    <div class="fx-card-actions">',
-    (/^VA-BR-/.test(p.sku)?'      <a class="fx-card-view" href="shop-product.html?sku='+p.sku+'" target="_top">Details</a>':''),
-    '      <button class="fx-card-cta" onclick="addToCart(\''+p.sku+'\',this)"><span class="cta-label">Add to Cart</span><span class="cta-spin" aria-hidden="true"></span><svg class="cta-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg></button>',
+    (/^VA-BR-/.test(p.sku)?'      <a class="fx-card-view" href="shop-product.html?sku='+p.sku+'" target="_top" onclick="event.stopPropagation()">Details</a>':''),
+    '      <button class="fx-card-cta" onclick="event.stopPropagation();addToCart(\''+p.sku+'\',this)"><span class="cta-label">Add to Cart</span><span class="cta-spin" aria-hidden="true"></span><svg class="cta-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg></button>',
     '    </div>',
     '  </div>',
     '</div>'

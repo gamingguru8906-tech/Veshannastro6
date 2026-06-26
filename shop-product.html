@@ -382,6 +382,9 @@
     border-radius:6px;padding:.78rem .82rem;font-family:var(--body);font-size:.92rem}
   .co-field input:focus,.co-field select:focus,.co-field textarea:focus{outline:none;border-color:var(--maroon);box-shadow:0 0 0 2px rgba(110,20,35,.12)}
   .co-field textarea{min-height:72px;resize:vertical}
+  .pin-autofill-msg{font-family:var(--body);font-size:.72rem;line-height:1.35;margin-top:.22rem;color:#7d6d5f;min-height:1em}
+  .pin-autofill-msg.ok{color:var(--ok)}
+  .pin-autofill-msg.bad{color:var(--maroon2)}
   .co-error{display:none;color:var(--maroon2);font-family:var(--body);font-size:.84rem;margin-top:.8rem}
   .co-error.show{display:block}
   .co-summary{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:1.1rem;height:max-content}
@@ -1183,7 +1186,7 @@
           <div class="co-field full"><label for="f-address2">Apartment, landmark (optional)</label><input id="f-address2" name="address2" autocomplete="address-line2" type="text"></div>
           <div class="co-field"><label for="f-city">City</label><input id="f-city" name="city" autocomplete="address-level2" type="text" required></div>
           <div class="co-field"><label for="f-state">State</label><select id="f-state" name="state" autocomplete="address-level1" required></select></div>
-          <div class="co-field"><label for="f-pincode">Pincode</label><input id="f-pincode" name="pincode" autocomplete="postal-code" type="text" maxlength="6" required></div>
+          <div class="co-field"><label for="f-pincode">Pincode</label><input id="f-pincode" name="pincode" autocomplete="postal-code" type="text" maxlength="6" required><small class="pin-autofill-msg" id="f-pin-msg" aria-live="polite"></small></div>
           <div class="co-field"><label for="f-country">Country</label><input id="f-country" name="country" type="text" value="India" readonly></div>
           <div class="co-field full"><label for="f-notes">Special instructions (optional)</label><textarea id="f-notes" name="notes" placeholder="Anything we should know about your order"></textarea></div>
         </div>
@@ -2043,6 +2046,40 @@ function buildStateSelect(){
   var states = ["","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Andaman and Nicobar Islands","Chandigarh","Dadra and Nagar Haveli and Daman and Diu","Jammu and Kashmir","Ladakh","Lakshadweep","Puducherry"];
   $("f-state").innerHTML = states.map(function(s){ return '<option value="'+esc(s)+'">'+(s||"Select state")+'</option>'; }).join("");
 }
+var pinLookupTimer=null;
+function setCheckoutPinMsg(text,kind){
+  var el=$("f-pin-msg"); if(!el) return;
+  el.textContent=text||"";
+  el.className="pin-autofill-msg" + (kind ? " " + kind : "");
+}
+function setCheckoutStateValue(state){
+  var sel=$("f-state"); if(!sel || !state) return;
+  var wanted=String(state).trim();
+  var match=[].filter.call(sel.options,function(o){ return o.value.toLowerCase()===wanted.toLowerCase(); })[0];
+  if(match) sel.value=match.value;
+}
+function lookupCheckoutPincode(pin,silent){
+  pin=String(pin||"").replace(/\D/g,"");
+  if(pin.length!==6){ if(!silent) setCheckoutPinMsg("Enter 6 digits to autofill city and state.",""); return Promise.resolve(false); }
+  setCheckoutPinMsg("Finding city and state...","");
+  return fetch("https://api.postalpincode.in/pincode/"+encodeURIComponent(pin), { method:"GET" })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      var root=data && data[0];
+      var post=root && root.PostOffice && root.PostOffice[0];
+      if(!post) throw new Error("not_found");
+      var city=post.District || post.Name || "";
+      var state=post.State || "";
+      if(city) $("f-city").value=city;
+      setCheckoutStateValue(state);
+      setCheckoutPinMsg((city&&state)?("Autofilled "+city+", "+state+"."):"Pincode found. Please confirm city and state.","ok");
+      return true;
+    })
+    .catch(function(){
+      setCheckoutPinMsg("Could not autofill. Please enter city and state manually.","bad");
+      return false;
+    });
+}
 
 function buildBenefits(){
   $("benefit-grid").innerHTML = benefitPoints(product).map(function(b, i){
@@ -2518,6 +2555,25 @@ function bind(){
   ["f-phone","f-pincode"].forEach(function(id){
     $(id).addEventListener("input", function(){ this.value = this.value.replace(/\D/g,""); });
   });
+  var coPin=$("f-pincode");
+  if(coPin){
+    coPin.addEventListener("input", function(){
+      var v=this.value.replace(/\D/g,"");
+      this.value=v;
+      clearTimeout(pinLookupTimer);
+      if(v.length===6){
+        pinLookupTimer=setTimeout(function(){ lookupCheckoutPincode(v,true); }, 260);
+      }else{
+        setCheckoutPinMsg(v.length ? "Enter 6 digits to autofill city and state." : "", "");
+      }
+    });
+    coPin.addEventListener("keydown", function(e){
+      if(e.key==="Enter"){
+        e.preventDefault();
+        lookupCheckoutPincode(this.value,false);
+      }
+    });
+  }
 }
 
 /* ══════════════════════════════════════════
