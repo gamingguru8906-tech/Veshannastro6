@@ -757,6 +757,8 @@
     <div class="gallery-main" id="gallery-main">
       <div class="gallery-glow"></div>
       <img id="main-img" alt="" />
+      <button class="gallery-nav gallery-prev" type="button" id="gallery-prev" aria-label="Previous product image">&#8249;</button>
+      <button class="gallery-nav gallery-next" type="button" id="gallery-next" aria-label="Next product image">&#8250;</button>
       <div class="gallery-fallback"><span class="glyph">◈</span><small>Veshannastro</small></div>
     </div>
     <div class="gallery-thumbs" id="gallery-thumbs"></div>
@@ -1347,6 +1349,26 @@ var PRODUCTS = {
 
 var DEFAULT_SKU = "VA-BR-GA-010";
 var IMG_EXT = ["webp","jpg","jpeg","png"];
+var PRODUCT_IMAGES = {
+  "VA-BR-TP-001": ["images/bracelets/VA-BR-TP-001.webp", "images/bracelets/VA-BR-TP-001-1.png"],
+  "VA-BR-AM-002": ["images/bracelets/VA-BR-AM-002.png", "images/bracelets/VA-BR-AM-002-10.webp"],
+  "VA-BR-CQ-003": ["images/bracelets/VA-BR-CQ-003.png", "images/bracelets/VA-BR-CQ-003-1.png", "images/bracelets/VA-BR-CQ-003-2.png", "images/bracelets/VA-BR-CQ-003-3.png"],
+  "VA-BR-BT-004": ["images/bracelets/VA-BR-BT-004.png", "images/bracelets/VA-BR-BT-004-1.png", "images/bracelets/VA-BR-BT-004-2.png", "images/bracelets/VA-BR-BT-004-3.png"],
+  "VA-BR-CT-005": ["images/bracelets/VA-BR-CT-005.png", "images/bracelets/VA-BR-CT-005-1.png", "images/bracelets/VA-BR-CT-005-10.webp"],
+  "VA-BR-YA-006": ["images/bracelets/VA-BR-YA-006.png", "images/bracelets/VA-BR-YA-006-1.png", "images/bracelets/VA-BR-YA-006-10.webp"],
+  "VA-BR-RJ-007": ["images/bracelets/VA-BR-RJ-007.png", "images/bracelets/VA-BR-RJ-007-1.png", "images/bracelets/VA-BR-RJ-007-2.png", "images/bracelets/VA-BR-RJ-007-3.png", "images/bracelets/VA-BR-RJ-007-4.png", "images/bracelets/VA-BR-RJ-007-10.webp"],
+  "VA-BR-TE-008": ["images/bracelets/VA-BR-TE-008.png", "images/bracelets/VA-BR-TE-008-1.png", "images/bracelets/VA-BR-TE-008-10.webp"],
+  "VA-BR-RQ-009": ["images/bracelets/VA-BR-RQ-009.png", "images/bracelets/VA-BR-RQ-009-1.png", "images/bracelets/VA-BR-RQ-009-2.png", "images/bracelets/VA-BR-RQ-009-10.webp"],
+  "VA-BR-GA-010": ["images/bracelets/VA-BR-GA-010.png", "images/bracelets/VA-BR-GA-010-1.png", "images/bracelets/VA-BR-GA-010-2.png", "images/bracelets/VA-BR-GA-010-3.png", "images/bracelets/VA-BR-GA-010-10.webp"],
+  "VA-BR-LL-011": ["images/bracelets/VA-BR-LL-011.png", "images/bracelets/VA-BR-LL-011-10.webp"],
+  "VA-BR-MN-012": ["images/bracelets/VA-BR-MN-012.png", "images/bracelets/VA-BR-MN-012-1.png", "images/bracelets/VA-BR-MN-012-2.png", "images/bracelets/VA-BR-MN-012-3.png", "images/bracelets/VA-BR-MN-012-4.png", "images/bracelets/VA-BR-MN-012-10.webp"],
+  "VA-BR-WM-015": ["images/bracelets/VA-BR-WM-015.png", "images/bracelets/VA-BR-WM-015-1.png", "images/bracelets/VA-BR-WM-015-2.png", "images/bracelets/VA-BR-WM-015-10.webp"],
+  "VA-BR-7C-013": ["images/bracelets/VA-BR-7C-013.png", "images/bracelets/VA-BR-7C-013-1.png", "images/bracelets/VA-BR-7C-013-2.png", "images/bracelets/VA-BR-7C-013-10.webp"],
+  "VA-BR-IO-014": ["images/bracelets/VA-BR-IO-014.png", "images/bracelets/VA-BR-IO-014-1.png", "images/bracelets/VA-BR-IO-014-2.png", "images/bracelets/VA-BR-IO-014-10.webp"],
+  "VA-BR-LK-016": ["images/bracelets/VA-BR-LK-016.png", "images/bracelets/VA-BR-LK-016-1.webp", "images/bracelets/VA-BR-LK-016-2.png", "images/bracelets/VA-BR-LK-016-3.png", "images/bracelets/VA-BR-LK-016-4.png", "images/bracelets/VA-BR-LK-016-5.png", "images/bracelets/VA-BR-LK-016-10.webp"],
+  "VA-BR-RE-017": ["images/bracelets/VA-BR-RE-017.png", "images/bracelets/VA-BR-RE-017-1.png", "images/bracelets/VA-BR-RE-017-2.png", "images/bracelets/VA-BR-RE-017-3.png", "images/bracelets/VA-BR-RE-017-4.png", "images/bracelets/VA-BR-RE-017-10.webp"],
+  "VA-BR-PY-018": ["images/bracelets/VA-BR-PY-018.png", "images/bracelets/VA-BR-PY-018-1.png", "images/bracelets/VA-BR-PY-018-2.png", "images/bracelets/VA-BR-PY-018-3.png", "images/bracelets/VA-BR-PY-018-4.png"]
+};
 
 /* Representative colour per stone — drives card tints + gallery glow.
    Add a band to PRODUCTS and give it a colour here; it flows everywhere. */
@@ -1524,6 +1546,39 @@ var product, sku, qty = 1, coupon = null, recUnlocked = false;
 var $ = function(id){ return document.getElementById(id); };
 function money(n){ return "₹" + Number(n||0).toLocaleString("en-IN"); }
 function esc(v){ return String(v==null?"":v).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+function productImageList(k){ return (PRODUCT_IMAGES && PRODUCT_IMAGES[k] ? PRODUCT_IMAGES[k].slice() : []); }
+function firstProductImage(k){ var list = productImageList(k); return list[0] || ("images/bracelets/" + k + "." + IMG_EXT[0]); }
+function braceletPlaceholderDataUrl(label, color, variant){
+  color = color || "#c9a84c";
+  variant = variant || 0;
+  var bead = [];
+  var cx = 260, cy = 252, rx = 112, ry = 88;
+  for(var i=0;i<22;i++){
+    var a = (Math.PI * 2 * i / 22) + (variant * .08);
+    var x = cx + Math.cos(a) * rx;
+    var y = cy + Math.sin(a) * ry;
+    var r = 14 + ((i + variant) % 3) * 1.6;
+    bead.push('<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+r.toFixed(1)+'" fill="url(#bead)" stroke="rgba(255,255,255,.55)" stroke-width="1.4"/>');
+  }
+  var title = esc(label || "Veshannastro Bracelet");
+  var svg = [
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 520">',
+    '<defs>',
+    '<radialGradient id="bg" cx="48%" cy="38%" r="65%"><stop offset="0" stop-color="#fffdf7"/><stop offset=".48" stop-color="#f6e5c9"/><stop offset="1" stop-color="#d8bd8c"/></radialGradient>',
+    '<radialGradient id="bead" cx="32%" cy="25%" r="78%"><stop offset="0" stop-color="#ffffff" stop-opacity=".95"/><stop offset=".22" stop-color="'+color+'"/><stop offset="1" stop-color="#1f1511"/></radialGradient>',
+    '<filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="22" stdDeviation="18" flood-color="#2d160a" flood-opacity=".28"/></filter>',
+    '</defs>',
+    '<rect width="520" height="520" rx="38" fill="url(#bg)"/>',
+    '<circle cx="260" cy="252" r="154" fill="'+color+'" opacity=".12"/>',
+    '<g filter="url(#shadow)">', bead.join(""), '</g>',
+    '<circle cx="260" cy="252" r="58" fill="#fffaf0" opacity=".72"/>',
+    '<path d="M164 382c46 26 146 26 192 0" fill="none" stroke="#8b6a30" stroke-width="3" opacity=".32"/>',
+    '<text x="260" y="446" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#3a2415">Premium Quality</text>',
+    '<text x="260" y="474" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" fill="#6d5234">'+title+'</text>',
+    '</svg>'
+  ].join("");
+  return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
+}
 
 /* Is the currently-applied coupon valid right now? Returns {discount, lapse?} */
 function couponState(){
@@ -1803,7 +1858,8 @@ function init(){
   if(lsEl) lsEl.innerHTML = "Founders' pricing — <b>" + off + "% off</b> the regular " + money(product.mrp) +
     ", held only while our first batch lasts.";
 
-  $("p-chips").innerHTML = product.tags.map(function(t){ return "<span>"+esc(t)+"</span>"; }).join("");
+  var chipList = (product.premium ? ["Premium Quality"] : []).concat(product.tags || []);
+  $("p-chips").innerHTML = chipList.map(function(t){ return "<span>"+esc(t)+"</span>"; }).join("");
 
   // ── Recommendation unlock for NEW15 ──
   var params = new URLSearchParams(location.search);
@@ -1834,42 +1890,80 @@ function setupGallery(){
   var base = "images/bracelets/";
   var candidates = [sku, sku+"-1", sku+"-2", sku+"-3", sku+"-4", sku+"-5"];
   var mainEl = $("main-img"), wrap = $("gallery-main"), thumbs = $("gallery-thumbs");
+  var prev = $("gallery-prev"), next = $("gallery-next");
   var loaded = [];
-  var firstSet = false;
+  var galleryIndex = 0;
 
   // tint the ambient glow to this stone's colour
   var gg = document.querySelector(".gallery-glow");
   if(gg){ var gc = STONE_COLORS[sku] || "#fff7d8";
     gg.style.background = "radial-gradient(circle at 50% 45%,"+hexA(gc,.5)+",transparent 60%)"; }
 
-  candidates.forEach(function(name){
-    tryLoad(base+name, 0);
-    function tryLoad(b, i){
-      if(i >= IMG_EXT.length) return;
-      var test = new Image();
-      test.onload = function(){
-        loaded.push(test.src);
-        if(!firstSet){ firstSet = true; mainEl.src = test.src; mainEl.alt = product.name; wrap.classList.remove("no-img"); }
-        addThumb(test.src);
-      };
-      test.onerror = function(){ tryLoad(b, i+1); };
-      test.src = b + "." + IMG_EXT[i];
-    }
-  });
+  mainEl.onerror = function(){
+    this.onerror = null;
+    this.src = braceletPlaceholderDataUrl(product.name, STONE_COLORS[sku] || "#c9a84c", galleryIndex + 4);
+    wrap.classList.remove("no-img");
+  };
 
-  // if nothing loads, show the glyph fallback
-  setTimeout(function(){ if(!firstSet) wrap.classList.add("no-img"); }, 1200);
-
-  function addThumb(src){
-    var b = document.createElement("button");
-    b.type = "button"; b.className = "gallery-thumb" + (thumbs.children.length===0?" active":"");
-    b.innerHTML = '<img src="'+src+'" alt="">';
-    b.addEventListener("click", function(){
-      mainEl.src = src;
-      [].forEach.call(thumbs.children, function(c){ c.classList.remove("active"); });
-      b.classList.add("active");
+  var knownImages = productImageList(sku).slice(0, 4);
+  if(knownImages.length){
+    knownImages.forEach(addImage);
+    ensureFallbackImages();
+  } else {
+    candidates.forEach(function(name){
+      tryLoad(base+name, 0);
+      function tryLoad(b, i){
+        if(i >= IMG_EXT.length) return;
+        var test = new Image();
+        test.onload = function(){
+          addImage(test.src);
+        };
+        test.onerror = function(){ tryLoad(b, i+1); };
+        test.src = b + "." + IMG_EXT[i];
+      }
     });
+    setTimeout(ensureFallbackImages, 900);
+    setTimeout(ensureFallbackImages, 1700);
+  }
+
+  if(prev) prev.addEventListener("click", function(){ setActive(galleryIndex - 1); });
+  if(next) next.addEventListener("click", function(){ setActive(galleryIndex + 1); });
+
+  function addImage(src){
+    if(loaded.indexOf(src) >= 0) return;
+    var index = loaded.push(src) - 1;
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "gallery-thumb" + (index===0?" active":"");
+    b.innerHTML = '<img src="'+src+'" alt="">';
+    b.addEventListener("click", function(){ setActive(index); });
     thumbs.appendChild(b);
+    if(loaded.length === 1) setActive(0);
+    updateGalleryButtons();
+  }
+
+  function ensureFallbackImages(){
+    var col = STONE_COLORS[sku] || "#c9a84c";
+    while(loaded.length < 3){
+      addImage(braceletPlaceholderDataUrl(product.name, col, loaded.length + 1));
+    }
+    wrap.classList.remove("no-img");
+    updateGalleryButtons();
+  }
+
+  function setActive(i){
+    if(!loaded.length) return;
+    galleryIndex = (i + loaded.length) % loaded.length;
+    mainEl.src = loaded[galleryIndex];
+    mainEl.alt = product.name + " image " + (galleryIndex + 1);
+    wrap.classList.remove("no-img");
+    [].forEach.call(thumbs.children, function(c, idx){ c.classList.toggle("active", idx === galleryIndex); });
+    updateGalleryButtons();
+  }
+
+  function updateGalleryButtons(){
+    var one = loaded.length <= 1;
+    if(prev) prev.disabled = one;
+    if(next) next.disabled = one;
   }
 }
 
@@ -1888,9 +1982,28 @@ function buildAbout(){
   $("about-title").innerHTML = 'About <span class="stone-tone-name">' + esc(product.gemstones) + '</span>';
   $("about-text").innerHTML = aboutCopy(product).map(function(t){ return "<p>"+esc(t)+"</p>"; }).join("");
   var ai = $("about-img");
-  ai.src = "images/bracelets/"+sku+"."+IMG_EXT[0];
   ai.alt = product.name;
-  ai.onerror = function(){ this.style.display="none"; };
+  ai.style.display = "block";
+  var knownAbout = productImageList(sku);
+  if(knownAbout.length){
+    ai.onerror = function(){
+      this.onerror = null;
+      this.src = braceletPlaceholderDataUrl(product.name, STONE_COLORS[sku] || "#c9a84c", 8);
+    };
+    ai.src = knownAbout[0];
+    return;
+  }
+  loadAboutImage(0);
+
+  function loadAboutImage(i){
+    if(i >= IMG_EXT.length){
+      ai.onerror = null;
+      ai.src = braceletPlaceholderDataUrl(product.name, STONE_COLORS[sku] || "#c9a84c", 8);
+      return;
+    }
+    ai.onerror = function(){ loadAboutImage(i + 1); };
+    ai.src = "images/bracelets/"+sku+"."+IMG_EXT[i];
+  }
 }
 
 function buildFaq(){
@@ -1921,9 +2034,13 @@ window.relImgFallback = function(img){
     img.setAttribute("data-ext", i);
     img.src = img.getAttribute("data-base") + "." + IMG_EXT[i];
   } else {
-    img.style.display = "none";
+    var card = img.closest(".rel-card");
+    var k = card ? card.getAttribute("data-sku") : sku;
+    img.onerror = null;
+    img.style.display = "block";
+    img.src = braceletPlaceholderDataUrl(img.getAttribute("data-label") || "Veshannastro Bracelet", STONE_COLORS[k] || "#c9a84c", 5);
     var fb = img.parentElement.querySelector(".rel-fallback");
-    if(fb) fb.style.display = "flex";
+    if(fb) fb.style.display = "none";
   }
 };
 
@@ -1953,7 +2070,16 @@ function buildRelated(){
   renderIntentChips();
 
   // every band in catalog order — add more to PRODUCTS and they appear here automatically
-  host.innerHTML = Object.keys(PRODUCTS).map(function(k){
+  var premiumKeys = Object.keys(PRODUCTS).filter(function(k){ return PRODUCTS[k].premium; });
+  var regularKeys = Object.keys(PRODUCTS).filter(function(k){ return !PRODUCTS[k].premium; });
+  host.innerHTML = [
+    '<div class="rel-tier rel-tier-premium">Premium Quality Bracelets</div>',
+    premiumKeys.map(cardHtml).join(""),
+    '<div class="rel-tier">Classic Bracelet Collection</div>',
+    regularKeys.map(cardHtml).join("")
+  ].join("");
+
+  function cardHtml(k){
     var p = PRODUCTS[k];
     var off = Math.round((1 - p.price / p.mrp) * 100);
     var base = "images/bracelets/" + k;
@@ -1964,9 +2090,10 @@ function buildRelated(){
     return [
       '<article class="rel-card'+(current?' is-current':'')+'" data-sku="'+k+'" data-intents="'+ints+'" style="--scol:'+col+'">',
       '  <div class="rel-media" data-go="'+k+'" style="background:'+glow+'">',
-      '    <img src="'+base+'.'+IMG_EXT[0]+'" data-base="'+base+'" data-ext="0" alt="'+esc(p.name)+'" loading="lazy" onerror="relImgFallback(this)">',
+      '    <img src="'+firstProductImage(k)+'" data-base="'+base+'" data-ext="0" data-label="'+esc(p.name)+'" alt="'+esc(p.name)+'" loading="lazy" onerror="relImgFallback(this)">',
       '    <div class="rel-fallback" style="display:none">◈</div>',
       '    <span class="rel-badge">'+off+'% OFF</span>',
+      (p.premium ? '    <span class="rel-badge rel-premium">Premium Quality</span>' : ''),
       (current ? '    <span class="rel-current">You\u2019re viewing</span>' : ''),
       '  </div>',
       '  <div class="rel-body">',
@@ -1976,7 +2103,7 @@ function buildRelated(){
       '  </div>',
       '</article>'
     ].join("");
-  }).join("");
+  }
 
   // intent filtering (delegated, attached once)
   var bar = $("intent-bar");
@@ -2497,6 +2624,63 @@ h1 em,h2 em,h3 em,h4 em,.wv-title em,.rj-copy h2 em,.section h2 em{
 @media(prefers-reduced-motion:reduce){
   .maaya-prescription::before{animation:none;}
   .mp-list span::after,.mp-report::after,.kit-badges span::after,.rj-step::after,.care-item::after,.rel-card::after,.rev::after,.offers-box::after,.pinfo .acc::after,.benefit::after{transition:none;display:none;}
+}
+</style>
+<style id="shop-fixes-gallery-premium">
+.gallery-nav{
+  position:absolute;top:50%;z-index:4;display:flex;align-items:center;justify-content:center;
+  width:42px;height:42px;border-radius:999px;border:1px solid rgba(255,255,255,.72);
+  background:linear-gradient(145deg,rgba(255,255,255,.88),rgba(255,244,220,.58));
+  color:#4a2414;font-size:2rem;line-height:1;cursor:pointer;
+  box-shadow:0 12px 30px rgba(40,20,8,.22),inset 0 1px 0 rgba(255,255,255,.96);
+  transform:translateY(-50%);transition:transform .2s,box-shadow .2s,background .2s,opacity .2s;
+  backdrop-filter:blur(10px);
+}
+.gallery-prev{left:.8rem}
+.gallery-next{right:.8rem}
+.gallery-nav:hover,.gallery-nav:focus-visible{
+  transform:translateY(-50%) scale(1.06);
+  background:linear-gradient(145deg,#fffdfa,#f2d59a);
+  box-shadow:0 16px 38px rgba(40,20,8,.28),0 0 0 3px rgba(var(--stone-rgb),.16);
+  outline:none;
+}
+.gallery-nav:disabled{opacity:.35;pointer-events:none}
+.maaya-prescription .mp-report{
+  background:linear-gradient(135deg,rgba(18,7,13,.82),rgba(var(--stone-rgb),.34))!important;
+  border-color:rgba(255,220,150,.52)!important;
+  box-shadow:0 18px 42px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.2)!important;
+}
+.maaya-prescription .mp-report span{
+  color:#fff8e8!important;background:transparent!important;box-shadow:none!important;text-shadow:0 2px 10px rgba(0,0,0,.46);
+}
+.maaya-prescription .mp-report b{color:#ffd98b!important}
+.about{grid-template-columns:minmax(0,1.15fr) minmax(220px,.72fr)!important;gap:2.1rem!important}
+.about-img{
+  width:100%;max-width:340px;justify-self:center;aspect-ratio:1/1!important;border-radius:14px!important;
+}
+.about-img img{display:block}
+.rel-tier{
+  grid-column:1/-1;margin:.25rem 0 -.2rem;padding:.76rem 1rem;border-radius:12px;
+  font-family:var(--label);font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:#2f2112;background:linear-gradient(135deg,#fff9ed,#f0d79b 58%,rgba(var(--stone-rgb),.18));
+  border:1px solid rgba(184,144,47,.32);box-shadow:0 12px 32px rgba(28,20,15,.08);
+}
+.rel-tier-premium{
+  color:#fff8e8;background:linear-gradient(135deg,#2b111b,#6c3716 48%,var(--stone-tone));
+  border-color:rgba(255,221,145,.52);box-shadow:0 18px 44px rgba(28,13,9,.2);
+}
+.rel-badge.rel-premium{
+  top:2.15rem;background:linear-gradient(135deg,#2b111b,#9a6a18 55%,var(--stone-tone));
+  color:#fff8e8;text-shadow:0 1px 8px rgba(0,0,0,.28);
+}
+@media(max-width:760px){
+  .gallery-nav{width:38px;height:38px;font-size:1.8rem}
+  .gallery-prev{left:.55rem}.gallery-next{right:.55rem}
+  .about{grid-template-columns:1fr!important}
+  .about-img{max-width:280px;margin:0 auto}
+}
+@media(prefers-reduced-motion:reduce){
+  .gallery-nav{transition:none}
 }
 </style>
 <style id="veshannastro-animated-retention-section">
