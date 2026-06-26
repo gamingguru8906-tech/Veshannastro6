@@ -890,7 +890,9 @@
 
     <p class="lede" id="p-lede">A genuine energy gemstone bracelet, finished as a comfortable free-size band.</p>
 
-    <p class="meta-line"><strong>Gemstone</strong><span id="p-gem">—</span></p>
+    <p class="meta-line"><strong>Best for</strong><span id="p-who">—</span></p>
+    <p class="meta-line"><strong>Gemstones</strong><span id="p-gem">—</span></p>
+    <p class="meta-line"><strong>What you receive</strong><span>Bracelet, pouch, mantra card, ritual note, Maaya guidance and free India shipping</span></p>
     <p class="meta-line"><strong>Helps with</strong><span id="p-benefits">—</span></p>
     <p class="meta-line"><strong>Size</strong><span>Free size · fits most wrists (stretchable)</span></p>
     <div class="stock" id="p-stock">In stock · ready to ship</div>
@@ -917,9 +919,9 @@
       <ul>
         <li><code>KIT</code> <span>Kundli-to-Wrist value: bracelet, Maaya note, ritual, mantra and 21-day guide.</span></li>
         <li><code>REPORT</code> <span>Rs. 299 Bracelet Report can be adjusted against bracelet purchase within 48 hours.</span></li>
-        <li><code>WELCOME</code> <span>₹50 off your first order — add the code yourself at checkout.</span></li>
-        <li><code>HAPPY10</code> <span>10% off the moment you add a second band to your order.</span></li>
-        <li><code>NEW15</code> <span>15% off, unlocked after a free stone reading from Maaya.</span></li>
+        <li><code>WELCOME15</code> <span>15% off your first bracelet order. Not valid on bundles.</span></li>
+        <li><code>PAIR10</code> <span>Buy any 2 bracelets and get 10% off. Coupons cannot be combined.</span></li>
+        <li><code>MAAYA15</code> <span>15% off only on the bracelet Maaya recommends.</span></li>
       </ul>
     </div>
 
@@ -1323,9 +1325,12 @@ var CONFIG = {
              type it without one, they're shown a "Get recommendation" button.
    ────────────────────────────────────────────────────────────────────────── */
 var COUPONS = {
-  "HAPPY10": { percent: 10, minQty: 2, note: "10% off on 2 or more bands." },
-  "NEW15":   { percent: 15, requiresRec: true, note: "15% off — your reward after a free AI recommendation." },
-  "WELCOME": { flat: 50, note: "₹50 off your order — enter it yourself at checkout." }
+  "PAIR10": { percent: 10, minQty: 2, note: "10% off on 2 or more bracelets. Not stackable." },
+  "HAPPY10": { percent: 10, minQty: 2, aliasOf: "PAIR10", note: "Old code alias for PAIR10." },
+  "MAAYA15": { percent: 15, requiresRec: true, note: "15% off only on the bracelet Maaya recommends." },
+  "NEW15": { percent: 15, welcome: true, note: "15% off your first bracelet order." },
+  "WELCOME15": { percent: 15, welcome: true, note: "15% off your first bracelet order." },
+  "FIRSTBLESSING15": { percent: 15, welcome: true, note: "15% off your first bracelet order." }
 };
 
 /* Product catalog (mirrors bracelet-shop.js). */
@@ -1349,6 +1354,30 @@ var PRODUCTS = {
   "VA-BR-RE-017": { name:"The Rose Embrace — Love Bracelet", mrp:1859, price:1299, premium:true, gemstones:"Rose Quartz + Rhodonite", benefits:"Love, attraction, self-worth, relationship harmony", description:"A tender rose-quartz and rhodonite pairing to open the heart and draw warm, lasting love.", tags:["love","relationships","healing","heart"] },
   "VA-BR-PY-018": { name:"Sunforge Pyrite Bracelet", mrp:1429, price:999, premium:true, gemstones:"Pyrite", benefits:"Wealth, willpower, confidence, protection", description:"A golden pyrite bracelet with real fire — for drive, money magnetism and bold confidence.", tags:["wealth","confidence","success","protection"] }
 };
+
+var PRODUCT_STRATEGY = {
+  "VA-BR-TP-001": { name:"Daily Nazar Shield Kit", kit:"Best Seller protection kit", who:"Best for people who feel drained, exposed or surrounded by heavy energy.", benefits:"Nazar shield, grounding and daily protection", description:"A Maaya-selected protection kit for daily nazar shielding, grounding and energetic boundaries." },
+  "VA-BR-AM-002": { name:"Student Focus & Sleep Calm Kit", kit:"Study-desk ritual kit", who:"Best for students, aspirants, creators and overthinkers.", benefits:"Focus, sleep calm, stress relief and intuition", description:"A guided Amethyst kit for sharper study energy, calmer sleep and overthinking relief." },
+  "VA-BR-CQ-003": { name:"Energy Amplifier Bracelet", kit:"Starter amplifier kit", who:"Best for first-time buyers and anyone pairing two bracelets.", benefits:"Amplifies intention, clarity and focus", description:"A clear starter bracelet that amplifies your intention and pairs cleanly with any other Maaya kit." },
+  "VA-BR-BT-004": { name:"Digital + Nazar Protection Bracelet", kit:"Screen-worker protection kit", who:"Best for online workers, travellers and people meeting many people.", benefits:"Protection, grounding and energy boundaries", description:"A Black Tourmaline kit for digital fatigue, daily nazar protection and energetic exhaustion." },
+  "VA-BR-CT-005": { name:"Client Magnet / Money Confidence Kit", kit:"Thursday abundance kit", who:"Best for freelancers, shop owners, salespeople and founders.", benefits:"Money confidence, clients and abundance mindset", description:"A Citrine ritual kit for client confidence, abundance thinking and business-facing courage." },
+  "VA-BR-YA-006": { name:"Confidence & Decision-Making Bracelet", kit:"Solar confidence kit", who:"Best for interviews, students, creators and young professionals.", benefits:"Confidence, optimism, willpower and decisions", description:"A Yellow Aventurine kit for decision-making, interviews and solar confidence." },
+  "VA-BR-RJ-007": { name:"Action & Courage Bracelet", kit:"Action starter kit", who:"Best for people delaying action, gym-goers and entrepreneurs.", benefits:"Strength, stamina, courage and discipline", description:"A Red Jasper kit for action, stamina and grounded courage when you need to move." },
+  "VA-BR-TE-008": { name:"Career Confidence Bracelet", kit:"Meeting and interview ritual kit", who:"Best for interviews, business decisions and public dealing.", benefits:"Confidence, focus, courage and practical success", description:"A Tiger Eye kit for interviews, meetings, business decisions and confident action." },
+  "VA-BR-RQ-009": { name:"Heart Healing & Self-Love Bracelet", kit:"Heart softness kit", who:"Best for heartbreak, self-worth and relationship harmony.", benefits:"Heart healing, self-love and emotional softness", description:"A Rose Quartz kit for heart healing, self-worth and softer relationship energy." },
+  "VA-BR-GA-010": { name:"Opportunity & Growth Bracelet", kit:"Breakthrough support kit", who:"Best for job seekers, new business starters and fresh openings.", benefits:"Opportunity, growth and heart-led progress", description:"A Green Aventurine kit for opportunity, growth and a fresh breakthrough mindset." },
+  "VA-BR-LL-011": { name:"Communication & Inner Truth Bracelet", kit:"Speak clearly kit", who:"Best for speakers, teachers, creators and students.", benefits:"Communication, wisdom, truth and self-expression", description:"A Lapis Lazuli kit for speaking clearly, teaching, presenting and inner truth." },
+  "VA-BR-MN-012": { name:"Moon Calm & New Beginning Bracelet", kit:"Emotional reset kit", who:"Best for new phases, emotional transitions and inner rhythm.", benefits:"Emotional balance, intuition and soothing calm", description:"A Moonstone kit for calm, emotional transition and gentle new beginnings." },
+  "VA-BR-WM-015": { name:"Moon Calm & New Beginning Bracelet", kit:"Premium feminine calm kit", who:"Best for women, transitions, peace and emotional rhythm.", benefits:"Emotional balance, intuition, calm and feminine energy", description:"A premium Moonstone kit for peace, inner rhythm and emotional steadiness." },
+  "VA-BR-7C-013": { name:"Complete Energy Reset Bracelet", kit:"7-day chakra guide kit", who:"Best for beginners who want one full-spectrum starter bracelet.", benefits:"Chakra balance, energy alignment and overall wellness", description:"A complete starter bracelet with a 7-day chakra reset path, one chakra per day." },
+  "VA-BR-IO-014": { name:"Intuition & Inner Direction Bracelet", kit:"Saturn support ritual kit", who:"Best for discipline, direction and deeper intuition.", benefits:"Intuition, vision, inner guidance and Saturn support", description:"An Iolite kit for inner direction, discipline and Saturn-style focus." },
+  "VA-BR-LK-016": { name:"Kundli-to-Wrist Money Flow Kit", kit:"Premium dhan yog kit", who:"Best for business growth, clients and steady money confidence.", benefits:"Wealth, abundance, money flow and opportunity", description:"A premium Maaya-style money flow kit built around Citrine, Pyrite and Green Aventurine." },
+  "VA-BR-RE-017": { name:"Love Healing Ritual Pair Kit", kit:"Premium heart harmony kit", who:"Best for emotional repair, self-worth and warm connection.", benefits:"Love, attraction, self-worth and relationship harmony", description:"A premium heart kit for self-worth, relationship harmony and emotional softness." },
+  "VA-BR-PY-018": { name:"Money Confidence Pyrite Bracelet", kit:"Bold abundance kit", who:"Best for founders, salespeople and confident action.", benefits:"Wealth, willpower, confidence and protection", description:"A Pyrite kit for bold money confidence, action and business-facing willpower." }
+};
+Object.keys(PRODUCT_STRATEGY).forEach(function(k){
+  if(PRODUCTS[k]) Object.assign(PRODUCTS[k], PRODUCT_STRATEGY[k]);
+});
 
 var DEFAULT_SKU = "VA-BR-GA-010";
 var IMG_EXT = ["webp","jpg","jpeg","png"];
@@ -1482,11 +1511,11 @@ function commitCartAdd(){
   qty = Math.min(10, Math.max(1, cartCount));
   updateCartBadge(true);
   checkoutFromCart = false;
-  if(cartCount >= 2 && coupon !== "HAPPY10"){
-    coupon = "HAPPY10";
-    var ci = $("coupon-input"); if(ci) ci.value = "HAPPY10";
+  if(cartCount >= 2 && coupon !== "PAIR10"){
+    coupon = "PAIR10";
+    var ci = $("coupon-input"); if(ci) ci.value = "PAIR10";
     showMakeTwo(false);
-    setCouponMsg("HAPPY10 applied automatically — 10% off unlocked on 2 bracelets.", "ok");
+    setCouponMsg("PAIR10 applied automatically - 10% off unlocked on 2 bracelets. Coupons cannot be combined.", "ok");
     if(before < 2 && !happy10Celebrated){
       happy10Celebrated = true;
       setTimeout(showHappy10Celebrate, 320);
@@ -1508,8 +1537,8 @@ function ensureHappy10Celebrate(){
     '      <span class="shop-gift-bow"></span>',
     '    </div>',
     '    <p class="shop-happy10-kicker">Two-bracelet ritual unlocked</p>',
-    '    <h3>HAPPY10 applied</h3>',
-    '    <p class="shop-happy10-copy">Your cart now has 2 bracelets, so 10% off has been added automatically.</p>',
+    '    <h3>PAIR10 applied</h3>',
+    '    <p class="shop-happy10-copy">Your cart now has 2 bracelets, so the Energy Pair 10% offer has been added automatically.</p>',
     '    <button type="button" class="shop-happy10-action" onclick="hideHappy10Celebrate();openCartCheckout();">Checkout with offer</button>',
     '  </div>',
     '</div>'
@@ -1566,9 +1595,9 @@ function estimateDelivery(){
 /* ---------- generic editorial sections built from product data ---------- */
 function aboutCopy(p){
   return [
-    p.name + " is a free-size energy band made with " + p.gemstones.toLowerCase() + ". It's finished on a comfortable stretch cord so it slips on easily and sits well on most wrists, with no clasp to fuss over.",
-    "People keep this one close for " + p.benefits.toLowerCase() + ". Wear it as a daily reminder of the intention you're holding — the stone does its quiet work while you get on with your day.",
-    "Every band is cleansed and energised before it's packed, and arrives in a small pouch ready to wear or gift."
+    p.name + " is a Maaya Energy Remedy Kit made with " + p.gemstones.toLowerCase() + ". It is finished as a comfortable free-size bracelet and positioned around one clear intention.",
+    (p.who || "Best for buyers who want a clear gemstone intention instead of a random stone choice."),
+    "Your kit includes the bracelet, pouch, mantra card, wearing ritual note, Maaya guidance and free India shipping."
   ];
 }
 function benefitPoints(p){
@@ -1660,9 +1689,9 @@ function couponState(qtyForCheck){
   var c = COUPONS[coupon];
   var q = qtyForCheck || selectedQty();
   if(c.minQty && q < c.minQty)
-    return { discount:0, lapse:"HAPPY10 needs " + c.minQty + " bands — add one more to keep 10% off." };
+    return { discount:0, lapse:"PAIR10 needs " + c.minQty + " bracelets - add one more to keep 10% off." };
   if(c.requiresRec && !recUnlocked)
-    return { discount:0, lapse:"NEW15 unlocks after a free AI recommendation." };
+    return { discount:0, lapse:"MAAYA15 unlocks after Maaya recommends this bracelet." };
   var base = product.price * q;
   var d = c.flat ? Math.min(c.flat, base) : Math.round(base * c.percent / 100);
   return { discount: d };
@@ -1916,8 +1945,9 @@ function init(){
       el.textContent = product.name;
     }
   })();
-  $("p-eyebrow").textContent = "Energy Gemstone · Veshannastro";
+  $("p-eyebrow").textContent = "Maaya Selected Ritual Kit · Veshannastro";
   $("p-lede").textContent = product.description;
+  var whoEl = $("p-who"); if(whoEl) whoEl.textContent = product.who || "Maaya-selected bracelet for your current intention.";
   $("p-gem").textContent = product.gemstones;
   $("p-benefits").textContent = product.benefits;
   $("p-price").textContent = money(product.price);
@@ -1936,14 +1966,14 @@ function init(){
   var chipList = (product.premium ? ["Premium Quality"] : []).concat(product.tags || []);
   $("p-chips").innerHTML = chipList.map(function(t){ return "<span>"+esc(t)+"</span>"; }).join("");
 
-  // ── Recommendation unlock for NEW15 ──
+  // Recommendation unlock for MAAYA15.
   var params = new URLSearchParams(location.search);
   var urlCoupon = (params.get("coupon") || "").toUpperCase();
-  recUnlocked = params.get("rec") === "1" || urlCoupon === "NEW15" ||
+  recUnlocked = params.get("rec") === "1" || urlCoupon === "MAAYA15" ||
                 params.has("maya_bundle") || sessionStorage.getItem("va_rec_unlocked") === "1";
   if(recUnlocked){ try{ sessionStorage.setItem("va_rec_unlocked", "1"); }catch(e){} }
-  // Auto-apply NEW15 if the buyer arrived straight from the recommender
-  if(recUnlocked && (urlCoupon === "NEW15" || params.has("maya_bundle"))) coupon = "NEW15";
+  // Auto-apply MAAYA15 if the buyer arrived straight from the recommender.
+  if(recUnlocked && (urlCoupon === "MAAYA15" || params.has("maya_bundle"))) coupon = "MAAYA15";
   if(coupon){ var ci = $("coupon-input"); if(ci) ci.value = coupon; }
 
   setupGallery();
@@ -2260,7 +2290,7 @@ function renderTotals(){
   if(coupon){
     var st = couponState();
     if(st.lapse) setCouponMsg(st.lapse, "bad");
-    else setCouponMsg(coupon + " applied — " + couponLabel(coupon) + ".", "ok");
+    else setCouponMsg(coupon + " applied - " + couponLabel(coupon) + ". Coupons cannot be combined.", "ok");
   }
   renderSummary();
 }
@@ -2295,18 +2325,18 @@ function applyCoupon(){
 
   var c = COUPONS[code];
 
-  // HAPPY10 — only on 2+ bands
+  // PAIR10 - only on 2+ bracelets.
   if(c.minQty && qty < c.minQty){
     coupon=null;
-    setCouponMsg(code + " applies on " + c.minQty + " or more bands. Tap “Make it 2” to unlock 10% off.", "bad");
+    setCouponMsg(code + " applies on " + c.minQty + " or more bracelets. Tap Make it 2 to unlock the Energy Pair offer.", "bad");
     showMakeTwo(true);
     renderSummary();
     return;
   }
-  // NEW15 — locked until the buyer has an AI recommendation
+  // MAAYA15 - locked until the buyer has a Maaya recommendation.
   if(c.requiresRec && !recUnlocked){
     coupon=null;
-    setCouponMsg(code + " isn't applicable yet — it's our reward for buying after a free AI recommendation.", "bad");
+    setCouponMsg(code + " applies after Maaya recommends this bracelet for your current energy.", "bad");
     showRecButton(true);
     showMakeTwo(false);
     renderSummary();
@@ -2316,7 +2346,7 @@ function applyCoupon(){
   coupon = code;
   $("coupon-input").value = code;
   showMakeTwo(false);
-  setCouponMsg(code + " applied — " + couponLabel(code) + ".", "ok");
+  setCouponMsg(code + " applied - " + couponLabel(code) + ". Coupons cannot be combined.", "ok");
   renderTotals();
 }
 
@@ -2522,9 +2552,10 @@ function showSuccess(order, msg){
 
 /* ---------- bind ---------- */
 function onQtyChange(){
-  // If HAPPY10 was attempted but blocked by the 2-band rule, auto-apply it once eligible.
-  if(qty >= 2 && !coupon && ($("coupon-input").value||"").trim().toUpperCase() === "HAPPY10"){
-    coupon = "HAPPY10"; showMakeTwo(false);
+  // If PAIR10 was attempted but blocked by the 2-bracelet rule, auto-apply it once eligible.
+  var attempted = ($("coupon-input").value||"").trim().toUpperCase();
+  if(qty >= 2 && !coupon && (attempted === "PAIR10" || attempted === "HAPPY10")){
+    coupon = attempted === "HAPPY10" ? "HAPPY10" : "PAIR10"; showMakeTwo(false);
   }
   renderTotals();
 }
@@ -2533,7 +2564,7 @@ function bind(){
   $("qty-inc").addEventListener("click", function(){ if(qty<10){ qty++; onQtyChange(); } });
   $("coupon-apply").addEventListener("click", applyCoupon);
   $("coupon-input").addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); applyCoupon(); } });
-  $("make-two-btn").addEventListener("click", function(){ qty = Math.max(2, qty); $("coupon-input").value = "HAPPY10"; coupon = null; applyCoupon(); });
+  $("make-two-btn").addEventListener("click", function(){ qty = Math.max(2, qty); $("coupon-input").value = "PAIR10"; coupon = null; applyCoupon(); });
   $("rec-btn").setAttribute("href", CONFIG.recommendationUrl);
   $("buy-btn").addEventListener("click", openCheckout);
   var sbb = $("sb-buy"); if(sbb) sbb.addEventListener("click", openCheckout);

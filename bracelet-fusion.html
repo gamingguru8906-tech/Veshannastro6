@@ -305,6 +305,14 @@ body{background:var(--page-bg);color:var(--ink);min-height:100vh;font-weight:500
 }
 .fx-card:hover .fx-name{color:var(--maroon);transform:translateX(3px);}
 
+.fx-kit-line{
+  font-family:'Jost',sans-serif;font-size:.7rem;color:#2f241b;line-height:1.45;
+  margin:.14rem 0 .28rem;font-weight:800;
+}
+.fx-who-line{
+  font-family:'Jost',sans-serif;font-size:.68rem;color:var(--muted);line-height:1.45;
+  margin:0 0 .42rem;font-weight:700;
+}
 .fx-benefit{
   font-size:.72rem;color:var(--muted);line-height:1.55;font-weight:600;
   margin-bottom:.6rem;flex:1;
@@ -520,9 +528,9 @@ body{background:var(--page-bg);color:var(--ink);min-height:100vh;font-weight:500
   <aside class="fx-sidebar" role="navigation" aria-label="Bracelet collections">
     <canvas class="fx-sb-canvas" id="sb-canvas"></canvas>
     <div class="fx-sb-top">
-      <span class="fx-sb-eyebrow">Veshannastro — Gemstone Store</span>
-      <div class="fx-sb-brand">Gemstone <em>Bracelets</em></div>
-      <p class="fx-sb-tagline">Curated gemstones, energised &amp; shipped free across India.</p>
+      <span class="fx-sb-eyebrow">Veshannastro - Maaya Store</span>
+      <div class="fx-sb-brand">Maaya Energy <em>Remedy Kits</em></div>
+      <p class="fx-sb-tagline">Astrology-selected bracelets with mantra, ritual guide and free India shipping.</p>
     </div>
     <div class="fx-sb-ornament" aria-hidden="true">
       <div class="fx-sb-orn-sym"><span>✦</span><span>✦</span><span>✦</span></div>
@@ -533,8 +541,8 @@ body{background:var(--page-bg);color:var(--ink);min-height:100vh;font-weight:500
         <div class="fx-sb-bg"></div>
         <div class="fx-sb-glyph">C</div>
         <div class="fx-sb-txt">
-          <div class="fx-sb-name">Crystal Bracelets</div>
-          <div class="fx-sb-hint">Protection · Clarity · Love</div>
+          <div class="fx-sb-name">Maaya Ritual Kits</div>
+          <div class="fx-sb-hint">Protection / Focus / Love</div>
         </div>
         <span class="fx-sb-count">12</span>
       </div>
@@ -543,8 +551,8 @@ body{background:var(--page-bg);color:var(--ink);min-height:100vh;font-weight:500
         <div class="fx-sb-bg"></div>
         <div class="fx-sb-glyph">P</div>
         <div class="fx-sb-txt">
-          <div class="fx-sb-name">Premium Bracelets</div>
-          <div class="fx-sb-hint">Rare stones · Exclusive settings</div>
+          <div class="fx-sb-name">Premium Ritual Kits</div>
+          <div class="fx-sb-hint">Custom / Chakra / Money</div>
         </div>
         <span class="fx-sb-count">6</span>
       </div>
@@ -646,27 +654,27 @@ var STONE_EMOJI={
 };
 
 var CRYSTAL=[
-  {sku:"VA-BR-CQ-003",name:"Clear Quartz Bracelet",mrp:1429,price:999,discount:30,gemstones:"Clear Quartz",benefits:"Energy amplification, clarity, focus",tags:["clarity","focus"]},
-  {sku:"VA-BR-BT-004",name:"Black Tourmaline Bracelet",mrp:1279,price:899,discount:30,gemstones:"Black Tourmaline",benefits:"Protection, grounding, negativity removal",tags:["protection"]},
-  {sku:"VA-BR-RJ-007",name:"Red Jasper Bracelet",mrp:1139,price:799,discount:30,gemstones:"Red Jasper",benefits:"Strength, stamina, courage, stability",tags:["health"]},
-  {sku:"VA-BR-MN-012",name:"Peach Moonstone Bracelet",mrp:1139,price:799,discount:30,gemstones:"Peach Moonstone",benefits:"Emotional balance, intuition, soothing",tags:["moon"]},
-  {sku:"VA-BR-GA-010",name:"Green Aventurine Bracelet",mrp:1279,price:899,discount:30,gemstones:"Green Aventurine",benefits:"Luck, growth, opportunity, heart balance",tags:["wealth"]},
-  {sku:"VA-BR-CT-005",name:"Citrine Natural Bracelet",mrp:1709,price:1199,discount:30,gemstones:"Natural Citrine",benefits:"Wealth, abundance, confidence, success",tags:["wealth"]},
-  {sku:"VA-BR-TP-001",name:"Triple Protection Bracelet",mrp:1139,price:799,discount:30,gemstones:"Tiger Eye + Black Obsidian + Hematite",benefits:"Protection, grounding, confidence",tags:["protection"]},
-  {sku:"VA-BR-AM-002",name:"Amethyst Bracelet",mrp:1429,price:999,discount:30,gemstones:"Amethyst",benefits:"Calm mind, stress relief, intuition",tags:["peace","intuition"]},
-  {sku:"VA-BR-YA-006",name:"Yellow Aventurine Bracelet",mrp:1139,price:799,discount:30,gemstones:"Yellow Aventurine",benefits:"Confidence, optimism, willpower",tags:["confidence"]},
-  {sku:"VA-BR-TE-008",name:"Tiger Eye Bracelet",mrp:1139,price:799,discount:30,gemstones:"Tiger Eye",benefits:"Confidence, focus, courage, protection",tags:["career"]},
-  {sku:"VA-BR-RQ-009",name:"Rose Quartz Bracelet",mrp:1279,price:899,discount:30,gemstones:"Rose Quartz",benefits:"Love, emotional healing, self-love",tags:["love"]},
-  {sku:"VA-BR-LL-011",name:"Lapis Lazuli Bracelet",mrp:1279,price:899,discount:30,gemstones:"Lapis Lazuli",benefits:"Wisdom, communication, truth",tags:["wisdom"]}
+  {sku:"VA-BR-CQ-003",name:"Energy Amplifier Bracelet",mrp:1429,price:999,discount:30,gemstones:"Clear Quartz",kit:"Starter amplifier kit",who:"Best for first-time buyers and anyone pairing two bracelets.",benefits:"Amplifies intention, clarity and focus",tags:["clarity","focus"]},
+  {sku:"VA-BR-BT-004",name:"Digital + Nazar Protection Bracelet",mrp:1279,price:899,discount:30,gemstones:"Black Tourmaline",kit:"Screen-worker protection kit",who:"Best for online workers, travellers and people meeting many people.",benefits:"Protection, grounding and energy boundaries",tags:["protection"]},
+  {sku:"VA-BR-RJ-007",name:"Action & Courage Bracelet",mrp:1139,price:799,discount:30,gemstones:"Red Jasper",kit:"Action starter kit",who:"Best for people delaying action, gym-goers and entrepreneurs.",benefits:"Strength, stamina, courage and discipline",tags:["health"]},
+  {sku:"VA-BR-MN-012",name:"Moon Calm & New Beginning Bracelet",mrp:1139,price:799,discount:30,gemstones:"Peach Moonstone",kit:"Emotional reset kit",who:"Best for new phases, emotional transitions and inner rhythm.",benefits:"Emotional balance, intuition and soothing calm",tags:["moon"]},
+  {sku:"VA-BR-GA-010",name:"Opportunity & Growth Bracelet",mrp:1279,price:899,discount:30,gemstones:"Green Aventurine",kit:"Breakthrough support kit",who:"Best for job seekers, new business starters and fresh openings.",benefits:"Opportunity, growth and heart-led progress",tags:["wealth"]},
+  {sku:"VA-BR-CT-005",name:"Client Magnet / Money Confidence Kit",mrp:1709,price:1199,discount:30,gemstones:"Natural Citrine",kit:"Thursday abundance kit",who:"Best for freelancers, shop owners, salespeople and founders.",benefits:"Money confidence, clients and abundance mindset",tags:["wealth"]},
+  {sku:"VA-BR-TP-001",name:"Daily Nazar Shield Kit",mrp:1139,price:799,discount:30,gemstones:"Tiger Eye + Black Obsidian + Hematite",kit:"Best Seller protection kit",who:"Best for people who feel drained, exposed or surrounded by heavy energy.",benefits:"Nazar shield, grounding and daily protection",tags:["protection"]},
+  {sku:"VA-BR-AM-002",name:"Student Focus & Sleep Calm Kit",mrp:1429,price:999,discount:30,gemstones:"Amethyst",kit:"Study-desk ritual kit",who:"Best for students, aspirants, creators and overthinkers.",benefits:"Focus, sleep calm, stress relief and intuition",tags:["peace","intuition"]},
+  {sku:"VA-BR-YA-006",name:"Confidence & Decision-Making Bracelet",mrp:1139,price:799,discount:30,gemstones:"Yellow Aventurine",kit:"Solar confidence kit",who:"Best for interviews, students, creators and young professionals.",benefits:"Confidence, optimism, willpower and decisions",tags:["confidence"]},
+  {sku:"VA-BR-TE-008",name:"Career Confidence Bracelet",mrp:1139,price:799,discount:30,gemstones:"Tiger Eye",kit:"Meeting and interview ritual kit",who:"Best for interviews, business decisions and public dealing.",benefits:"Confidence, focus, courage and practical success",tags:["career"]},
+  {sku:"VA-BR-RQ-009",name:"Heart Healing & Self-Love Bracelet",mrp:1279,price:899,discount:30,gemstones:"Rose Quartz",kit:"Heart softness kit",who:"Best for heartbreak, self-worth and relationship harmony.",benefits:"Heart healing, self-love and emotional softness",tags:["love"]},
+  {sku:"VA-BR-LL-011",name:"Communication & Inner Truth Bracelet",mrp:1279,price:899,discount:30,gemstones:"Lapis Lazuli",kit:"Speak clearly kit",who:"Best for speakers, teachers, creators and students.",benefits:"Communication, wisdom, truth and self-expression",tags:["wisdom"]}
 ];
 
 var PREMIUM=[
-  {sku:"VA-BR-LK-016",name:"Lakshmi's Loom - Dhan Yog",mrp:1859,price:1299,discount:30,premium:true,gemstones:"Citrine + Pyrite + Green Aventurine",benefits:"Wealth, abundance, money flow",tags:["wealth"]},
-  {sku:"VA-BR-RE-017",name:"The Rose Embrace - Love",mrp:1859,price:1299,discount:30,premium:true,gemstones:"Rose Quartz + Rhodonite",benefits:"Love, attraction, relationship harmony",tags:["love"]},
-  {sku:"VA-BR-PY-018",name:"Sunforge Pyrite Bracelet",mrp:1429,price:999,discount:30,premium:true,gemstones:"Pyrite",benefits:"Wealth, willpower, confidence",tags:["wealth"]},
-  {sku:"VA-BR-WM-015",name:"White Moonstone Bracelet",mrp:1999,price:1399,discount:30,premium:true,gemstones:"White Moonstone",benefits:"Emotional balance, intuition, calm",tags:["moon"]},
-  {sku:"VA-BR-7C-013",name:"7 Chakra Bracelet",mrp:1569,price:1099,discount:30,premium:true,gemstones:"7 Chakra mixed gemstones",benefits:"Chakra balance, energy alignment",tags:["chakra"]},
-  {sku:"VA-BR-IO-014",name:"Iolite Bracelet (Neeli)",mrp:2279,price:1599,discount:30,premium:true,gemstones:"Iolite (Neeli - Saturn substitute)",benefits:"Intuition, vision, Saturn support",tags:["intuition"]}
+  {sku:"VA-BR-LK-016",name:"Kundli-to-Wrist Money Flow Kit",mrp:1859,price:1299,discount:30,premium:true,gemstones:"Citrine + Pyrite + Green Aventurine",kit:"Premium dhan yog kit",who:"Best for business growth, clients and steady money confidence.",benefits:"Wealth, abundance, money flow and opportunity",tags:["wealth"]},
+  {sku:"VA-BR-RE-017",name:"Love Healing Ritual Pair Kit",mrp:1859,price:1299,discount:30,premium:true,gemstones:"Rose Quartz + Rhodonite",kit:"Premium heart harmony kit",who:"Best for emotional repair, self-worth and warm connection.",benefits:"Love, attraction, self-worth and relationship harmony",tags:["love"]},
+  {sku:"VA-BR-PY-018",name:"Money Confidence Pyrite Bracelet",mrp:1429,price:999,discount:30,premium:true,gemstones:"Pyrite",kit:"Bold abundance kit",who:"Best for founders, salespeople and confident action.",benefits:"Wealth, willpower, confidence and protection",tags:["wealth"]},
+  {sku:"VA-BR-WM-015",name:"Moon Calm & New Beginning Bracelet",mrp:1999,price:1399,discount:30,premium:true,gemstones:"White Moonstone",kit:"Premium feminine calm kit",who:"Best for women, transitions, peace and emotional rhythm.",benefits:"Emotional balance, intuition, calm and feminine energy",tags:["moon"]},
+  {sku:"VA-BR-7C-013",name:"Complete Energy Reset Bracelet",mrp:1569,price:1099,discount:30,premium:true,gemstones:"7 Chakra mixed gemstones",kit:"7-day chakra guide kit",who:"Best for beginners who want one full-spectrum starter bracelet.",benefits:"Chakra balance, energy alignment and overall wellness",tags:["chakra"]},
+  {sku:"VA-BR-IO-014",name:"Intuition & Inner Direction Bracelet",mrp:2279,price:1599,discount:30,premium:true,gemstones:"Iolite (Neeli - Saturn substitute)",kit:"Saturn support ritual kit",who:"Best for discipline, direction and deeper intuition.",benefits:"Intuition, vision, inner guidance and Saturn support",tags:["intuition"]}
 ];
 
 // Zodiac — placeholder (not in bracelet-shop.js yet)
@@ -693,11 +701,11 @@ var STONE_COLORS_ZODIAC={
 var ZODIAC_EMOJI={"ZO-001":"♈","ZO-002":"♉","ZO-003":"♊","ZO-004":"♋","ZO-005":"♌","ZO-006":"♍","ZO-007":"♎","ZO-008":"♏","ZO-009":"♐","ZO-010":"♑","ZO-011":"♒","ZO-012":"♓"};
 
 var DATA={
-  crystal:{eyebrow:'Collection One',initial:'C',title:'Crystal',titleEm:'Bracelets',
-    desc:'Natural gemstones handpicked for protection, clarity, love and daily spiritual grounding. Every piece is cleansed and energised before it ships.',
+  crystal:{eyebrow:'Maaya Energy Remedy Kits',initial:'M',title:'Maaya Selected',titleEm:'Ritual Kits',
+    desc:'Do not pick a random gemstone. Choose by life situation: protection, focus, money, love, calm or confidence. Every kit is cleansed, energised and packed with ritual guidance.',
     sym:'✦ &nbsp; ✦ &nbsp; ✦',products:CRYSTAL,colorMap:STONE_COLORS,emojiMap:STONE_EMOJI},
-  premium:{eyebrow:'Collection Two',initial:'P',title:'Premium',titleEm:'Bracelets',
-    desc:'Rare and carefully curated stones in exclusive settings — for those who seek the extraordinary in their daily spiritual practice.',
+  premium:{eyebrow:'Kundli-to-Wrist Upgrade',initial:'K',title:'Premium',titleEm:'Ritual Kits',
+    desc:'Higher-intent kits for buyers who want a stronger Maaya-led remedy path with clear wearing ritual, mantra and guided intention.',
     sym:'✦ &nbsp; ✦ &nbsp; ✦',products:PREMIUM,colorMap:STONE_COLORS,emojiMap:STONE_EMOJI},
   zodiac:{eyebrow:'Collection Three',initial:'Z',title:'Zodiac',titleEm:'Bracelets',
     desc:'Gemstones matched to your Vedic birth sign — amplifying your innate strengths and gently softening life\'s friction.',
@@ -789,16 +797,18 @@ function buildCard(p,colorMap,emojiMap){
     '    <div class="fx-card-emoji">'+emoji+'</div>',
     '  </div>',
     '  <div class="fx-card-body">',
-    '    <span class="fx-stone">'+p.gemstones+'</span>',
+    '    <span class="fx-stone">'+(p.kit||p.gemstones)+'</span>',
     '    <div class="fx-name">'+p.name+'</div>',
+    '    <p class="fx-kit-line">'+(p.who||'Maaya-selected bracelet for your current intention.')+'</p>',
     '    <p class="fx-benefit">'+p.benefits+'</p>',
+    '    <p class="fx-who-line">Includes bracelet, pouch, mantra card, ritual note and free India shipping.</p>',
     '    <div class="fx-price-row">',
     '      <span class="fx-price">'+money(p.price)+'</span>',
     '      <span class="fx-was">'+money(p.mrp)+'</span>',
     '      <span class="fx-off">'+p.discount+'% off</span>',
     '    </div>',
     '    <div class="fx-card-actions">',
-    (/^VA-BR-/.test(p.sku)?'      <a class="fx-card-view" href="shop-product.html?sku='+p.sku+'" target="_top" onclick="event.stopPropagation()">Details</a>':''),
+    (/^VA-BR-/.test(p.sku)?'      <a class="fx-card-view" href="shop-product.html?sku='+p.sku+'" target="_top" onclick="event.stopPropagation()">Ask Maaya</a>':''),
     '      <button class="fx-card-cta" onclick="event.stopPropagation();addToCart(\''+p.sku+'\',this)"><span class="cta-label">Add to Cart</span><span class="cta-spin" aria-hidden="true"></span><svg class="cta-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg></button>',
     '    </div>',
     '  </div>',
@@ -955,10 +965,15 @@ var FX_CONFIG={
   cartLinkEndpoint:""
 };
 var fxCoupon='', fxCelebrated=false;
+try{
+  var fxParams=new URLSearchParams((window.top&&window.top.location?window.top.location.search:window.location.search)||"");
+  var fxUrlCoupon=(fxParams.get("coupon")||"").toUpperCase();
+  if(["MAAYA15","NEW15","WELCOME15","PAIR10","HAPPY10"].indexOf(fxUrlCoupon)>-1) fxCoupon=fxUrlCoupon;
+}catch(e){}
 function fxSubtotal(){var t=0;for(var s in fxCart){var r=ALL_PRODUCTS[s];if(r)t+=r.p.price*fxCart[s];}return t;}
 function fxDiscountRate(){
-  if(fxCoupon==='HAPPY10' && cartCountTotal()>=2) return 0.10;   // 2+ bracelets
-  if(fxCoupon==='NEW15') return 0.15;
+  if((fxCoupon==='PAIR10' || fxCoupon==='HAPPY10') && cartCountTotal()>=2) return 0.10;   // 2+ bracelets
+  if(fxCoupon==='MAAYA15' || fxCoupon==='NEW15' || fxCoupon==='WELCOME15') return 0.15;
   return 0;
 }
 function fxDiscountAmt(){return Math.round(fxSubtotal()*fxDiscountRate());}
@@ -1041,13 +1056,13 @@ function injectCartUI(){
           '<div class="fx-gift-box"><span class="fx-gift-ribbon"></span></div>'+
         '</div>'+
         '<div class="fx-reward">'+
-          '<div class="fx-reward-badge">10% OFF</div>'+
-          '<h3>HAPPY10 unlocked!</h3>'+
-          '<p>Your 2-bracelet discount has been applied automatically.</p>'+
+          '<div class="fx-reward-badge">PAIR10</div>'+
+          '<h3>Energy Pair unlocked</h3>'+
+          '<p>Your guided 2-bracelet discount has been applied automatically.</p>'+
           '<div class="fx-upsell">'+
-            '<div class="fx-upsell-head">Want <b>15% OFF</b> instead?</div>'+
-            '<p>Ask Maya for a free reading and unlock <b>NEW15</b> \u2014 an even bigger discount.</p>'+
-            '<button class="fx-maya-btn" id="fx-maya-btn">\u2728 Chat with Maya \u2014 get 15% off</button>'+
+            '<div class="fx-upsell-head">Need a personal pick?</div>'+
+            '<p>Ask Maaya to choose one bracelet for your current energy and unlock <b>MAAYA15</b>.</p>'+
+            '<button class="fx-maya-btn" id="fx-maya-btn">Chat with Maaya - get MAAYA15</button>'+
           '</div>'+
           '<button class="fx-reward-continue" id="fx-reward-continue">Continue with 10% off</button>'+
         '</div>'+
@@ -1060,7 +1075,7 @@ function injectCartUI(){
   var sc=document.getElementById('fx-success-close'); if(sc)sc.addEventListener('click',function(){ fxResetPanes(); closeCart(); });
   var pin=document.getElementById('fx-pin'); if(pin)pin.addEventListener('input',function(){this.value=this.value.replace(/\D/g,'');});
   var ph=document.getElementById('fx-phone'); if(ph)ph.addEventListener('input',function(){this.value=this.value.replace(/\D/g,'');});
-  var mb=document.getElementById('fx-maya-btn'); if(mb)mb.addEventListener('click',function(){ try{(window.top||window).location.href='index.html?openMaaya=1&coupon=NEW15#vesha-chat';}catch(e){window.location.href='index.html#vesha-chat';} });
+  var mb=document.getElementById('fx-maya-btn'); if(mb)mb.addEventListener('click',function(){ try{(window.top||window).location.href='index.html?openMaaya=1&coupon=MAAYA15#vesha-chat';}catch(e){window.location.href='index.html#vesha-chat';} });
   var rc=document.getElementById('fx-reward-continue'); if(rc)rc.addEventListener('click',fxCelebrateClose);
 }
 function openCart(){var o=document.getElementById('fx-cart-overlay'),d=document.getElementById('fx-cart-drawer');if(o)o.classList.add('open');if(d)d.classList.add('open');}
@@ -1103,8 +1118,8 @@ function renderCart(){
     if(disc>0){
       if(subline){subline.style.display='flex';} if(subVal)subVal.textContent=money(sub);
       if(discline){discline.style.display='flex';} if(discVal)discVal.textContent='\u2212 '+money(disc);
-      if(discLabel)discLabel.textContent=fxCoupon+' ('+(fxCoupon==='NEW15'?'15':'10')+'% off)';
-      if(tag){tag.style.display='block';tag.textContent='\uD83C\uDF89 '+fxCoupon+' applied \u2014 you saved '+money(disc)+'!';}
+      if(discLabel)discLabel.textContent=fxCoupon+' ('+((fxCoupon==='MAAYA15'||fxCoupon==='NEW15'||fxCoupon==='WELCOME15')?'15':'10')+'% off)';
+      if(tag){tag.style.display='block';tag.textContent=fxCoupon+' applied - you saved '+money(disc)+'. Coupons cannot be combined.';}
     }else{
       if(subline)subline.style.display='none'; if(discline)discline.style.display='none'; if(tag)tag.style.display='none';
     }
@@ -1274,7 +1289,7 @@ function fxCelebrate(){
   fxConfettiBurst();
   setTimeout(function(){ ov.classList.add('opened'); fxConfettiBurst(); },650);   // lid pops off
   setTimeout(function(){                                                          // reward + auto-discount
-    fxCoupon='HAPPY10';
+    fxCoupon='PAIR10';
     renderCart();
     ov.classList.add('reward');
   },1500);
