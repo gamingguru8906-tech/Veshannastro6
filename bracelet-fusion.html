@@ -251,6 +251,7 @@ body{background:var(--page-bg);color:var(--ink);min-height:100vh;font-weight:500
   transition:transform .55s cubic-bezier(.22,1,.36,1),filter .4s;
 }
 .fx-card:hover .fx-card-img img{transform:scale(1.09) rotate(-1deg);}
+.fx-card-img.is-swapping img{filter:saturate(1.08) contrast(1.05) brightness(1.02);}
 
 /* emoji fallback (shown when img errors) */
 .fx-card-emoji{
@@ -722,6 +723,38 @@ function fxImgFallback(img,sku){
   }
 }
 
+function fxCardPhotoHover(wrap,sku,on){
+  var img=wrap&&wrap.querySelector('img');
+  if(!img||wrap.classList.contains('img-err'))return;
+  if(on){
+    img.dataset.returnSrc=img.dataset.returnSrc||img.getAttribute('src')||('images/bracelets/'+sku+'.webp');
+    wrap.classList.add('is-swapping');
+    var tries=[
+      'images/bracelets/'+sku+'-1.webp',
+      'images/bracelets/'+sku+'-1.png',
+      'images/bracelets/'+sku+'-1.jpg',
+      'images/bracelets/'+sku+'-1.jpeg'
+    ];
+    var i=0;
+    function tryNext(){
+      if(!wrap.classList.contains('is-swapping'))return;
+      if(i>=tries.length){
+        img.onerror=function(){fxImgFallback(img,sku);};
+        img.src=img.dataset.returnSrc||('images/bracelets/'+sku+'.webp');
+        wrap.classList.remove('is-swapping');
+        return;
+      }
+      img.onerror=function(){i++;tryNext();};
+      img.src=tries[i];
+    }
+    tryNext();
+  }else{
+    wrap.classList.remove('is-swapping');
+    img.onerror=function(){fxImgFallback(img,sku);};
+    img.src=img.dataset.returnSrc||('images/bracelets/'+sku+'.webp');
+  }
+}
+
 /* ═════════════════════════════════════
    BUILD CARD HTML
 ═════════════════════════════════════ */
@@ -738,7 +771,7 @@ function buildCard(p,colorMap,emojiMap){
     '  <div class="fx-card-top-line"></div>',
     isPremium?'  <span class="fx-premium-ribbon">Premium</span>':'',
     '  <span class="fx-badge">'+p.discount+'% OFF</span>',
-    '  <div class="fx-card-img" id="img-wrap-'+p.sku+'">',
+    '  <div class="fx-card-img" id="img-wrap-'+p.sku+'" onmouseenter="fxCardPhotoHover(this,\''+p.sku+'\',true)" onmouseleave="fxCardPhotoHover(this,\''+p.sku+'\',false)">',
     '    <div class="fx-card-glow" style="background:'+glow+'"></div>',
     '    <img src="'+imgSrc+'" alt="'+p.name+'" loading="lazy" decoding="async"',
     '      onerror="fxImgFallback(this,\''+p.sku+'\')" />',

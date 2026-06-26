@@ -4721,7 +4721,7 @@ canvas#sc{background:#050507!important;z-index:0!important;}
 
 <!-- GEMSTONE BRACELET SHOP — embedded self-contained app (bracelet-fusion.html) -->
 <section id="bracelet-shop" aria-label="Veshannastro gemstone bracelet catalog" style="background:#F4EFE6;">
-  <iframe id="fx-bracelet-frame" src="bracelet-fusion.html?v=20260626" title="Gemstone Bracelets — Veshannastro"
+  <iframe id="fx-bracelet-frame" src="bracelet-fusion.html?v=20260626-cartfix" title="Gemstone Bracelets — Veshannastro"
     loading="lazy"
     style="display:block;width:100%;border:0;height:88vh;min-height:600px;background:#F4EFE6;"></iframe>
 </section>
@@ -8568,5 +8568,127 @@ h1,h2,.lsb-title,.vo-title,.section-title,.gp-title,.cd-title{
 }
 </style>
 
+<style id="brand-font-and-clean-grey-receive-fix">
+/* Restore original brand/name typography after the Anton heading pass. */
+.nav-logo{
+  font-family:'Cinzel',serif!important;
+  font-weight:300!important;
+  letter-spacing:.25em!important;
+}
+.hero-title,
+.hero-title em,
+.footer-logo,
+.footer-logo em{
+  font-family:'Vollkorn',serif!important;
+  font-weight:300!important;
+  letter-spacing:.08em!important;
+}
+.hero-title em,
+.footer-logo em{
+  font-style:italic!important;
+}
+.about-text-col .section-title,
+.about-text-col .section-title em{
+  font-family:'Vollkorn',serif!important;
+  font-weight:300!important;
+  letter-spacing:.05em!important;
+}
+.about-text-col .section-title em{
+  font-style:italic!important;
+}
+
+/* What You Receive: clean full-width grey band, no card frame, no dusty overlay. */
+#consultation-deliverables{
+  width:100vw!important;
+  margin-left:calc(50% - 50vw)!important;
+  margin-right:calc(50% - 50vw)!important;
+  background:#3a3c40!important;
+  background-image:none!important;
+  border:0!important;
+  box-shadow:none!important;
+  overflow:hidden!important;
+  isolation:isolate!important;
+}
+#consultation-deliverables::before,
+#consultation-deliverables::after{
+  content:none!important;
+  display:none!important;
+  background:none!important;
+  opacity:0!important;
+}
+#consultation-deliverables > *{
+  position:relative!important;
+  z-index:2!important;
+}
+#consultation-deliverables .cd-panel{
+  width:min(1240px,calc(100% - 3rem))!important;
+  max-width:none!important;
+  margin:0 auto!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  background:transparent!important;
+  background-image:none!important;
+  overflow:visible!important;
+}
+#consultation-deliverables .cd-panel::before,
+#consultation-deliverables .cd-panel::after,
+#consultation-deliverables .cd-left::before,
+#consultation-deliverables .cd-left::after,
+#consultation-deliverables .cd-right::before,
+#consultation-deliverables .cd-right::after{
+  content:none!important;
+  display:none!important;
+}
+#consultation-deliverables .cd-left,
+#consultation-deliverables .cd-right{
+  background:transparent!important;
+  background-image:none!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+#consultation-deliverables .cd-divider{
+  background:linear-gradient(180deg,transparent,rgba(240,208,128,.32) 14%,rgba(240,208,128,.32) 86%,transparent)!important;
+}
+#consultation-deliverables .cd-divider::after{
+  background:#3a3c40!important;
+}
+#consultation-deliverables .cd-footer{
+  background:transparent!important;
+  background-image:none!important;
+  border-top:1px solid rgba(240,224,178,.16)!important;
+  box-shadow:none!important;
+}
+#consultation-deliverables .eyebrow-label,
+#consultation-deliverables .cd-panel-label,
+#consultation-deliverables .cd-step-label,
+#consultation-deliverables .dlv2-idx,
+#consultation-deliverables .dlv2-sub,
+#consultation-deliverables .cd-footer-note,
+#consultation-deliverables .cd-footer-seal{
+  color:rgba(240,208,128,.84)!important;
+}
+#consultation-deliverables .section-title,
+#consultation-deliverables .dlv2-title,
+#consultation-deliverables .cd-step-title{
+  color:#fff8ec!important;
+}
+#consultation-deliverables .section-title em{
+  color:#f0d080!important;
+}
+#consultation-deliverables .section-subtitle,
+#consultation-deliverables .dlv2-desc,
+#consultation-deliverables .cd-step-detail{
+  color:rgba(255,248,236,.76)!important;
+}
+@media(max-width:900px){
+  #consultation-deliverables .cd-panel{
+    width:min(100% - 2rem,760px)!important;
+  }
+  #consultation-deliverables .cd-divider{
+    background:linear-gradient(90deg,transparent,rgba(240,208,128,.32) 14%,rgba(240,208,128,.32) 86%,transparent)!important;
+  }
+}
+</style>
 </body>
 </html>

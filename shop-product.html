@@ -1417,7 +1417,8 @@ function toast(msg){
 }
 
 /* single-configuration cart (matches the one-product-per-page flow) */
-var cartCount=0, cartBusy=false, ccTimer;
+var cartCount=0, cartBusy=false, ccTimer, checkoutFromCart=false, happy10Celebrated=false;
+function selectedQty(){ return (checkoutFromCart && cartCount>0) ? cartCount : qty; }
 function updateCartBadge(pop){
   var b=$("cart-count"); if(!b) return;
   b.textContent=cartCount;
@@ -1442,7 +1443,8 @@ function showCartConfirm(){
   var p=$("cart-confirm"); if(!p) return;
   var nm=$("cc-name"), mt=$("cc-meta"), th=$("cc-thumb");
   if(nm) nm.textContent=product.name;
-  if(mt) mt.textContent=qty+" \u00D7 "+money(product.price)+"  \u00B7  "+money(product.price*qty);
+  var q = cartCount || qty;
+  if(mt) mt.textContent=q+" \u00D7 "+money(product.price)+"  \u00B7  "+money(product.price*q);
   if(th){
     var img=document.querySelector("#main-img, #gallery-main img");
     var src=img && img.getAttribute("src");
@@ -1455,7 +1457,7 @@ function showCartConfirm(){
 function addToCart(){
   if(cartBusy) return;
   var btn=$("cart-btn");
-  if(!btn){ cartCount+=qty; updateCartBadge(true); return; }
+  if(!btn){ commitCartAdd(); return; }
   cartBusy=true;
   btn.classList.remove("is-done");
   btn.classList.add("is-loading");
@@ -1463,8 +1465,7 @@ function addToCart(){
   setTimeout(function(){
     btn.classList.remove("is-loading");
     btn.classList.add("is-done");
-    cartCount+=qty;
-    updateCartBadge(true);
+    commitCartAdd();
     showCartConfirm();
   }, 760);
   setTimeout(function(){
@@ -1472,7 +1473,77 @@ function addToCart(){
     cartBusy=false;
   }, 1950);
 }
+function commitCartAdd(){
+  var before = cartCount;
+  cartCount += qty;
+  qty = Math.min(10, Math.max(1, cartCount));
+  updateCartBadge(true);
+  checkoutFromCart = false;
+  if(cartCount >= 2 && coupon !== "HAPPY10"){
+    coupon = "HAPPY10";
+    var ci = $("coupon-input"); if(ci) ci.value = "HAPPY10";
+    showMakeTwo(false);
+    setCouponMsg("HAPPY10 applied automatically — 10% off unlocked on 2 bracelets.", "ok");
+    if(before < 2 && !happy10Celebrated){
+      happy10Celebrated = true;
+      setTimeout(showHappy10Celebrate, 320);
+    }
+  }
+  renderTotals();
+}
 
+function ensureHappy10Celebrate(){
+  if($("shop-happy10-celebrate")) return;
+  document.body.insertAdjacentHTML("beforeend", [
+    '<div class="shop-happy10-celebrate" id="shop-happy10-celebrate" aria-hidden="true">',
+    '  <div class="shop-happy10-card">',
+    '    <button type="button" class="shop-happy10-close" onclick="hideHappy10Celebrate()" aria-label="Close">x</button>',
+    '    <div class="shop-happy10-confetti" id="shop-happy10-confetti"></div>',
+    '    <div class="shop-happy10-gift" aria-hidden="true">',
+    '      <span class="shop-gift-lid"></span>',
+    '      <span class="shop-gift-box"></span>',
+    '      <span class="shop-gift-bow"></span>',
+    '    </div>',
+    '    <p class="shop-happy10-kicker">Two-bracelet ritual unlocked</p>',
+    '    <h3>HAPPY10 applied</h3>',
+    '    <p class="shop-happy10-copy">Your cart now has 2 bracelets, so 10% off has been added automatically.</p>',
+    '    <button type="button" class="shop-happy10-action" onclick="hideHappy10Celebrate();openCartCheckout();">Checkout with offer</button>',
+    '  </div>',
+    '</div>'
+  ].join(""));
+}
+function shopHappy10Confetti(){
+  var c=$("shop-happy10-confetti"); if(!c) return;
+  if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var colors=["#c9a24a","#6E1423","#4f9e6a","#e08aa0","#2b4a8c","#F4DD9B"];
+  for(var i=0;i<34;i++){
+    var p=document.createElement("span");
+    p.className="shop-conf-piece";
+    p.style.left=(50+(Math.random()*70-35))+"%";
+    p.style.background=colors[i%colors.length];
+    p.style.setProperty("--dx",(Math.random()*250-125)+"px");
+    p.style.setProperty("--dy",(-130-Math.random()*180)+"px");
+    p.style.setProperty("--rot",(Math.random()*760-380)+"deg");
+    p.style.animationDelay=(Math.random()*0.16)+"s";
+    c.appendChild(p);
+    (function(el){ setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); },1800); })(p);
+  }
+}
+function showHappy10Celebrate(){
+  ensureHappy10Celebrate();
+  var ov=$("shop-happy10-celebrate"); if(!ov) return;
+  ov.classList.remove("opened","reward");
+  ov.classList.add("show");
+  ov.setAttribute("aria-hidden","false");
+  shopHappy10Confetti();
+  setTimeout(function(){ ov.classList.add("opened"); shopHappy10Confetti(); },620);
+  setTimeout(function(){ ov.classList.add("reward"); },1350);
+}
+function hideHappy10Celebrate(){
+  var ov=$("shop-happy10-celebrate"); if(!ov) return;
+  ov.classList.remove("show","opened","reward");
+  ov.setAttribute("aria-hidden","true");
+}
 /* delivery estimate from pincode — dispatch 1–2 working days + regional transit */
 function fmtDate(d){ return d.toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"}); }
 function addDays(base,n){ var d=new Date(base); d.setDate(d.getDate()+n); return d; }
@@ -1581,14 +1652,15 @@ function braceletPlaceholderDataUrl(label, color, variant){
 }
 
 /* Is the currently-applied coupon valid right now? Returns {discount, lapse?} */
-function couponState(){
+function couponState(qtyForCheck){
   if(!coupon || !COUPONS[coupon]) return { discount:0 };
   var c = COUPONS[coupon];
-  if(c.minQty && qty < c.minQty)
+  var q = qtyForCheck || selectedQty();
+  if(c.minQty && q < c.minQty)
     return { discount:0, lapse:"HAPPY10 needs " + c.minQty + " bands — add one more to keep 10% off." };
   if(c.requiresRec && !recUnlocked)
     return { discount:0, lapse:"NEW15 unlocks after a free AI recommendation." };
-  var base = product.price * qty;
+  var base = product.price * q;
   var d = c.flat ? Math.min(c.flat, base) : Math.round(base * c.percent / 100);
   return { discount: d };
 }
@@ -1597,7 +1669,7 @@ function couponLabel(code){
   return c.flat ? ("₹" + c.flat + " off") : (c.percent + "% off");
 }
 function discount(){ return couponState().discount; }
-function total(){ return Math.max(0, product.price*qty - discount()); }
+function total(){ var q=selectedQty(); return Math.max(0, product.price*q - couponState(q).discount); }
 
 /* ---------- init ---------- */
 /* ════════ RICH PRODUCT CONTENT (accordions + premium sections) ════════ */
@@ -2166,8 +2238,9 @@ function showRecButton(show){
 }
 
 function renderSummary(){
+  var q = selectedQty();
   var lines = [
-    '<div class="co-sum-line"><span>'+esc(product.name)+' × '+qty+'</span><strong>'+money(product.price*qty)+'</strong></div>'
+    '<div class="co-sum-line"><span>'+esc(product.name)+' × '+q+'</span><strong>'+money(product.price*q)+'</strong></div>'
   ];
   if(discount() > 0) lines.push('<div class="co-sum-line"><span>Coupon ('+coupon+')</span><strong>− '+money(discount())+'</strong></div>');
   lines.push('<div class="co-sum-line"><span>Shipping</span><strong>Free</strong></div>');
@@ -2217,6 +2290,19 @@ function showMakeTwo(show){
 
 /* ---------- checkout ---------- */
 function openCheckout(){
+  checkoutFromCart = false;
+  renderSummary();
+  $("co-body").style.display = "grid";
+  $("co-success").classList.remove("show");
+  $("co-modal").classList.add("open");
+  $("co-modal").setAttribute("aria-hidden","false");
+}
+function openCartCheckout(){
+  if(cartCount>0){
+    checkoutFromCart = true;
+    qty = Math.min(10, Math.max(1, cartCount));
+    renderTotals();
+  }
   renderSummary();
   $("co-body").style.display = "grid";
   $("co-success").classList.remove("show");
@@ -2224,8 +2310,10 @@ function openCheckout(){
   $("co-modal").setAttribute("aria-hidden","false");
 }
 function closeCheckout(){
+  checkoutFromCart = false;
   $("co-modal").classList.remove("open");
   $("co-modal").setAttribute("aria-hidden","true");
+  renderTotals();
 }
 
 function val(id){ var el=$(id); return el?String(el.value||"").trim():""; }
@@ -2251,17 +2339,18 @@ function validate(){
 }
 
 function buildOrder(c, paymentId, status){
+  var q = selectedQty();
   return {
     timestamp:new Date().toLocaleString("en-IN",{timeZone:"Asia/Kolkata"}),
     order_id:"VA-BR-"+Date.now(),
     category:"Product Store", source:"Product Page Checkout",
     payment_status:status, payment_id:paymentId||"", payment_method:"Razorpay prepaid",
     currency:"INR", customer:c,
-    items:[{ sku:sku, name:product.name, product_type:"Bracelet", quantity:qty,
-      option:"Free size", unit_price:product.price, line_total:product.price*qty,
+    items:[{ sku:sku, name:product.name, product_type:"Bracelet", quantity:q,
+      option:"Free size", unit_price:product.price, line_total:product.price*q,
       gemstones:product.gemstones, benefits:product.benefits }],
-    item_summary:product.name+" × "+qty+" (Free size)",
-    subtotal:product.price*qty, coupon:coupon||"", discount:discount(), total:total(),
+    item_summary:product.name+" x "+q+" (Free size)",
+    subtotal:product.price*q, coupon:coupon||"", discount:couponState(q).discount, total:total(),
     shipping_country:"India"
   };
 }
@@ -2300,9 +2389,9 @@ function payNow(){
       body: JSON.stringify({
         amount: total(),            // rupees; backend re-checks this when the price guard is on
         order_id: dynOrder.order_id,
-        description: product.name + " × " + qty,
+        description: product.name + " x " + selectedQty(),
         customer: { name:c.name, email:c.email, contact:"+91"+c.phone },
-        notes: { sku:sku, qty:String(qty), coupon:coupon||"" },
+        notes: { sku:sku, qty:String(selectedQty()), coupon:coupon||"" },
         callback_url: CONFIG.thankYouUrl
       })
     })
@@ -2328,7 +2417,7 @@ function payNow(){
   // A fixed payment link only fits the one case it was created for:
   // a single band at full price, no coupon. Everything else is a variable
   // amount and goes through Checkout.
-  var wantedLink = (qty === 1 && !coupon) ? (CONFIG.paymentLinks[sku] || "") : "";
+  var wantedLink = (selectedQty() === 1 && !coupon) ? (CONFIG.paymentLinks[sku] || "") : "";
   var hasRealLink = wantedLink && wantedLink.indexOf("REPLACE") === -1;
 
   /* ── PRIMARY PATH: Razorpay Payment Link (fixed amount, qty 1) ── */
@@ -2363,9 +2452,9 @@ function payNow(){
   try{
     var rzp = new Razorpay({
       key:CONFIG.razorpayKey, amount:total()*100, currency:CONFIG.currency,
-      name:CONFIG.brand, description:product.name+" × "+qty,
+      name:CONFIG.brand, description:product.name+" x "+selectedQty(),
       prefill:{ name:c.name, email:c.email, contact:"+91"+c.phone },
-      notes:{ category:"Gemstone Bracelet", sku:sku, coupon:coupon||"", qty:String(qty) },
+      notes:{ category:"Gemstone Bracelet", sku:sku, coupon:coupon||"", qty:String(selectedQty()) },
       theme:{ color:"#6E1423" },
       modal:{ ondismiss:function(){ btn.disabled=false; renderSummary(); } },
       handler:function(resp){
@@ -2412,11 +2501,11 @@ function bind(){
   $("buy-btn").addEventListener("click", openCheckout);
   var sbb = $("sb-buy"); if(sbb) sbb.addEventListener("click", openCheckout);
   var cb = $("cart-btn"); if(cb) cb.addEventListener("click", addToCart);
-  var ccc = $("cc-checkout"); if(ccc) ccc.addEventListener("click", function(){ var p=$("cart-confirm"); if(p) p.classList.remove("show"); openCheckout(); });
+  var ccc = $("cc-checkout"); if(ccc) ccc.addEventListener("click", function(){ var p=$("cart-confirm"); if(p) p.classList.remove("show"); openCartCheckout(); });
   var cck = $("cc-continue"); if(cck) cck.addEventListener("click", function(){ var p=$("cart-confirm"); if(p) p.classList.remove("show"); });
   var ccp = $("cart-confirm"); if(ccp){ ccp.addEventListener("mouseenter", function(){ clearTimeout(ccTimer); }); ccp.addEventListener("mouseleave", function(){ clearTimeout(ccTimer); ccTimer=setTimeout(function(){ ccp.classList.remove("show"); }, 2500); }); }
   var ab = $("ai-btn"); if(ab) ab.addEventListener("click", function(){ window.location.href = CONFIG.recommendationUrl; });
-  var nc = $("nav-cart"); if(nc) nc.addEventListener("click", function(e){ if(cartCount>0){ e.preventDefault(); openCheckout(); } });
+  var nc = $("nav-cart"); if(nc) nc.addEventListener("click", function(e){ if(cartCount>0){ e.preventDefault(); openCartCheckout(); } });
   var pc = $("pin-check"); if(pc) pc.addEventListener("click", estimateDelivery);
   var pin = $("pin-input");
   if(pin){
@@ -2783,6 +2872,37 @@ h1 em,h2 em,h3 em,h4 em,.wv-title em,.rj-copy h2 em,.section h2 em{
 @media(max-width:920px){.va-stage{grid-template-columns:1fr}.va-orb{min-height:270px}.va-benefits{grid-template-columns:1fr 1fr!important}.va-proof{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:620px){.va-retain{padding:3.6rem 1rem!important}.va-benefits{grid-template-columns:1fr!important}.va-proof{grid-template-columns:1fr 1fr}.va-proof strong{font-size:1.7rem}.va-card{min-height:0!important}.va-compare-head,.va-row{grid-template-columns:1fr}.va-compare-head strong,.va-row b{border-left:0;border-top:1px solid rgba(230,200,120,.12)}.va-orb{min-height:230px}.va-orb span{width:126px;height:126px}}
 @media(prefers-reduced-motion:reduce){.va-retain::before,.va-proof div,.va-proof div::after,.va-orb span,.va-orb i,.va-row::before{animation:none!important}.va-card,.va-card::before{transition:none!important}}
+</style>
+<style id="shop-happy10-cart-fixes">
+#rel-grid .rel-name{color:#15100c!important;text-shadow:none!important;}
+#rel-grid .rel-card:hover .rel-name{color:#000!important;}
+.shop-happy10-celebrate{position:fixed;inset:0;z-index:12000;display:none;align-items:center;justify-content:center;padding:1.2rem;background:rgba(16,7,10,.58);backdrop-filter:blur(10px);}
+.shop-happy10-celebrate.show{display:flex;}
+.shop-happy10-card{position:relative;width:min(430px,94vw);min-height:430px;border-radius:28px;padding:2rem 1.4rem 1.5rem;text-align:center;color:#fff7e6;overflow:hidden;border:1px solid rgba(244,221,155,.42);background:radial-gradient(circle at 50% 16%,rgba(244,221,155,.24),transparent 34%),linear-gradient(145deg,#19080d,#4f101d 54%,#100b12);box-shadow:0 36px 100px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.22);transform:translateY(12px) scale(.96);opacity:0;animation:shopCelebrateIn .36s cubic-bezier(.2,.9,.2,1) forwards;}
+.shop-happy10-card::before{content:"";position:absolute;inset:-45%;background:conic-gradient(from 180deg,transparent,rgba(244,221,155,.22),transparent,rgba(79,158,106,.2),transparent);animation:shopCelebrateSpin 7s linear infinite;}
+.shop-happy10-card>*{position:relative;z-index:2;}
+.shop-happy10-close{position:absolute;right:14px;top:12px;z-index:4;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.34);background:rgba(255,255,255,.12);color:#fff;font-weight:900;cursor:pointer;}
+.shop-happy10-gift{position:relative;width:154px;height:146px;margin:.55rem auto 1rem;filter:drop-shadow(0 20px 25px rgba(0,0,0,.28));}
+.shop-gift-box,.shop-gift-lid{position:absolute;left:50%;transform:translateX(-50%);border-radius:12px;background:linear-gradient(135deg,#f6d66f,#c28726);box-shadow:inset 0 2px 0 rgba(255,255,255,.34);}
+.shop-gift-box{bottom:0;width:122px;height:92px;}
+.shop-gift-lid{bottom:86px;width:142px;height:38px;transform-origin:18% 100%;transition:transform .55s cubic-bezier(.2,1.2,.2,1),bottom .55s;}
+.shop-gift-box::before,.shop-gift-lid::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:22px;transform:translateX(-50%);background:linear-gradient(#7a1422,#b91f36);}
+.shop-gift-box::after{content:"";position:absolute;left:0;right:0;top:34px;height:20px;background:linear-gradient(90deg,#7a1422,#b91f36,#7a1422);}
+.shop-gift-bow{position:absolute;left:50%;bottom:122px;width:78px;height:36px;transform:translateX(-50%);}
+.shop-gift-bow::before,.shop-gift-bow::after{content:"";position:absolute;width:38px;height:32px;border:10px solid #b91f36;border-radius:50% 50% 8px 50%;background:rgba(255,255,255,.12);}
+.shop-gift-bow::before{left:0;transform:rotate(-28deg);}.shop-gift-bow::after{right:0;transform:scaleX(-1) rotate(-28deg);}
+.shop-happy10-celebrate.opened .shop-gift-lid{bottom:112px;transform:translateX(-50%) rotate(-18deg);}
+.shop-happy10-kicker{margin:0 0 .45rem;font-family:"Jost",sans-serif;font-size:.72rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:#f4dd9b;}
+.shop-happy10-card h3{margin:0;font-family:"Anton",sans-serif!important;font-size:clamp(2.1rem,8vw,3.35rem);font-weight:400;letter-spacing:0;color:#fff;}
+.shop-happy10-copy{max-width:320px;margin:.7rem auto 1.2rem;font-family:"Jost",sans-serif;font-weight:700;line-height:1.5;color:rgba(255,248,232,.84);}
+.shop-happy10-action{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:999px;padding:.9rem 1.2rem;background:linear-gradient(135deg,#f4dd9b,#c9973d);color:#2a1408;font-family:"Jost",sans-serif;font-weight:900;cursor:pointer;box-shadow:0 16px 34px rgba(0,0,0,.24);}
+.shop-happy10-confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:3;}
+.shop-conf-piece{position:absolute;top:51%;width:9px;height:15px;border-radius:3px;opacity:0;animation:shopConfettiFly 1.4s cubic-bezier(.15,.75,.2,1) forwards;}
+.shop-happy10-celebrate.reward .shop-happy10-card{box-shadow:0 40px 115px rgba(0,0,0,.48),0 0 38px rgba(244,221,155,.22),inset 0 1px 0 rgba(255,255,255,.24);}
+@keyframes shopCelebrateIn{to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes shopCelebrateSpin{to{transform:rotate(360deg)}}
+@keyframes shopConfettiFly{0%{opacity:0;transform:translate(-50%,0) scale(.5) rotate(0)}12%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),var(--dy)) rotate(var(--rot)) scale(1)}}
+@media(prefers-reduced-motion:reduce){.shop-happy10-card,.shop-happy10-card::before,.shop-conf-piece{animation:none!important}.shop-happy10-card{opacity:1;transform:none}.shop-happy10-card::before{display:none}}
 </style>
 </body>
 </html>
