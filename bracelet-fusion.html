@@ -705,6 +705,24 @@ var DATA={
 function money(n){return'Rs. '+Number(n||0).toLocaleString('en-IN');}
 
 /* ═════════════════════════════════════
+   IMAGE FALLBACK CHAIN: webp → jpg → jpeg → png
+   If none load, shows the stone emoji instead
+═════════════════════════════════════ */
+var FX_IMG_EXTS=['webp','jpg','jpeg','png'];
+function fxImgFallback(img,sku){
+  var cur=img.src.split('.').pop().toLowerCase().split('?')[0];
+  var idx=FX_IMG_EXTS.indexOf(cur)+1;
+  if(idx>0&&idx<FX_IMG_EXTS.length){
+    img.onerror=function(){fxImgFallback(img,sku);};
+    img.src='images/bracelets/'+sku+'.'+FX_IMG_EXTS[idx];
+  }else{
+    img.onerror=null;
+    var wrap=img.closest('.fx-card-img');
+    if(wrap)wrap.classList.add('img-err');
+  }
+}
+
+/* ═════════════════════════════════════
    BUILD CARD HTML
 ═════════════════════════════════════ */
 function buildCard(p,colorMap,emojiMap){
@@ -723,7 +741,7 @@ function buildCard(p,colorMap,emojiMap){
     '  <div class="fx-card-img" id="img-wrap-'+p.sku+'">',
     '    <div class="fx-card-glow" style="background:'+glow+'"></div>',
     '    <img src="'+imgSrc+'" alt="'+p.name+'" loading="lazy" decoding="async"',
-    '      onerror="this.closest(\'.fx-card-img\').classList.add(\'img-err\')" />',
+    '      onerror="fxImgFallback(this,\''+p.sku+'\')" />',
     '    <div class="fx-card-emoji">'+emoji+'</div>',
     '  </div>',
     '  <div class="fx-card-body">',
