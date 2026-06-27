@@ -66,14 +66,25 @@
   @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
 
   /* ── announcement bar — refined, gold hairline ── */
-  .announce{background:linear-gradient(90deg,#160a0d,#3d0a11 50%,#160a0d);color:#f3e3c8;
+  :root{--announce-h:36px;}
+  .announce{height:var(--announce-h);background:linear-gradient(90deg,#160a0d,#3d0a11 50%,#160a0d);color:#f3e3c8;
     font-family:var(--body-ui);font-size:.72rem;font-weight:500;letter-spacing:.06em;
-    text-align:center;padding:.62rem 1rem;display:flex;gap:2rem;align-items:center;justify-content:center;flex-wrap:wrap;
-    border-bottom:1px solid var(--line-gold);position:relative;}
+    text-align:center;padding:0 1rem;display:flex;align-items:center;justify-content:center;overflow:hidden;
+    border-bottom:1px solid var(--line-gold);position:sticky;top:0;z-index:9200;box-shadow:0 8px 22px rgba(22,10,13,.16);}
+  .announce span{position:absolute;left:50%;top:50%;width:min(92vw,680px);opacity:0;transform:translate(-50%,18px);
+    white-space:nowrap;animation:announceRotate 9s ease-in-out infinite;}
+  .announce span:nth-child(1){animation-delay:0s}
+  .announce span:nth-child(2){animation-delay:3s}
+  .announce span:nth-child(3){animation-delay:6s}
   .announce b{color:var(--gold-lt);font-weight:600}
+  @keyframes announceRotate{
+    0%{opacity:0;transform:translate(-50%,18px)}
+    7%,28%{opacity:1;transform:translate(-50%,-50%)}
+    35%,100%{opacity:0;transform:translate(-50%,-118%)}
+  }
 
   /* ── nav — glass + gold underline ── */
-  #site-nav{position:sticky;top:0;z-index:9000;display:flex;align-items:center;justify-content:space-between;
+  #site-nav{position:sticky;top:var(--announce-h);z-index:9000;display:flex;align-items:center;justify-content:space-between;
     padding:0 2.2rem;height:64px;background:rgba(244,237,224,.82);border-bottom:1px solid var(--line-gold);
     backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);}
   .nav-logo{font-family:var(--serif);font-weight:600;font-size:1.18rem;letter-spacing:.04em;color:var(--maroon);text-decoration:none;}
@@ -90,7 +101,8 @@
     border:1px solid transparent;transition:background .3s,box-shadow .3s;}
   .nav-cart::after{display:none}
   .nav-cart:hover{background:var(--maroon2)!important;box-shadow:0 8px 22px rgba(94,17,25,.3)}
-  @media(max-width:760px){.nav-links li:not(.nav-cart-li){display:none}#site-nav{padding:0 1.1rem;height:58px}}
+  @media(max-width:760px){:root{--announce-h:34px}.announce{font-size:.66rem}.announce span{width:94vw}.nav-links li:not(.nav-cart-li){display:none}#site-nav{padding:0 1.1rem;height:58px}}
+  @media(prefers-reduced-motion:reduce){.announce span{animation:none;opacity:0;transform:translate(-50%,-50%)}.announce span:first-child{opacity:1}}
 
   /* ── breadcrumb ── */
   .breadcrumb{max-width:1200px;margin:0 auto;padding:1.3rem 1.5rem .2rem;font-family:var(--body-ui);font-size:.74rem;font-weight:400;color:var(--ink3);letter-spacing:.02em;}
@@ -139,6 +151,7 @@
   .rating{display:flex;align-items:center;gap:.55rem;font-family:var(--body-ui);font-size:.82rem;color:var(--ink2);margin-bottom:1rem}
   .stars{color:var(--gold);letter-spacing:.1em;font-size:1rem}
   .rating a{color:var(--ink2);text-decoration:underline;text-underline-offset:3px;font-weight:400}
+  .p-kit-line{font-family:var(--body-ui);font-size:1rem;line-height:1.45;color:var(--maroon);font-weight:700;margin:-.15rem 0 .62rem;}
 
   .price-row{display:flex;align-items:baseline;gap:.8rem;flex-wrap:wrap;margin:.2rem 0 .1rem}
   .price-now{font-family:var(--serif);font-weight:600;font-size:2.9rem;color:var(--maroon);line-height:1;letter-spacing:-.01em}
@@ -732,7 +745,7 @@
 <div class="announce">
   <span>🚚 <b>Free delivery</b> across India</span>
   <span>🔒 Secure prepaid via <b>Razorpay</b></span>
-  <span>🎁 Founders Kit: <b>Maaya note + 21-day guide</b></span>
+  <span>🎁 Maaya First Circle: <b>Maaya note + 21-day guide</b></span>
 </div>
 
 <nav id="site-nav">
@@ -771,6 +784,7 @@
   <div class="buybox">
     <span class="eyebrow" id="p-eyebrow">Energy Gemstone · Veshannastro</span>
     <h1 id="p-name">Gemstone Band</h1>
+    <p class="p-kit-line" id="p-kit-line">Maaya Kundli-to-Wrist Kit</p>
     <div class="rating">
       <span class="stars" id="p-stars">★★★★★</span>
       <span class="rating-num" id="p-rating-num">4.8</span>
@@ -784,7 +798,7 @@
           <span class="mp-kicker">Maaya Bracelet Prescription</span>
           <strong>Kundli-to-Wrist Kit, prepared around your current intention.</strong>
         </div>
-        <span class="mp-pill">Founders Batch</span>
+        <span class="mp-pill">Maaya First Circle</span>
       </div>
       <div class="mp-list">
         <span>Personalized Maaya note</span>
@@ -833,10 +847,10 @@
       <div class="urgency-block">
         <div class="urgency-stock">
           <span class="urgency-dot" aria-hidden="true"></span>
-          <span>Only <strong>25 founders kits</strong> left with free Maaya guidance in this batch</span>
+          <span>Only <strong>25 Maaya First Circle kits</strong> left with free Maaya guidance in this circle</span>
         </div>
         <div class="urgency-power">
-          Founders batch includes <em>bracelet, ritual, mantra and 21-day guidance</em> at the launch price.
+          Maaya First Circle includes <em>bracelet, ritual, mantra and 21-day guidance</em> at the launch price.
         </div>
         <div class="urgency-timer">
           <span class="timer-label">⚡ Launch offer ends in</span>
@@ -940,7 +954,7 @@
     <div class="rj-copy">
       <span class="rj-kicker">After You Order</span>
       <h2>Your bracelet does not arrive alone. <em>Maaya stays with it.</em></h2>
-      <p>Every founders kit is built as a guided ritual: one bracelet, one intention, one clear way to wear it, and gentle check-ins that keep the remedy meaningful after delivery.</p>
+      <p>Every Maaya First Circle kit is built as a guided ritual: one bracelet, one intention, one clear way to wear it, and gentle check-ins that keep the remedy meaningful after delivery.</p>
     </div>
     <div class="rj-ladder" aria-label="Journey steps">
       <div class="rj-step"><b>01</b><strong>Maaya Match</strong><span>Your concern and energy theme guide the bracelet suggestion.</span></div>
@@ -1356,24 +1370,24 @@ var PRODUCTS = {
 };
 
 var PRODUCT_STRATEGY = {
-  "VA-BR-TP-001": { name:"Daily Nazar Shield Kit", kit:"Best Seller protection kit", who:"Best for people who feel drained, exposed or surrounded by heavy energy.", benefits:"Nazar shield, grounding and daily protection", description:"A Maaya-selected protection kit for daily nazar shielding, grounding and energetic boundaries." },
-  "VA-BR-AM-002": { name:"Student Focus & Sleep Calm Kit", kit:"Study-desk ritual kit", who:"Best for students, aspirants, creators and overthinkers.", benefits:"Focus, sleep calm, stress relief and intuition", description:"A guided Amethyst kit for sharper study energy, calmer sleep and overthinking relief." },
-  "VA-BR-CQ-003": { name:"Energy Amplifier Bracelet", kit:"Starter amplifier kit", who:"Best for first-time buyers and anyone pairing two bracelets.", benefits:"Amplifies intention, clarity and focus", description:"A clear starter bracelet that amplifies your intention and pairs cleanly with any other Maaya kit." },
-  "VA-BR-BT-004": { name:"Digital + Nazar Protection Bracelet", kit:"Screen-worker protection kit", who:"Best for online workers, travellers and people meeting many people.", benefits:"Protection, grounding and energy boundaries", description:"A Black Tourmaline kit for digital fatigue, daily nazar protection and energetic exhaustion." },
-  "VA-BR-CT-005": { name:"Client Magnet / Money Confidence Kit", kit:"Thursday abundance kit", who:"Best for freelancers, shop owners, salespeople and founders.", benefits:"Money confidence, clients and abundance mindset", description:"A Citrine ritual kit for client confidence, abundance thinking and business-facing courage." },
-  "VA-BR-YA-006": { name:"Confidence & Decision-Making Bracelet", kit:"Solar confidence kit", who:"Best for interviews, students, creators and young professionals.", benefits:"Confidence, optimism, willpower and decisions", description:"A Yellow Aventurine kit for decision-making, interviews and solar confidence." },
-  "VA-BR-RJ-007": { name:"Action & Courage Bracelet", kit:"Action starter kit", who:"Best for people delaying action, gym-goers and entrepreneurs.", benefits:"Strength, stamina, courage and discipline", description:"A Red Jasper kit for action, stamina and grounded courage when you need to move." },
-  "VA-BR-TE-008": { name:"Career Confidence Bracelet", kit:"Meeting and interview ritual kit", who:"Best for interviews, business decisions and public dealing.", benefits:"Confidence, focus, courage and practical success", description:"A Tiger Eye kit for interviews, meetings, business decisions and confident action." },
-  "VA-BR-RQ-009": { name:"Heart Healing & Self-Love Bracelet", kit:"Heart softness kit", who:"Best for heartbreak, self-worth and relationship harmony.", benefits:"Heart healing, self-love and emotional softness", description:"A Rose Quartz kit for heart healing, self-worth and softer relationship energy." },
-  "VA-BR-GA-010": { name:"Opportunity & Growth Bracelet", kit:"Breakthrough support kit", who:"Best for job seekers, new business starters and fresh openings.", benefits:"Opportunity, growth and heart-led progress", description:"A Green Aventurine kit for opportunity, growth and a fresh breakthrough mindset." },
-  "VA-BR-LL-011": { name:"Communication & Inner Truth Bracelet", kit:"Speak clearly kit", who:"Best for speakers, teachers, creators and students.", benefits:"Communication, wisdom, truth and self-expression", description:"A Lapis Lazuli kit for speaking clearly, teaching, presenting and inner truth." },
-  "VA-BR-MN-012": { name:"Moon Calm & New Beginning Bracelet", kit:"Emotional reset kit", who:"Best for new phases, emotional transitions and inner rhythm.", benefits:"Emotional balance, intuition and soothing calm", description:"A Moonstone kit for calm, emotional transition and gentle new beginnings." },
-  "VA-BR-WM-015": { name:"Moon Calm & New Beginning Bracelet", kit:"Premium feminine calm kit", who:"Best for women, transitions, peace and emotional rhythm.", benefits:"Emotional balance, intuition, calm and feminine energy", description:"A premium Moonstone kit for peace, inner rhythm and emotional steadiness." },
-  "VA-BR-7C-013": { name:"Complete Energy Reset Bracelet", kit:"7-day chakra guide kit", who:"Best for beginners who want one full-spectrum starter bracelet.", benefits:"Chakra balance, energy alignment and overall wellness", description:"A complete starter bracelet with a 7-day chakra reset path, one chakra per day." },
-  "VA-BR-IO-014": { name:"Intuition & Inner Direction Bracelet", kit:"Saturn support ritual kit", who:"Best for discipline, direction and deeper intuition.", benefits:"Intuition, vision, inner guidance and Saturn support", description:"An Iolite kit for inner direction, discipline and Saturn-style focus." },
-  "VA-BR-LK-016": { name:"Kundli-to-Wrist Money Flow Kit", kit:"Premium dhan yog kit", who:"Best for business growth, clients and steady money confidence.", benefits:"Wealth, abundance, money flow and opportunity", description:"A premium Maaya-style money flow kit built around Citrine, Pyrite and Green Aventurine." },
-  "VA-BR-RE-017": { name:"Love Healing Ritual Pair Kit", kit:"Premium heart harmony kit", who:"Best for emotional repair, self-worth and warm connection.", benefits:"Love, attraction, self-worth and relationship harmony", description:"A premium heart kit for self-worth, relationship harmony and emotional softness." },
-  "VA-BR-PY-018": { name:"Money Confidence Pyrite Bracelet", kit:"Bold abundance kit", who:"Best for founders, salespeople and confident action.", benefits:"Wealth, willpower, confidence and protection", description:"A Pyrite kit for bold money confidence, action and business-facing willpower." }
+  "VA-BR-TP-001": { name:"Triple Protection Bracelet", kit:"Maaya Kundli-to-Wrist Nazar & Energy Shield Kit", who:"For: grounding, protection, heavy energy and daily emotional stability.", benefits:"Nazar shield, grounding and daily protection", description:"A Maaya-selected protection kit built around Triple Protection Bracelet for daily nazar shielding, grounding and energetic boundaries." },
+  "VA-BR-AM-002": { name:"Amethyst Bracelet", kit:"Maaya Kundli-to-Wrist Calm Mind & Focus Kit", who:"For: students, overthinkers, sleep balance and mental clarity.", benefits:"Focus, sleep calm, stress relief and intuition", description:"A guided Amethyst Bracelet kit for sharper study energy, calmer sleep and overthinking relief." },
+  "VA-BR-CQ-003": { name:"Clear Quartz Bracelet", kit:"Maaya Kundli-to-Wrist Clarity Amplifier Kit", who:"For: clarity, focus, energy cleansing and intention amplification.", benefits:"Amplifies intention, clarity and focus", description:"A Clear Quartz Bracelet kit that amplifies your intention and pairs cleanly with any other Maaya remedy." },
+  "VA-BR-BT-004": { name:"Black Tourmaline Bracelet", kit:"Maaya Kundli-to-Wrist Nazar & Energy Shield Kit", who:"For: protection, grounding, digital fatigue and heavy energy.", benefits:"Protection, grounding and energy boundaries", description:"A Black Tourmaline Bracelet kit for digital fatigue, daily nazar protection and energetic exhaustion." },
+  "VA-BR-CT-005": { name:"Citrine Natural Bracelet", kit:"Maaya Kundli-to-Wrist Money Confidence Kit", who:"For: wealth flow, client attraction, business growth and money confidence.", benefits:"Money confidence, clients and abundance mindset", description:"A Citrine Natural Bracelet kit for client confidence, abundance thinking and business-facing courage." },
+  "VA-BR-YA-006": { name:"Yellow Aventurine Bracelet", kit:"Maaya Kundli-to-Wrist Confidence & Decision Kit", who:"For: interviews, decision-making, willpower and positive action.", benefits:"Confidence, optimism, willpower and decisions", description:"A Yellow Aventurine Bracelet kit for decision-making, interviews and solar confidence." },
+  "VA-BR-RJ-007": { name:"Red Jasper Bracelet", kit:"Maaya Kundli-to-Wrist Action & Courage Kit", who:"For: stamina, discipline, courage and starting what you delay.", benefits:"Strength, stamina, courage and discipline", description:"A Red Jasper Bracelet kit for action, stamina and grounded courage when you need to move." },
+  "VA-BR-TE-008": { name:"Tiger Eye Bracelet", kit:"Maaya Kundli-to-Wrist Career Confidence Kit", who:"For: courage, decisions, interviews, business confidence and action energy.", benefits:"Confidence, focus, courage and practical success", description:"A Tiger Eye Bracelet kit for interviews, meetings, business decisions and confident action." },
+  "VA-BR-RQ-009": { name:"Rose Quartz Bracelet", kit:"Maaya Kundli-to-Wrist Heart Healing & Self-Love Kit", who:"For: emotional healing, relationship softness and self-worth.", benefits:"Heart healing, self-love and emotional softness", description:"A Rose Quartz Bracelet kit for heart healing, self-worth and softer relationship energy." },
+  "VA-BR-GA-010": { name:"Green Aventurine Bracelet", kit:"Maaya Kundli-to-Wrist Opportunity & Growth Kit", who:"For: opportunity flow, luck, job openings and heart-led growth.", benefits:"Opportunity, growth and heart-led progress", description:"A Green Aventurine Bracelet kit for opportunity, growth and a fresh breakthrough mindset." },
+  "VA-BR-LL-011": { name:"Lapis Lazuli Bracelet", kit:"Maaya Kundli-to-Wrist Communication & Truth Kit", who:"For: speaking clearly, study, teaching, wisdom and self-expression.", benefits:"Communication, wisdom, truth and self-expression", description:"A Lapis Lazuli Bracelet kit for speaking clearly, teaching, presenting and inner truth." },
+  "VA-BR-MN-012": { name:"Peach Moonstone Bracelet", kit:"Maaya Kundli-to-Wrist Emotional Reset Kit", who:"For: new beginnings, emotional balance, intuition and inner softness.", benefits:"Emotional balance, intuition and soothing calm", description:"A Peach Moonstone Bracelet kit for calm, emotional transition and gentle new beginnings." },
+  "VA-BR-WM-015": { name:"White Moonstone Bracelet", kit:"Maaya Kundli-to-Wrist Moon Calm & Balance Kit", who:"For: emotional rhythm, intuition, calm and feminine balance.", benefits:"Emotional balance, intuition, calm and feminine energy", description:"A premium White Moonstone Bracelet kit for peace, inner rhythm and emotional steadiness." },
+  "VA-BR-7C-013": { name:"7 Chakra Bracelet", kit:"Maaya Kundli-to-Wrist Full Energy Reset Kit", who:"For: chakra balance, energy alignment, positivity and overall wellness.", benefits:"Chakra balance, energy alignment and overall wellness", description:"A 7 Chakra Bracelet kit with a full-spectrum reset path for daily energetic balance." },
+  "VA-BR-IO-014": { name:"Iolite Bracelet (Neeli)", kit:"Maaya Kundli-to-Wrist Intuition & Saturn Support Kit", who:"For: discipline, inner direction, vision and deeper intuition.", benefits:"Intuition, vision, inner guidance and Saturn support", description:"An Iolite Bracelet kit for inner direction, discipline and Saturn-style focus." },
+  "VA-BR-LK-016": { name:"Lakshmi's Loom - Dhan Yog Bracelet", kit:"Maaya Kundli-to-Wrist Wealth & Prosperity Kit", who:"For: wealth flow, business growth, financial confidence and opportunity energy.", benefits:"Wealth, abundance, money flow and opportunity", description:"A premium Dhan Yog Bracelet kit built around Citrine, Pyrite and Green Aventurine for wealth flow and opportunity energy." },
+  "VA-BR-RE-017": { name:"The Rose Embrace - Love Bracelet", kit:"Maaya Kundli-to-Wrist Heart Healing & Relationship Kit", who:"For: emotional repair, attraction, self-worth and relationship harmony.", benefits:"Love, attraction, self-worth and relationship harmony", description:"A premium Rose Embrace Bracelet kit for self-worth, relationship harmony and emotional softness." },
+  "VA-BR-PY-018": { name:"Sunforge Pyrite Bracelet", kit:"Maaya Kundli-to-Wrist Money Magnet & Willpower Kit", who:"For: money confidence, action energy, business courage and protection.", benefits:"Wealth, willpower, confidence and protection", description:"A Sunforge Pyrite Bracelet kit for bold money confidence, action and business-facing willpower." }
 };
 Object.keys(PRODUCT_STRATEGY).forEach(function(k){
   if(PRODUCTS[k]) Object.assign(PRODUCTS[k], PRODUCT_STRATEGY[k]);
@@ -1945,7 +1959,8 @@ function init(){
       el.textContent = product.name;
     }
   })();
-  $("p-eyebrow").textContent = "Maaya Selected Ritual Kit · Veshannastro";
+  $("p-eyebrow").textContent = "Maaya First Circle · Veshannastro";
+  var kitLine = $("p-kit-line"); if(kitLine) kitLine.textContent = product.kit || "Maaya Kundli-to-Wrist Kit";
   $("p-lede").textContent = product.description;
   var whoEl = $("p-who"); if(whoEl) whoEl.textContent = product.who || "Maaya-selected bracelet for your current intention.";
   $("p-gem").textContent = product.gemstones;
@@ -1960,8 +1975,8 @@ function init(){
   $("p-review-link").textContent = "(" + rc + " reviews)";
   var off = Math.round((1 - product.price/product.mrp)*100);
   var lsEl = $("ls-text");
-  if(lsEl) lsEl.innerHTML = "Founders' pricing — <b>" + off + "% off</b> the regular " + money(product.mrp) +
-    ", held only while our first batch lasts.";
+  if(lsEl) lsEl.innerHTML = "Maaya First Circle pricing — <b>" + off + "% off</b> the regular " + money(product.mrp) +
+    ", held only while the Maaya First Circle window lasts.";
 
   var chipList = (product.premium ? ["Premium Quality"] : []).concat(product.tags || []);
   $("p-chips").innerHTML = chipList.map(function(t){ return "<span>"+esc(t)+"</span>"; }).join("");
@@ -2654,17 +2669,7 @@ function bind(){
 ══════════════════════════════════════════ */
 function initReveal(){
   var targets = document.querySelectorAll('.section, .why-veshan, .india-strip, .pinfo, .rich');
-  targets.forEach(function(t){ t.classList.add('reveal'); });
-  if(!('IntersectionObserver' in window)){
-    targets.forEach(function(t){ t.classList.add('seen'); });
-    return;
-  }
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting){ e.target.classList.add('seen'); io.unobserve(e.target); }
-    });
-  }, { threshold:.12, rootMargin:'0px 0px -8% 0px' });
-  targets.forEach(function(t){ io.observe(t); });
+  targets.forEach(function(t){ t.classList.add('seen'); });
 }
 
 function boot(){ init(); initReveal(); }
@@ -2990,6 +2995,271 @@ h1 em,h2 em,h3 em,h4 em,.wv-title em,.rj-copy h2 em,.section h2 em{
 @keyframes shopCelebrateSpin{to{transform:rotate(360deg)}}
 @keyframes shopConfettiFly{0%{opacity:0;transform:translate(-50%,0) scale(.5) rotate(0)}12%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),var(--dy)) rotate(var(--rot)) scale(1)}}
 @media(prefers-reduced-motion:reduce){.shop-happy10-card,.shop-happy10-card::before,.shop-conf-piece{animation:none!important}.shop-happy10-card{opacity:1;transform:none}.shop-happy10-card::before{display:none}}
+</style>
+<style id="veshannastro-premium-calm-retention">
+.why-veshan.va-retain{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:hidden!important;
+  padding:clamp(3.8rem,6vw,5.8rem) 1.25rem!important;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.74),rgba(255,255,255,.28) 36%,rgba(245,238,226,.74)),
+    radial-gradient(circle at 12% 0%,rgba(var(--stone-rgb),.13),transparent 34%),
+    #f8f3ea!important;
+  border-top:1px solid rgba(110,20,35,.08)!important;
+  border-bottom:1px solid rgba(110,20,35,.08)!important;
+}
+.why-veshan.va-retain::before{
+  content:""!important;position:absolute!important;inset:0!important;z-index:0!important;pointer-events:none!important;
+  opacity:.38!important;animation:none!important;
+  background:
+    linear-gradient(90deg,rgba(110,20,35,.08),transparent 22%,transparent 78%,rgba(var(--stone-rgb),.09)),
+    repeating-linear-gradient(90deg,rgba(50,34,24,.035) 0 1px,transparent 1px 86px)!important;
+  mask-image:linear-gradient(to bottom,transparent,black 10%,black 90%,transparent)!important;
+}
+.why-veshan.va-retain::after{content:none!important;display:none!important;}
+.why-veshan.va-retain .va-aurora,
+.why-veshan.va-retain .va-orb{display:none!important;}
+.why-veshan.va-retain .wv-inner{max-width:1120px!important;}
+.why-veshan.va-retain .wv-head{margin-bottom:1.75rem!important;text-align:center!important;}
+.why-veshan.va-retain .wv-eye{
+  display:inline-flex!important;align-items:center!important;gap:.5rem!important;
+  padding:.5rem .8rem!important;border-radius:999px!important;
+  border:1px solid rgba(110,20,35,.14)!important;background:rgba(255,255,255,.62)!important;
+  color:#6e1423!important;box-shadow:none!important;
+  font-family:"Jost",sans-serif!important;font-size:.66rem!important;letter-spacing:.24em!important;font-weight:800!important;
+}
+.why-veshan.va-retain .wv-eye::before{
+  content:"";width:7px;height:7px;border-radius:50%;background:var(--stone-tone);
+  box-shadow:0 0 0 4px rgba(var(--stone-rgb),.12)!important;
+}
+.why-veshan.va-retain .wv-title{
+  max-width:760px!important;margin:.85rem auto .7rem!important;
+  color:#211915!important;text-shadow:none!important;
+  font-size:clamp(2.1rem,4vw,3.25rem)!important;line-height:1.03!important;
+}
+.why-veshan.va-retain .wv-title em{
+  color:#6e1423!important;text-shadow:none!important;font-style:normal!important;
+}
+.why-veshan.va-retain .wv-sub{
+  max-width:650px!important;color:#675b50!important;
+  font-family:"Jost",sans-serif!important;font-weight:600!important;font-size:1.02rem!important;line-height:1.7!important;
+}
+.why-veshan.va-retain .va-proof{
+  display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:0!important;
+  max-width:840px!important;margin:0 auto 2rem!important;
+  border:1px solid rgba(110,20,35,.10)!important;border-radius:18px!important;overflow:hidden!important;
+  background:rgba(255,255,255,.52)!important;box-shadow:0 18px 55px rgba(51,35,23,.07)!important;
+}
+.why-veshan.va-retain .va-proof div{
+  animation:none!important;position:relative!important;text-align:center!important;overflow:hidden!important;
+  padding:1rem .75rem!important;border:0!important;border-left:1px solid rgba(110,20,35,.08)!important;border-radius:0!important;
+  background:transparent!important;box-shadow:none!important;
+}
+.why-veshan.va-retain .va-proof div:first-child{border-left:0!important;}
+.why-veshan.va-retain .va-proof div::after{content:none!important;display:none!important;}
+.why-veshan.va-retain .va-proof strong{
+  font-family:"Anton",sans-serif!important;font-size:clamp(1.45rem,2.4vw,2rem)!important;font-weight:400!important;
+  color:#2a1c14!important;line-height:1!important;
+}
+.why-veshan.va-retain .va-proof span{
+  margin-top:.35rem!important;font-family:"Jost",sans-serif!important;font-size:.63rem!important;font-weight:800!important;
+  letter-spacing:.13em!important;text-transform:uppercase!important;color:#8a7161!important;
+}
+.why-veshan.va-retain .va-stage{
+  display:block!important;position:relative!important;z-index:2!important;
+}
+.why-veshan.va-retain .va-benefits{
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:.85rem!important;
+  border:0!important;background:transparent!important;overflow:visible!important;
+}
+.why-veshan.va-retain .va-card,
+.why-veshan.va-retain .va-card-hot{
+  min-height:0!important;position:relative!important;overflow:hidden!important;
+  display:flex!important;flex-direction:column!important;justify-content:flex-start!important;
+  padding:1.15rem!important;border-radius:16px!important;
+  border:1px solid rgba(110,20,35,.10)!important;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.94),rgba(255,252,246,.86)),
+    radial-gradient(circle at 0% 0%,rgba(var(--stone-rgb),.08),transparent 42%)!important;
+  box-shadow:0 14px 38px rgba(55,36,20,.08)!important;
+  transform:none!important;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s,border-color .35s,background .35s!important;
+}
+.why-veshan.va-retain .va-card::before{content:none!important;display:none!important;}
+.why-veshan.va-retain .va-card:hover{
+  transform:translateY(-5px)!important;
+  border-color:rgba(var(--stone-rgb),.28)!important;
+  background:#fffdf8!important;
+  box-shadow:0 22px 55px rgba(55,36,20,.12)!important;
+}
+.why-veshan.va-retain .va-card .wv-ic{
+  width:42px;height:42px;border-radius:50%;display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  margin:0 0 .9rem!important;background:rgba(var(--stone-rgb),.10)!important;color:#6e1423!important;
+  font-family:"Jost",sans-serif!important;font-size:.8rem!important;font-weight:900!important;letter-spacing:.06em!important;
+  filter:none!important;line-height:1!important;
+}
+.why-veshan.va-retain .va-card small{
+  color:#a37a3a!important;font-family:"Jost",sans-serif!important;font-size:.62rem!important;font-weight:900!important;
+  letter-spacing:.16em!important;text-transform:uppercase!important;
+}
+.why-veshan.va-retain .va-card h3{
+  margin:.45rem 0 .45rem!important;color:#211915!important;
+  font-family:"Anton",sans-serif!important;font-size:clamp(1.15rem,1.65vw,1.45rem)!important;line-height:1.04!important;
+  letter-spacing:0!important;text-transform:none!important;
+}
+.why-veshan.va-retain .va-card p{
+  color:#62564d!important;font-family:"Jost",sans-serif!important;font-size:.92rem!important;font-weight:600!important;
+  line-height:1.58!important;margin:0!important;
+}
+.why-veshan.va-retain .va-card b{
+  margin-top:1rem!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;
+  color:#6e1423!important;font-family:"Jost",sans-serif!important;font-size:.76rem!important;font-weight:900!important;
+  letter-spacing:.02em!important;text-transform:none!important;
+}
+.why-veshan.va-retain .va-compare{
+  margin-top:1rem!important;border-radius:18px!important;overflow:hidden!important;
+  border:1px solid rgba(110,20,35,.10)!important;background:rgba(255,255,255,.58)!important;
+  box-shadow:0 18px 55px rgba(51,35,23,.07)!important;
+}
+.why-veshan.va-retain .va-compare-head{
+  background:#fffaf1!important;color:#7a6555!important;
+  font-family:"Jost",sans-serif!important;font-size:.68rem!important;font-weight:900!important;letter-spacing:.13em!important;
+}
+.why-veshan.va-retain .va-compare-head span,
+.why-veshan.va-retain .va-compare-head strong,
+.why-veshan.va-retain .va-row span,
+.why-veshan.va-retain .va-row b{padding:.9rem 1rem!important;}
+.why-veshan.va-retain .va-compare-head strong{color:#6e1423!important;border-left:1px solid rgba(110,20,35,.08)!important;}
+.why-veshan.va-retain .va-row{
+  border-top:1px solid rgba(110,20,35,.08)!important;background:transparent!important;
+  font-family:"Jost",sans-serif!important;font-size:.92rem!important;font-weight:700!important;
+}
+.why-veshan.va-retain .va-row::before{content:none!important;display:none!important;animation:none!important;}
+.why-veshan.va-retain .va-row span{color:#9b8d82!important;text-decoration:none!important;}
+.why-veshan.va-retain .va-row b{color:#2b211b!important;border-left:1px solid rgba(110,20,35,.08)!important;font-weight:850!important;}
+.why-veshan.va-retain .va-row b::before{
+  content:"";display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:.55rem;
+  background:var(--stone-tone)!important;box-shadow:0 0 0 4px rgba(var(--stone-rgb),.10)!important;
+}
+.why-veshan.va-retain .va-benefits .va-card:nth-child(1){
+  --va-accent:#4f9e6a;--va-accent-rgb:79,158,106;--va-soft:#edf8f0;--va-soft2:#fffaf0;
+}
+.why-veshan.va-retain .va-benefits .va-card:nth-child(2){
+  --va-accent:#7b5bc8;--va-accent-rgb:123,91,200;--va-soft:#f2efff;--va-soft2:#fff7ee;
+}
+.why-veshan.va-retain .va-benefits .va-card:nth-child(3){
+  --va-accent:#d49a2f;--va-accent-rgb:212,154,47;--va-soft:#fff4d8;--va-soft2:#f7fbf1;
+}
+.why-veshan.va-retain .va-benefits .va-card:nth-child(4){
+  --va-accent:#2f7fab;--va-accent-rgb:47,127,171;--va-soft:#eaf6fb;--va-soft2:#fff4f4;
+}
+.why-veshan.va-retain .va-benefits .va-card{
+  border-color:rgba(var(--va-accent-rgb),.22)!important;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.95),rgba(255,255,255,.74) 42%,var(--va-soft) 100%),
+    radial-gradient(circle at 0 0,var(--va-soft2),transparent 52%)!important;
+}
+.why-veshan.va-retain .va-benefits .va-card::after{
+  content:"";position:absolute;left:0;right:0;top:0;height:3px;
+  background:linear-gradient(90deg,var(--va-accent),rgba(255,255,255,.22))!important;
+  opacity:.86;pointer-events:none;
+}
+.why-veshan.va-retain .va-benefits .va-card:hover{
+  border-color:rgba(var(--va-accent-rgb),.42)!important;
+  box-shadow:0 24px 60px rgba(var(--va-accent-rgb),.13),0 14px 36px rgba(55,36,20,.08)!important;
+}
+.why-veshan.va-retain .va-benefits .va-card .wv-ic{
+  background:rgba(var(--va-accent-rgb),.12)!important;
+  color:var(--va-accent)!important;
+}
+.why-veshan.va-retain .va-benefits .va-card small,
+.why-veshan.va-retain .va-benefits .va-card b{
+  color:var(--va-accent)!important;
+}
+@media(max-width:980px){
+  .why-veshan.va-retain .va-benefits{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+}
+@media(max-width:680px){
+  .why-veshan.va-retain{padding:3.4rem 1rem!important;}
+  .why-veshan.va-retain .va-proof{grid-template-columns:repeat(2,1fr)!important;}
+  .why-veshan.va-retain .va-proof div:nth-child(odd){border-left:0!important;}
+  .why-veshan.va-retain .va-proof div:nth-child(n+3){border-top:1px solid rgba(110,20,35,.08)!important;}
+  .why-veshan.va-retain .va-benefits{grid-template-columns:1fr!important;}
+  .why-veshan.va-retain .va-compare-head,.why-veshan.va-retain .va-row{grid-template-columns:1fr!important;}
+  .why-veshan.va-retain .va-compare-head strong,.why-veshan.va-retain .va-row b{border-left:0!important;border-top:1px solid rgba(110,20,35,.06)!important;}
+}
+@media(prefers-reduced-motion:reduce){
+  .why-veshan.va-retain *{animation:none!important;transition:none!important;}
+}
+</style>
+<style id="veshannastro-scroll-performance-boost">
+html{scroll-behavior:smooth;}
+body{
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+.product-hero,.section,.why-veshan,.india-strip,.pinfo,.rich,.reviews,.related,.faq,.care,.about,.roadmap,.comparison{
+  content-visibility:auto;
+  contain-intrinsic-size:1px 760px;
+}
+.reveal,.reveal.seen{
+  opacity:1!important;
+  transform:none!important;
+  transition:none!important;
+}
+.hero-card::before,
+.maaya-prescription::before,
+.siddh-banner::before,
+.siddh-seal,
+.urgency-dot,
+.mantra .om,
+.va-retain::before,
+.va-proof div,
+.va-proof div::after,
+.va-orb span,
+.va-orb i,
+.va-row::before,
+.shop-happy10-card::before{
+  animation:none!important;
+}
+#site-nav,.sticky-buy,.co-modal,.shop-happy10-celebrate,.gallery-nav{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.hero-card,.buybox,.maaya-prescription,.benefit,.rj-step,.care-item,.rel-card,.rev,.offers-box,.pinfo .acc,.mp-list span,.mp-report,.kit-badges span,.ingr,.cmp-us,.about-img,.va-proof,.va-card,.va-compare,.co-card{
+  box-shadow:0 10px 28px rgba(38,28,20,.08)!important;
+}
+.benefit:hover,.care-item:hover,.rel-card:hover,.rev:hover,.rj-step:hover,.ingr:hover,.va-card:hover{
+  transform:translateY(-3px)!important;
+  box-shadow:0 16px 38px rgba(38,28,20,.12)!important;
+}
+.gallery-thumb.active,.nav-cart:hover,.buy-btn:hover,.gallery-nav:hover,.gallery-nav:focus-visible{
+  box-shadow:0 8px 20px rgba(38,28,20,.12)!important;
+}
+.fly-dot{display:none!important;}
+img{content-visibility:auto;}
+@media(max-width:760px){
+  .product-hero,.section,.why-veshan,.india-strip,.pinfo,.rich,.reviews,.related,.faq,.care,.about,.roadmap,.comparison{
+    contain-intrinsic-size:1px 920px;
+  }
+  .hero-card,.buybox,.maaya-prescription,.benefit,.rj-step,.care-item,.rel-card,.rev,.offers-box,.pinfo .acc,.mp-list span,.mp-report,.kit-badges span,.ingr,.cmp-us,.about-img,.va-proof,.va-card,.va-compare,.co-card{
+    box-shadow:0 6px 18px rgba(38,28,20,.07)!important;
+  }
+}
+</style>
+<style id="veshannastro-vibrant-background-only">
+body{
+  background:
+    linear-gradient(135deg,rgba(255,244,215,.92) 0%,rgba(255,248,238,.94) 24%,rgba(238,249,241,.92) 48%,rgba(255,240,245,.9) 72%,rgba(239,245,255,.92) 100%) fixed!important;
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.55;
+  background:
+    linear-gradient(120deg,transparent 0 28%,rgba(230,169,63,.12) 28% 29%,transparent 29% 100%),
+    linear-gradient(60deg,transparent 0 68%,rgba(56,161,105,.10) 68% 69%,transparent 69% 100%);
+}
 </style>
 </body>
 </html>
