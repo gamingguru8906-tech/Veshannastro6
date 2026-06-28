@@ -699,6 +699,66 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
     .cart-confirm{transition:opacity .3s ease;transform:none;}
   }
 
+  /* ── tier choice ── */
+  .tier-choice{position:relative;margin:.55rem 0 .78rem;z-index:2;}
+  .tier-label{margin-bottom:.42rem!important;}
+  .tier-grid{display:grid;grid-template-columns:1fr 1.08fr;gap:.62rem;}
+  .tier-card{position:relative;text-align:left;cursor:pointer;border:1px solid rgba(184,144,47,.32);border-radius:12px;background:rgba(255,250,240,.88);padding:.72rem .78rem;min-height:94px;color:var(--ink);box-shadow:0 8px 22px rgba(28,20,15,.07);transition:transform .2s,box-shadow .2s,border-color .2s,background .2s;}
+  .tier-card:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(28,20,15,.12);}
+  .tier-card.active{border-color:var(--maroon);background:linear-gradient(135deg,#fffaf0,#fff4df);box-shadow:0 14px 34px rgba(110,20,35,.13),0 0 0 2px rgba(110,20,35,.08);}
+  .tier-premium{overflow:hidden;border-color:rgba(230,200,120,.58);background:linear-gradient(145deg,#1a0a0f,#3a121e 54%,#10241f);color:#fff8e8;}
+  .tier-premium.active{border-color:#f4d98d;background:linear-gradient(145deg,#240c12,#6e1423 48%,#294f38);box-shadow:0 18px 42px rgba(110,20,35,.28),0 0 0 2px rgba(244,217,141,.18);}
+  .tier-premium::after{content:"";position:absolute;inset:0;background:linear-gradient(116deg,transparent,rgba(255,255,255,.2),transparent);transform:translateX(-120%);transition:transform .7s ease;}
+  .tier-premium:hover::after,.tier-premium.active::after{transform:translateX(120%);}
+  .tier-head{position:relative;z-index:1;display:flex;justify-content:space-between;gap:.7rem;align-items:flex-start;margin-bottom:.32rem;}
+  .tier-head b{font-family:var(--serif);font-size:1rem;line-height:1.05;font-weight:700;}
+  .tier-head small{font-family:var(--body-ui);font-size:.68rem;font-weight:800;color:var(--maroon);white-space:nowrap;}
+  .tier-premium .tier-head small,.tier-premium .tier-head b{color:#fff6df;}
+  .tier-copy{position:relative;z-index:1;display:block;font-family:var(--body-ui);font-size:.74rem;line-height:1.34;font-weight:600;color:var(--ink2);}
+  .tier-premium .tier-copy{color:#eedfc4;}
+  .tier-tag{position:relative;z-index:1;display:inline-flex;margin-bottom:.38rem;border-radius:999px;padding:.18rem .5rem;background:var(--gold-grad);color:#241307;font-family:var(--label);font-size:.48rem;letter-spacing:.14em;text-transform:uppercase;font-weight:800;}
+  .tier-note{font-family:var(--body-ui);font-size:.72rem;font-weight:700;color:var(--maroon);margin:.42rem 0 0;}
+
+  /* ── hero urgency (above buy actions) ── */
+  .hero-urgency{margin:.45rem 0 .7rem!important;padding:.68rem .82rem!important;border-color:rgba(255,88,88,.38)!important;}
+  .hero-urgency .urgency-stock{margin-bottom:.42rem!important;font-size:.78rem!important;}
+  .hero-urgency .urgency-power{font-size:.95rem!important;margin-bottom:.48rem!important;padding-bottom:.48rem!important;}
+  .hero-urgency .timer-label{font-size:.56rem!important;}
+  .hero-urgency .td{min-width:36px!important;padding:.22rem .42rem!important;}
+  .hero-urgency .td span{font-size:1.08rem!important;}
+
+  /* ── compact desktop layout ── */
+  @media(min-width:901px){
+    .product{grid-template-columns:minmax(300px,.82fr) minmax(0,1.18fr)!important;gap:2rem!important;padding-top:1.05rem!important;padding-bottom:2.8rem!important;}
+    .gallery{max-width:350px!important;top:76px!important;}
+    .gallery-main{border-radius:16px!important;}
+    .gallery-thumb{width:58px!important;height:58px!important;border-radius:9px!important;}
+    .gallery-thumbs{gap:.52rem!important;margin-top:.65rem!important;}
+    .buybox h1{font-size:clamp(1.75rem,3vw,2.45rem)!important;line-height:1.02!important;margin:.35rem 0 .45rem!important;}
+    .rating{margin-bottom:.6rem!important;}
+    .maaya-prescription{padding:.78rem .9rem!important;margin:.65rem 0 .72rem!important;border-radius:12px!important;}
+    .maaya-prescription::after{inset:7px!important;border-radius:9px!important;}
+    .mp-top{margin-bottom:.55rem!important;gap:.58rem!important;}
+    .mp-orb{width:38px!important;height:38px!important;flex-basis:38px!important;font-size:1.1rem!important;box-shadow:0 0 0 4px rgba(184,144,47,.14),0 8px 18px rgba(0,0,0,.2)!important;}
+    .mp-kicker{font-size:.5rem!important;letter-spacing:.18em!important;}
+    .mp-copy strong{font-size:1.02rem!important;line-height:1.08!important;}
+    .mp-pill{font-size:.58rem!important;padding:.25rem .48rem!important;}
+    .mp-list{grid-template-columns:repeat(4,1fr)!important;gap:.35rem!important;margin:.12rem 0 .5rem!important;}
+    .mp-list span{font-size:.66rem!important;padding:.38rem .42rem!important;line-height:1.2!important;}
+    .mp-report{padding:.52rem .62rem!important;border-radius:8px!important;}
+    .mp-report span{font-size:.68rem!important;line-height:1.25!important;}
+    .mp-report a{font-size:.5rem!important;padding:.5rem .58rem!important;}
+    .price-row{margin:.08rem 0 0!important;}
+    .price-now{font-size:2.35rem!important;}
+    .tax-note{margin:.2rem 0 .55rem!important;}
+    .kit-badges{grid-template-columns:repeat(4,1fr)!important;gap:.35rem!important;margin-bottom:.65rem!important;}
+    .kit-badges span{min-height:34px!important;font-size:.48rem!important;padding:.38rem .32rem!important;}
+    .buy-actions{margin-top:.15rem!important;}
+    .qty{margin-bottom:.65rem!important;}
+  }
+  @media(max-width:760px){.tier-grid{grid-template-columns:1fr}.mp-list{grid-template-columns:1fr 1fr!important}.hero-urgency{padding:.72rem!important}.tier-card{min-height:0}}
+  @media(prefers-reduced-motion:reduce){.tier-card,.tier-premium::after{transition:none!important}.tier-card:hover{transform:none!important}}
+
   /* ── responsive ── */
   @media(max-width:1080px){ .rel-grid{grid-template-columns:repeat(4,1fr)} }
   @media(max-width:880px){
@@ -900,6 +960,43 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
     </div>
     <p class="tax-note">Inclusive of all taxes · Free shipping across India</p>
 
+    <!-- urgency stays visible in the first desktop view -->
+    <div class="urgency-block hero-urgency">
+      <div class="urgency-stock">
+        <span class="urgency-dot" aria-hidden="true"></span>
+        <span>Only <strong>25 Maaya First Circle kits</strong> left with free Maaya guidance in this circle</span>
+      </div>
+      <div class="urgency-power">
+        Maaya First Circle includes <em>bracelet, ritual, mantra and 21-day guidance</em> at the launch price.
+      </div>
+      <div class="urgency-timer">
+        <span class="timer-label">⚡ Launch offer ends in</span>
+        <div class="timer-digits" aria-live="polite" aria-label="Offer countdown">
+          <span class="td"><span id="ct-h">10</span><small>hrs</small></span>
+          <span class="td-sep" aria-hidden="true">:</span>
+          <span class="td"><span id="ct-m">00</span><small>min</small></span>
+          <span class="td-sep" aria-hidden="true">:</span>
+          <span class="td"><span id="ct-s">00</span><small>sec</small></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier-choice" aria-label="Choose your order tier">
+      <span class="field-label tier-label">Choose your order tier</span>
+      <div class="tier-grid">
+        <button type="button" class="tier-card active" data-tier="bracelet" aria-pressed="true">
+          <span class="tier-head"><b>Just Bracelet</b><small>Same price</small></span>
+          <span class="tier-copy">Bracelet, pouch, mantra note and dispatch care.</span>
+        </button>
+        <button type="button" class="tier-card tier-premium" data-tier="maaya" aria-pressed="false">
+          <span class="tier-tag">Most Valuable</span>
+          <span class="tier-head"><b>Maaya First Circle Report</b><small>Only + Rs. 100</small></span>
+          <span class="tier-copy">Fully customised Maaya report with intention, ritual, mantra and 21-day wearing guidance.</span>
+        </button>
+      </div>
+      <p class="tier-note" id="tier-note">Selected: Just Bracelet at the same price.</p>
+    </div>
+
     <div class="kit-badges" aria-label="Kit inclusions">
       <span>Maaya Selected</span>
       <span>Energised Dispatch</span>
@@ -914,27 +1011,6 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
         <span id="qty-val">1</span>
         <button type="button" id="qty-inc" aria-label="Increase quantity">+</button>
       </div>
-      <!-- ═══ URGENCY BLOCK + COUNTDOWN ═══ -->
-      <div class="urgency-block">
-        <div class="urgency-stock">
-          <span class="urgency-dot" aria-hidden="true"></span>
-          <span>Only <strong>25 Maaya First Circle kits</strong> left with free Maaya guidance in this circle</span>
-        </div>
-        <div class="urgency-power">
-          Maaya First Circle includes <em>bracelet, ritual, mantra and 21-day guidance</em> at the launch price.
-        </div>
-        <div class="urgency-timer">
-          <span class="timer-label">⚡ Launch offer ends in</span>
-          <div class="timer-digits" aria-live="polite" aria-label="Offer countdown">
-            <span class="td"><span id="ct-h">10</span><small>hrs</small></span>
-            <span class="td-sep" aria-hidden="true">:</span>
-            <span class="td"><span id="ct-m">00</span><small>min</small></span>
-            <span class="td-sep" aria-hidden="true">:</span>
-            <span class="td"><span id="ct-s">00</span><small>sec</small></span>
-          </div>
-        </div>
-      </div>
-
       <div class="cta-row">
         <button class="buy-btn" id="buy-btn">Buy now · <span id="buy-amt">₹0</span></button>
         <button class="cart-btn" id="cart-btn" type="button">
@@ -1552,6 +1628,16 @@ function toast(msg){
 
 /* single-configuration cart (matches the one-product-per-page flow) */
 var cartCount=0, cartBusy=false, ccTimer, checkoutFromCart=false, happy10Celebrated=false;
+var selectedTier = "bracelet";
+var TIER_ADDON = 100;
+var ORDER_TIERS = {
+  bracelet:{ name:"Just Bracelet", addon:0, note:"Selected: Just Bracelet at the same price." },
+  maaya:{ name:"Maaya First Circle Report", addon:TIER_ADDON, note:"Selected: Maaya First Circle Report added for only Rs. 100." }
+};
+function tierInfo(){ return ORDER_TIERS[selectedTier] || ORDER_TIERS.bracelet; }
+function tierAddOn(){ return tierInfo().addon || 0; }
+function braceletSubtotal(q){ return product.price * q; }
+function payableSubtotal(q){ return braceletSubtotal(q) + tierAddOn(); }
 function selectedQty(){ return (checkoutFromCart && cartCount>0) ? cartCount : qty; }
 function updateCartBadge(pop){
   var b=$("cart-count"); if(!b) return;
@@ -1794,7 +1880,7 @@ function couponState(qtyForCheck){
     return { discount:0, lapse:"PAIR10 needs " + c.minQty + " bracelets - add one more to keep 10% off." };
   if(c.requiresRec && !recUnlocked)
     return { discount:0, lapse:"MAAYA15 unlocks after Maaya recommends this bracelet." };
-  var base = product.price * q;
+  var base = braceletSubtotal(q);
   var d = c.flat ? Math.min(c.flat, base) : Math.round(base * c.percent / 100);
   return { discount: d };
 }
@@ -1803,7 +1889,7 @@ function couponLabel(code){
   return c.flat ? ("₹" + c.flat + " off") : (c.percent + "% off");
 }
 function discount(){ return couponState().discount; }
-function total(){ var q=selectedQty(); return Math.max(0, product.price*q - couponState(q).discount); }
+function total(){ var q=selectedQty(); return Math.max(0, payableSubtotal(q) - couponState(q).discount); }
 
 /* ---------- init ---------- */
 /* ════════ RICH PRODUCT CONTENT (accordions + premium sections) ════════ */
@@ -2135,8 +2221,8 @@ function setupGallery(){
     setTimeout(ensureFallbackImages, 1700);
   }
 
-  if(prev) prev.addEventListener("click", function(){ setActive(galleryIndex - 1); });
-  if(next) next.addEventListener("click", function(){ setActive(galleryIndex + 1); });
+  if(prev) prev.addEventListener("click", function(){ setActive(galleryIndex - 1); startGalleryAuto(); });
+  if(next) next.addEventListener("click", function(){ setActive(galleryIndex + 1); startGalleryAuto(); });
 
   function addImage(src){
     if(loaded.indexOf(src) >= 0) return;
@@ -2144,10 +2230,11 @@ function setupGallery(){
     var b = document.createElement("button");
     b.type = "button"; b.className = "gallery-thumb" + (index===0?" active":"");
     b.innerHTML = '<img src="'+src+'" alt="">';
-    b.addEventListener("click", function(){ setActive(index); });
+    b.addEventListener("click", function(){ setActive(index); startGalleryAuto(); });
     thumbs.appendChild(b);
     if(loaded.length === 1) setActive(0);
     updateGalleryButtons();
+    startGalleryAuto();
   }
 
   function ensureFallbackImages(){
@@ -2167,6 +2254,13 @@ function setupGallery(){
     wrap.classList.remove("no-img");
     [].forEach.call(thumbs.children, function(c, idx){ c.classList.toggle("active", idx === galleryIndex); });
     updateGalleryButtons();
+  }
+
+  function startGalleryAuto(){
+    if(setupGallery.timer) clearInterval(setupGallery.timer);
+    if(loaded.length < 2) return;
+    if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    setupGallery.timer = setInterval(function(){ setActive(galleryIndex + 1); }, 5000);
   }
 
   function updateGalleryButtons(){
@@ -2388,6 +2482,7 @@ function renderTotals(){
   $("p-total").textContent = money(total());
   var sb = $("sb-total"); if(sb) sb.textContent = money(total());
   var ba = $("buy-amt"); if(ba) ba.textContent = money(total());
+  updateTierUI();
   var d = discount();
   $("p-save").textContent = d > 0 ? "you save " + money(d) : "";
   // if an applied coupon has lapsed (e.g. qty dropped below 2), surface it
@@ -2403,6 +2498,16 @@ function renderTotals(){
   renderSummary();
 }
 
+function updateTierUI(){
+  [].forEach.call(document.querySelectorAll(".tier-card"), function(card){
+    var active = card.getAttribute("data-tier") === selectedTier;
+    card.classList.toggle("active", active);
+    card.setAttribute("aria-pressed", active ? "true" : "false");
+  });
+  var note = $("tier-note");
+  if(note) note.textContent = tierInfo().note;
+}
+
 function setCouponMsg(text, kind){
   var msg = $("coupon-msg");
   msg.className = "coupon-msg" + (kind ? " " + kind : "");
@@ -2415,13 +2520,14 @@ function showRecButton(show){
 function renderSummary(){
   var q = selectedQty();
   var lines = [
-    '<div class="co-sum-line"><span>'+esc(product.name)+' × '+q+'</span><strong>'+money(product.price*q)+'</strong></div>'
+    '<div class="co-sum-line"><span>'+esc(product.name)+' × '+q+'</span><strong>'+money(braceletSubtotal(q))+'</strong></div>'
   ];
+  if(tierAddOn() > 0) lines.push('<div class="co-sum-line"><span>'+esc(tierInfo().name)+'</span><strong>'+money(tierAddOn())+'</strong></div>');
   if(discount() > 0) lines.push('<div class="co-sum-line"><span>Coupon ('+coupon+')</span><strong>− '+money(discount())+'</strong></div>');
   lines.push('<div class="co-sum-line"><span>Shipping</span><strong>Free</strong></div>');
   lines.push('<div class="co-sum-line cashback-line"><span>Wallet cashback after payment</span><strong>100% up to ₹400</strong></div>');
   var wr = walletRedeemPaise();
-  if(wr > 0) lines.push('<div class="co-sum-line"><span>Wallet used</span><strong>- '+money(wr/100)+'</strong></div>');
+  if(wr > 0) lines.push('<div class="co-sum-line"><span>Wallet used</span><strong>− '+money(wr/100)+'</strong></div>');
   lines.push('<div class="co-sum-line grand"><span>Total</span><strong>'+money(Math.max(0, total() - wr/100))+'</strong></div>');
   $("co-sum-lines").innerHTML = lines.join("");
   $("co-pay").textContent = "Pay " + money(Math.max(0, total() - wr/100)) + " with Razorpay";
@@ -2602,17 +2708,25 @@ function initWalletLayer(){ renderCashbackOffer(); initGoogleWallet(); if(wallet
 
 function buildOrder(c, paymentId, status, orderId){
   var q = selectedQty();
+  var addon = tierAddOn();
+  var orderItems = [{ sku:sku, name:product.name, product_type:"Bracelet", quantity:q,
+    option:"Free size", unit_price:product.price, line_total:braceletSubtotal(q),
+    gemstones:product.gemstones, benefits:product.benefits }];
+  if(addon > 0){
+    orderItems.push({ sku:sku+"-MAAYA-FIRST-CIRCLE", name:tierInfo().name,
+      product_type:"Custom Report Add-on", quantity:1,
+      option:"Fully customised Maaya report", unit_price:addon, line_total:addon,
+      gemstones:product.gemstones, benefits:"Personalised wearing ritual, mantra and 21-day guide" });
+  }
   return {
     timestamp:new Date().toLocaleString("en-IN",{timeZone:"Asia/Kolkata"}),
     order_id:orderId || makeOrderId(),
     category:"Product Store", source:"Product Page Checkout",
     payment_status:status, payment_id:paymentId||"", payment_method:"Razorpay prepaid",
-    currency:"INR", customer:c,
-    items:[{ sku:sku, name:product.name, product_type:"Bracelet", quantity:q,
-      option:"Free size", unit_price:product.price, line_total:product.price*q,
-      gemstones:product.gemstones, benefits:product.benefits }],
-    item_summary:product.name+" x "+q+" (Free size)",
-    subtotal:product.price*q, coupon:coupon||"", discount:couponState(q).discount, total:total(),
+    currency:"INR", customer:c, order_tier:selectedTier, order_tier_name:tierInfo().name,
+    items:orderItems,
+    item_summary:product.name+" x "+q+" (Free size)"+(addon>0?" + "+tierInfo().name:""),
+    subtotal:payableSubtotal(q), coupon:coupon||"", discount:couponState(q).discount, total:total(),
     shipping_country:"India"
   };
 }
@@ -2682,7 +2796,7 @@ function payNow(){
   // a single band at full price, no coupon. Everything else is a variable
   // amount and goes through Checkout.
   var cashbackNeedsPaymentNotes = true;
-  var wantedLink = (selectedQty() === 1 && !coupon) ? (CONFIG.paymentLinks[sku] || "") : "";
+  var wantedLink = (selectedQty() === 1 && !coupon && selectedTier === "bracelet") ? (CONFIG.paymentLinks[sku] || "") : "";
   var hasRealLink = !cashbackNeedsPaymentNotes && wantedLink && wantedLink.indexOf("REPLACE") === -1;
 
   /* ── PRIMARY PATH: Razorpay Payment Link (fixed amount, qty 1) ── */
@@ -2717,7 +2831,7 @@ function payNow(){
   try{
     var rzp = new Razorpay({
       key:CONFIG.razorpayKey, amount:total()*100, currency:CONFIG.currency,
-      name:CONFIG.brand, description:product.name+" x "+selectedQty(),
+      name:CONFIG.brand, description:product.name+" x "+selectedQty()+(tierAddOn()?" + "+tierInfo().name:""),
       prefill:{ name:c.name, email:walletEmail() || c.email, contact:"+91"+c.phone },
       notes:paymentNotes(c, checkoutOrderId),
       theme:{ color:"#6E1423" },
@@ -2764,6 +2878,12 @@ function bind(){
   $("coupon-input").addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); applyCoupon(); } });
   $("make-two-btn").addEventListener("click", function(){ qty = Math.max(2, qty); $("coupon-input").value = "PAIR10"; coupon = null; applyCoupon(); });
   $("rec-btn").setAttribute("href", CONFIG.recommendationUrl);
+  [].forEach.call(document.querySelectorAll(".tier-card"), function(card){
+    card.addEventListener("click", function(){
+      selectedTier = this.getAttribute("data-tier") || "bracelet";
+      renderTotals();
+    });
+  });
   $("buy-btn").addEventListener("click", openCheckout);
   var sbb = $("sb-buy"); if(sbb) sbb.addEventListener("click", openCheckout);
   var cb = $("cart-btn"); if(cb) cb.addEventListener("click", addToCart);
@@ -2853,7 +2973,17 @@ function bind(){
 ══════════════════════════════════════════ */
 function initReveal(){
   var targets = document.querySelectorAll('.section, .why-veshan, .india-strip, .pinfo, .rich');
-  targets.forEach(function(t){ t.classList.add('seen'); });
+  targets.forEach(function(t){ t.classList.add('reveal'); });
+  if(!('IntersectionObserver' in window)){
+    targets.forEach(function(t){ t.classList.add('seen'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('seen'); io.unobserve(e.target); }
+    });
+  }, { threshold:.12, rootMargin:'0px 0px -8% 0px' });
+  targets.forEach(function(t){ io.observe(t); });
 }
 
 function boot(){ init(); initReveal(); }
@@ -3388,11 +3518,8 @@ body{
   content-visibility:auto;
   contain-intrinsic-size:1px 760px;
 }
-.reveal,.reveal.seen{
-  opacity:1!important;
-  transform:none!important;
-  transition:none!important;
-}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .9s cubic-bezier(.22,1,.36,1),transform .9s cubic-bezier(.22,1,.36,1);}
+.reveal.seen{opacity:1;transform:none;}
 .hero-card::before,
 .maaya-prescription::before,
 .siddh-banner::before,
