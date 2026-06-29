@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -16,12 +16,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
 window.VESHANN_GOOGLE_CLIENT_ID = "946598106017-o84r674jg4qr35fuedq8i5c3rtm3gqa9.apps.googleusercontent.com";
 window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
 </script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 
 <style>
   /* ════════════════════════════════════════════════════
@@ -164,6 +166,13 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
   .price-off{font-family:var(--body-ui);font-weight:600;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:#fdf3df;
     background:var(--gold-grad);border-radius:999px;padding:.34rem .7rem;box-shadow:0 4px 12px rgba(184,144,47,.32);}
   .tax-note{font-family:var(--body);font-size:.84rem;color:var(--ink3);margin:.35rem 0 1.2rem;font-weight:500}
+  /* price + countdown side-by-side (adapted from minimalist variant) */
+  .price-urgency{display:grid;grid-template-columns:minmax(0,.9fr) minmax(220px,1fr);gap:.9rem;align-items:stretch;margin:.2rem 0 1.2rem}
+  .price-card{border:1px solid var(--line-gold);background:#fffdf8;border-radius:12px;padding:.95rem 1rem;display:flex;flex-direction:column;justify-content:center}
+  .price-card .price-row{margin:0}
+  .price-card .tax-note{margin:.45rem 0 0}
+  .price-urgency .urgency-block{margin:0!important}
+  @media(max-width:620px){.price-urgency{grid-template-columns:1fr}}
 
   .maaya-prescription{position:relative;overflow:hidden;border:1px solid rgba(184,144,47,.42);border-radius:14px;
     background:
@@ -208,6 +217,13 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
 
   .meta-line{font-family:var(--body);font-size:.96rem;color:var(--ink2);margin:.4rem 0;display:flex;gap:.5rem;font-weight:500}
   .meta-line strong{color:var(--maroon);font-weight:600;min-width:92px;display:inline-block;font-family:var(--label);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;padding-top:.18rem}
+  /* meta mini-card grid (adapted from minimalist variant) */
+  .meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin:.7rem 0 1rem}
+  .meta-grid .mini-card{border:1px solid var(--line-gold);background:rgba(255,253,248,.9);border-radius:9px;padding:.7rem .8rem}
+  .meta-grid .mini-card strong{display:block;font-family:var(--label);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--maroon);margin-bottom:.3rem;font-weight:600}
+  .meta-grid .mini-card span{display:block;font-family:var(--body);font-size:.96rem;font-weight:500;color:var(--ink2);line-height:1.45}
+  .meta-grid .mini-card span.stock{margin:0}
+  @media(max-width:560px){.meta-grid{grid-template-columns:1fr}}
   .stock{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--body-ui);font-size:.82rem;color:var(--ok);font-weight:600;margin:.8rem 0 1.2rem}
   .stock::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(47,125,79,.18)}
 
@@ -380,19 +396,44 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
     font-weight:600;cursor:pointer;padding:.6rem;transition:background .25s,color .25s}
   .rel-view:hover{background:var(--maroon);color:#fdf3df}
 
-  /* ── checkout modal ── */
-  .co-modal{position:fixed;inset:0;z-index:10000;display:none;background:rgba(12,10,8,.66);backdrop-filter:blur(4px);
-    align-items:center;justify-content:center;padding:1rem}
+  /* Split checkout */
+  .co-modal{position:fixed;inset:0;z-index:10000;display:none;background:rgba(12,7,7,.78);align-items:stretch;justify-content:stretch;padding:0}
   .co-modal.open{display:flex}
-  .co-card{width:min(880px,100%);max-height:94vh;overflow:auto;background:var(--paper2);border-radius:12px;
-    border:1px solid rgba(201,168,76,.28);box-shadow:var(--shadow-lg)}
-  .co-head{padding:1.2rem 1.4rem;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;background:#fff8ec}
-  .co-head h3{font-family:var(--serif);font-size:1.7rem;font-weight:500;color:var(--ink);margin:0}
-  .co-head p{font-family:var(--body);font-size:.84rem;color:var(--ink2);margin:.2rem 0 0}
-  .co-close{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:#43251f;
-    font-size:1.4rem;line-height:1;cursor:pointer;flex:0 0 auto}
-  .co-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(250px,.75fr);gap:1.2rem;padding:1.3rem 1.4rem}
-  .co-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.85rem}
+  .co-card{position:relative;width:100%;height:100vh;max-height:none;overflow:hidden;background:var(--paper2);
+    display:grid;grid-template-columns:minmax(310px,.36fr) minmax(0,.64fr);border:0;border-radius:0;box-shadow:none}
+  .co-ritual{grid-row:1 / 4;position:relative;overflow:hidden;background:linear-gradient(145deg,#120708 0%,#2d0f16 56%,#17110d 100%);
+    color:#fff8ed;padding:1.65rem;display:flex;flex-direction:column;justify-content:space-between;gap:1rem;border-right:1px solid rgba(230,200,120,.24)}
+  .co-mandala{position:absolute;inset:auto -18% -18% auto;width:560px;aspect-ratio:1;border-radius:50%;opacity:.18;
+    background:repeating-conic-gradient(from 0deg,rgba(230,200,120,.72) 0 7deg,transparent 7deg 14deg);
+    -webkit-mask:radial-gradient(circle,transparent 0 22%,#000 23% 27%,transparent 28% 36%,#000 37% 41%,transparent 42% 52%,#000 53% 58%,transparent 59%);
+    mask:radial-gradient(circle,transparent 0 22%,#000 23% 27%,transparent 28% 36%,#000 37% 41%,transparent 42% 52%,#000 53% 58%,transparent 59%);
+    animation:coMandalaSpin 36s linear infinite}
+  @keyframes coMandalaSpin{to{transform:rotate(360deg)}}
+  .co-kicker{font-family:var(--label);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:#f4dd9b;font-weight:700}
+  .co-ritual h3{font-family:var(--impact)!important;font-size:clamp(1.9rem,3.15vw,3.05rem);font-weight:400;line-height:1.02;color:#fff;margin:.38rem 0 .62rem}
+  .co-ritual p{font-family:var(--body-ui);font-size:.92rem;line-height:1.55;font-weight:600;color:rgba(255,248,232,.78);max-width:420px}
+  .co-mini-order{position:relative;z-index:1;border:1px solid rgba(230,200,120,.28);border-radius:12px;padding:.85rem;
+    background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.04));box-shadow:0 24px 70px rgba(0,0,0,.22)}
+  .co-mini-row{display:flex;align-items:flex-start;justify-content:space-between;gap:.8rem;border-bottom:1px dashed rgba(230,200,120,.2);padding:.52rem 0}
+  .co-mini-row:first-child{padding-top:0}.co-mini-row:last-child{border-bottom:0;padding-bottom:0}
+  .co-mini-row span{font-family:var(--body-ui);font-size:.76rem;font-weight:700;color:rgba(255,248,232,.72)}
+  .co-mini-row strong{font-family:var(--serif);font-size:.92rem;color:#fff;text-align:right}
+  .co-trust{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem}
+  .co-trust span{border:1px solid rgba(230,200,120,.22);border-radius:8px;padding:.52rem;text-align:center;
+    font-family:var(--label);font-size:.5rem;letter-spacing:.11em;text-transform:uppercase;color:#f4dd9b;background:rgba(255,255,255,.06)}
+  .co-head{grid-column:2;position:sticky;top:0;z-index:4;padding:1.1rem 4.4rem 1.1rem 1.2rem;
+    border-bottom:1px solid var(--line-gold);display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;background:rgba(255,249,240,.92)}
+  .co-head h3{font-family:var(--impact)!important;font-size:2rem;font-weight:400;color:var(--ink);margin:0}
+  .co-head p{font-family:var(--body-ui);font-size:.88rem;color:var(--ink2);font-weight:600;margin:.2rem 0 0;max-width:640px}
+  .co-close{position:absolute;right:1rem;top:1rem;z-index:5;width:40px;height:40px;border-radius:50%;border:1px solid rgba(94,17,25,.18);
+    background:#fff8ec;color:#43251f;font-size:1.4rem;line-height:1;cursor:pointer;flex:0 0 auto}
+  .co-body{grid-column:2;display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.46fr);gap:1rem;align-items:start;min-height:0;overflow:auto;padding:1.15rem}
+  .co-gate{grid-column:1/-1;border:1px solid rgba(201,168,76,.55);border-radius:14px;padding:1rem;background:#fffaf0;box-shadow:0 10px 28px rgba(38,28,20,.08)}
+  .co-gate.locked{border-color:rgba(166,56,47,.4);background:linear-gradient(135deg,#fff7ed,#fffdf8)}
+  .co-gate-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:.7rem}
+  .co-gate h4{font-family:var(--impact)!important;font-size:1.45rem;font-weight:400;color:var(--ink);margin:0}
+  .co-gate p{font-family:var(--body-ui);font-size:.9rem;line-height:1.55;color:var(--ink2);font-weight:600;margin:.2rem 0 0}
+  .co-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.85rem;border:1px solid var(--line-gold);border-radius:14px;background:rgba(255,250,240,.72);padding:1rem}
   .co-field{display:flex;flex-direction:column;gap:.35rem}
   .co-field.full{grid-column:1/-1}
   .co-field label{font-family:var(--label);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--maroon);font-weight:600}
@@ -405,8 +446,25 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
   .pin-autofill-msg.bad{color:var(--maroon2)}
   .co-error{display:none;color:var(--maroon2);font-family:var(--body);font-size:.84rem;margin-top:.8rem}
   .co-error.show{display:block}
-  .co-summary{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:1.1rem;height:max-content}
-  .co-summary h4{font-family:var(--serif);font-size:1.35rem;font-weight:500;margin:0 0 .9rem;color:var(--ink)}
+  .co-location{grid-column:1/-1;display:grid;grid-template-columns:1fr auto;gap:.65rem;align-items:center;border:1px dashed rgba(201,168,76,.55);
+    border-radius:10px;background:#fff8ec;padding:.8rem}
+  .co-location p{font-family:var(--body-ui);font-size:.84rem;line-height:1.45;color:var(--ink2);font-weight:600;margin:0}
+  .co-location-actions{display:flex;align-items:center;justify-content:flex-end;gap:.5rem;flex-wrap:wrap}
+  .co-locate{border:0;border-radius:8px;background:var(--maroon);color:#fff6e5;font-family:var(--label);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;padding:.78rem .9rem;cursor:pointer;white-space:nowrap}
+  .co-map-toggle,.co-map-close{border:1px solid rgba(94,17,25,.2);border-radius:8px;background:#fff;color:var(--maroon);font-family:var(--label);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;padding:.74rem .86rem;cursor:pointer;white-space:nowrap}
+  .co-location-msg{grid-column:1/-1;font-family:var(--body-ui);font-size:.78rem;color:var(--ink3);min-height:1em}
+  .co-location-msg.ok{color:var(--ok)}.co-location-msg.bad{color:var(--maroon2)}
+  .co-map-wrap{grid-column:1/-1;display:none;border:1px solid rgba(201,168,76,.45);border-radius:12px;background:#fffaf0;padding:.8rem;overflow:hidden}
+  .co-map-wrap.show{display:block}
+  .co-map-top{display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-bottom:.65rem}
+  .co-map-top strong{font-family:var(--label);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--maroon)}
+  .co-map-top small,.co-map-note{font-family:var(--body-ui);font-size:.72rem;line-height:1.35;color:var(--ink3)}
+  .co-map{width:100%;height:260px;border-radius:10px;border:1px solid var(--line-gold);overflow:hidden;background:#efe2cd}
+  .co-map-actions{display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-top:.72rem;flex-wrap:wrap}
+  .co-summary{position:sticky;top:92px;background:#fffaf0;border:1px solid var(--line-gold);border-radius:14px;padding:1.1rem;height:max-content;box-shadow:0 10px 28px rgba(38,28,20,.08);display:flex;flex-direction:column}
+  .co-summary h4{font-family:var(--impact)!important;font-size:1.45rem;font-weight:400;margin:0 0 .9rem;color:var(--ink)}
+  .co-summary .co-wallet{order:-1;margin-top:0;margin-bottom:1rem}
+  .co-summary h4{order:0}.co-summary #co-sum-lines{order:1}.co-summary .co-pay{order:2}.co-summary .co-helper{order:3}
   .co-sum-line{display:flex;justify-content:space-between;gap:.8rem;font-family:var(--body);font-size:.86rem;color:var(--ink2);margin-bottom:.5rem}
   .co-sum-line.grand{border-top:1px solid var(--line);padding-top:.6rem;margin-top:.6rem;font-size:1.05rem;color:var(--ink);font-weight:600}
   .co-pay{width:100%;border:none;border-radius:6px;background:var(--maroon);color:#fff6e5;font-family:var(--label);
@@ -416,7 +474,7 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
   .co-helper{font-family:var(--body);font-size:.76rem;color:var(--ink2);line-height:1.5;margin-top:.8rem}
 
   /* success */
-  .co-success{display:none;text-align:center;padding:2.8rem 2rem 3rem}
+  .co-success{grid-column:2;display:none;text-align:center;padding:2.8rem 2rem 3rem}
   .co-success.show{display:block}
   .co-success .tick{width:64px;height:64px;margin:0 auto 1.2rem;border-radius:50%;border:1.5px solid var(--ok);
     display:flex;align-items:center;justify-content:center;color:var(--ok);font-size:2rem}
@@ -529,12 +587,14 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
   .offers-box h4{font-family:var(--label);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--maroon);
     font-weight:600;margin-bottom:.6rem;display:flex;align-items:center;gap:.45rem}
   .offers-box h4 svg{width:15px;height:15px;stroke:var(--maroon);fill:none;stroke-width:1.6}
-  .offers-box ul{list-style:none}
-  .offers-box li{font-family:var(--body);font-size:.82rem;color:var(--ink2);padding:.4rem 0;line-height:1.45;
-    border-bottom:1px dashed rgba(201,168,76,.4);display:flex;gap:.6rem;align-items:flex-start}
-  .offers-box li:last-child{border-bottom:none}
-  .offers-box code{font-family:var(--label);font-size:.64rem;letter-spacing:.05em;background:var(--maroon);color:#fff6e5;
-    border-radius:4px;padding:.2rem .42rem;flex:0 0 auto;margin-top:.05rem}
+  .offers-box ul{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:.5rem}
+  .offers-box li{font-family:var(--body);font-size:.82rem;color:var(--ink2);line-height:1.42;
+    border:1px dashed rgba(201,168,76,.46);border-radius:7px;padding:.6rem .65rem;
+    display:flex;flex-direction:column;align-items:flex-start;gap:.42rem;background:rgba(255,255,255,.45)}
+  .offers-box code{font-family:var(--label);font-size:.62rem;letter-spacing:.05em;background:var(--maroon);color:#fff6e5;
+    border-radius:4px;padding:.2rem .42rem;flex:0 0 auto;align-self:flex-start}
+  @media(max-width:560px){.offers-box ul{grid-template-columns:1fr 1fr}}
+  @media(max-width:380px){.offers-box ul{grid-template-columns:1fr}}
 
   /* ── Made in India strip ── */
   .india-strip{background:#fff8ec;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -767,11 +827,19 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
     .trust-strip .inner{grid-template-columns:repeat(2,1fr);gap:1.4rem}
     .benefit-grid,.rev-grid,.care{grid-template-columns:1fr}
     .about{grid-template-columns:1fr}
+    .co-card{grid-template-columns:1fr;height:100vh;overflow:auto}
+    .co-ritual{grid-row:auto;min-height:360px}
+    .co-head,.co-body,.co-success{grid-column:1}
     .co-body{grid-template-columns:1fr}
+    .co-summary{position:static;order:-1}
     .rel-grid{grid-template-columns:repeat(3,1fr);gap:.7rem}
   }
   @media(max-width:520px){
     .co-grid{grid-template-columns:1fr}
+    .co-location{grid-template-columns:1fr}
+    .co-location-actions{justify-content:flex-start}
+    .co-map{height:220px}
+    .co-ritual{padding:1.2rem}.co-trust{grid-template-columns:1fr}
     .announce{gap:.4rem 1rem;font-size:.7rem}
     .rel-grid{grid-template-columns:repeat(2,1fr)}
   }
@@ -818,38 +886,7 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
   .cb-pills span{font-family:var(--label);font-size:.54rem;letter-spacing:.13em;text-transform:uppercase;color:#5a3518;
     border:1px solid rgba(201,168,76,.42);background:rgba(255,255,255,.58);border-radius:999px;padding:.38rem .5rem;}
   .co-wallet{margin-top:.9rem;border:1px solid rgba(201,168,76,.36);border-radius:10px;background:#fffaf0;padding:.85rem .9rem;}
-  .cw-head{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;margin-bottom:.4rem;}
-  .cw-head span{font-family:var(--label);font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--maroon);font-weight:700;}
-  .cw-head strong{font-family:var(--body-ui);font-size:.8rem;color:var(--ink);text-align:right;}
-  .cw-copy,.cw-msg{font-family:var(--body-ui);font-size:.78rem;line-height:1.45;color:#5b4a3c;margin:.35rem 0 0;}
-  .cw-msg.ok{color:#2d6b3a}.cw-msg.bad{color:var(--maroon2)}
-  .cw-actions{display:grid;grid-template-columns:1fr auto;gap:.45rem;margin-top:.7rem;}
-  .cw-actions input{border:1px solid var(--line);border-radius:7px;padding:.72rem .75rem;font-family:var(--body-ui);font-size:.9rem;background:#fff;}
-  .cw-actions button,.cw-use{border:1px solid var(--maroon);border-radius:7px;background:var(--maroon);color:#fff6e5;
-    font-family:var(--label);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;padding:.72rem .75rem;cursor:pointer;}
-  .cw-actions button.secondary{background:#fff;color:var(--maroon);}
-  .cw-actions button:disabled,.cw-use:disabled{opacity:.55;cursor:not-allowed;}
-  .cw-use-row{display:flex;align-items:center;gap:.55rem;margin-top:.65rem;font-family:var(--body-ui);font-size:.8rem;color:#4a392d;}
-  .cw-use-row input{accent-color:var(--maroon);}
-  .cw-hidden{display:none!important;}
-  .cashback-line strong{color:var(--maroon);}
-  @media(max-width:520px){.cb-top{display:block}.cb-amount{display:block;margin-top:.35rem}.cw-actions{grid-template-columns:1fr}.cw-head{display:block}.cw-head strong{text-align:left;display:block;margin-top:.2rem}}
-
-
-  /* Veshannastro Wallet cashback layer */
-  .cashback-ledger{position:relative;margin:.9rem 0 1rem;border:1px solid rgba(201,168,76,.46);border-radius:12px;
-    background:linear-gradient(135deg,#fffaf0 0%,#fffdf8 56%,#f7ead3 100%);padding:1rem 1.05rem;
-    box-shadow:0 12px 28px rgba(38,28,20,.07);overflow:hidden;}
-  .cashback-ledger::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(#6e1423,#c9a84c);}
-  .cb-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.9rem;margin-bottom:.55rem;}
-  .cb-kicker{font-family:var(--label);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--maroon);font-weight:700;display:block;margin-bottom:.24rem;}
-  .cb-title{font-family:var(--serif);font-size:1.16rem;line-height:1.08;color:var(--ink);font-weight:600;display:block;}
-  .cb-amount{font-family:var(--serif);font-size:1.35rem;color:var(--maroon);font-weight:700;white-space:nowrap;}
-  .cb-copy{font-family:var(--body-ui);font-size:.84rem;line-height:1.5;color:#5b4a3c;margin:0 0 .7rem;}
-  .cb-pills{display:flex;flex-wrap:wrap;gap:.42rem;}
-  .cb-pills span{font-family:var(--label);font-size:.54rem;letter-spacing:.13em;text-transform:uppercase;color:#5a3518;
-    border:1px solid rgba(201,168,76,.42);background:rgba(255,255,255,.58);border-radius:999px;padding:.38rem .5rem;}
-  .co-wallet{margin-top:.9rem;border:1px solid rgba(201,168,76,.36);border-radius:10px;background:#fffaf0;padding:.85rem .9rem;}
+  .co-wallet.locked{border-color:rgba(166,56,47,.38);box-shadow:0 0 0 2px rgba(166,56,47,.06);}
   .cw-head{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;margin-bottom:.4rem;}
   .cw-head span{font-family:var(--label);font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--maroon);font-weight:700;}
   .cw-head strong{font-family:var(--body-ui);font-size:.8rem;color:var(--ink);text-align:right;}
@@ -870,6 +907,640 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
   @media(max-width:520px){.cb-top{display:block}.cb-amount{display:block;margin-top:.35rem}.cw-actions{grid-template-columns:1fr}.cw-head{display:block}.cw-head strong{text-align:left;display:block;margin-top:.2rem}}
 
 </style>
+
+<style id="gk-checkout-styles">
+/* ══════════════════════════════════════════════════════════
+   GOKWIK-STYLE CHECKOUT UPGRADE — Veshannastro
+   Scoped to .gk-* and .co-modal overrides.
+   No existing fonts, colors, or variables overridden.
+══════════════════════════════════════════════════════════ */
+
+/* ── step show/hide logic ── */
+.gk-step { grid-column: 2; overflow-y: auto; display: none; }
+.co-modal[data-gk-step="1"] .gk-s1 { display: block; }
+.co-modal[data-gk-step="2"] .gk-s2 { display: block; }
+.co-modal[data-gk-step="4"] .gk-s4 { display: block; }
+.co-modal[data-gk-step="5"] .gk-s5 { display: block; }
+
+/* co-body (step 3) — visible only when step=3 */
+.co-modal .co-body { display: none !important; }
+.co-modal[data-gk-step="3"] .co-body { display: grid !important; }
+
+/* always hide the old co-summary in new flow (kept only for JS compat) */
+.co-modal .co-summary { display: none !important; }
+
+/* hide old co-success steps overlay when showing success */
+.co-modal[data-gk-step="success"] .gk-s1,
+.co-modal[data-gk-step="success"] .gk-s2,
+.co-modal[data-gk-step="success"] .gk-s4,
+.co-modal[data-gk-step="success"] .gk-s5 { display: none; }
+.co-modal[data-gk-step="success"] .co-success { display: block; }
+
+/* ── co-head redesign ── */
+.co-head {
+  flex-direction: column !important;
+  gap: 0 !important;
+  padding: .7rem 1rem .6rem !important;
+}
+.gk-trust-top {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  font-family: var(--body-ui);
+  font-size: .72rem;
+  font-weight: 700;
+  color: #235c39;
+  background: rgba(47,125,79,.08);
+  border: 1px solid rgba(47,125,79,.22);
+  border-radius: 6px;
+  padding: .42rem .72rem;
+  margin-bottom: .55rem;
+  letter-spacing: .02em;
+  width: fit-content;
+}
+.gk-trust-top svg { stroke: #2f7d4f; flex: 0 0 auto; }
+.gk-head-main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: .5rem;
+  padding-right: 2.8rem;
+}
+.gk-head-text h3 { font-size: 1.22rem !important; margin: 0; color: var(--ink); }
+.gk-head-text p { font-family: var(--body-ui); font-size: .76rem; color: var(--ink2); font-weight: 600; margin: .18rem 0 0; }
+
+/* step progress dots */
+.gk-dots {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-top: .25rem;
+}
+.gk-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--cream-deep); border: 1.5px solid rgba(94,17,25,.25);
+  flex: 0 0 9px; transition: background .3s, border-color .3s;
+}
+.gk-dot.gk-dot-active, .gk-dot.gk-dot-done {
+  background: var(--maroon); border-color: var(--maroon);
+}
+.gk-dot.gk-dot-done { background: var(--ok); border-color: var(--ok); }
+.gk-dot-line {
+  flex: 1; height: 2px; background: var(--cream-deep); transition: background .3s;
+  min-width: 18px; max-width: 40px;
+}
+.gk-dot-line.gk-done { background: var(--ok); }
+
+/* ── step content wrapper ── */
+.gk-step-content {
+  padding: 1.1rem 1.2rem 1.5rem;
+  max-width: 540px;
+}
+.gk-step-hint {
+  font-family: var(--body-ui); font-size: .84rem; line-height: 1.5;
+  color: var(--ink2); margin: 0 0 1rem; font-weight: 600;
+}
+
+/* ── STEP 1: Phone login ── */
+.gk-phone-wrap { display: flex; flex-direction: column; gap: .7rem; }
+.gk-step1-google .co-wallet{margin:.15rem 0 .25rem;border-color:rgba(201,168,76,.48);background:#fffaf0;}
+.gk-step1-google .cw-head strong{text-align:left;}
+.gk-step1-google .cw-use-row{display:none;}
+.gk-phone-field {
+  display: flex; align-items: center;
+  border: 1.5px solid var(--line-gold); border-radius: 8px;
+  background: #fff; overflow: hidden;
+  transition: border-color .25s, box-shadow .25s;
+}
+.gk-phone-field:focus-within {
+  border-color: var(--maroon); box-shadow: 0 0 0 2.5px rgba(94,17,25,.12);
+}
+.gk-cc {
+  flex: 0 0 auto; padding: .82rem .85rem;
+  font-family: var(--body-ui); font-size: .92rem; font-weight: 700;
+  color: var(--ink); border-right: 1.5px solid var(--line-gold);
+  background: var(--paper);
+}
+.gk-phone-field input {
+  flex: 1; border: none; outline: none; padding: .82rem .85rem;
+  font-family: var(--body-ui); font-size: 1rem; color: var(--ink);
+  background: transparent; letter-spacing: .06em;
+}
+.gk-input-err {
+  font-family: var(--body-ui); font-size: .76rem; color: var(--maroon2);
+  min-height: 1.1em; margin: 0;
+}
+.gk-check-label {
+  display: flex; align-items: flex-start; gap: .55rem;
+  font-family: var(--body-ui); font-size: .8rem; color: var(--ink2);
+  font-weight: 600; cursor: pointer; line-height: 1.45;
+}
+.gk-check-label input { accent-color: var(--maroon); margin-top: .12rem; flex: 0 0 auto; }
+.gk-logged-row {
+  display: none;
+  align-items: center; gap: .7rem;
+  border: 1px solid rgba(47,125,79,.3); background: rgba(47,125,79,.06);
+  border-radius: 8px; padding: .7rem .85rem;
+  font-family: var(--body-ui); font-size: .84rem; color: #235c39; font-weight: 700;
+}
+.gk-logged-row.visible { display: flex; }
+.gk-logout-link {
+  margin-left: auto; border: none; background: transparent;
+  color: var(--maroon); font-family: var(--label);
+  font-size: .6rem; letter-spacing: .12em; text-transform: uppercase;
+  font-weight: 600; cursor: pointer; padding: .2rem .4rem;
+  border-radius: 4px; transition: background .2s;
+}
+.gk-logout-link:hover { background: var(--maroon-soft); }
+
+/* ── Primary button ── */
+.gk-primary-btn {
+  width: 100%; border: none; border-radius: 8px; cursor: pointer;
+  background: var(--maroon); color: #fdf3df;
+  font-family: var(--label); font-weight: 600; font-size: .78rem;
+  letter-spacing: .18em; text-transform: uppercase; padding: 1.05rem;
+  transition: background .25s, box-shadow .25s, transform .15s;
+  box-shadow: 0 10px 28px rgba(94,17,25,.22); position: relative; overflow: hidden;
+}
+.gk-primary-btn:hover { background: var(--maroon2); transform: translateY(-1px); box-shadow: 0 16px 36px rgba(94,17,25,.3); }
+.gk-primary-btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+
+/* ── STEP 2: Order card ── */
+.gk-order-card {
+  border: 1px solid var(--line-gold); border-radius: 12px;
+  background: #fffaf0; padding: .9rem 1rem; margin-bottom: 1rem;
+}
+.gk-oc-item {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: .6rem; margin-bottom: .7rem;
+}
+.gk-oc-name { font-family: var(--serif); font-size: 1.1rem; font-weight: 600; color: var(--ink); }
+.gk-oc-qty { font-family: var(--body-ui); font-size: .84rem; font-weight: 700; color: var(--ink2); white-space: nowrap; }
+.gk-oc-prices { display: flex; flex-direction: column; gap: .32rem; }
+.gk-oc-row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--body-ui); font-size: .84rem; color: var(--ink2); font-weight: 600;
+}
+.gk-mrp-strike { text-decoration: line-through; color: var(--ink3); }
+.gk-sale-val { color: var(--maroon); font-weight: 700; }
+.gk-saved-row .gk-saved-val { color: var(--ok); font-weight: 700; }
+.gk-oc-ship-row .gk-free-pill {
+  background: var(--ok); color: #fff; border-radius: 999px;
+  font-size: .66rem; font-weight: 700; letter-spacing: .05em;
+  padding: .2rem .55rem; font-family: var(--body-ui);
+}
+.gk-oc-total-row {
+  border-top: 1px solid var(--line-gold); padding-top: .55rem; margin-top: .28rem;
+  font-size: .95rem;
+}
+.gk-total-big { font-family: var(--serif); font-size: 1.3rem; font-weight: 600; color: var(--maroon); }
+
+/* ── Offers & Rewards ── */
+.gk-rewards-box {
+  border: 1px solid rgba(184,144,47,.42); border-radius: 12px;
+  background: #fffdf8; padding: .85rem .95rem; margin-bottom: 1rem;
+}
+.gk-rewards-hd {
+  display: flex; align-items: center; gap: .45rem;
+  font-family: var(--label); font-size: .66rem; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--maroon); font-weight: 600; margin-bottom: .65rem;
+}
+.gk-rewards-hd svg { stroke: var(--maroon); flex: 0 0 auto; }
+.gk-offer-chips { display: flex; flex-direction: column; gap: .42rem; margin-bottom: .72rem; }
+.gk-chip {
+  display: flex; align-items: center; gap: .6rem;
+  border: 1.5px dashed rgba(184,144,47,.5); border-radius: 9px;
+  background: rgba(255,255,255,.65); padding: .62rem .7rem;
+  cursor: pointer; text-align: left; transition: border-color .2s, background .2s;
+  width: 100%;
+}
+.gk-chip:hover { border-color: var(--maroon); background: rgba(255,248,236,.9); }
+.gk-chip.applied { border-color: var(--ok); background: rgba(47,125,79,.06); border-style: solid; }
+.gk-chip-tag {
+  font-family: var(--label); font-size: .6rem; letter-spacing: .06em;
+  background: var(--maroon); color: #fff6e5; border-radius: 4px;
+  padding: .22rem .45rem; flex: 0 0 auto;
+}
+.gk-chip.applied .gk-chip-tag { background: var(--ok); }
+.gk-chip-desc { flex: 1; font-family: var(--body-ui); font-size: .8rem; color: var(--ink2); font-weight: 600; }
+.gk-chip-btn {
+  font-family: var(--label); font-size: .58rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--maroon); font-weight: 700;
+  white-space: nowrap; border: 1px solid rgba(94,17,25,.28); border-radius: 5px;
+  padding: .28rem .52rem; transition: background .2s, color .2s; background: transparent;
+}
+.gk-chip:hover .gk-chip-btn { background: var(--maroon); color: #fdf3df; }
+.gk-chip.applied .gk-chip-btn { content: "Applied ✓"; color: var(--ok); border-color: var(--ok); }
+.gk-coupon-row {
+  display: grid; grid-template-columns: 1fr auto; gap: .5rem; margin-bottom: .5rem;
+}
+.gk-coupon-row input {
+  border: 1.5px solid var(--line); border-radius: 7px; padding: .72rem .78rem;
+  font-family: var(--body-ui); font-size: .9rem; background: #fff;
+  color: var(--ink); text-transform: uppercase; letter-spacing: .05em;
+  transition: border-color .25s;
+}
+.gk-coupon-row input:focus { outline: none; border-color: var(--maroon); box-shadow: 0 0 0 2px rgba(94,17,25,.1); }
+.gk-coupon-row input::placeholder { text-transform: none; letter-spacing: normal; color: #9a8e84; }
+.gk-coupon-row button {
+  border: 1.5px solid var(--maroon); border-radius: 7px; background: transparent;
+  color: var(--maroon); font-family: var(--label); font-size: .62rem;
+  letter-spacing: .14em; text-transform: uppercase; padding: .72rem .9rem;
+  cursor: pointer; transition: background .2s, color .2s; white-space: nowrap;
+}
+.gk-coupon-row button:hover { background: var(--maroon); color: #fff6e5; }
+.gk-coupon-fb {
+  font-family: var(--body); font-size: .8rem; min-height: 1.2em;
+  margin: 0 0 .42rem; line-height: 1.4;
+}
+.gk-coupon-fb.ok { color: var(--ok); } .gk-coupon-fb.bad { color: var(--maroon2); }
+.gk-applied-row {
+  display: none; align-items: center; gap: .5rem;
+  font-family: var(--body-ui); font-size: .8rem; color: #235c39;
+  background: rgba(47,125,79,.08); border: 1px solid rgba(47,125,79,.25);
+  border-radius: 7px; padding: .55rem .72rem; flex-wrap: wrap;
+}
+.gk-applied-row.visible { display: flex; }
+#gk-remove-coupon {
+  margin-left: auto; border: none; background: transparent; color: var(--maroon);
+  font-family: var(--body-ui); font-size: .76rem; font-weight: 700; cursor: pointer; padding: 0;
+}
+
+/* ── STEP 3: address hints & extras ── */
+.gk-addr-hint {
+  display: flex; align-items: flex-start; gap: .4rem;
+  font-family: var(--body-ui); font-size: .78rem; color: var(--ink2);
+  font-weight: 600; line-height: 1.4; margin: .55rem 0 .45rem;
+}
+.gk-addr-hint svg { flex: 0 0 auto; margin-top: .1rem; stroke: var(--gold2); }
+.gk-addr-cta { grid-column: 1/-1; padding: .6rem 0 .3rem; }
+.gk-notes-toggle {
+  border: none; background: transparent; color: var(--maroon);
+  font-family: var(--label); font-size: .6rem; letter-spacing: .12em;
+  text-transform: uppercase; font-weight: 600; cursor: pointer; padding: 0;
+}
+
+/* ── STEP 4: Delivery review ── */
+.gk-addr-banner {
+  display: flex; align-items: center; gap: .5rem;
+  background: rgba(47,125,79,.1); border: 1.5px solid rgba(47,125,79,.35);
+  border-radius: 8px; padding: .65rem .85rem;
+  font-family: var(--body-ui); font-size: .84rem;
+  color: #235c39; font-weight: 700; margin-bottom: .9rem;
+  animation: gkAddrPop .4s cubic-bezier(.2,.8,.25,1) both;
+}
+@keyframes gkAddrPop { from { opacity:0; transform: translateY(-6px); } to { opacity:1; transform: none; } }
+.gk-addr-banner svg { stroke: #2f7d4f; flex: 0 0 auto; }
+.gk-review-card {
+  border: 1px solid var(--line-gold); border-radius: 12px;
+  background: #fffaf0; padding: .9rem 1rem; margin-bottom: .8rem;
+}
+.gk-rc-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: .7rem; margin-bottom: .62rem;
+  font-family: var(--label); font-size: .6rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--maroon); font-weight: 700;
+}
+.gk-change-btn {
+  border: 1px solid rgba(94,17,25,.28); border-radius: 5px; background: transparent;
+  color: var(--maroon); font-family: var(--label); font-size: .58rem;
+  letter-spacing: .1em; text-transform: uppercase; font-weight: 600;
+  padding: .3rem .55rem; cursor: pointer; transition: background .2s;
+}
+.gk-change-btn:hover { background: var(--maroon); color: #fdf3df; }
+.gk-rc-name { font-family: var(--serif); font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: .28rem; }
+.gk-rc-addr { font-family: var(--body-ui); font-size: .84rem; color: var(--ink2); font-weight: 600; line-height: 1.5; }
+.gk-rc-contact { font-family: var(--body-ui); font-size: .78rem; color: var(--ink3); margin-top: .35rem; }
+.gk-ship-row {
+  display: flex; align-items: center; justify-content: space-between;
+  border: 1px solid rgba(47,125,79,.28); background: rgba(47,125,79,.06);
+  border-radius: 8px; padding: .65rem .85rem; margin-bottom: .9rem;
+}
+.gk-ship-label {
+  display: flex; align-items: center; gap: .45rem;
+  font-family: var(--body-ui); font-size: .84rem; color: #235c39; font-weight: 600;
+}
+.gk-ship-label svg { stroke: #2f7d4f; }
+.gk-free-badge {
+  font-family: var(--body-ui); font-size: .72rem; font-weight: 800;
+  color: #fff; background: var(--ok); border-radius: 999px;
+  padding: .24rem .6rem; letter-spacing: .04em; text-transform: uppercase;
+}
+
+/* ── STEP 5: Payment ── */
+.gk-pay-phone-row {
+  display: flex; align-items: center; gap: .5rem;
+  border: 1px solid var(--line-gold); background: var(--paper);
+  border-radius: 8px; padding: .65rem .85rem; margin-bottom: .8rem;
+  font-family: var(--body-ui); font-size: .84rem; color: var(--ink); font-weight: 700;
+}
+.gk-pay-phone-row svg { stroke: var(--gold2); flex: 0 0 auto; }
+.gk-pay-total-row {
+  display: flex; align-items: center; justify-content: space-between;
+  border: 1px solid var(--line-gold); border-radius: 8px;
+  background: #fffaf0; padding: .7rem .9rem; margin-bottom: .9rem;
+  font-family: var(--body-ui); font-size: .88rem; font-weight: 700; color: var(--ink2);
+}
+.gk-pay-total-val { font-family: var(--serif); font-size: 1.3rem; font-weight: 600; color: var(--maroon); }
+.gk-pm-section { margin-bottom: .9rem; }
+.gk-pm-label {
+  font-family: var(--label); font-size: .62rem; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--maroon); font-weight: 600; margin-bottom: .55rem;
+}
+.gk-pm-row {
+  display: flex; align-items: center; gap: .7rem; width: 100%;
+  border: 1.5px solid var(--line-gold); border-radius: 10px; background: #fff;
+  padding: .75rem .85rem; cursor: pointer; text-align: left; margin-bottom: .42rem;
+  transition: border-color .2s, background .2s, box-shadow .2s;
+}
+.gk-pm-row:hover { border-color: var(--maroon); background: var(--paper); box-shadow: 0 6px 18px rgba(94,17,25,.1); }
+.gk-pm-row.selected { border-color: var(--maroon); border-width: 2px; background: linear-gradient(135deg,#fffaf0,#fff4df); box-shadow: 0 8px 22px rgba(94,17,25,.12); }
+.gk-pm-ic { font-size: 1.2rem; flex: 0 0 auto; }
+.gk-pm-info { flex: 1; min-width: 0; }
+.gk-pm-name { font-family: var(--body-ui); font-size: .88rem; font-weight: 700; color: var(--ink); display: block; }
+.gk-pm-disc { font-family: var(--body-ui); font-size: .72rem; color: var(--ok); font-weight: 600; display: block; margin-top: .06rem; }
+.gk-pm-amt { font-family: var(--serif); font-size: .95rem; font-weight: 600; color: var(--maroon); white-space: nowrap; }
+.gk-pm-arr { font-family: var(--body); font-size: 1.2rem; color: var(--ink3); flex: 0 0 auto; }
+
+/* Wallet in step 5 */
+.gk-wallet-block { margin-bottom: 1rem; }
+.gk-wallet-block .cw-head { background: transparent; border: 0; padding: 0; margin-bottom: .45rem; }
+
+/* ── Pay button (step 5) ── */
+.gk-pay-btn {
+  width: 100%; border: none; border-radius: 8px; cursor: pointer;
+  background: linear-gradient(135deg,#6e1423,#9a2336);
+  color: #fdf3df;
+  font-family: var(--label); font-weight: 600; font-size: .84rem;
+  letter-spacing: .2em; text-transform: uppercase; padding: 1.1rem 1.4rem;
+  transition: background .25s, box-shadow .25s, transform .15s;
+  box-shadow: 0 12px 32px rgba(94,17,25,.28);
+  display: flex; align-items: center; justify-content: center; gap: .55rem;
+  position: relative; overflow: hidden; margin-top: .5rem;
+}
+.gk-pay-btn::before {
+  content: ""; position: absolute; top: 0; left: -80%; width: 50%; height: 100%;
+  background: linear-gradient(90deg,transparent,rgba(230,200,120,.35),transparent);
+  transform: skewX(-20deg); transition: left .55s ease;
+}
+.gk-pay-btn:hover { background: linear-gradient(135deg,#7a1d2b,#a82e3e); transform: translateY(-2px); box-shadow: 0 18px 42px rgba(94,17,25,.36); }
+.gk-pay-btn:hover::before { left: 140%; }
+.gk-pay-btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+.gk-error-5 { margin-top: .6rem; font-family: var(--body-ui); font-size: .8rem; color: var(--maroon2); }
+.gk-error-5.show { display: block; }
+
+/* ── Micro-offer popup ── */
+.gk-micro-popup {
+  position: fixed; inset: 0; z-index: 10200;
+  background: rgba(12,7,7,.72);
+  display: none; align-items: center; justify-content: center; padding: 1.2rem;
+}
+.gk-micro-popup.show { display: flex; }
+.gk-mp-inner {
+  background: var(--paper2); border: 1px solid var(--line-gold);
+  border-radius: 18px; padding: 2rem 1.5rem 1.6rem;
+  max-width: 340px; width: 100%; text-align: center; position: relative;
+  box-shadow: 0 28px 72px rgba(12,7,7,.38);
+  animation: gkPopIn .45s cubic-bezier(.2,.8,.25,1) both;
+}
+@keyframes gkPopIn { from { opacity:0; transform: scale(.88) translateY(12px); } to { opacity:1; transform: none; } }
+.gk-mp-close {
+  position: absolute; top: .7rem; right: .8rem; border: none;
+  background: transparent; color: var(--ink3); font-size: 1.1rem; cursor: pointer;
+  width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  transition: background .2s;
+}
+.gk-mp-close:hover { background: var(--maroon-soft); color: var(--maroon); }
+.gk-mp-emoji { font-size: 2.4rem; line-height: 1; margin-bottom: .7rem; display: block; }
+.gk-mp-title {
+  font-family: var(--serif); font-size: 1.35rem; font-weight: 600;
+  color: var(--ink); margin: 0 0 .55rem; line-height: 1.2;
+}
+.gk-mp-desc {
+  font-family: var(--body-ui); font-size: .88rem; color: var(--ink2);
+  font-weight: 600; margin: 0 0 1.2rem; line-height: 1.45;
+}
+.gk-mp-desc strong { color: var(--maroon); }
+.gk-mp-offer {
+  font-family: var(--serif); font-size: 1.45rem; line-height: 1.1;
+  color: var(--maroon); font-weight: 700; margin: 0 0 .55rem;
+}
+.gk-mp-applied[hidden] { display: none; }
+.gk-micro-popup.applied .gk-mp-inner > .gk-mp-emoji,
+.gk-micro-popup.applied .gk-mp-inner > .gk-mp-title,
+.gk-micro-popup.applied .gk-mp-inner > .gk-mp-desc,
+.gk-micro-popup.applied .gk-mp-inner > .gk-mp-btns { display: none; }
+.gk-mp-btns { display: flex; flex-direction: column; gap: .5rem; }
+.gk-mp-claim {
+  border: none; border-radius: 8px; background: var(--maroon); color: #fdf3df;
+  font-family: var(--label); font-size: .74rem; letter-spacing: .16em;
+  text-transform: uppercase; font-weight: 600; padding: .95rem;
+  cursor: pointer; transition: background .2s; box-shadow: 0 8px 22px rgba(94,17,25,.22);
+}
+.gk-mp-claim:hover { background: var(--maroon2); }
+.gk-mp-skip {
+  border: 1px solid rgba(94,17,25,.22); border-radius: 8px; background: transparent;
+  color: var(--ink3); font-family: var(--body-ui); font-size: .78rem; font-weight: 600;
+  padding: .72rem; cursor: pointer; transition: background .2s;
+}
+.gk-mp-skip:hover { background: var(--maroon-soft); color: var(--maroon); }
+
+/* ── Confetti particle ── */
+#gk-confetti-canvas { pointer-events: none; }
+.gk-cracker-layer{position:fixed;inset:0;z-index:13000;pointer-events:none;overflow:hidden;}
+.gk-cracker-piece{position:absolute;width:9px;height:18px;border-radius:3px;opacity:0;box-shadow:0 0 14px rgba(244,221,155,.55);animation:gkCrackerFly 1.55s cubic-bezier(.16,.78,.23,1) forwards;}
+@keyframes gkCrackerFly{0%{opacity:0;transform:translate(0,0) scale(.45) rotate(0)}12%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1) rotate(var(--rot))}}
+@media(prefers-reduced-motion:reduce){.gk-cracker-piece{animation:none!important;display:none!important}}
+
+/* ── EXIT-INTENT WARNING POPUP ── */
+.gk-exit-popup {
+  position: fixed; inset: 0; z-index: 10300;
+  background: rgba(12,7,7,.78);
+  display: none; align-items: center; justify-content: center; padding: 1.2rem;
+}
+.gk-exit-popup.show { display: flex; }
+.gk-ep-inner {
+  background: var(--paper2); border: 1px solid var(--line-gold);
+  border-radius: 20px; padding: 2.2rem 1.8rem 1.8rem;
+  max-width: 380px; width: 100%; text-align: center;
+  box-shadow: 0 32px 80px rgba(12,7,7,.42);
+  animation: gkPopIn .42s cubic-bezier(.2,.8,.25,1) both;
+}
+.gk-ep-inner.gk-ep-coupon {
+  border-color: rgba(184,144,47,.55);
+  background: linear-gradient(155deg,#fffdf8,#fff8ec);
+}
+.gk-ep-icon { font-size: 2.6rem; line-height: 1; margin-bottom: .75rem; display: block; }
+.gk-ep-title {
+  font-family: var(--serif); font-size: 1.45rem; font-weight: 600;
+  color: var(--ink); margin: 0 0 .65rem; line-height: 1.18;
+}
+.gk-ep-body {
+  font-family: var(--body-ui); font-size: .88rem; color: var(--ink2);
+  font-weight: 600; margin: 0 0 1.3rem; line-height: 1.55;
+}
+.gk-ep-body strong { color: var(--maroon); }
+
+/* Coupon display box */
+.gk-ep-coupon-box {
+  display: flex; flex-direction: column; align-items: center; gap: .4rem;
+  border: 2px dashed rgba(184,144,47,.7); border-radius: 12px;
+  background: rgba(255,248,220,.6); padding: .9rem 1rem;
+  margin-bottom: 1.3rem;
+  animation: gkCouponPulse 1.8s ease-in-out infinite;
+}
+@keyframes gkCouponPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(184,144,47,.3); }
+  50%      { box-shadow: 0 0 0 8px rgba(184,144,47,0); }
+}
+.gk-ep-coupon-tag {
+  font-family: var(--label); font-size: .92rem; letter-spacing: .14em;
+  font-weight: 800; color: var(--maroon); text-transform: uppercase;
+  background: var(--maroon); color: #fdf3df;
+  border-radius: 6px; padding: .35rem .75rem; display: inline-block;
+}
+.gk-ep-coupon-val {
+  font-family: var(--body-ui); font-size: .8rem; color: var(--ok);
+  font-weight: 700; letter-spacing: .02em;
+}
+
+/* Buttons */
+.gk-ep-btns { display: flex; flex-direction: column; gap: .55rem; }
+.gk-ep-stay {
+  border: none; border-radius: 10px; cursor: pointer;
+  background: var(--maroon); color: #fdf3df;
+  font-family: var(--label); font-size: .76rem; letter-spacing: .16em;
+  text-transform: uppercase; font-weight: 600; padding: 1rem;
+  transition: background .2s, transform .15s, box-shadow .2s;
+  box-shadow: 0 8px 24px rgba(94,17,25,.24);
+}
+.gk-ep-stay:hover { background: var(--maroon2); transform: translateY(-1px); }
+.gk-ep-claim {
+  background: linear-gradient(135deg,#6e1423,#9a2336) !important;
+  box-shadow: 0 10px 28px rgba(94,17,25,.3) !important;
+  font-size: .8rem !important;
+}
+.gk-ep-leave {
+  border: 1px solid rgba(94,17,25,.2); border-radius: 10px; background: transparent;
+  color: var(--ink3); font-family: var(--body-ui); font-size: .78rem;
+  font-weight: 600; padding: .8rem; cursor: pointer; transition: background .2s, color .2s;
+}
+.gk-ep-leave:hover { background: rgba(94,17,25,.06); color: var(--maroon); }
+.gk-ep-leave2 {
+  font-size: .72rem !important; color: #b0a090 !important;
+  padding: .6rem !important; text-decoration: underline; border: none !important;
+  background: transparent !important;
+}
+.gk-ep-leave2:hover { color: var(--maroon) !important; background: transparent !important; }
+
+/* Timer row in stage 2 */
+.gk-ep-timer-row {
+  display: flex; align-items: center; justify-content: center; gap: .4rem;
+  font-family: var(--body-ui); font-size: .78rem; color: var(--ink2);
+  font-weight: 600; margin-bottom: 1.1rem;
+}
+.gk-ep-timer-row svg { stroke: var(--maroon); flex: 0 0 auto; }
+.gk-ep-countdown {
+  font-family: var(--label); font-size: .84rem; font-weight: 800;
+  color: var(--maroon); letter-spacing: .04em; min-width: 38px;
+}
+
+
+/* ── Mobile responsive ── */
+@media(max-width:880px){
+  .gk-step { grid-column: 1; }
+  .co-modal[data-gk-step="3"] .co-body { grid-template-columns: 1fr !important; }
+  .gk-step-content { padding: .85rem .9rem 1.2rem; }
+  .gk-addr-cta { padding-top: .5rem; }
+}
+@media(max-width:520px){
+  .gk-head-text h3 { font-size: 1.05rem !important; }
+  .gk-pm-row { padding: .65rem .72rem; }
+  .gk-step-content { padding: .72rem .78rem 1rem; }
+}
+@media(prefers-reduced-motion:reduce){
+  .gk-addr-banner,.gk-mp-inner { animation: none !important; }
+  .gk-primary-btn,.gk-pay-btn { transition: none !important; }
+}
+</style>
+
+<!-- Baseband & Bracelet Tracking System injection -->
+<style id="bbt-tracking-system-styles">
+  :root{--bbt-ink:#18110d;--bbt-muted:#6d5e53;--bbt-paper:#fffaf1;--bbt-line:rgba(94,17,25,.15);--bbt-maroon:#5e1119;--bbt-gold:#c59a37;--bbt-blue:#2456c6;--bbt-green:#27784e;}
+  .bbt-nav-li{display:flex;align-items:center;}
+  .bbt-google-btn{display:inline-grid;place-items:center;width:42px;height:42px;border:0;border-radius:999px;padding:2px;cursor:pointer;background:conic-gradient(from 45deg,#4285f4,#34a853,#fbbc05,#ea4335,#4285f4);box-shadow:0 12px 28px rgba(30,20,12,.18);transition:transform .22s ease,box-shadow .22s ease;flex:0 0 auto;}
+  .bbt-google-btn:hover{transform:translateY(-1px) scale(1.035);box-shadow:0 16px 36px rgba(30,20,12,.24);}
+  .bbt-google-btn:focus-visible{outline:3px solid rgba(66,133,244,.32);outline-offset:3px;}
+  .bbt-google-btn span{display:grid;place-items:center;width:100%;height:100%;border-radius:inherit;background:#fffdf8;color:#333;font:800 1.08rem/1 var(--body-ui,Jost,sans-serif);}
+  .bbt-launcher{margin-left:.15rem;}
+  .bbt-checkout-launcher{position:absolute;right:4.45rem;top:1rem;z-index:6;width:40px;height:40px;}
+  .co-head{padding-right:7.9rem!important;}
+  .bbt-shell{position:fixed;inset:0;z-index:12000;display:none;background:rgba(22,10,13,.72);backdrop-filter:blur(10px);padding:18px;}
+  .bbt-shell.open{display:block;}
+  .bbt-app{height:100%;max-width:1180px;margin:0 auto;background:linear-gradient(180deg,#fffaf1,#f7eddb);border:1px solid rgba(230,200,120,.62);box-shadow:0 32px 90px rgba(10,7,6,.38);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;color:var(--bbt-ink);font-family:var(--body-ui,Jost,sans-serif);}
+  .bbt-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 1.15rem;border-bottom:1px solid var(--bbt-line);background:linear-gradient(135deg,#fffdf7,#f4e5c5);}
+  .bbt-brand{display:flex;align-items:center;gap:.8rem;min-width:0;}
+  .bbt-mark{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--bbt-maroon),#8b2636);display:grid;place-items:center;color:#fff8e8;box-shadow:0 12px 26px rgba(94,17,25,.22);font-weight:900;}
+  .bbt-brand small{display:block;color:var(--bbt-maroon);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;font-weight:800;}
+  .bbt-brand h2{margin:.1rem 0 0;font-family:var(--serif,Fraunces,serif);font-size:clamp(1.18rem,2.8vw,2rem);line-height:1.05;color:#20140d;}
+  .bbt-close{width:40px;height:40px;border-radius:10px;border:1px solid rgba(94,17,25,.18);background:#fffdf8;color:var(--bbt-maroon);cursor:pointer;font-size:1.35rem;line-height:1;transition:background .2s ease,transform .2s ease;}
+  .bbt-close:hover{background:#fff2de;transform:rotate(4deg);}
+  .bbt-tabs{display:flex;gap:.55rem;overflow:auto;padding:.8rem 1rem;border-bottom:1px solid var(--bbt-line);background:#fff9ee;}
+  .bbt-tab{border:1px solid rgba(94,17,25,.18);background:#fffdf8;color:#4a382d;border-radius:999px;padding:.7rem .95rem;white-space:nowrap;cursor:pointer;font-weight:800;font-size:.78rem;letter-spacing:.04em;}
+  .bbt-tab.active{background:var(--bbt-maroon);border-color:var(--bbt-maroon);color:#fff8e8;box-shadow:0 10px 24px rgba(94,17,25,.22);}
+  .bbt-body{overflow:auto;padding:1rem;background:radial-gradient(circle at 0 0,rgba(197,154,55,.13),transparent 34%),radial-gradient(circle at 100% 12%,rgba(94,17,25,.08),transparent 32%),#fbf4e9;}
+  .bbt-view{display:none;animation:bbtFade .26s ease both;}
+  .bbt-view.active{display:block;}
+  @keyframes bbtFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .bbt-grid{display:grid;gap:1rem;}
+  .bbt-grid.two{grid-template-columns:1.25fr .75fr;}
+  .bbt-grid.three{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .bbt-card{background:rgba(255,253,248,.94);border:1px solid var(--bbt-line);border-radius:14px;padding:1rem;box-shadow:0 16px 36px rgba(42,26,14,.08);}
+  .bbt-card h3{margin:0 0 .35rem;font-family:var(--serif,Fraunces,serif);font-size:1.25rem;color:#21150f;}
+  .bbt-muted{color:var(--bbt-muted);font-size:.92rem;}
+  .bbt-device{min-height:188px;display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(180deg,#fffdf7,#f8ead3);}
+  .bbt-device-icon{width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,#1c2540,#2456c6);color:#fff;display:grid;place-items:center;font-weight:900;margin-bottom:.8rem;}
+  .bbt-kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem;margin-top:.9rem;}
+  .bbt-kpi{border-radius:12px;background:#fff7e8;border:1px solid rgba(197,154,55,.28);padding:.8rem;}
+  .bbt-kpi span{display:block;color:var(--bbt-muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;font-weight:900;}
+  .bbt-kpi strong{display:block;font-size:1.35rem;color:#24150d;margin-top:.12rem;}
+  .bbt-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem;margin-bottom:1rem;}
+  .bbt-metric{border-radius:16px;padding:1rem;border:1px solid rgba(197,154,55,.35);background:linear-gradient(135deg,#fffdf7,#f5e4c0);}
+  .bbt-metric.green{background:linear-gradient(135deg,#f2fff8,#dff5e9);border-color:rgba(39,120,78,.24);}
+  .bbt-metric span{display:block;color:#69584c;font-size:.78rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;}
+  .bbt-metric strong{display:block;margin-top:.25rem;font-size:clamp(1.6rem,4vw,2.25rem);color:#24150d;}
+  .bbt-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem;}
+  .bbt-field.full{grid-column:1/-1;}
+  .bbt-field label{display:block;font-weight:900;font-size:.75rem;color:#5c4739;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.28rem;}
+  .bbt-field input{width:100%;height:44px;border-radius:10px;border:1px solid rgba(94,17,25,.18);background:#f8efe1;color:#1b120d;padding:0 .8rem;font:600 .93rem var(--body-ui,Jost,sans-serif);}
+  .bbt-field input:not([readonly]){background:#fff;border-color:rgba(36,86,198,.36);box-shadow:0 0 0 4px rgba(36,86,198,.08);}
+  .bbt-actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1rem;}
+  .bbt-btn{border:0;border-radius:10px;padding:.78rem 1rem;background:var(--bbt-maroon);color:#fff8e8;cursor:pointer;font-weight:900;letter-spacing:.05em;transition:transform .18s ease,box-shadow .18s ease,background .18s ease;}
+  .bbt-btn:hover{transform:translateY(-1px);box-shadow:0 12px 22px rgba(94,17,25,.22);}
+  .bbt-btn.secondary{background:#fffdf8;color:var(--bbt-maroon);border:1px solid rgba(94,17,25,.2);}
+  .bbt-table-wrap{overflow:auto;border:1px solid var(--bbt-line);border-radius:14px;background:#fffdf8;}
+  .bbt-table{width:100%;min-width:860px;border-collapse:collapse;font-size:.9rem;}
+  .bbt-table th{background:#f5e8d0;color:#5b4538;text-align:left;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;padding:.8rem;font-weight:900;}
+  .bbt-table td{padding:.85rem;border-top:1px solid rgba(94,17,25,.12);vertical-align:top;color:#25170f;}
+  .bbt-awb{display:inline-block;font-family:Consolas,monospace;background:#f1e7d6;border-radius:7px;padding:.24rem .42rem;font-size:.78rem;color:#3b281d;}
+  .bbt-status{display:inline-flex;border-radius:999px;padding:.28rem .55rem;font-weight:900;font-size:.74rem;background:#eaf1ff;color:#2456c6;}
+  .bbt-status.done{background:#e7f6ee;color:#27784e;}
+  .bbt-status.warn{background:#fff2cc;color:#8a6a22;}
+  .bbt-track-panel{position:fixed;inset:0;z-index:12100;display:none;place-items:center;background:rgba(22,10,13,.68);padding:18px;}
+  .bbt-track-panel.open{display:grid;}
+  .bbt-track-card{width:min(560px,100%);background:#fffaf1;border-radius:18px;border:1px solid rgba(230,200,120,.56);box-shadow:0 28px 78px rgba(10,7,6,.35);overflow:hidden;}
+  .bbt-track-head{display:flex;justify-content:space-between;gap:1rem;padding:1rem;border-bottom:1px solid var(--bbt-line);background:linear-gradient(135deg,#fffdf8,#f1dfba);}
+  .bbt-steps{list-style:none;margin:0;padding:1rem;}
+  .bbt-steps li{display:grid;grid-template-columns:34px 1fr;gap:.75rem;min-height:58px;}
+  .bbt-dot{width:28px;height:28px;border-radius:999px;display:grid;place-items:center;border:2px solid #d5c4a8;background:#fff;color:#8b7a68;font-weight:900;}
+  .bbt-steps li.done .bbt-dot{background:var(--bbt-blue);border-color:var(--bbt-blue);color:#fff;}
+  .bbt-step-title{font-weight:900;color:#21150f;}
+  .bbt-step-time{color:var(--bbt-muted);font-size:.84rem;margin-top:.1rem;}
+  .bbt-loader{padding:2rem;text-align:center;color:#5b4538;font-weight:900;}
+  @media(max-width:900px){.bbt-grid.two,.bbt-grid.three{grid-template-columns:1fr}.bbt-shell{padding:8px}.bbt-app{border-radius:14px}.bbt-top{align-items:flex-start}.bbt-brand h2{font-size:1.18rem}.bbt-form,.bbt-summary{grid-template-columns:1fr}.bbt-checkout-launcher{right:4.05rem;top:.85rem;width:38px;height:38px}.co-head{padding-right:7.4rem!important;}}
+  @media(max-width:760px){.nav-links .bbt-nav-li{display:flex!important}.bbt-launcher{width:40px;height:40px}.bbt-google-btn span{font-size:1rem;}.nav-links{gap:.5rem;}}
+</style>
 </head>
 <body>
 
@@ -888,9 +1559,109 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
     <li class="nav-cart-li"><a class="nav-cart" id="nav-cart" href="#buy">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/><path d="M3 4h2l2.6 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 1.9-1.4L21 8H7"/></svg>
       Cart<span class="cart-count" id="cart-count">0</span></a></li>
-  </ul>
+      <li class="bbt-nav-li"><button class="bbt-google-btn bbt-launcher" id="bbt-launcher" data-bbt-open type="button" aria-label="Open Baseband tracking dashboard" title="Open tracking dashboard"><span>G</span></button></li>
+</ul>
 </nav>
 
+<!-- Baseband & Bracelet Tracking System app shell -->
+<section class="bbt-shell" id="bbt-shell" aria-hidden="true">
+  <div class="bbt-app" role="dialog" aria-modal="true" aria-labelledby="bbt-title">
+    <header class="bbt-top">
+      <div class="bbt-brand">
+        <div class="bbt-mark" aria-hidden="true">BB</div>
+        <div>
+          <small>Baseband command center</small>
+          <h2 id="bbt-title">Bracelet Tracking System</h2>
+        </div>
+      </div>
+      <button class="bbt-close" id="bbt-close" type="button" aria-label="Close tracking dashboard">&times;</button>
+    </header>
+
+    <nav class="bbt-tabs" aria-label="Baseband tracking sections">
+      <button class="bbt-tab active" type="button" data-bbt-view="dashboard">User Dashboard</button>
+      <button class="bbt-tab" type="button" data-bbt-view="details">Bracelet Details</button>
+      <button class="bbt-tab" type="button" data-bbt-view="checkout">Checkout</button>
+    </nav>
+
+    <div class="bbt-body">
+      <section class="bbt-view active" id="bbt-view-dashboard">
+        <div class="bbt-grid two">
+          <article class="bbt-card">
+            <h3>Your Details</h3>
+            <p class="bbt-muted">Review your profile. Toggle edit when you need to update delivery or contact details.</p>
+            <form id="bbt-profile-form" class="bbt-form" autocomplete="on"></form>
+            <div class="bbt-actions">
+              <button class="bbt-btn secondary" id="bbt-edit-profile" type="button">Edit Profile</button>
+              <button class="bbt-btn" id="bbt-save-profile" type="button" hidden>Save Details</button>
+            </div>
+          </article>
+          <article class="bbt-card">
+            <div class="bbt-summary" id="bbt-summary"></div>
+            <h3>Your Orders</h3>
+            <p class="bbt-muted">Every bracelet, service, and location order with its AWB tracking ID.</p>
+          </article>
+        </div>
+        <div class="bbt-card" style="margin-top:1rem">
+          <div class="bbt-table-wrap">
+            <table class="bbt-table" aria-label="Your orders and AWB tracking">
+              <thead><tr><th>Order</th><th>Date</th><th>Price</th><th>AWB</th><th>Courier</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody id="bbt-orders-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="bbt-view" id="bbt-view-details">
+        <div class="bbt-grid two">
+          <article class="bbt-card">
+            <h3>Live Bracelet Inventory</h3>
+            <p class="bbt-muted">A compact operations view for basebands, RFID bracelets, NFC packs, and QC status.</p>
+            <div class="bbt-grid three" id="bbt-inventory" style="margin-top:1rem"></div>
+          </article>
+          <aside class="bbt-card">
+            <h3>Location Health</h3>
+            <p class="bbt-muted">Current fulfilment readiness across mapped hubs.</p>
+            <div class="bbt-kpis">
+              <div class="bbt-kpi"><span>Active zones</span><strong>18</strong></div>
+              <div class="bbt-kpi"><span>Synced today</span><strong>94%</strong></div>
+              <div class="bbt-kpi"><span>Pending QC</span><strong>7</strong></div>
+              <div class="bbt-kpi"><span>Alerts</span><strong>2</strong></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="bbt-view" id="bbt-view-checkout">
+        <div class="bbt-grid two">
+          <article class="bbt-card">
+            <h3>Checkout Preview</h3>
+            <p class="bbt-muted">A lightweight summary for bracelet shipments before payment handoff.</p>
+            <div id="bbt-checkout-items" style="margin-top:1rem"></div>
+          </article>
+          <aside class="bbt-card">
+            <h3>Payment Summary</h3>
+            <div id="bbt-payment-summary" style="margin-top:1rem"></div>
+            <button class="bbt-btn" type="button" style="width:100%;margin-top:1rem">Continue Securely</button>
+          </aside>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>
+
+<section class="bbt-track-panel" id="bbt-track-panel" aria-hidden="true">
+  <div class="bbt-track-card" role="dialog" aria-modal="true" aria-labelledby="bbt-track-title">
+    <header class="bbt-track-head">
+      <div>
+        <p class="bbt-muted" id="bbt-track-courier"></p>
+        <h3 id="bbt-track-title" style="margin:.1rem 0 0;font-family:var(--serif,Fraunces,serif)">Tracking</h3>
+        <p class="bbt-awb" id="bbt-track-awb" style="margin-top:.4rem"></p>
+      </div>
+      <button class="bbt-close" id="bbt-track-close" type="button" aria-label="Close tracking">&times;</button>
+    </header>
+    <div id="bbt-track-body"></div>
+  </div>
+</section>
 <nav class="breadcrumb" aria-label="Breadcrumb">
   <a href="https://www.veshannastro.co.in/">Home</a> /
   <a href="https://www.veshannastro.co.in/#bracelet-shop">Gemstone Bracelets</a> /
@@ -953,30 +1724,34 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
       <span class="siddh-free">FREE</span>
     </div>
 
-    <div class="price-row">
-      <span class="price-now" id="p-price">₹0</span>
-      <span class="price-mrp" id="p-mrp">₹0</span>
-      <span class="price-off" id="p-off">0% OFF</span>
-    </div>
-    <p class="tax-note">Inclusive of all taxes · Free shipping across India</p>
+    <div class="price-urgency">
+      <div class="price-card">
+        <div class="price-row">
+          <span class="price-now" id="p-price">₹0</span>
+          <span class="price-mrp" id="p-mrp">₹0</span>
+          <span class="price-off" id="p-off">0% OFF</span>
+        </div>
+        <p class="tax-note">Inclusive of all taxes · Free shipping across India</p>
+      </div>
 
-    <!-- urgency stays visible in the first desktop view -->
-    <div class="urgency-block hero-urgency">
-      <div class="urgency-stock">
-        <span class="urgency-dot" aria-hidden="true"></span>
-        <span>Only <strong>25 Maaya First Circle kits</strong> left with free Maaya guidance in this circle</span>
-      </div>
-      <div class="urgency-power">
-        Maaya First Circle includes <em>bracelet, ritual, mantra and 21-day guidance</em> at the launch price.
-      </div>
-      <div class="urgency-timer">
-        <span class="timer-label">⚡ Launch offer ends in</span>
-        <div class="timer-digits" aria-live="polite" aria-label="Offer countdown">
-          <span class="td"><span id="ct-h">10</span><small>hrs</small></span>
-          <span class="td-sep" aria-hidden="true">:</span>
-          <span class="td"><span id="ct-m">00</span><small>min</small></span>
-          <span class="td-sep" aria-hidden="true">:</span>
-          <span class="td"><span id="ct-s">00</span><small>sec</small></span>
+      <!-- urgency stays visible in the first desktop view -->
+      <div class="urgency-block hero-urgency">
+        <div class="urgency-stock">
+          <span class="urgency-dot" aria-hidden="true"></span>
+          <span>Only <strong>25 Maaya First Circle kits</strong> left with free Maaya guidance in this circle</span>
+        </div>
+        <div class="urgency-power">
+          Maaya First Circle includes <em>bracelet, ritual, mantra and 21-day guidance</em> at the launch price.
+        </div>
+        <div class="urgency-timer">
+          <span class="timer-label">⚡ Launch offer ends in</span>
+          <div class="timer-digits" aria-live="polite" aria-label="Offer countdown">
+            <span class="td"><span id="ct-h">10</span><small>hrs</small></span>
+            <span class="td-sep" aria-hidden="true">:</span>
+            <span class="td"><span id="ct-m">00</span><small>min</small></span>
+            <span class="td-sep" aria-hidden="true">:</span>
+            <span class="td"><span id="ct-s">00</span><small>sec</small></span>
+          </div>
         </div>
       </div>
     </div>
@@ -1051,12 +1826,14 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
 
     <p class="lede" id="p-lede">A genuine energy gemstone bracelet, finished as a comfortable free-size band.</p>
 
-    <p class="meta-line"><strong>Best for</strong><span id="p-who">—</span></p>
-    <p class="meta-line"><strong>Gemstones</strong><span id="p-gem">—</span></p>
-    <p class="meta-line"><strong>What you receive</strong><span>Bracelet, pouch, mantra card, ritual note, Maaya guidance and free India shipping</span></p>
-    <p class="meta-line"><strong>Helps with</strong><span id="p-benefits">—</span></p>
-    <p class="meta-line"><strong>Size</strong><span>Free size · fits most wrists (stretchable)</span></p>
-    <div class="stock" id="p-stock">In stock · ready to ship</div>
+    <div class="meta-grid">
+      <div class="mini-card"><strong>Best for</strong><span id="p-who">—</span></div>
+      <div class="mini-card"><strong>Gemstones</strong><span id="p-gem">—</span></div>
+      <div class="mini-card"><strong>What you receive</strong><span>Bracelet, pouch, mantra card, ritual note, Maaya guidance and free India shipping</span></div>
+      <div class="mini-card"><strong>Helps with</strong><span id="p-benefits">—</span></div>
+      <div class="mini-card"><strong>Size</strong><span>Free size · fits most wrists (stretchable)</span></div>
+      <div class="mini-card"><strong>Availability</strong><span class="stock" id="p-stock">In stock · ready to ship</span></div>
+    </div>
 
     <div class="chips" id="p-chips"></div>
 
@@ -1327,51 +2104,337 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
   <div class="rel-grid" id="rel-grid"></div>
 </section>
 
-<!-- ═══ CHECKOUT MODAL ═══ -->
-<div class="co-modal" id="co-modal" aria-hidden="true">
+<!-- ═══ CHECKOUT MODAL (GoKwik-style 5-step flow) ═══ -->
+<div class="co-modal" id="co-modal" data-gk-step="1" aria-hidden="true">
   <div class="co-card" role="dialog" aria-modal="true" aria-label="Checkout">
-    <div class="co-head">
+
+    <!-- ── Left ritual panel (desktop sidebar) ── -->
+    <aside class="co-ritual" aria-label="Order guidance">
+      <div class="co-mandala" aria-hidden="true"></div>
       <div>
-        <h3>Shipping &amp; checkout</h3>
-        <p>Prepaid order for delivery within India. We use these details only to ship and update you about your order.</p>
+        <span class="co-kicker">Secure checkout</span>
+        <h3>Your Path to Prosperity</h3>
+        <p>Welcome to a frictionless checkout experience where your path to prosperity begins. We safeguard your details from the very first click, giving you complete peace of mind so you can focus entirely on the healing energy your beautiful new piece will bring.</p>
       </div>
-      <button type="button" class="co-close" id="co-close" aria-label="Close checkout">&times;</button>
+      <div class="co-mini-order" aria-label="Live order summary">
+        <div class="co-mini-row"><span>Bracelet</span><strong id="co-left-name">Gemstone Band</strong></div>
+        <div class="co-mini-row"><span>Tier</span><strong id="co-left-tier">Just Bracelet</strong></div>
+        <div class="co-mini-row"><span>Quantity</span><strong id="co-left-meta">1 × ₹0</strong></div>
+        <div class="co-mini-row"><span>Wallet</span><strong id="co-left-wallet">Sign in required</strong></div>
+        <div class="co-mini-row"><span>Total</span><strong id="co-left-total">₹0</strong></div>
+      </div>
+      <div class="co-trust" aria-label="Trust signals">
+        <span>🔒 Encrypted</span>
+        <span>🚚 Free Ship</span>
+        <span>✦ Verified</span>
+      </div>
+    </aside>
+
+    <!-- ── Checkout header ── -->
+    <div class="co-head" id="co-head">
+      <div class="gk-trust-top">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        100% Secured Payment
+      </div>
+      <div class="gk-head-main">
+        <div class="gk-head-text">
+          <h3 id="gk-step-title">Enter your mobile number</h3>
+          <p id="gk-step-sub">Step 1 of 5 · Login</p>
+        </div>
+                <button class="bbt-google-btn bbt-checkout-launcher" data-bbt-open type="button" aria-label="Open Baseband tracking dashboard from checkout" title="Open tracking dashboard"><span>G</span></button><button type="button" class="co-close" id="co-close" aria-label="Close checkout">&times;</button>
+      </div>
+      <div class="gk-dots" id="gk-dots" aria-label="Checkout progress">
+        <span class="gk-dot gk-dot-active" data-step="1"></span>
+        <span class="gk-dot-line"></span>
+        <span class="gk-dot" data-step="2"></span>
+        <span class="gk-dot-line"></span>
+        <span class="gk-dot" data-step="3"></span>
+        <span class="gk-dot-line"></span>
+        <span class="gk-dot" data-step="4"></span>
+        <span class="gk-dot-line"></span>
+        <span class="gk-dot" data-step="5"></span>
+      </div>
     </div>
 
-    <!-- form view -->
+    <!-- ── STEP 1: Phone Login ── -->
+    <div class="gk-step gk-s1" id="gk-s1">
+      <div class="gk-step-content">
+        <p class="gk-step-hint">Enter your mobile number to continue. We'll send order updates to this number.</p>
+        <div class="gk-phone-wrap">
+          <div class="gk-phone-field">
+            <span class="gk-cc">+91</span>
+            <input type="tel" id="gk-phone" inputmode="numeric" maxlength="10"
+                   placeholder="10-digit mobile number" autocomplete="tel">
+          </div>
+          <p class="gk-input-err" id="gk-phone-err" aria-live="polite"></p>
+          <div class="gk-step1-google" id="gk-step1-google"></div>
+          <label class="gk-check-label">
+            <input type="checkbox" id="gk-updates" checked>
+            <span>Send me order updates &amp; offers — no spam</span>
+          </label>
+          <button type="button" class="gk-primary-btn" id="gk-phone-cont">Continue →</button>
+        </div>
+        <div class="gk-logged-row" id="gk-logged-row">
+          <span id="gk-logged-disp">+91 XXXXXXXXXX</span>
+          <button type="button" class="gk-logout-link" id="gk-logout">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STEP 2: Order Summary + Offers ── -->
+    <div class="gk-step gk-s2" id="gk-s2">
+      <div class="gk-step-content">
+        <div class="gk-order-card">
+          <div class="gk-oc-item">
+            <span class="gk-oc-name" id="gk-oc-name">Gemstone Band</span>
+            <span class="gk-oc-qty" id="gk-oc-qty">× 1</span>
+          </div>
+          <div class="gk-oc-prices">
+            <div class="gk-oc-row"><span>MRP</span><span class="gk-mrp-strike" id="gk-oc-mrp">₹0</span></div>
+            <div class="gk-oc-row"><span>Sale Price</span><span class="gk-sale-val" id="gk-oc-sale">₹0</span></div>
+            <div class="gk-oc-row gk-saved-row" id="gk-saved-row"><span>You save</span><span class="gk-saved-val" id="gk-oc-saved">₹0 🎉</span></div>
+            <div class="gk-oc-row gk-oc-ship-row"><span>Shipping</span><span class="gk-free-pill">Free</span></div>
+            <div class="gk-oc-row gk-oc-total-row"><span>Total</span><span class="gk-total-big" id="gk-oc-total">₹0</span></div>
+          </div>
+        </div>
+
+        <div class="gk-rewards-box">
+          <div class="gk-rewards-hd">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 12v8H4v-8M2 7h20v5H2zM12 7v13M12 7C12 4 9 3 7.5 4.5S6 8 9 8h3M12 7c0-3 3-4 4.5-2.5S18 8 15 8h-3"/></svg>
+            Offers &amp; Rewards
+          </div>
+          <div class="gk-offer-chips" id="gk-offer-chips">
+            <button type="button" class="gk-chip" data-code="WELCOME15">
+              <span class="gk-chip-tag">WELCOME15</span>
+              <span class="gk-chip-desc">15% off — first order</span>
+              <span class="gk-chip-btn">Claim</span>
+            </button>
+            <button type="button" class="gk-chip" data-code="PAIR10">
+              <span class="gk-chip-tag">PAIR10</span>
+              <span class="gk-chip-desc">Buy 2+ get 10% off</span>
+              <span class="gk-chip-btn">Claim</span>
+            </button>
+            <button type="button" class="gk-chip" data-code="MAAYA15">
+              <span class="gk-chip-tag">MAAYA15</span>
+              <span class="gk-chip-desc">15% — Maaya's pick</span>
+              <span class="gk-chip-btn">Claim</span>
+            </button>
+          </div>
+          <div class="gk-coupon-row">
+            <input type="text" id="gk-coupon-inp" placeholder="Enter coupon code"
+                   autocomplete="off" autocapitalize="characters" spellcheck="false">
+            <button type="button" id="gk-coupon-go">Apply</button>
+          </div>
+          <p class="gk-coupon-fb" id="gk-coupon-fb" aria-live="polite"></p>
+          <div class="gk-applied-row" id="gk-applied-row">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2f7d4f" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+            Coupon <strong id="gk-applied-code">—</strong> applied
+            <button type="button" id="gk-remove-coupon">✕ Remove</button>
+          </div>
+        </div>
+
+        <button type="button" class="gk-primary-btn" id="gk-to-address">Continue to Delivery →</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 3: Address form (co-body / co-form — reordered, pincode-first) ── -->
     <div class="co-body" id="co-body">
       <form id="co-form" novalidate>
         <div class="co-grid">
+          <!-- Location helper (collapsed, optional) -->
+          <div class="co-location">
+            <p>Use your current location to fill address faster.</p>
+            <div class="co-location-actions">
+              <button type="button" class="co-locate" id="co-locate">📍 Use my location</button>
+              <button type="button" class="co-map-toggle" id="co-map-toggle">Pick on map</button>
+            </div>
+            <div class="co-location-msg" id="co-location-msg" aria-live="polite"></div>
+          </div>
+          <div class="co-map-wrap" id="co-map-wrap" aria-label="Delivery location map">
+            <div class="co-map-top">
+              <div><strong>Delivery pin</strong><small>Move the pin to your gate or entrance.</small></div>
+              <button type="button" class="co-map-close" id="co-map-close">Hide map</button>
+            </div>
+            <div class="co-map" id="co-map"></div>
+            <div class="co-map-actions">
+              <button type="button" class="co-locate" id="co-map-use">Use selected pin</button>
+              <span class="co-map-note">Free OpenStreetMap lookup. Confirm address before paying.</span>
+            </div>
+          </div>
+          <input id="f-latitude" name="latitude" type="hidden">
+          <input id="f-longitude" name="longitude" type="hidden">
+          <input id="f-location-source" name="location_source" type="hidden">
+          <input id="f-location-label" name="location_label" type="hidden">
+          <!-- PINCODE-FIRST ORDER -->
+          <div class="co-field"><label for="f-pincode">Pincode</label><input id="f-pincode" name="pincode" autocomplete="postal-code" type="text" inputmode="numeric" maxlength="6" placeholder="6-digit pincode" required><small class="pin-autofill-msg" id="f-pin-msg" aria-live="polite"></small></div>
+          <div class="co-field"><label for="f-city">City</label><input id="f-city" name="city" autocomplete="address-level2" type="text" placeholder="Auto-filled from pincode" required></div>
+          <div class="co-field full"><label for="f-state">State</label><select id="f-state" name="state" autocomplete="address-level1" required></select></div>
+          <div class="co-field"><label for="f-address2">Flat / House no.</label><input id="f-address2" name="address2" autocomplete="address-line2" type="text" placeholder="Flat no., House no."></div>
+          <div class="co-field full"><label for="f-address1">Street / Area / Landmark</label><input id="f-address1" name="address1" autocomplete="address-line1" type="text" placeholder="Street, area, or landmark" required></div>
           <div class="co-field"><label for="f-name">Full name</label><input id="f-name" name="name" autocomplete="name" type="text" required></div>
-          <div class="co-field"><label for="f-phone">Mobile number</label><input id="f-phone" name="phone" autocomplete="tel" type="tel" maxlength="10" required></div>
-          <div class="co-field full"><label for="f-email">Email</label><input id="f-email" name="email" autocomplete="email" type="email" required></div>
-          <div class="co-field full"><label for="f-address1">Shipping address</label><input id="f-address1" name="address1" autocomplete="address-line1" type="text" required></div>
-          <div class="co-field full"><label for="f-address2">Apartment, landmark (optional)</label><input id="f-address2" name="address2" autocomplete="address-line2" type="text"></div>
-          <div class="co-field"><label for="f-city">City</label><input id="f-city" name="city" autocomplete="address-level2" type="text" required></div>
-          <div class="co-field"><label for="f-state">State</label><select id="f-state" name="state" autocomplete="address-level1" required></select></div>
-          <div class="co-field"><label for="f-pincode">Pincode</label><input id="f-pincode" name="pincode" autocomplete="postal-code" type="text" maxlength="6" required><small class="pin-autofill-msg" id="f-pin-msg" aria-live="polite"></small></div>
+          <div class="co-field"><label for="f-phone">Mobile number</label><input id="f-phone" name="phone" autocomplete="tel" type="tel" inputmode="numeric" maxlength="10" required></div>
+          <div class="co-field full"><label for="f-email">Email address</label><input id="f-email" name="email" autocomplete="email" type="email" required></div>
           <div class="co-field"><label for="f-country">Country</label><input id="f-country" name="country" type="text" value="India" readonly></div>
-          <div class="co-field full"><label for="f-notes">Special instructions (optional)</label><textarea id="f-notes" name="notes" placeholder="Anything we should know about your order"></textarea></div>
+          <div class="co-field full">
+            <button type="button" class="gk-notes-toggle" id="gk-notes-toggle">+ Add order notes (optional)</button>
+            <div id="gk-notes-body" style="display:none;flex-direction:column;gap:.35rem">
+              <label for="f-notes" style="font-family:var(--label);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--maroon);font-weight:600">Order notes</label>
+              <textarea id="f-notes" name="notes" placeholder="Anything we should know about your order"></textarea>
+            </div>
+          </div>
         </div>
+        <p class="gk-addr-hint">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+          Please verify your address and enter the complete details for smooth delivery.
+        </p>
         <div class="co-error" id="co-error">Please fill all required details correctly.</div>
       </form>
-
-      <aside class="co-summary" aria-label="Order summary">
+      <div class="gk-addr-cta">
+        <button type="button" class="gk-primary-btn" id="gk-to-review">Review Delivery →</button>
+      </div>
+      <!-- Hidden co-summary kept for renderSummary() JS compatibility -->
+      <aside class="co-summary" id="co-summary" aria-hidden="true">
         <h4>Order summary</h4>
         <div id="co-sum-lines"></div>
         <button type="button" class="co-pay" id="co-pay">Pay with Razorpay</button>
-        <p class="co-helper">You'll be taken to Razorpay's secure page to complete payment. Keep the payment ID for any support queries.</p>
-        <div class="co-wallet" id="co-wallet" aria-label="Veshannastro wallet">
-          <div class="cw-head"><span>Wallet access</span><strong id="cw-status">Sign in to attach cashback</strong></div>
-          <p class="cw-copy" id="cw-copy">Continue with Google once. You'll get 100% cashback up to ₹400 credited to your wallet after successful payment.</p>
-          <div class="cw-google" id="cw-google"></div>
-          <label class="cw-use-row"><input type="checkbox" id="cw-use" disabled> <span id="cw-use-label">Use wallet balance on this order when available</span></label>
-          <p class="cw-msg" id="cw-msg" aria-live="polite"></p>
-        </div>
+        <p class="co-helper">Secure Razorpay checkout.</p>
       </aside>
     </div>
 
-    <!-- success view -->
+    <!-- ── STEP 4: Delivery Review ── -->
+    <div class="gk-step gk-s4" id="gk-s4">
+      <div class="gk-step-content">
+        <div class="gk-addr-banner" id="gk-addr-banner">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+          Address saved successfully
+        </div>
+        <div class="gk-review-card">
+          <div class="gk-rc-head">
+            <span>Delivering to</span>
+            <button type="button" class="gk-change-btn" id="gk-change-addr">Change address</button>
+          </div>
+          <div class="gk-rc-name" id="gk-rc-name"></div>
+          <div class="gk-rc-addr" id="gk-rc-addr"></div>
+          <div class="gk-rc-contact" id="gk-rc-contact"></div>
+        </div>
+        <div class="gk-ship-row">
+          <span class="gk-ship-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="15" height="12" rx="2"/><path d="M16 9h3l3 3v6h-6"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>
+            Delivery charges
+          </span>
+          <span class="gk-free-badge">Free</span>
+        </div>
+        <button type="button" class="gk-primary-btn" id="gk-to-payment">Continue to Payment →</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 5: Payment ── -->
+    <div class="gk-step gk-s5" id="gk-s5">
+      <div class="gk-step-content">
+        <!-- Logged-in phone row -->
+        <div class="gk-pay-phone-row" id="gk-pay-phone-row">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92V20a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.37 18a19.5 19.5 0 0 1-5.25-5.37 19.79 19.79 0 0 1-3.97-8.59A2 2 0 0 1 4.11 2h3.09a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <span id="gk-pay-phone-disp">+91 XXXXXXXXXX</span>
+          <button type="button" class="gk-logout-link" id="gk-pay-logout">Logout</button>
+        </div>
+
+        <!-- Order mini-summary for payment step -->
+        <div class="gk-pay-total-row">
+          <span>Order total</span>
+          <span class="gk-pay-total-val" id="gk-pay-total">₹0</span>
+        </div>
+
+        <!-- Payment method rows -->
+        <div class="gk-pm-section">
+          <p class="gk-pm-label">Select payment method</p>
+
+          <button type="button" class="gk-pm-row" id="gk-pm-upi" data-method="upi">
+            <span class="gk-pm-ic">📱</span>
+            <span class="gk-pm-info">
+              <span class="gk-pm-name">UPI / QR</span>
+              <span class="gk-pm-disc" id="gk-pm-upi-disc"></span>
+            </span>
+            <span class="gk-pm-amt" id="gk-pm-upi-amt"></span>
+            <span class="gk-pm-arr">›</span>
+          </button>
+
+          <button type="button" class="gk-pm-row" id="gk-pm-cards" data-method="cards">
+            <span class="gk-pm-ic">💳</span>
+            <span class="gk-pm-info">
+              <span class="gk-pm-name">Debit / Credit Card</span>
+              <span class="gk-pm-disc" id="gk-pm-cards-disc"></span>
+            </span>
+            <span class="gk-pm-amt" id="gk-pm-cards-amt"></span>
+            <span class="gk-pm-arr">›</span>
+          </button>
+
+          <button type="button" class="gk-pm-row" id="gk-pm-emi" data-method="emi" style="display:none">
+            <span class="gk-pm-ic">📅</span>
+            <span class="gk-pm-info">
+              <span class="gk-pm-name">EMI</span>
+              <span class="gk-pm-disc" id="gk-pm-emi-disc">No cost EMI available</span>
+            </span>
+            <span class="gk-pm-amt" id="gk-pm-emi-amt"></span>
+            <span class="gk-pm-arr">›</span>
+          </button>
+
+          <button type="button" class="gk-pm-row" id="gk-pm-nb" data-method="netbanking">
+            <span class="gk-pm-ic">🏦</span>
+            <span class="gk-pm-info">
+              <span class="gk-pm-name">Net Banking</span>
+              <span class="gk-pm-disc" id="gk-pm-nb-disc"></span>
+            </span>
+            <span class="gk-pm-amt" id="gk-pm-nb-amt"></span>
+            <span class="gk-pm-arr">›</span>
+          </button>
+
+          <button type="button" class="gk-pm-row" id="gk-pm-wallets" data-method="wallets">
+            <span class="gk-pm-ic">👜</span>
+            <span class="gk-pm-info">
+              <span class="gk-pm-name">Wallets</span>
+              <span class="gk-pm-disc">Paytm, PhonePe, Amazon Pay &amp; more</span>
+            </span>
+            <span class="gk-pm-amt" id="gk-pm-wallets-amt"></span>
+            <span class="gk-pm-arr">›</span>
+          </button>
+
+          <button type="button" class="gk-pm-row gk-pm-cod-row" id="gk-pm-cod" data-method="cod" style="display:none">
+            <span class="gk-pm-ic">💵</span>
+            <span class="gk-pm-info">
+              <span class="gk-pm-name">Cash on Delivery</span>
+              <span class="gk-pm-disc">Pay when you receive</span>
+            </span>
+            <span class="gk-pm-amt" id="gk-pm-cod-amt"></span>
+            <span class="gk-pm-arr">›</span>
+          </button>
+        </div>
+
+        <!-- Wallet / Cashback / Google (existing IDs preserved) -->
+        <div class="co-wallet" id="co-wallet" aria-label="Veshannastro wallet">
+          <div class="cw-head">
+            <span>Wallet &amp; Cashback</span>
+            <strong id="cw-status">Sign in to attach cashback</strong>
+          </div>
+          <p class="cw-copy" id="cw-copy">Continue with Google once to earn 100% cashback up to ₹400 on your order.</p>
+          <div class="cw-google" id="cw-google"></div>
+          <label class="cw-use-row">
+            <input type="checkbox" id="cw-use" disabled>
+            <span id="cw-use-label">Use wallet balance on this order when available</span>
+          </label>
+          <p class="cw-msg" id="cw-msg" aria-live="polite"></p>
+        </div>
+
+        <!-- Main pay button -->
+        <button type="button" class="gk-pay-btn" id="gk-pay-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>
+          Pay <span id="gk-pay-btn-amt">₹0</span> · Secure Razorpay
+        </button>
+        <div class="co-error gk-error-5" id="co-error-5" aria-live="polite"></div>
+        <p class="co-helper">You'll be taken to Razorpay's secure page. Keep your payment ID for any queries.</p>
+      </div>
+    </div>
+
+    <!-- ── Success screen (existing, unchanged IDs) ── -->
     <div class="co-success" id="co-success">
       <div class="tick">✓</div>
       <h3>Order received</h3>
@@ -1381,10 +2444,69 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
         Send order details on WhatsApp
       </a>
     </div>
+
   </div>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ── Micro-offer popup ── -->
+<div class="gk-micro-popup" id="gk-micro-popup" aria-hidden="true" role="dialog" aria-label="Special offer">
+  <div class="gk-mp-inner">
+    <button type="button" class="gk-mp-close" id="gk-mp-close" aria-label="Skip offer">✕</button>
+    <div class="gk-mp-emoji">🎁</div>
+    <h4 class="gk-mp-title">Wait! We have a special offer just for you</h4>
+    <p class="gk-mp-desc" id="gk-mp-desc">Claim an extra <strong>₹ off</strong> on your order.</p>
+    <div class="gk-mp-btns">
+      <button type="button" class="gk-mp-claim" id="gk-mp-claim">Claim offer</button>
+      <button type="button" class="gk-mp-skip" id="gk-mp-skip">Skip offer</button>
+    </div>
+    <div class="gk-mp-applied" id="gk-mp-applied" hidden>
+      <div class="gk-mp-emoji">ðŸŽ</div>
+      <h4 class="gk-mp-title">COMEBACK25 applied</h4>
+      <p class="gk-mp-offer">You saved ₹25</p>
+      <div class="gk-mp-btns">
+        <button type="button" class="gk-mp-claim" id="gk-mp-continue">Continue to checkout</button>
+        <button type="button" class="gk-mp-skip" id="gk-mp-remove">Remove</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Exit-intent warning popup (2-stage) ── -->
+<div class="gk-exit-popup" id="gk-exit-popup" aria-hidden="true" role="dialog" aria-label="Before you leave">
+  <!-- Stage 1: soft nudge — hints at what's coming -->
+  <div class="gk-ep-inner" id="gk-ep-stage1">
+    <div class="gk-ep-icon">🙏</div>
+    <h4 class="gk-ep-title">Wait — don't go just yet!</h4>
+    <p class="gk-ep-body">Your Maaya-selected bracelet is still here, waiting for you. And we have a <strong>little gift</strong> if you give us one more moment...</p>
+    <div class="gk-ep-btns">
+      <button type="button" class="gk-ep-stay" id="gk-ep-stay1">Show me the offer →</button>
+      <button type="button" class="gk-ep-leave" id="gk-ep-leave1">I'll come back later</button>
+    </div>
+  </div>
+  <!-- Stage 2: coupon offer with haptic + countdown -->
+  <div class="gk-ep-inner gk-ep-coupon" id="gk-ep-stage2" style="display:none">
+    <div class="gk-ep-icon">🎁</div>
+    <h4 class="gk-ep-title">Here's your comeback coupon!</h4>
+    <p class="gk-ep-body">We genuinely want you to experience the healing energy of your bracelet. So here is a <strong>flat ₹25 instant discount</strong> — no conditions, just for coming this far.</p>
+    <div class="gk-ep-coupon-box">
+      <span class="gk-ep-coupon-tag">COMEBACK25</span>
+      <span class="gk-ep-coupon-val">₹25 flat off — applied instantly on claim</span>
+    </div>
+    <div class="gk-ep-timer-row">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      Offer expires in <span id="gk-ep-countdown" class="gk-ep-countdown">10:00</span>
+    </div>
+    <div class="gk-ep-btns">
+      <button type="button" class="gk-ep-stay gk-ep-claim" id="gk-ep-claim">✦ Claim ₹25 off &amp; complete my order</button>
+      <button type="button" class="gk-ep-leave gk-ep-leave2" id="gk-ep-leave2">Leave (coupon saved for my return)</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Confetti canvas ── -->
+<canvas id="gk-confetti-canvas" style="position:fixed;inset:0;pointer-events:none;z-index:10500;display:none"></canvas>
 
 <div class="cart-confirm" id="cart-confirm" role="status" aria-live="polite">
   <div class="cc-head"><span class="cc-tick">&#10003;</span> Added to your cart</div>
@@ -1474,6 +2596,16 @@ var CONFIG = {
      single buy also uses Checkout — so the page works before links exist.
      In each link's dashboard settings, set the redirect URL to thank-you.html.
      ───────────────────────────────────────────────────────────────────── */
+  /* ─── GoKwik-style checkout feature flags ─── */
+  ENABLE_COD: false,        // set true to show Cash on Delivery row
+  ENABLE_EMI: false,        // set true to show EMI row
+  paymentDiscounts: {       // set "" to hide a label; config-driven
+    upi:   "Get 5% off · up to ₹125 cashback",
+    cards: "",
+    nb:    "",
+    emi:   "No cost EMI available"
+  },
+
   paymentLinks: {
     "VA-BR-TP-001": "https://rzp.io/rzp/REPLACE-VA-BR-TP-001-799",
     "VA-BR-AM-002": "https://rzp.io/rzp/REPLACE-VA-BR-AM-002-999",
@@ -1508,7 +2640,10 @@ var COUPONS = {
   "MAAYA15": { percent: 15, requiresRec: true, note: "15% off only on the bracelet Maaya recommends." },
   "NEW15": { percent: 15, welcome: true, note: "15% off your first bracelet order." },
   "WELCOME15": { percent: 15, welcome: true, note: "15% off your first bracelet order." },
-  "FIRSTBLESSING15": { percent: 15, welcome: true, note: "15% off your first bracelet order." }
+  "FIRSTBLESSING15": { percent: 15, welcome: true, note: "15% off your first bracelet order." },
+  "COMEBACK25": { flat: 25, note: "Flat ₹25 off — a little gift to welcome you back." },
+  "MAAYA25": { percent: 25, requiresRec: true, note: "25% off — Maaya's special pick for you." },
+  "KINDLYCOMEBACK25": { flat: 25, note: "Flat ₹25 off — a little gift to welcome you back." }
 };
 
 /* Product catalog (mirrors bracelet-shop.js). */
@@ -1704,6 +2839,7 @@ function commitCartAdd(){
     var ci = $("coupon-input"); if(ci) ci.value = "PAIR10";
     showMakeTwo(false);
     setCouponMsg("PAIR10 applied automatically - 10% off unlocked on 2 bracelets. Coupons cannot be combined.", "ok");
+    gkFireCracker();
     if(before < 2 && !happy10Celebrated){
       happy10Celebrated = true;
       setTimeout(showHappy10Celebrate, 320);
@@ -2286,6 +3422,13 @@ function setCheckoutStateValue(state){
   var match=[].filter.call(sel.options,function(o){ return o.value.toLowerCase()===wanted.toLowerCase(); })[0];
   if(match) sel.value=match.value;
 }
+function coSetIfValue(id,value,overwrite){
+  var el=$(id), v=String(value||"").trim();
+  if(!el || !v) return false;
+  if(!overwrite && String(el.value||"").trim()) return false;
+  el.value=v;
+  return true;
+}
 function lookupCheckoutPincode(pin,silent){
   pin=String(pin||"").replace(/\D/g,"");
   if(pin.length!==6){ if(!silent) setCheckoutPinMsg("Enter 6 digits to autofill city and state.",""); return Promise.resolve(false); }
@@ -2395,6 +3538,11 @@ function filterRelated(){
     var show = activeIntent === "all" || ints.indexOf(activeIntent) >= 0;
     card.style.display = show ? "" : "none";
   });
+  // collapse a whole family if nothing in it matches the active intent
+  [].forEach.call(document.querySelectorAll("#rel-grid .cat-group"), function(grp){
+    var visible = grp.querySelector('.rel-card:not([style*="display: none"])');
+    grp.style.display = visible ? "" : "none";
+  });
 }
 
 function buildRelated(){
@@ -2406,15 +3554,40 @@ function buildRelated(){
 
   renderIntentChips();
 
-  // every band in catalog order — add more to PRODUCTS and they appear here automatically
+  // split catalog into the two curated families and render each as its own headed grid
   var premiumKeys = Object.keys(PRODUCTS).filter(function(k){ return PRODUCTS[k].premium; });
   var regularKeys = Object.keys(PRODUCTS).filter(function(k){ return !PRODUCTS[k].premium; });
-  host.innerHTML = [
-    '<div class="rel-tier rel-tier-premium">Premium Quality Bracelets</div>',
-    premiumKeys.map(cardHtml).join(""),
-    '<div class="rel-tier">Classic Bracelet Collection</div>',
-    regularKeys.map(cardHtml).join("")
-  ].join("");
+
+  function groupBlock(o, keys){
+    if(!keys.length) return "";
+    return [
+      '<div class="cat-group '+o.cls+'" data-group="'+o.id+'">',
+      '  <div class="cat-head">',
+      '    <div class="cat-head-main">',
+      '      <span class="cat-eyebrow">'+o.eyebrow+'</span>',
+      '      <h3 class="cat-title">'+o.title+'</h3>',
+      '      <p class="cat-sub">'+o.sub+'</p>',
+      '    </div>',
+      '    <span class="cat-count">'+keys.length+' '+(keys.length===1?'design':'designs')+'</span>',
+      '  </div>',
+      '  <div class="cat-grid">'+keys.map(cardHtml).join("")+'</div>',
+      '</div>'
+    ].join("");
+  }
+
+  host.innerHTML =
+    groupBlock({
+      id:'premium', cls:'cat-premium',
+      eyebrow:'Signature Series',
+      title:'Premium Bracelets',
+      sub:'Higher-grade stones and multi-stone yantra weaves, individually cleansed and energised before dispatch.'
+    }, premiumKeys) +
+    groupBlock({
+      id:'crystal', cls:'cat-crystal',
+      eyebrow:'Everyday Energy',
+      title:'Crystal Bracelets',
+      sub:'Classic single-stone crystal bands — one clear intention each, finished as a comfortable free-size band.'
+    }, regularKeys);
 
   function cardHtml(k){
     var p = PRODUCTS[k];
@@ -2493,8 +3666,6 @@ function renderTotals(){
   }
   renderCashbackOffer();
   if(walletToken()) walletQuote();
-  renderCashbackOffer();
-  if(walletToken()) walletQuote();
   renderSummary();
 }
 
@@ -2531,6 +3702,173 @@ function renderSummary(){
   lines.push('<div class="co-sum-line grand"><span>Total</span><strong>'+money(Math.max(0, total() - wr/100))+'</strong></div>');
   $("co-sum-lines").innerHTML = lines.join("");
   $("co-pay").textContent = "Pay " + money(Math.max(0, total() - wr/100)) + " with Razorpay";
+  coUpdateLeftPanel();
+  coSyncAuthState();
+  // Also update new GoKwik step 2 & 5 summary
+  updateGkSummary();
+}
+
+function coUpdateLeftPanel(){
+  var q = selectedQty(), wr = walletRedeemPaise(), due = Math.max(0, total() - wr/100);
+  var name = $("co-left-name"), tier = $("co-left-tier"), meta = $("co-left-meta"), wallet = $("co-left-wallet"), totalEl = $("co-left-total");
+  if(name && product) name.textContent = product.name;
+  if(tier) tier.textContent = tierInfo().name;
+  if(meta && product) meta.textContent = q + " x " + money(product.price);
+  if(wallet) wallet.textContent = walletToken() ? (walletEmail() || "Google attached") : "Sign in required";
+  if(totalEl) totalEl.textContent = money(due);
+}
+
+function coSyncAuthState(){
+  var signed = !!walletToken();
+  var pay = $("co-pay"), walletBox = $("co-wallet"), status = $("cw-status");
+  if(walletBox) walletBox.classList.toggle("locked", !signed);
+  if(status && signed && walletEmail()) status.textContent = "Google attached: " + walletEmail();
+  if(pay){
+    pay.disabled = !signed;
+    if(!signed) pay.textContent = "Continue with Google to unlock payment";
+  }
+  // Also control the new pay button in step 5
+  var gkPay = $("gk-pay-btn");
+  if(gkPay){
+    gkPay.disabled = !signed;
+    if(!signed){
+      gkPay.querySelector("span") && (gkPay.querySelector("span").textContent = "Sign in with Google to pay");
+    } else {
+      var wr = walletRedeemPaise ? walletRedeemPaise() : 0;
+      var due = Math.max(0, total() - wr/100);
+      var amtSpan = $("gk-pay-btn-amt");
+      if(amtSpan) amtSpan.textContent = money(due);
+    }
+  }
+}
+
+function coSetLocationMsg(text, kind){
+  var el = $("co-location-msg"); if(!el) return;
+  el.textContent = text || "";
+  el.className = "co-location-msg" + (kind ? " " + kind : "");
+}
+
+var coMap = null, coMapMarker = null, coSelectedLatLng = null, coReverseCache = {};
+
+function coSaveLocationPin(lat, lng, source, label){
+  if($("f-latitude")) $("f-latitude").value = String(lat);
+  if($("f-longitude")) $("f-longitude").value = String(lng);
+  if($("f-location-source")) $("f-location-source").value = source || "map_picker";
+  if($("f-location-label")) $("f-location-label").value = label || "";
+}
+
+function coMapLibraryReady(){ return !!(window.L && $("co-map")); }
+
+function coSetMapPin(lat, lng, zoom){
+  coSelectedLatLng = { lat:Number(lat), lng:Number(lng) };
+  if(!coMapLibraryReady() || !coMap) return;
+  var point = [coSelectedLatLng.lat, coSelectedLatLng.lng];
+  if(coMapMarker) coMapMarker.setLatLng(point);
+  if(zoom) coMap.setView(point, zoom);
+}
+
+function coOpenMap(lat, lng){
+  var wrap = $("co-map-wrap");
+  if(!wrap) return;
+  wrap.classList.add("show");
+  lat = Number(lat || val("f-latitude") || 22.9734);
+  lng = Number(lng || val("f-longitude") || 78.6569);
+  if(!coMapLibraryReady()){
+    coSetLocationMsg("Map is still loading. Try again in a moment, or use current location.", "");
+    return;
+  }
+  if(!coMap){
+    coMap = L.map("co-map", { zoomControl:true, scrollWheelZoom:false }).setView([lat,lng], 15);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom:19,
+      attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(coMap);
+    coMapMarker = L.marker([lat,lng], { draggable:true }).addTo(coMap);
+    coMap.on("click", function(e){ coSetMapPin(e.latlng.lat, e.latlng.lng, 17); });
+    coMapMarker.on("dragend", function(){ var p=coMapMarker.getLatLng(); coSetMapPin(p.lat, p.lng, 0); });
+  }
+  coSetMapPin(lat, lng, 15);
+  setTimeout(function(){ if(coMap) coMap.invalidateSize(); }, 80);
+}
+
+function coAddressFromReverse(data){
+  var a = (data && data.address) || {};
+  var displayParts = String((data && data.display_name) || "").split(",").map(function(part){ return part.trim(); }).filter(Boolean);
+  var placeName = (data && data.name) || a.building || a.amenity || a.shop || a.office || a.tourism || a.residential || "";
+  var roadBits = [a.house_number, a.road || a.pedestrian || a.footway || a.path].filter(Boolean).join(", ");
+  var displayAddress = displayParts.slice(0, Math.min(displayParts.length, 3)).join(", ");
+  var areaBits = [a.neighbourhood || a.suburb || a.quarter || a.hamlet, a.city_district || a.state_district].filter(Boolean).join(", ");
+  var city = a.city || a.town || a.village || a.municipality || a.county || "";
+  var pin = String(a.postcode || "").replace(/\D/g,"").slice(0,6);
+  return {
+    address1: roadBits || placeName || displayAddress || ("Map pin: " + Number(data.lat || 0).toFixed(6) + ", " + Number(data.lon || 0).toFixed(6)),
+    address2: areaBits || displayParts.slice(3, 5).join(", "),
+    city: city,
+    state: a.state || "",
+    pincode: pin,
+    label: (data && data.display_name) || ""
+  };
+}
+
+function coFillAddressFromReverse(data, overwrite){
+  var addr = coAddressFromReverse(data);
+  var filled = false;
+  filled = coSetIfValue("f-address1", addr.address1, overwrite) || filled;
+  filled = coSetIfValue("f-address2", addr.address2, false) || filled;
+  filled = coSetIfValue("f-city", addr.city, overwrite) || filled;
+  if(addr.state){ setCheckoutStateValue(addr.state); filled = true; }
+  filled = coSetIfValue("f-pincode", addr.pincode, overwrite) || filled;
+  if(addr.pincode) lookupCheckoutPincode(addr.pincode, true);
+  return { filled:filled, label:addr.label };
+}
+
+function coReverseGeocode(lat, lng, source, overwrite){
+  var key = Number(lat).toFixed(5) + "," + Number(lng).toFixed(5);
+  if(coReverseCache[key]){
+    var cached = coFillAddressFromReverse(coReverseCache[key], overwrite);
+    coSaveLocationPin(lat, lng, source, cached.label);
+    coSetLocationMsg(cached.filled ? "Address filled from the selected pin. Please confirm house, flat, landmark and pincode before payment." : "Pin saved. Please enter the address details manually before payment.", cached.filled ? "ok" : "");
+    return Promise.resolve(cached);
+  }
+  coSetLocationMsg("Finding address from selected pin...", "");
+  var url = "https://nominatim.openstreetmap.org/reverse?format=jsonv2&addressdetails=1&zoom=18&accept-language=en-IN&lat=" + encodeURIComponent(lat) + "&lon=" + encodeURIComponent(lng);
+  return fetch(url, { method:"GET", headers:{ "Accept":"application/json" } })
+    .then(function(r){ if(!r.ok) throw new Error("lookup_failed"); return r.json(); })
+    .then(function(data){
+      var result = coFillAddressFromReverse(data, overwrite);
+      coReverseCache[key] = data;
+      coSaveLocationPin(lat, lng, source, result.label);
+      coSetLocationMsg(result.filled ? "Address filled from the selected pin. Please confirm house, flat, landmark and pincode before payment." : "Pin saved. Please enter the address details manually before payment.", result.filled ? "ok" : "");
+      return result;
+    })
+    .catch(function(){
+      coSaveLocationPin(lat, lng, source, "");
+      coSetLocationMsg("Pin saved, but free address lookup is unavailable right now. Please enter the address manually.", "bad");
+      return { filled:false, label:"" };
+    });
+}
+
+function coApplyLocationPin(lat, lng, source, overwrite){
+  coSaveLocationPin(lat, lng, source, "");
+  coSetIfValue("f-address1", "Map pin: " + Number(lat).toFixed(6) + ", " + Number(lng).toFixed(6), false);
+  coSetMapPin(lat, lng, 17);
+  return coReverseGeocode(lat, lng, source, overwrite);
+}
+
+function coUseCurrentLocation(){
+  if(!navigator.geolocation){
+    coSetLocationMsg("Current location is not available in this browser. Please enter the address manually.", "bad");
+    return;
+  }
+  coSetLocationMsg("Requesting precise location permission...", "");
+  navigator.geolocation.getCurrentPosition(function(pos){
+    var lat = pos.coords.latitude, lng = pos.coords.longitude;
+    coOpenMap(lat, lng);
+    coApplyLocationPin(lat, lng, "browser_geolocation", true);
+  }, function(err){
+    var msg = err && err.code === 1 ? "Location permission was blocked. Please allow location or enter the address manually." : "Could not get current location. Please enter the address manually.";
+    coSetLocationMsg(msg, "bad");
+  }, { enableHighAccuracy:true, timeout:12000, maximumAge:0 });
 }
 
 function applyCoupon(){
@@ -2565,6 +3903,7 @@ function applyCoupon(){
   showMakeTwo(false);
   setCouponMsg(code + " applied - " + couponLabel(code) + ". Coupons cannot be combined.", "ok");
   renderTotals();
+  gkFireCracker();
 }
 
 function showMakeTwo(show){
@@ -2575,11 +3914,19 @@ function showMakeTwo(show){
 /* ---------- checkout ---------- */
 function openCheckout(){
   checkoutFromCart = false;
+  gkExitCount = 0; // reset exit warning counter for fresh open
   renderSummary();
-  $("co-body").style.display = "grid";
+  coUpdateLeftPanel();
+  coSyncAuthState();
   $("co-success").classList.remove("show");
+  showGkStep(1);
   $("co-modal").classList.add("open");
   $("co-modal").setAttribute("aria-hidden","false");
+  document.body.style.overflow = "hidden";
+  // Pre-fill phone from login step if already entered
+  gkSyncPhoneFromSession();
+  // Reset exit-intent counter for fresh session
+  gkExitCount = 0;
 }
 function openCartCheckout(){
   if(cartCount>0){
@@ -2587,27 +3934,73 @@ function openCartCheckout(){
     qty = Math.min(10, Math.max(1, cartCount));
     renderTotals();
   }
+  gkExitCount = 0; // reset exit warning counter
   renderSummary();
-  $("co-body").style.display = "grid";
+  coUpdateLeftPanel();
+  coSyncAuthState();
   $("co-success").classList.remove("show");
+  showGkStep(1);
   $("co-modal").classList.add("open");
   $("co-modal").setAttribute("aria-hidden","false");
+  document.body.style.overflow = "hidden";
+  gkSyncPhoneFromSession();
+  gkExitCount = 0;
 }
-function closeCheckout(){
+/* ── Exit-intent state ── */
+var gkExitCount = 0;          // tracks exit attempts this session
+var gkExitCouponUsed = false; // prevent repeat coupon offer
+
+function gkDoClose(){
+  /* actual close — bypasses warnings */
   checkoutFromCart = false;
   $("co-modal").classList.remove("open");
   $("co-modal").setAttribute("aria-hidden","true");
+  document.body.style.overflow = "";
   renderTotals();
+  gkExitCount = 0; // reset for next open
+}
+
+function closeCheckout(){
+  /* Gate: only intercept when mid-checkout (steps 1-5) and not post-payment */
+  var midCheckout = (gkCurrentStep >= 1 && gkCurrentStep <= 5);
+
+  if(!midCheckout){
+    var alreadyCoupon = !!coupon;
+    gkDoClose();
+    if(gkCurrentStep === 2 && !alreadyCoupon && !gkMicroOfferShown){
+      setTimeout(gkShowMicroOffer, 320);
+    }
+    return;
+  }
+
+  /* First close attempt: show stage 1 — the bracelet is waiting */
+  if(gkExitCount === 0){
+    gkExitCount = 1;
+    // Haptic already fired inside gkShowExitWarn(1)
+    gkShowExitWarn(1);
+    return;
+  }
+
+  /* If counter already at 1 or above (called programmatically), show stage 2 */
+  if(gkExitCount >= 1 && !gkExitCouponUsed){
+    gkShowExitWarn(2);
+    return;
+  }
+
+  /* After coupon already used or both stages done: just close */
+  gkDoClose();
 }
 
 function val(id){ var el=$(id); return el?String(el.value||"").trim():""; }
 function customer(){
   return { name:val("f-name"), phone:val("f-phone"), email:val("f-email"),
     address1:val("f-address1"), address2:val("f-address2"), city:val("f-city"),
-    state:val("f-state"), pincode:val("f-pincode"), country:"India", notes:val("f-notes") };
+    state:val("f-state"), pincode:val("f-pincode"), country:"India", notes:val("f-notes"),
+    latitude:val("f-latitude"), longitude:val("f-longitude"), location_source:val("f-location-source"), location_label:val("f-location-label") };
 }
 function validate(){
   var ok = true;
+  var signed = !!walletToken();
   var req = ["f-name","f-phone","f-email","f-address1","f-city","f-state","f-pincode"];
   req.forEach(function(id){
     var el = $(id), v = el ? String(el.value||"").trim() : "";
@@ -2618,6 +4011,11 @@ function validate(){
     if(el) el.style.borderColor = valid ? "" : "var(--maroon2)";
     if(!valid) ok = false;
   });
+  if(!signed){
+    ok = false;
+    setWalletMsg("Continue with Google before payment.", "bad");
+    coSyncAuthState();
+  }
   $("co-error").classList.toggle("show", !ok);
   return ok;
 }
@@ -2641,6 +4039,7 @@ function renderCashbackOffer(){
 }
 function walletToken(){ try{ return localStorage.getItem(CONFIG.walletTokenKey) || ""; }catch(e){ return ""; } }
 function setWalletToken(t){ try{ if(t) localStorage.setItem(CONFIG.walletTokenKey, t); }catch(e){} }
+function clearWalletToken(){ try{ localStorage.removeItem(CONFIG.walletTokenKey); }catch(e){} walletProfile = null; }
 function walletEmail(){ return walletProfile && walletProfile.email ? walletProfile.email : ""; }
 function walletIdentifier(){ var c = customer(); return c.email || c.phone || ""; }
 function walletHeaders(){ var h = { "Content-Type":"application/json" }, t = walletToken(); if(t) h.Authorization = "Bearer " + t; return h; }
@@ -2666,12 +4065,16 @@ function walletGoogleCallback(response){
       if(walletProfile && walletProfile.email && $("f-email") && !val("f-email")) $("f-email").value = walletProfile.email;
       if(walletProfile && walletProfile.name && $("f-name") && !val("f-name")) $("f-name").value = walletProfile.name;
       setWalletMsg("Google wallet attached. Cashback will be credited after payment.", "ok");
+      coSyncAuthState();
+      coUpdateLeftPanel();
+      renderSummary();
       return walletLoad();
     })
     .catch(function(e){ setWalletMsg(e.message, "bad"); });
 }
 function initGoogleWallet(){
   var host = $("cw-google"); if(!host) return;
+  if(host.dataset.googleRendered === "1") return;
   if(!CONFIG.googleClientId){
     host.innerHTML = '<button type="button" class="cw-use" id="cw-google-missing">Continue with Google</button>';
     var miss = $("cw-google-missing"); if(miss) miss.addEventListener("click", function(){ setWalletMsg("Add your Google Client ID to enable Google login.", "bad"); });
@@ -2681,13 +4084,20 @@ function initGoogleWallet(){
     if(!(window.google && google.accounts && google.accounts.id)){ setTimeout(render, 120); return; }
     google.accounts.id.initialize({ client_id:CONFIG.googleClientId, callback:walletGoogleCallback });
     google.accounts.id.renderButton(host, { theme:"outline", size:"large", width:260, text:"continue_with" });
+    host.dataset.googleRendered = "1";
   }
   render();
 }
 function walletLoad(){
   if(!walletToken()) return Promise.resolve();
-  return walletApi("/wallet/me").then(function(d){ var status = $("cw-status"); if(status) status.textContent = "Wallet balance: Rs " + Number(d.balance_rupees || 0).toLocaleString("en-IN", { minimumFractionDigits:2, maximumFractionDigits:2 }); return walletQuote(); })
-    .catch(function(){ setWalletMsg("Wallet session expired. Continue with Google again to attach cashback.", "bad"); });
+  return walletApi("/wallet/me").then(function(d){
+    var status = $("cw-status"); if(status) status.textContent = "Wallet balance: Rs " + Number(d.balance_rupees || 0).toLocaleString("en-IN", { minimumFractionDigits:2, maximumFractionDigits:2 });
+    walletProfile = d.customer || walletProfile;
+    coSyncAuthState();
+    coUpdateLeftPanel();
+    return walletQuote();
+  })
+    .catch(function(){ clearWalletToken(); setWalletMsg("Wallet session expired. Continue with Google again to attach cashback.", "bad"); coSyncAuthState(); coUpdateLeftPanel(); });
 }
 function walletQuote(){
   if(!walletToken()) return Promise.resolve();
@@ -2698,7 +4108,9 @@ function walletQuote(){
       if(use) use.disabled = !(CONFIG.createLinkEndpoint && walletMaxRedeemPaise > 0);
       if(label) label.textContent = walletMaxRedeemPaise > 0 ? "Use up to Rs " + (walletMaxRedeemPaise/100).toFixed(2) + " wallet balance on this order" : "Wallet balance can be used after cashback is credited";
       if(!CONFIG.createLinkEndpoint && walletMaxRedeemPaise > 0) setWalletMsg("Balance found. Redemption needs secure-link checkout from the backend; cashback earning still works here.", "ok");
-    }).catch(function(){ walletMaxRedeemPaise = 0; });
+      coUpdateLeftPanel();
+      coSyncAuthState();
+    }).catch(function(){ walletMaxRedeemPaise = 0; coUpdateLeftPanel(); coSyncAuthState(); });
 }
 function walletRedeemPaise(){ var use = $("cw-use"); if(!use || !use.checked || !CONFIG.createLinkEndpoint || !walletToken()) return 0; return Math.max(0, walletMaxRedeemPaise || 0); }
 function paymentNotes(c, orderId){
@@ -2756,7 +4168,7 @@ function payNow(){
   var c = customer();
 
   /* ── BEST PATH: flexible dynamic Payment Link (any amount) via your backend ── */
-  if(CONFIG.createLinkEndpoint){
+  if(CONFIG.createLinkEndpoint && coupon !== "COMEBACK25" && coupon !== "KINDLYCOMEBACK25"){
     var dynOrder = buildOrder(c, "", "Pending payment", makeOrderId());
     logOrder(dynOrder);
     var payBtn = $("co-pay"); payBtn.disabled = true; payBtn.textContent = "Creating secure link…";
@@ -2828,6 +4240,7 @@ function payNow(){
   }
 
   var btn = $("co-pay"); btn.disabled = true; btn.textContent = "Opening Razorpay…";
+  var checkoutOrderId = makeOrderId();
   try{
     var rzp = new Razorpay({
       key:CONFIG.razorpayKey, amount:total()*100, currency:CONFIG.currency,
@@ -2856,11 +4269,796 @@ function payNow(){
 }
 
 function showSuccess(order, msg){
-  $("co-body").style.display = "none";
+  showGkStep("success");
   $("co-success-msg").textContent = msg;
   $("co-wa").href = waLink(order);
   $("co-success").classList.add("show");
 }
+
+/* ══════════════════════════════════════════════════════════════
+   GOKWIK CHECKOUT — Multi-step flow functions
+   Functions: showGkStep, gkSyncPhoneFromSession, updateGkSummary,
+   gkValidateAddress, gkBuildDeliveryReview, gkApplyRewardOffer,
+   gkShowMicroOffer, gkConfetti, gkInitPaymentRows
+══════════════════════════════════════════════════════════════ */
+var gkCurrentStep = 1;
+var gkMicroOfferShown = false;
+var gkMicroOfferDismissed = false;
+var gkMicroOfferClaimed = false;
+var gkMicroPendingCart = false;
+var gkMicroOfferActive = false;
+var gkLoggedPhone = "";
+
+var GK_STEP_META = {
+  1: { title: "Enter your mobile number",     sub: "Step 1 of 5 · Login" },
+  2: { title: "Your order",                   sub: "Step 2 of 5 · Review & Offers" },
+  3: { title: "Delivery details",             sub: "Step 3 of 5 · Address" },
+  4: { title: "Review delivery",              sub: "Step 4 of 5 · Confirm address" },
+  5: { title: "Select payment",               sub: "Step 5 of 5 · Pay securely" },
+  "success": { title: "Order placed!",        sub: "Thank you" }
+};
+
+function showGkStep(step){
+  gkCurrentStep = step;
+  var modal = $("co-modal");
+  if(!modal) return;
+  modal.setAttribute("data-gk-step", step);
+  // Update header text
+  var meta = GK_STEP_META[step] || {};
+  var titleEl = $("gk-step-title"), subEl = $("gk-step-sub");
+  if(titleEl) titleEl.textContent = meta.title || "";
+  if(subEl) subEl.textContent = meta.sub || "";
+  // Update progress dots
+  var stepNum = parseInt(step, 10) || 0;
+  var dots = document.querySelectorAll(".gk-dot");
+  var lines = document.querySelectorAll(".gk-dot-line");
+  dots.forEach(function(d){
+    var ds = parseInt(d.getAttribute("data-step"), 10);
+    d.classList.toggle("gk-dot-active", ds === stepNum);
+    d.classList.toggle("gk-dot-done", ds < stepNum);
+  });
+  lines.forEach(function(l, i){
+    l.classList.toggle("gk-done", (i + 1) < stepNum);
+  });
+  // Run per-step setup
+  if(step === 2) { updateGkSummary(); }
+  if(step === 4) { gkBuildDeliveryReview(); }
+  if(step === 5) { gkInitPaymentRows(); updateGkSummary(); coSyncAuthState(); }
+}
+
+function gkSyncPhoneFromSession(){
+  try{
+    var saved = sessionStorage.getItem("gk_phone") || "";
+    if(saved && /^[6-9]\d{9}$/.test(saved)){
+      gkLoggedPhone = saved;
+      var inp = $("gk-phone");
+      if(inp) inp.value = saved;
+      gkShowLoggedRow(saved);
+    }
+  }catch(e){}
+}
+
+function gkShowLoggedRow(phone){
+  var row = $("gk-logged-row");
+  var disp = $("gk-logged-disp");
+  if(row) row.classList.toggle("visible", !!phone);
+  if(disp && phone) disp.textContent = "+91 " + phone;
+  // Sync to existing f-phone field
+  var fp = $("f-phone"); if(fp && phone && !fp.value) fp.value = phone;
+  // Sync to pay step phone display
+  var pd = $("gk-pay-phone-disp"); if(pd && phone) pd.textContent = "+91 " + phone;
+  var prow = $("gk-pay-phone-row"); if(prow) prow.style.display = phone ? "flex" : "none";
+}
+
+function gkLogout(){
+  gkLoggedPhone = "";
+  try{ sessionStorage.removeItem("gk_phone"); }catch(e){}
+  var row = $("gk-logged-row"); if(row) row.classList.remove("visible");
+  var prow = $("gk-pay-phone-row"); if(prow) prow.style.display = "none";
+  var inp = $("gk-phone"); if(inp) inp.value = "";
+  showGkStep(1);
+}
+
+function gkMoveGoogleToStep1(){
+  var slot = $("gk-step1-google");
+  var wallet = $("co-wallet");
+  if(slot && wallet && wallet.parentNode !== slot) slot.appendChild(wallet);
+}
+
+function updateGkSummary(){
+  if(!product) return;
+  var q = selectedQty();
+  var wr = walletRedeemPaise ? walletRedeemPaise() : 0;
+  var mrpTotal = product.mrp * q + (tierAddOn() > 0 ? tierAddOn() : 0);
+  var saleTotal = braceletSubtotal(q);
+  var due = Math.max(0, total() - wr/100);
+  var saved = mrpTotal - due;
+
+  // Step 2 elements
+  function sEl(id, val){ var e = $(id); if(e) e.textContent = val; }
+  sEl("gk-oc-name", product.name + (tierAddOn() > 0 ? " + " + tierInfo().name : ""));
+  sEl("gk-oc-qty", "× " + q);
+  sEl("gk-oc-mrp", money(mrpTotal));
+  sEl("gk-oc-sale", money(saleTotal));
+  var savedRow = $("gk-saved-row");
+  if(savedRow) savedRow.style.display = saved > 0 ? "" : "none";
+  sEl("gk-oc-saved", money(saved) + " 🎉");
+  sEl("gk-oc-total", money(due));
+
+  // Step 5 total
+  sEl("gk-pay-total", money(due));
+  // Update pay button amount
+  var pamtEl = $("gk-pay-btn-amt");
+  if(pamtEl) pamtEl.textContent = money(due);
+
+  // Sync coupon display in step 2
+  var appliedRow = $("gk-applied-row");
+  var appliedCode = $("gk-applied-code");
+  if(appliedRow) appliedRow.classList.toggle("visible", !!coupon);
+  if(appliedCode && coupon) appliedCode.textContent = coupon;
+  // Sync chips applied state
+  document.querySelectorAll(".gk-chip").forEach(function(c){
+    c.classList.toggle("applied", c.getAttribute("data-code") === coupon);
+  });
+  // Sync coupon input
+  var ginp = $("gk-coupon-inp");
+  if(ginp && coupon && !ginp.value) ginp.value = coupon;
+}
+
+function gkSetCouponFeedback(text, kind){
+  var el = $("gk-coupon-fb");
+  if(!el) return;
+  el.textContent = text || "";
+  el.className = "gk-coupon-fb" + (kind ? " " + kind : "");
+}
+
+function gkApplyRewardOffer(code){
+  code = (code || "").toUpperCase().trim();
+  if(!code) { gkSetCouponFeedback("Enter a coupon code.", "bad"); return; }
+  if(!COUPONS[code]) { gkSetCouponFeedback("That code isn't valid. Try WELCOME15.", "bad"); return; }
+  var c = COUPONS[code];
+  if(c.minQty && qty < c.minQty){
+    gkSetCouponFeedback(code + " applies on " + c.minQty + "+ bracelets. Increase quantity first.", "bad");
+    return;
+  }
+  if(c.requiresRec && !recUnlocked){
+    gkSetCouponFeedback(code + " applies after Maaya recommends this bracelet.", "bad");
+    return;
+  }
+  coupon = code;
+  var ci = $("coupon-input"); if(ci) ci.value = code;
+  var gci = $("gk-coupon-inp"); if(gci) gci.value = code;
+  gkSetCouponFeedback(code + " applied — " + couponLabel(code) + "!", "ok");
+  renderTotals();
+  updateGkSummary();
+  gkFireCracker();
+}
+
+function gkRemoveCoupon(){
+  coupon = null;
+  var ci = $("coupon-input"); if(ci) ci.value = "";
+  var gci = $("gk-coupon-inp"); if(gci) gci.value = "";
+  gkSetCouponFeedback("Coupon removed.", "");
+  renderTotals();
+  updateGkSummary();
+}
+
+function gkValidateAddressStep(){
+  var req = ["f-name","f-phone","f-email","f-address1","f-city","f-state","f-pincode"];
+  var ok = true;
+  req.forEach(function(id){
+    var el = $(id), v = el ? String(el.value||"").trim() : "";
+    var valid = !!v;
+    if(id === "f-phone") valid = /^[6-9]\d{9}$/.test(v);
+    if(id === "f-pincode") valid = /^\d{6}$/.test(v);
+    if(id === "f-email") valid = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v);
+    if(el) el.style.borderColor = valid ? "" : "var(--maroon2)";
+    if(!valid) ok = false;
+  });
+  var errEl = $("co-error");
+  if(errEl) errEl.classList.toggle("show", !ok);
+  return ok;
+}
+
+function gkBuildDeliveryReview(){
+  var c = customer ? customer() : {};
+  var nameEl = $("gk-rc-name"), addrEl = $("gk-rc-addr"), contactEl = $("gk-rc-contact");
+  if(nameEl) nameEl.textContent = c.name || "—";
+  var addrParts = [c.address2, c.address1, c.city, c.state, c.pincode].filter(Boolean);
+  if(addrEl) addrEl.textContent = addrParts.join(", ") || "—";
+  if(contactEl) contactEl.textContent = (c.phone ? "+91 " + c.phone : "") + (c.email ? " · " + c.email : "");
+}
+
+function gkInitPaymentRows(){
+  var t = Math.max(0, total() - (walletRedeemPaise ? walletRedeemPaise()/1 : 0));
+  var amtStr = money(t);
+  var discCfg = (CONFIG.paymentDiscounts || {});
+  var methods = [
+    { id:"gk-pm-upi",     amtId:"gk-pm-upi-amt",     discId:"gk-pm-upi-disc",     disc: discCfg.upi   || "" },
+    { id:"gk-pm-cards",   amtId:"gk-pm-cards-amt",   discId:"gk-pm-cards-disc",   disc: discCfg.cards || "" },
+    { id:"gk-pm-emi",     amtId:"gk-pm-emi-amt",     discId:"gk-pm-emi-disc",     disc: discCfg.emi   || "" },
+    { id:"gk-pm-nb",      amtId:"gk-pm-nb-amt",      discId:"gk-pm-nb-disc",      disc: discCfg.nb    || "" },
+    { id:"gk-pm-wallets", amtId:"gk-pm-wallets-amt", discId:null,                 disc: "" },
+    { id:"gk-pm-cod",     amtId:"gk-pm-cod-amt",     discId:null,                 disc: "" }
+  ];
+  methods.forEach(function(m){
+    var amtEl = $(m.amtId); if(amtEl) amtEl.textContent = amtStr;
+    if(m.discId){ var de = $(m.discId); if(de) de.textContent = m.disc; }
+  });
+  // Feature flags
+  var emiBtn = $("gk-pm-emi");
+  if(emiBtn) emiBtn.style.display = CONFIG.ENABLE_EMI ? "flex" : "none";
+  var codBtn = $("gk-pm-cod");
+  if(codBtn) codBtn.style.display = CONFIG.ENABLE_COD ? "flex" : "none";
+  // Pay button in step 5 — keep phone row visible
+  var prow = $("gk-pay-phone-row");
+  if(prow) prow.style.display = gkLoggedPhone ? "flex" : "none";
+}
+
+/* ── Cracker / Firework celebration animation ── */
+var _gkCrackerToken = 0; // incremented each call — old loops check this and self-cancel
+
+function gkDomCracker(){
+  if(window.matchMedia && window.matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+  var layer = document.getElementById("gk-cracker-layer");
+  if(!layer){
+    layer = document.createElement("div");
+    layer.id = "gk-cracker-layer";
+    layer.className = "gk-cracker-layer";
+    document.body.appendChild(layer);
+  }
+  var colors=["#f4dd9b","#b8902f","#6E1423","#ff4466","#4dbb7a","#4fc3f7","#ffffff","#ffcc02"];
+  for(var i=0;i<64;i++){
+    var p=document.createElement("span");
+    p.className="gk-cracker-piece";
+    p.style.left=(14+Math.random()*72)+"%";
+    p.style.top=(24+Math.random()*42)+"%";
+    p.style.background=colors[i%colors.length];
+    p.style.setProperty("--dx",(Math.random()*420-210)+"px");
+    p.style.setProperty("--dy",(-120-Math.random()*260)+"px");
+    p.style.setProperty("--rot",(Math.random()*960-480)+"deg");
+    p.style.animationDelay=(Math.random()*0.22)+"s";
+    layer.appendChild(p);
+    (function(el){ setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); },1900); })(p);
+  }
+}
+
+function gkFireCracker(){
+  gkDomCracker();
+  var canvas = document.getElementById("gk-confetti-canvas");
+  if(!canvas) return;
+  if(window.matchMedia && window.matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+
+  // Cancel any previous animation loop
+  _gkCrackerToken++;
+  var myToken = _gkCrackerToken;
+
+  canvas.style.display = "block";
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  var ctx = canvas.getContext("2d");
+
+  // Brand + celebration palette
+  var colors = [
+    "#b8902f","#e6c878","#f4dd9b","#ffd700",
+    "#5e1119","#9a2336","#c94060","#ff4466",
+    "#2f7d4f","#4dbb7a","#00e676",
+    "#fdf3df","#ffffff","#fff3b0",
+    "#ff6b35","#ffcc02","#ff9f1c",
+    "#4fc3f7","#ce93d8","#f48fb1"
+  ];
+
+  var pieces = [];
+
+  function burst(cx, cy, count){
+    for(var i = 0; i < count; i++){
+      var angle = (Math.PI * 2 * i / count) + (Math.random() - 0.5) * 0.5;
+      var speed = 5 + Math.random() * 9;
+      var r     = Math.random();
+      var type  = r < 0.22 ? 0 : r < 0.55 ? 1 : r < 0.82 ? 2 : 3;
+      pieces.push({
+        x: cx + (Math.random()-0.5)*8, y: cy + (Math.random()-0.5)*8,
+        vx: Math.cos(angle)*speed,
+        vy: Math.sin(angle)*speed - (1 + Math.random()*2),
+        color: colors[Math.floor(Math.random()*colors.length)],
+        alpha: 1,
+        rot: Math.random()*Math.PI*2, rotV: (Math.random()-0.5)*0.25,
+        type: type,
+        size: type===0 ? (3+Math.random()*5) : type===3 ? (4+Math.random()*5) : (5+Math.random()*9),
+        h:    type===2 ? (14+Math.random()*22) : (5+Math.random()*9),
+        gravity: 0.14+Math.random()*0.14,
+        decay:   0.007+Math.random()*0.006,
+        wobble: Math.random()*Math.PI*2,
+        wobbleV:(Math.random()-0.5)*0.18
+      });
+    }
+  }
+
+  function rain(count){
+    for(var i = 0; i < count; i++){
+      var r = Math.random();
+      pieces.push({
+        x: Math.random()*canvas.width, y: -20 - Math.random()*200,
+        vx: (Math.random()-0.5)*2.5, vy: 2.5+Math.random()*3.5,
+        color: colors[Math.floor(Math.random()*colors.length)],
+        alpha: 1,
+        rot: Math.random()*Math.PI*2, rotV: (Math.random()-0.5)*0.18,
+        type: r<0.4?1:r<0.75?2:0,
+        size: 4+Math.random()*7,
+        h:    r<0.75?(10+Math.random()*16):(4+Math.random()*7),
+        gravity: 0.06+Math.random()*0.08,
+        decay:   0.005+Math.random()*0.004,
+        wobble: Math.random()*Math.PI*2,
+        wobbleV:(Math.random()-0.5)*0.14
+      });
+    }
+  }
+
+  var w = canvas.width, h = canvas.height;
+  var plan = [
+    {x:w*0.50, y:h*0.18, n:40, t:0  },
+    {x:w*0.20, y:h*0.30, n:30, t:110},
+    {x:w*0.80, y:h*0.25, n:30, t:190},
+    {x:w*0.12, y:h*0.60, n:22, t:260},
+    {x:w*0.88, y:h*0.55, n:22, t:340},
+    {x:w*0.50, y:h*0.40, n:28, t:450}
+  ];
+  plan.forEach(function(b){
+    setTimeout(function(){
+      if(_gkCrackerToken !== myToken) return; // stale — newer call took over
+      burst(b.x, b.y, b.n);
+    }, b.t);
+  });
+  setTimeout(function(){ if(_gkCrackerToken===myToken) rain(65); }, 80);
+  setTimeout(function(){ if(_gkCrackerToken===myToken) rain(40); }, 500);
+
+  function draw(){
+    if(_gkCrackerToken !== myToken){
+      // A newer cracker call is running — stop this loop
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      return;
+    }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var alive = false;
+
+    for(var i = pieces.length-1; i >= 0; i--){
+      var p = pieces[i];
+      if(p.alpha <= 0.02 || p.y > canvas.height+60){ pieces.splice(i,1); continue; }
+      alive = true;
+      p.wobble += p.wobbleV;
+      p.vx     += Math.sin(p.wobble)*0.06;
+      p.vx     *= 0.992;
+      p.vy     += p.gravity;
+      p.x      += p.vx; p.y += p.vy;
+      p.rot    += p.rotV;
+      p.alpha  -= p.decay;
+
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.alpha);
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+
+      if(p.type === 0){
+        ctx.beginPath(); ctx.arc(0,0,p.size/2,0,Math.PI*2); ctx.fill();
+      } else if(p.type === 1){
+        ctx.fillRect(-p.size/2, -p.h/2, p.size, p.h);
+      } else if(p.type === 2){
+        var rw = p.size*0.45;
+        ctx.fillRect(-rw/2, -p.h/2, rw, p.h);
+        ctx.globalAlpha = Math.max(0, p.alpha*0.4);
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(-rw/4, -p.h/2, rw/4, p.h);
+      } else {
+        var s = p.size;
+        ctx.beginPath();
+        for(var k=0; k<8; k++){
+          var a = k*Math.PI/4;
+          var r2 = (k%2===0) ? s : s*0.38;
+          k===0 ? ctx.moveTo(Math.cos(a)*r2, Math.sin(a)*r2)
+                : ctx.lineTo(Math.cos(a)*r2, Math.sin(a)*r2);
+        }
+        ctx.closePath(); ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    if(alive){
+      requestAnimationFrame(draw);
+    } else {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      canvas.style.display = "none";
+    }
+  }
+  requestAnimationFrame(draw);
+}
+
+/* Keep old name working as alias */
+function gkFireConfetti(){ gkFireCracker(); }
+
+/* ── Micro-offer popup ── */
+var GK_MICRO_OFFER_CODE = "COMEBACK25";
+var GK_MICRO_OFFER_LABEL = "Flat ₹25.00 off";
+
+function gkShowMicroOffer(){
+  return;
+  if(gkMicroOfferShown || coupon) return;
+  gkMicroOfferShown = true;
+  var popup = $("gk-micro-popup");
+  var title = document.querySelector("#gk-micro-popup > .gk-mp-inner > .gk-mp-title");
+  var desc = $("gk-mp-desc");
+  var claim = $("gk-mp-claim");
+  var applied = $("gk-mp-applied");
+  if(title) title.textContent = "Wait! We have a special offer just for you 🎉";
+  if(desc) desc.innerHTML = '<span class="gk-mp-offer">Flat ₹25.00 off</span><br>Save <strong>₹25.00 with COMEBACK25</strong><br>Discount will be auto-applied at checkout';
+  if(claim) claim.textContent = "Claim extra ₹25 off";
+  if(applied) applied.hidden = true;
+  if(popup) { popup.classList.remove("applied"); popup.classList.add("show"); popup.setAttribute("aria-hidden","false"); }
+}
+
+function gkHideMicroOffer(){
+  var popup = $("gk-micro-popup");
+  if(popup) { popup.classList.remove("show","applied"); popup.setAttribute("aria-hidden","true"); }
+  gkMicroOfferActive = false;
+}
+
+function gkShouldShowCheckoutOffer(fromCart){
+  if(coupon || gkMicroOfferDismissed || gkMicroOfferClaimed) return false;
+  if(fromCart && cartCount>0 && cartCount >= 2) return false;
+  return total() > 25;
+}
+
+function gkRequestCheckout(fromCart){
+  gkMicroPendingCart = !!fromCart;
+  if(fromCart && cartCount>0){
+    checkoutFromCart = true;
+    qty = Math.min(10, Math.max(1, cartCount));
+    renderTotals();
+  }else{
+    checkoutFromCart = false;
+    renderTotals();
+  }
+  if(gkShouldShowCheckoutOffer(fromCart)){
+    gkMicroOfferShown = false;
+    gkMicroOfferActive = true;
+    gkShowMicroOffer();
+    document.body.style.overflow = "hidden";
+    return;
+  }
+  gkOpenPendingCheckout();
+}
+
+function gkOpenPendingCheckout(){
+  if(gkMicroPendingCart) openCartCheckout();
+  else openCheckout();
+}
+
+function gkClaimMicroOffer(){
+  gkForceApplyCoupon(GK_MICRO_OFFER_CODE);
+  gkMicroOfferClaimed = true;
+  gkMicroOfferDismissed = true;
+  var popup = $("gk-micro-popup"), applied = $("gk-mp-applied");
+  if(applied) applied.hidden = false;
+  if(popup) popup.classList.add("applied");
+}
+
+function gkRemoveMicroOffer(){
+  if(coupon === GK_MICRO_OFFER_CODE) gkRemoveCoupon();
+  gkMicroOfferClaimed = false;
+  var popup = $("gk-micro-popup"), applied = $("gk-mp-applied");
+  if(applied) applied.hidden = true;
+  if(popup) popup.classList.remove("applied");
+}
+
+function gkSkipMicroOffer(){
+  gkMicroOfferDismissed = true;
+  var wasCheckout = gkMicroOfferActive;
+  gkHideMicroOffer();
+  if(wasCheckout) gkOpenPendingCheckout();
+}
+
+function gkContinueMicroOffer(){
+  gkHideMicroOffer();
+  gkOpenPendingCheckout();
+}
+
+/* ── Exit-warning popup ── */
+var gkEpCountdownTimer = null;
+
+function gkShowExitWarn(stage){
+  var popup = $("gk-exit-popup");
+  var s1 = $("gk-ep-stage1"), s2 = $("gk-ep-stage2");
+  if(!popup) return;
+  if(stage === 1 && s1){
+    var title = s1.querySelector(".gk-ep-title");
+    var body = s1.querySelector(".gk-ep-body");
+    var claim = $("gk-ep-stay1");
+    var skip = $("gk-ep-leave1");
+    if(title) title.textContent = "Wait! Claim ₹25 off before you go";
+    if(body) body.innerHTML = 'Use <strong>COMEBACK25</strong> now and get a flat <strong>₹25 instant discount</strong> on this bracelet order.';
+    if(claim) claim.textContent = "Claim this offer";
+    if(skip) skip.textContent = "Skip offer";
+  }
+  if(stage === 2){
+    var finalSkip = $("gk-ep-leave2");
+    if(finalSkip) finalSkip.textContent = "No thanks, close checkout";
+  }
+  if(s1) s1.style.display = stage === 1 ? "" : "none";
+  if(s2) s2.style.display = stage === 2 ? "" : "none";
+  popup.classList.add("show");
+  popup.setAttribute("aria-hidden","false");
+
+  if(stage === 1){
+    // Gentle haptic: single buzz to get attention
+    try{ if(navigator.vibrate) navigator.vibrate([120]); }catch(e){}
+  }
+  if(stage === 2){
+    // Strong haptic: urgent pattern — here's your gift!
+    try{ if(navigator.vibrate) navigator.vibrate([80, 40, 80, 40, 180]); }catch(e){}
+    // Start 10-minute countdown
+    gkStartEpCountdown(600);
+  }
+}
+
+function gkHideExitWarn(){
+  var popup = $("gk-exit-popup");
+  if(popup) { popup.classList.remove("show"); popup.setAttribute("aria-hidden","true"); }
+  clearInterval(gkEpCountdownTimer);
+}
+
+function gkStartEpCountdown(seconds){
+  clearInterval(gkEpCountdownTimer);
+  var remaining = seconds;
+  function tick(){
+    var m = Math.floor(remaining / 60);
+    var s = remaining % 60;
+    var el = $("gk-ep-countdown");
+    if(el) el.textContent = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+    if(remaining <= 0){
+      clearInterval(gkEpCountdownTimer);
+      // Timer expired — force-apply coupon as parting gift and close
+      gkExitCouponUsed = true;
+      gkForceApplyCoupon("COMEBACK25");
+      gkHideExitWarn();
+      gkDoClose();
+      setTimeout(function(){ toast("Your ₹25 coupon COMEBACK25 has been saved!"); }, 400);
+      return;
+    }
+    remaining--;
+  }
+  tick();
+  gkEpCountdownTimer = setInterval(tick, 1000);
+}
+
+function gkApplyExitCoupon(){
+  if(gkExitCouponUsed) return;
+  gkExitCouponUsed = true;
+  gkForceApplyCoupon("COMEBACK25");
+}
+
+/* Force-apply any coupon directly — used by exit flow, bypasses chip validation */
+function gkForceApplyCoupon(code){
+  coupon = code;
+  // Sync all coupon input fields so nothing is out of state
+  var ci = $("coupon-input");   if(ci) ci.value = code;
+  var gci = $("gk-coupon-inp"); if(gci) gci.value = code;
+  // Update all UI that reflects the coupon
+  renderTotals();           // recalculates total + updates product page total
+  renderSummary();          // updates co-sum-lines (hidden compat layer)
+  updateGkSummary();        // updates step-2 price card
+  setCouponMsg(code + " applied — " + couponLabel(code) + ". No conditions.", "ok");
+  gkSetCouponFeedback("✓ " + code + " applied — " + couponLabel(code) + "!", "ok");
+  toast("🎁 " + couponLabel(code) + " applied — " + code);
+  gkFireCracker();
+}
+
+/* ── bind new gokwik events ── */
+function gkBind(){
+  gkMoveGoogleToStep1();
+  // Step 1 — phone continue
+  var phoneCont = $("gk-phone-cont");
+  if(phoneCont) phoneCont.addEventListener("click", function(){
+    var ph = (($("gk-phone") && $("gk-phone").value)||"").replace(/\D/g,"");
+    var errEl = $("gk-phone-err");
+    if(!/^[6-9]\d{9}$/.test(ph)){
+      if(errEl) errEl.textContent = "Please enter a valid 10-digit Indian mobile number.";
+      return;
+    }
+    if(!walletToken()){
+      if(errEl) errEl.textContent = "Continue with Google before moving ahead.";
+      setWalletMsg("Continue with Google to attach cashback and unlock payment.", "bad");
+      coSyncAuthState();
+      return;
+    }
+    if(errEl) errEl.textContent = "";
+    gkLoggedPhone = ph;
+    try{ sessionStorage.setItem("gk_phone", ph); }catch(e){}
+    // Sync to existing f-phone field
+    var fp = $("f-phone"); if(fp && !fp.value) fp.value = ph;
+    gkShowLoggedRow(ph);
+    renderSummary(); // ensure totals fresh
+    showGkStep(2);
+  });
+
+  // Phone field — numbers only
+  var ghp = $("gk-phone");
+  if(ghp){
+    ghp.addEventListener("input", function(){ this.value = this.value.replace(/\D/g,""); });
+    ghp.addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); var btn=$("gk-phone-cont"); if(btn) btn.click(); } });
+  }
+
+  // Logout buttons
+  var logoutBtn = $("gk-logout");
+  if(logoutBtn) logoutBtn.addEventListener("click", gkLogout);
+  var payLogout = $("gk-pay-logout");
+  if(payLogout) payLogout.addEventListener("click", gkLogout);
+
+  // Step 2 — offer chips
+  var chips = document.querySelectorAll(".gk-chip");
+  chips.forEach(function(chip){
+    chip.addEventListener("click", function(){
+      var code = this.getAttribute("data-code");
+      gkApplyRewardOffer(code);
+    });
+  });
+
+  // Step 2 — manual coupon
+  var gci = $("gk-coupon-inp");
+  if(gci){
+    gci.addEventListener("input", function(){ this.value = this.value.toUpperCase(); });
+    gci.addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); var btn=$("gk-coupon-go"); if(btn) btn.click(); } });
+  }
+  var gcGo = $("gk-coupon-go");
+  if(gcGo) gcGo.addEventListener("click", function(){
+    var v = ($("gk-coupon-inp") && $("gk-coupon-inp").value || "").toUpperCase().trim();
+    gkApplyRewardOffer(v);
+  });
+
+  // Step 2 — remove coupon
+  var rcBtn = $("gk-remove-coupon");
+  if(rcBtn) rcBtn.addEventListener("click", gkRemoveCoupon);
+
+  // Step 2 → Step 3 (address)
+  var toAddr = $("gk-to-address");
+  if(toAddr) toAddr.addEventListener("click", function(){ showGkStep(3); });
+
+  // Step 3 → Step 4 (review)
+  var toReview = $("gk-to-review");
+  if(toReview) toReview.addEventListener("click", function(){
+    if(!gkValidateAddressStep()) return;
+    showGkStep(4);
+  });
+
+  // Step 4 — change address
+  var changeAddr = $("gk-change-addr");
+  if(changeAddr) changeAddr.addEventListener("click", function(){ showGkStep(3); });
+
+  // Step 4 → Step 5
+  var toPay = $("gk-to-payment");
+  if(toPay) toPay.addEventListener("click", function(){ showGkStep(5); });
+
+  // Step 5 — payment method rows (all open Razorpay)
+  document.querySelectorAll(".gk-pm-row").forEach(function(row){
+    row.addEventListener("click", function(){
+      document.querySelectorAll(".gk-pm-row").forEach(function(r){ r.classList.remove("selected"); });
+      this.classList.add("selected");
+    });
+  });
+
+  // Step 5 — pay button
+  var gkPayBtn = $("gk-pay-btn");
+  if(gkPayBtn) gkPayBtn.addEventListener("click", function(){
+    payNow();
+  });
+
+  // Notes toggle
+  var notesToggle = $("gk-notes-toggle");
+  if(notesToggle) notesToggle.addEventListener("click", function(){
+    var body = $("gk-notes-body");
+    if(!body) return;
+    var open = body.style.display !== "none";
+    body.style.display = open ? "none" : "flex";
+    this.textContent = open ? "+ Add order notes (optional)" : "− Hide order notes";
+  });
+
+  // Micro-offer popup
+  var mpClose = $("gk-mp-close"), mpSkip = $("gk-mp-skip");
+  if(mpClose) mpClose.addEventListener("click", gkSkipMicroOffer);
+  if(mpSkip) mpSkip.addEventListener("click", gkSkipMicroOffer);
+  var mpClaim = $("gk-mp-claim");
+  if(mpClaim) mpClaim.addEventListener("click", function(){
+    gkClaimMicroOffer();
+  });
+  var mpContinue = $("gk-mp-continue");
+  if(mpContinue) mpContinue.addEventListener("click", gkContinueMicroOffer);
+  var mpRemove = $("gk-mp-remove");
+  if(mpRemove) mpRemove.addEventListener("click", gkRemoveMicroOffer);
+
+  // ── Exit-warning popup bindings ──
+  var epStay1 = $("gk-ep-stay1");
+  if(epStay1) epStay1.addEventListener("click", function(event){
+    if(event && event.stopImmediatePropagation) event.stopImmediatePropagation();
+    gkExitCouponUsed = true;
+    gkHideExitWarn();
+    gkForceApplyCoupon("COMEBACK25");
+    $("co-modal").classList.add("open");
+    $("co-modal").setAttribute("aria-hidden","false");
+    document.body.style.overflow = "hidden";
+    showGkStep(2);
+  });
+  if(epStay1) epStay1.addEventListener("click", function(){
+    // "Show me the offer" → go straight to stage 2 coupon reveal
+    gkExitCount = 1; // ensure stage 2 counter is correct
+    gkShowExitWarn(2);
+  });
+
+  var epLeave1 = $("gk-ep-leave1");
+  if(epLeave1) epLeave1.addEventListener("click", function(){
+    // User wants to leave — second warning: reveal the coupon
+    gkExitCount = Math.max(gkExitCount, 1);
+    gkShowExitWarn(2);
+  });
+
+  var epClaim = $("gk-ep-claim");
+  if(epClaim) epClaim.addEventListener("click", function(){
+    // Mark used so leave-path doesn't double-apply
+    gkExitCouponUsed = true;
+    // Haptic: multi-pulse celebration
+    try{ if(navigator.vibrate) navigator.vibrate([50, 30, 50, 30, 150, 50, 250]); }catch(e){}
+    gkHideExitWarn();
+    // Force-apply the coupon — no guards, no conditions
+    gkForceApplyCoupon("COMEBACK25");
+    // Reopen checkout at step 2 to show the discount
+    $("co-modal").classList.add("open");
+    $("co-modal").setAttribute("aria-hidden","false");
+    document.body.style.overflow = "hidden";
+    showGkStep(2);
+    // Extra safety refresh after modal is shown
+    setTimeout(function(){
+      updateGkSummary();
+      renderSummary();
+    }, 80);
+  });
+
+  var epLeave2 = $("gk-ep-leave2");
+  if(epLeave2) epLeave2.addEventListener("click", function(event){
+    if(event && event.stopImmediatePropagation) event.stopImmediatePropagation();
+    gkHideExitWarn();
+    gkDoClose();
+    try{ if(navigator.vibrate) navigator.vibrate([60]); }catch(e){}
+  });
+  if(epLeave2) epLeave2.addEventListener("click", function(){
+    // Auto-apply coupon as a parting gift — ready when they return
+    gkExitCouponUsed = true;
+    gkForceApplyCoupon("COMEBACK25");
+    gkHideExitWarn();
+    gkDoClose();
+    try{ if(navigator.vibrate) navigator.vibrate([60]); }catch(e){}
+    // Fire a small celebration even as they leave — coupon is theirs
+    setTimeout(gkFireCracker, 200);
+    setTimeout(function(){
+      toast("₹25 off saved — COMEBACK25 is ready for your return!");
+    }, 400);
+  });
+
+  // Close exit popup on backdrop click
+  var exitPopup = $("gk-exit-popup");
+  if(exitPopup) exitPopup.addEventListener("click", function(e){
+    if(e.target === exitPopup) gkHideExitWarn();
+  });
+
+  // Hesitation timer on step 2 — show micro-offer after 45s of inactivity
+  var gkHesitateTimer = null;
+  document.addEventListener("visibilitychange", function(){
+    if(document.hidden && gkCurrentStep === 2 && !coupon && !gkMicroOfferShown){
+      gkHesitateTimer = setTimeout(function(){
+        if(!coupon && !gkMicroOfferShown) gkShowMicroOffer();
+      }, 300);
+    } else { clearTimeout(gkHesitateTimer); }
+  });
+}
+
+/* ── End GoKwik JS ── */
 
 /* ---------- bind ---------- */
 function onQtyChange(){
@@ -2868,6 +5066,7 @@ function onQtyChange(){
   var attempted = ($("coupon-input").value||"").trim().toUpperCase();
   if(qty >= 2 && !coupon && (attempted === "PAIR10" || attempted === "HAPPY10")){
     coupon = attempted === "HAPPY10" ? "HAPPY10" : "PAIR10"; showMakeTwo(false);
+    gkFireCracker();
   }
   renderTotals();
 }
@@ -2901,9 +5100,17 @@ function bind(){
   $("co-close").addEventListener("click", closeCheckout);
   $("co-modal").addEventListener("click", function(e){ if(e.target===$("co-modal")) closeCheckout(); });
   $("co-pay").addEventListener("click", payNow);
+  var locate = $("co-locate"); if(locate) locate.addEventListener("click", coUseCurrentLocation);
+  var mapToggle = $("co-map-toggle"); if(mapToggle) mapToggle.addEventListener("click", function(){ coOpenMap(val("f-latitude"), val("f-longitude")); });
+  var mapClose = $("co-map-close"); if(mapClose) mapClose.addEventListener("click", function(){ var wrap=$("co-map-wrap"); if(wrap) wrap.classList.remove("show"); });
+  var mapUse = $("co-map-use"); if(mapUse) mapUse.addEventListener("click", function(){
+    if(!coSelectedLatLng){ coOpenMap(val("f-latitude"), val("f-longitude")); coSetLocationMsg("Select a map pin first.", "bad"); return; }
+    coApplyLocationPin(coSelectedLatLng.lat, coSelectedLatLng.lng, "map_picker", true);
+  });
   var wu = $("cw-use"); if(wu) wu.addEventListener("change", renderSummary);
   ["f-phone","f-pincode"].forEach(function(id){
-    $(id).addEventListener("input", function(){ this.value = this.value.replace(/\D/g,""); });
+    var el = $(id);
+    if(el) el.addEventListener("input", function(){ this.value = this.value.replace(/\D/g,""); });
   });
   var coPin=$("f-pincode");
   if(coPin){
@@ -2924,6 +5131,8 @@ function bind(){
       }
     });
   }
+  // Bind GoKwik new checkout events
+  gkBind();
 }
 
 /* ══════════════════════════════════════════
@@ -3167,6 +5376,40 @@ h1 em,h2 em,h3 em,h4 em,.wv-title em,.rj-copy h2 em,.section h2 em{
 .rel-badge.rel-premium{
   top:2.15rem;background:linear-gradient(135deg,#2b111b,#9a6a18 55%,var(--stone-tone));
   color:#fff8e8;text-shadow:0 1px 8px rgba(0,0,0,.28);
+}
+/* ═══ STRUCTURED CATALOG — separated premium vs crystal families ═══ */
+#rel-grid{display:flex;flex-direction:column;gap:2.6rem;}
+.cat-group{position:relative;}
+.cat-head{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;
+  padding-bottom:.85rem;margin-bottom:1.4rem;border-bottom:1px solid var(--line-gold);position:relative;}
+.cat-head::after{content:"";position:absolute;left:0;bottom:-1px;width:64px;height:2px;background:var(--gold-grad);border-radius:2px;}
+.cat-eyebrow{display:block;font-family:var(--label);font-size:.6rem;font-weight:600;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--gold-dk);margin-bottom:.35rem;}
+.cat-title{font-family:var(--serif);font-weight:600;font-size:clamp(1.5rem,3vw,2rem);line-height:1.05;color:var(--ink);margin:0;}
+.cat-sub{font-family:var(--body);font-size:.98rem;line-height:1.45;color:var(--ink2);max-width:60ch;margin:.4rem 0 0;font-weight:500;}
+.cat-count{flex:0 0 auto;font-family:var(--label);font-size:.56rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--maroon);background:#fff9ed;border:1px solid var(--line-gold);border-radius:999px;padding:.42rem .8rem;white-space:nowrap;}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1.1rem;align-items:stretch;}
+
+/* premium family — richer header + subtle card lift */
+.cat-premium .cat-head{border-bottom-color:rgba(184,144,47,.5);}
+.cat-premium .cat-eyebrow{color:var(--maroon2);}
+.cat-premium .cat-title{color:var(--maroon);}
+.cat-premium .cat-count{color:#fff8e8;background:linear-gradient(135deg,#2b111b,#7a1d2b);border-color:rgba(255,221,145,.4);}
+.cat-premium .rel-card{
+  background:linear-gradient(160deg,#fffaf0,#f6ead1 130%);
+  box-shadow:0 14px 36px rgba(94,17,25,.08);
+}
+/* crystal family — clean, calm */
+.cat-crystal .cat-count{background:#fff9ed;}
+
+@media(max-width:760px){
+  .cat-head{flex-wrap:wrap;align-items:flex-start;}
+  .cat-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.7rem;}
+  #rel-grid{gap:2rem;}
+}
+@media(max-width:420px){
+  .cat-grid{grid-template-columns:1fr 1fr;}
 }
 @media(max-width:760px){
   .gallery-nav{width:38px;height:38px;font-size:1.8rem}
@@ -3572,6 +5815,432 @@ body::before{
     linear-gradient(60deg,transparent 0 68%,rgba(56,161,105,.10) 68% 69%,transparent 69% 100%);
 }
 </style>
+<!-- ════════════════════════════════════════════════════════════
+     VESHANN FX LAYER (LEAN) — compositor-cheap motion only.
+     Removed: will-change layers, cursor-spotlight, border-draw,
+     3D tilt, scroll parallax, infinite shimmer, magnetic buttons.
+     Kept: transform/opacity reveals, hover lift, zoom, shine,
+     sticky cart bar, scroll-spy, rail, count-up, ripple.
+     Degrades to fully-visible without JS / IntersectionObserver.
+     ════════════════════════════════════════════════════════════ -->
+<style id="veshann-fx">
+  :root{--fx-ease:cubic-bezier(.22,1,.36,1);}
+
+  /* scroll progress — scaleX is compositor-only (no layout) */
+  .fx-progress{position:fixed;top:0;left:0;height:2px;width:100%;z-index:9999;
+    background:var(--gold-grad);transform:scaleX(0);transform-origin:left;
+    pointer-events:none;will-change:transform;}
+
+  /* staggered child rise — opacity+transform only */
+  .fx-stagger > *{opacity:0;transform:translateY(16px);
+    transition:opacity .6s var(--fx-ease),transform .6s var(--fx-ease);
+    transition-delay:calc(var(--i,0) * 60ms);}
+  .fx-stagger.fx-in > *{opacity:1;transform:none;}
+
+  /* card hover — soft lift + gold shadow. NO will-change, NO pseudo layers */
+  .fx-card{transition:transform .45s var(--fx-ease),box-shadow .45s var(--fx-ease),border-color .45s var(--fx-ease);}
+  .fx-card:hover{transform:translateY(-3px);
+    box-shadow:0 18px 40px rgba(94,17,25,.10),0 0 0 1px rgba(184,144,47,.4) inset;
+    border-color:rgba(184,144,47,.5);}
+
+  /* image zoom-in-frame — transform only */
+  .fx-zoom{overflow:hidden;}
+  .fx-zoom img{transition:transform .8s var(--fx-ease);}
+  .fx-zoom:hover img{transform:scale(1.05);}
+
+  /* shine sweep — transform only, on hover */
+  .fx-shine{position:relative;overflow:hidden;}
+  .fx-shine::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(110deg,transparent 25%,rgba(255,240,200,.3),transparent 75%);
+    transform:translateX(-120%);transition:transform .7s var(--fx-ease);}
+  .fx-shine:hover::before{transform:translateX(120%);}
+
+  /* side scroll-spy dots (desktop only) */
+  .fx-spy{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:9000;
+    display:flex;flex-direction:column;gap:.7rem;align-items:center;}
+  .fx-spy a{width:9px;height:9px;border-radius:50%;background:rgba(94,17,25,.22);
+    border:1px solid rgba(184,144,47,.45);transition:transform .35s var(--fx-ease),background .35s var(--fx-ease);position:relative;}
+  .fx-spy a.active{background:var(--gold-grad);transform:scale(1.4);}
+  .fx-spy a span{position:absolute;right:18px;top:50%;transform:translateY(-50%);
+    white-space:nowrap;font-family:var(--label);font-size:.54rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--maroon);background:rgba(251,246,236,.95);border:1px solid var(--line-gold);border-radius:4px;
+    padding:.28rem .5rem;opacity:0;pointer-events:none;transition:opacity .3s var(--fx-ease);}
+  .fx-spy a:hover span{opacity:1;}
+  @media(max-width:1080px){.fx-spy{display:none;}}
+
+  /* sticky add-to-cart bar (mobile / tablet) */
+  .fx-cartbar{position:fixed;left:0;right:0;bottom:0;z-index:9100;
+    transform:translateY(115%);transition:transform .4s var(--fx-ease);will-change:transform;
+    display:flex;align-items:center;gap:.9rem;justify-content:space-between;
+    padding:.7rem 1rem;background:rgba(28,20,15,.96);border-top:1px solid var(--line-gold);
+    box-shadow:0 -10px 30px rgba(28,20,15,.26);}
+  .fx-cartbar.show{transform:translateY(0);}
+  .fx-cartbar .fx-cb-info{min-width:0;display:flex;flex-direction:column;line-height:1.1;}
+  .fx-cartbar .fx-cb-name{font-family:var(--label);font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-lt);}
+  .fx-cartbar .fx-cb-price{font-family:var(--serif);font-weight:600;font-size:1.18rem;color:#fff;}
+  .fx-cartbar .fx-cb-btn{flex:0 0 auto;border:0;cursor:pointer;border-radius:6px;
+    font-family:var(--label);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:.66rem;
+    color:#fdf3df;background:var(--maroon);padding:.85rem 1.3rem;transition:background .3s var(--fx-ease);}
+  .fx-cartbar .fx-cb-btn:hover{background:var(--maroon2);}
+  @media(min-width:1081px){.fx-cartbar{display:none;}}
+
+  /* sticky-pin journey copy (desktop) */
+  @media(min-width:1081px){.ritual-journey .rj-copy{position:sticky;top:96px;align-self:start;}}
+
+  /* horizontal scroll-snap rail for related */
+  @supports (scroll-snap-type:x mandatory){
+    #rel-grid.fx-rail{display:flex;grid-template-columns:none;overflow-x:auto;gap:1rem;
+      scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:.6rem;
+      scrollbar-width:thin;scrollbar-color:rgba(184,144,47,.5) transparent;}
+    #rel-grid.fx-rail::-webkit-scrollbar{height:6px;}
+    #rel-grid.fx-rail::-webkit-scrollbar-thumb{background:rgba(184,144,47,.5);border-radius:6px;}
+    #rel-grid.fx-rail > *{flex:0 0 clamp(220px,72%,272px);scroll-snap-align:start;}
+  }
+
+  /* animated underline links */
+  .fx-underline{position:relative;text-decoration:none;}
+  .fx-underline::after{content:"";position:absolute;left:0;right:100%;bottom:-2px;height:1.5px;
+    background:var(--gold-grad);transition:right .35s var(--fx-ease);}
+  .fx-underline:hover::after{right:0;}
+
+  /* urgency timer pulse under 10 min */
+  .urgency-timer.fx-urgent .timer-label{animation:fxUrgent 1.1s ease-in-out infinite;}
+  @keyframes fxUrgent{0%,100%{opacity:1}50%{opacity:.5}}
+
+  /* tap ripple */
+  .fx-ripple{position:absolute;border-radius:50%;pointer-events:none;transform:scale(0);
+    background:rgba(255,240,200,.4);animation:fxRipple .6s var(--fx-ease) forwards;}
+  @keyframes fxRipple{to{transform:scale(2.6);opacity:0;}}
+
+  @media(prefers-reduced-motion:reduce){
+    .fx-stagger > *,.fx-card,.fx-zoom img,.fx-shine::before,.fx-cartbar,.fx-progress{transition:none!important;animation:none!important;}
+    .fx-stagger > *{opacity:1!important;transform:none!important;}
+    .fx-progress{display:none!important;}
+  }
+</style>
+
+<script id="veshann-fx-js">
+(function(){
+  "use strict";
+  var mm = function(q){ return window.matchMedia ? matchMedia(q).matches : false; };
+  var reduce  = mm('(prefers-reduced-motion:reduce)');
+  var fine    = mm('(hover:hover) and (pointer:fine)');
+  var lightOK = !reduce;
+  var hasIO   = ('IntersectionObserver' in window);
+  var $  = function(s,c){ return (c||document).querySelector(s); };
+  var $$ = function(s,c){ return Array.prototype.slice.call((c||document).querySelectorAll(s)); };
+  var rAF = window.requestAnimationFrame || function(f){ return setTimeout(f,16); };
+  function ready(fn){ if(document.readyState!=='loading') fn(); else document.addEventListener('DOMContentLoaded',fn); }
+  // one shared IntersectionObserver for "reveal once" work
+  function onceIO(cb,opts){
+    return hasIO ? new IntersectionObserver(function(es,ob){
+      es.forEach(function(e){ if(e.isIntersecting){ cb(e.target); ob.unobserve(e.target); } });
+    }, opts) : null;
+  }
+
+  ready(function(){
+    /* scroll progress — scaleX, rAF-throttled */
+    if(lightOK){
+      var bar=document.createElement('div'); bar.className='fx-progress'; document.body.appendChild(bar);
+      var t=false;
+      function prog(){ var h=document.documentElement,max=h.scrollHeight-h.clientHeight;
+        bar.style.transform='scaleX('+(max>0?(h.scrollTop||pageYOffset)/max:0)+')'; t=false; }
+      addEventListener('scroll',function(){ if(!t){ rAF(prog); t=true; } },{passive:true}); prog();
+    }
+
+    /* staggered reveal on small static grids only */
+    if(lightOK){
+      var io=onceIO(function(el){ el.classList.add('fx-in'); },{threshold:.16,rootMargin:'0px 0px -6% 0px'});
+      ['.meta-grid','.offers-box ul','.kit-badges','.tier-grid','.care','.va-proof','.rj-ladder']
+      .forEach(function(sel){ $$(sel).forEach(function(g){
+        g.classList.add('fx-stagger');
+        $$(':scope > *',g).forEach(function(ch,i){ ch.style.setProperty('--i',i); });
+        if(io) io.observe(g); else g.classList.add('fx-in');
+      }); });
+    }
+
+    /* card hover lift (cheap) + zoom frames + shine */
+    $$('.benefit,.care-item,.rev,.va-card,.tier-card,.mini-card,.co-card,#rel-grid .rel-card')
+      .forEach(function(c){ c.classList.add('fx-card'); });
+    $$('#rel-grid .rel-card,.about-img').forEach(function(el){ el.classList.add('fx-zoom'); });
+    $$('.tier-premium,.va-card-hot').forEach(function(el){ el.classList.add('fx-shine'); });
+
+    /* side scroll-spy (desktop pointer) */
+    if(fine && !reduce){
+      var map=[['#buy','Buy'],['.ritual-journey','Journey'],['.why-veshan','Why Us'],['#reviews','Reviews'],['#related','Stones'],['.faq','FAQ']];
+      var secs=map.map(function(m){ var el=$(m[0]); return el?{el:el,label:m[1]}:null; }).filter(Boolean);
+      if(secs.length && hasIO){
+        var spy=document.createElement('nav'); spy.className='fx-spy'; spy.setAttribute('aria-label','Section navigation');
+        secs.forEach(function(s,i){ if(!s.el.id) s.el.id='fxsec-'+i;
+          var a=document.createElement('a'); a.href='#'+s.el.id; a.innerHTML='<span>'+s.label+'</span>'; spy.appendChild(a); s.dot=a; });
+        document.body.appendChild(spy);
+        var spyIO=new IntersectionObserver(function(es){ es.forEach(function(e){
+          var s=secs.filter(function(x){return x.el===e.target;})[0];
+          if(s && e.isIntersecting){ secs.forEach(function(x){x.dot.classList.remove('active');}); s.dot.classList.add('active'); }
+        }); },{threshold:.3,rootMargin:'-40% 0px -40% 0px'});
+        secs.forEach(function(s){ spyIO.observe(s.el); });
+      }
+    }
+
+    /* sticky add-to-cart bar */
+    var buyBtn=$('#buy-btn'), buyAmt=$('#buy-amt');
+    if(buyBtn && lightOK){
+      var cb=document.createElement('div'); cb.className='fx-cartbar'; cb.setAttribute('aria-label','Quick buy');
+      cb.innerHTML='<div class="fx-cb-info"><span class="fx-cb-name">Maaya First Circle Kit</span>'+
+                   '<span class="fx-cb-price" id="fx-cb-price">'+(buyAmt?buyAmt.textContent:'')+'</span></div>'+
+                   '<button type="button" class="fx-cb-btn">Buy now</button>';
+      document.body.appendChild(cb);
+      cb.querySelector('.fx-cb-btn').addEventListener('click',function(){ buyBtn.click(); });
+      if(buyAmt && 'MutationObserver' in window){ var pm=$('#fx-cb-price');
+        new MutationObserver(function(){ pm.textContent=buyAmt.textContent; }).observe(buyAmt,{childList:true,characterData:true,subtree:true}); }
+      if(hasIO) new IntersectionObserver(function(es){ es.forEach(function(e){ cb.classList.toggle('show',!e.isIntersecting); }); },
+        {threshold:0,rootMargin:'0px 0px -10% 0px'}).observe(buyBtn);
+    }
+
+    /* (catalog now uses separated group grids — rail intentionally not applied here) */
+
+    /* underline links */
+    $$('.site-footer a,.breadcrumb a').forEach(function(a){ a.classList.add('fx-underline'); });
+
+    /* urgency pulse under 10 min */
+    var timer=$('.urgency-timer'), ctH=$('#ct-h'), ctM=$('#ct-m');
+    if(timer && ctH && ctM && lightOK){
+      setInterval(function(){ var h=parseInt(ctH.textContent,10),m=parseInt(ctM.textContent,10);
+        timer.classList.toggle('fx-urgent',(h===0 && m<10)); },1000);
+    }
+
+    /* tap ripple */
+    $$('.buy-btn,.cart-btn,.ai-btn,.tier-card,.fx-cb-btn').forEach(function(el){
+      var cs=getComputedStyle(el); if(cs.position==='static') el.style.position='relative';
+      if(cs.overflow!=='hidden') el.style.overflow='hidden';
+      el.addEventListener('pointerdown',function(ev){ var r=el.getBoundingClientRect(),d=Math.max(r.width,r.height);
+        var s=document.createElement('span'); s.className='fx-ripple'; s.style.width=s.style.height=d+'px';
+        s.style.left=(ev.clientX-r.left-d/2)+'px'; s.style.top=(ev.clientY-r.top-d/2)+'px';
+        el.appendChild(s); setTimeout(function(){ s.remove(); },650); },{passive:true});
+    });
+
+    /* count-up on proof stats + rating only (never the price) */
+    if(lightOK && hasIO){
+      var nums=$$('.va-proof strong'); var rn=$('#p-rating-num'); if(rn) nums.push(rn);
+      var cu=onceIO(countUp,{threshold:.6}); nums.forEach(function(n){ if(cu) cu.observe(n); });
+    }
+    function countUp(el){
+      var m=el.textContent.trim().match(/^([^\d]*)([\d,]+(?:\.\d+)?)(.*)$/); if(!m) return;
+      var pre=m[1],suf=m[3],target=parseFloat(m[2].replace(/,/g,'')); if(!isFinite(target)) return;
+      var dec=(m[2].split('.')[1]||'').length,dur=1000,t0=null;
+      function fmt(v){ return dec?v.toFixed(dec):Math.round(v).toLocaleString('en-IN'); }
+      function step(ts){ if(t0===null)t0=ts; var p=Math.min(1,(ts-t0)/dur),e=1-Math.pow(1-p,3);
+        el.textContent=pre+fmt(target*e)+suf; if(p<1) rAF(step); }
+      el.textContent=pre+fmt(0)+suf; rAF(step);
+    }
+  });
+})();
+</script>
+
+
+
+<script id="bbt-tracking-system-js">
+(function(){
+  "use strict";
+  var userProfile = {
+    fullName:"Arjun Sharma",
+    email:"arjun.sharma@example.com",
+    phone:"+91 98765 43210",
+    address:"B-42, Indiranagar, Bengaluru, Karnataka",
+    city:"Bengaluru",
+    pincode:"560038",
+    walletBalance:2450,
+    cashbackEarned:385
+  };
+  var orders = [
+    {id:"ord_9001",orderName:"Kundli-to-Wrist Bracelet Kit",serviceType:"Bracelet order",date:"2026-06-18",price:3499,awb:"DLVRY890123456",courierName:"Delhivery",status:"In Transit",location:"Bengaluru Hub"},
+    {id:"ord_9002",orderName:"Energised Bracelet Batch",serviceType:"Bulk order",date:"2026-06-09",price:8750,awb:"SRKT672349001",courierName:"Shiprocket",status:"Delivered",location:"Mumbai Center"},
+    {id:"ord_9003",orderName:"Maaya Location Support",serviceType:"Service booking",date:"2026-05-28",price:1499,awb:"AFS998812341",courierName:"AfterShip",status:"Out for Delivery",location:"Delhi NCR Field Office"},
+    {id:"ord_9004",orderName:"Replacement Gemstone Pack",serviceType:"Replacement",date:"2026-05-14",price:1299,awb:"BDTRK445566778",courierName:"Blue Dart",status:"Dispatched",location:"Pune Sorting Facility"}
+  ];
+  var inventory = [
+    {name:"Baseband Pro",tag:"Active BLE tracking",stock:42,price:2499,status:"Ready"},
+    {name:"NFC Bracelet",tag:"Guest verification",stock:320,price:149,status:"Ready"},
+    {name:"RFID Baseband",tag:"Warehouse movement",stock:88,price:699,status:"Batch QC"}
+  ];
+  var fields = [
+    ["fullName","Full Name"],["email","Email"],["phone","Phone"],["address","Address"],["city","City"],["pincode","Pincode"]
+  ];
+  var stages = ["Ordered","Dispatched","In Transit","Out for Delivery","Delivered"];
+  var stageIndex = {"Ordered":0,"Dispatched":1,"In Transit":2,"Out for Delivery":3,"Delivered":4};
+  var $ = function(id){ return document.getElementById(id); };
+  var money = function(value){ return "Rs " + Number(value || 0).toLocaleString("en-IN"); };
+  var esc = function(value){
+    return String(value == null ? "" : value).replace(/[&<>"']/g,function(ch){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch];
+    });
+  };
+
+  function init(){
+    if(!$("bbt-shell") || $("bbt-shell").dataset.ready) return;
+    $("bbt-shell").dataset.ready = "1";
+    renderAll();
+    document.querySelectorAll("[data-bbt-open]").forEach(function(btn){
+      btn.addEventListener("click", openShell);
+    });
+    $("bbt-close").addEventListener("click", closeShell);
+    $("bbt-shell").addEventListener("click", function(event){ if(event.target === $("bbt-shell")) closeShell(); });
+    $("bbt-track-close").addEventListener("click", closeTrack);
+    $("bbt-track-panel").addEventListener("click", function(event){ if(event.target === $("bbt-track-panel")) closeTrack(); });
+    document.querySelectorAll("[data-bbt-view]").forEach(function(btn){
+      btn.addEventListener("click", function(){ showView(btn.getAttribute("data-bbt-view")); });
+    });
+    $("bbt-edit-profile").addEventListener("click", function(){ setProfileEditing(true); });
+    $("bbt-save-profile").addEventListener("click", saveProfile);
+    document.addEventListener("keydown", function(event){
+      if(event.key !== "Escape") return;
+      if($("bbt-track-panel").classList.contains("open")) closeTrack();
+      else closeShell();
+    });
+  }
+
+  function openShell(){
+    $("bbt-shell").classList.add("open");
+    $("bbt-shell").setAttribute("aria-hidden","false");
+    showView("dashboard");
+  }
+  function closeShell(){
+    $("bbt-shell").classList.remove("open");
+    $("bbt-shell").setAttribute("aria-hidden","true");
+  }
+  function showView(name){
+    document.querySelectorAll(".bbt-tab").forEach(function(btn){ btn.classList.toggle("active", btn.getAttribute("data-bbt-view") === name); });
+    document.querySelectorAll(".bbt-view").forEach(function(view){ view.classList.toggle("active", view.id === "bbt-view-" + name); });
+  }
+
+  function renderAll(){
+    renderProfile();
+    renderSummary();
+    renderOrders();
+    renderInventory();
+    renderCheckout();
+  }
+  function renderProfile(){
+    var form = $("bbt-profile-form");
+    form.innerHTML = fields.map(function(field){
+      var wide = field[0] === "address" ? " full" : "";
+      return '<div class="bbt-field'+wide+'"><label for="bbt-field-'+field[0]+'">'+field[1]+'</label><input id="bbt-field-'+field[0]+'" name="'+field[0]+'" value="'+esc(userProfile[field[0]])+'" readonly></div>';
+    }).join("");
+  }
+  function setProfileEditing(isEditing){
+    fields.forEach(function(field){
+      var input = $("bbt-field-" + field[0]);
+      if(input) input.readOnly = !isEditing;
+    });
+    $("bbt-edit-profile").hidden = isEditing;
+    $("bbt-save-profile").hidden = !isEditing;
+  }
+  function saveProfile(){
+    fields.forEach(function(field){
+      var input = $("bbt-field-" + field[0]);
+      if(input) userProfile[field[0]] = input.value.trim();
+    });
+    setProfileEditing(false);
+  }
+  function renderSummary(){
+    $("bbt-summary").innerHTML =
+      '<article class="bbt-metric"><span>Wallet Balance</span><strong>'+money(userProfile.walletBalance)+'</strong></article>'+
+      '<article class="bbt-metric green"><span>Cashback Earned</span><strong>'+money(userProfile.cashbackEarned)+'</strong></article>';
+  }
+  function renderOrders(){
+    $("bbt-orders-body").innerHTML = orders.map(function(order){
+      var statusClass = order.status === "Delivered" ? " done" : (order.status === "Dispatched" ? " warn" : "");
+      return '<tr><td><strong>'+esc(order.orderName)+'</strong><br><span class="bbt-muted">'+esc(order.serviceType)+' - '+esc(order.location)+'</span></td>'+
+      '<td>'+esc(order.date)+'</td><td><strong>'+money(order.price)+'</strong></td><td><span class="bbt-awb">'+esc(order.awb)+'</span></td>'+
+      '<td>'+esc(order.courierName)+'</td><td><span class="bbt-status'+statusClass+'">'+esc(order.status)+'</span></td>'+
+      '<td><button class="bbt-btn secondary" type="button" data-bbt-track="'+esc(order.id)+'">Track Order</button></td></tr>';
+    }).join("");
+    document.querySelectorAll("[data-bbt-track]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var order = orders.find(function(item){ return item.id === btn.getAttribute("data-bbt-track"); });
+        if(order) openTrack(order);
+      });
+    });
+  }
+  function renderInventory(){
+    $("bbt-inventory").innerHTML = inventory.map(function(item){
+      return '<article class="bbt-card bbt-device"><div><div class="bbt-device-icon">BB</div><h3>'+esc(item.name)+'</h3><p class="bbt-muted">'+esc(item.tag)+'</p></div>'+
+      '<div class="bbt-kpis"><div class="bbt-kpi"><span>Stock</span><strong>'+esc(item.stock)+'</strong></div><div class="bbt-kpi"><span>Price</span><strong>'+money(item.price)+'</strong></div></div></article>';
+    }).join("");
+  }
+  function renderCheckout(){
+    var cart = orders.slice(0,2);
+    var subtotal = cart.reduce(function(sum,item){ return sum + item.price; },0);
+    var walletApplied = Math.min(userProfile.walletBalance,500);
+    var cashback = Math.round(subtotal * .04);
+    $("bbt-checkout-items").innerHTML = cart.map(function(item){
+      return '<div class="bbt-card" style="margin-bottom:.75rem"><strong>'+esc(item.orderName)+'</strong><p class="bbt-muted">'+esc(item.serviceType)+' - '+esc(item.courierName)+'</p><p style="margin-top:.45rem;font-weight:900">'+money(item.price)+'</p></div>';
+    }).join("");
+    $("bbt-payment-summary").innerHTML =
+      summaryRow("Subtotal", money(subtotal))+
+      summaryRow("Wallet applied", "-" + money(walletApplied))+
+      summaryRow("Cashback estimate", money(cashback))+
+      '<hr style="border:0;border-top:1px solid var(--bbt-line);margin:.9rem 0">'+
+      summaryRow("Amount payable", money(subtotal - walletApplied), true);
+  }
+  function summaryRow(label,value,strong){
+    return '<div style="display:flex;justify-content:space-between;gap:1rem;margin:.55rem 0;color:#4b392e"><span>'+label+'</span><strong style="font-size:'+(strong?'1.2rem':'1rem')+';color:#21150f">'+value+'</strong></div>';
+  }
+
+  function fetchTrackingStatus(awbId, currentStatus){
+    return new Promise(function(resolve){
+      window.setTimeout(function(){
+        var current = stageIndex[currentStatus] == null ? 2 : stageIndex[currentStatus];
+        resolve({
+          awbId: awbId,
+          currentStatus: currentStatus,
+          estimatedDelivery: currentStatus === "Delivered" ? "Delivered" : "Expected in 1-3 days",
+          stages: stages.map(function(label,index){
+            return {label:label,completed:index <= current,timestamp:index <= current ? mockTimestamp(index) : null};
+          })
+        });
+      },650);
+    });
+  }
+  window.fetchTrackingStatus = window.fetchTrackingStatus || fetchTrackingStatus;
+
+  function openTrack(order){
+    $("bbt-track-panel").classList.add("open");
+    $("bbt-track-panel").setAttribute("aria-hidden","false");
+    $("bbt-track-title").textContent = order.orderName;
+    $("bbt-track-courier").textContent = order.courierName;
+    $("bbt-track-awb").textContent = order.awb;
+    $("bbt-track-body").innerHTML = '<div class="bbt-loader">Fetching live tracking status...</div>';
+    fetchTrackingStatus(order.awb, order.status).then(function(data){
+      $("bbt-track-body").innerHTML =
+        '<div class="bbt-card" style="margin:1rem"><p class="bbt-muted">Current Status</p><h3>'+esc(data.currentStatus)+'</h3><p class="bbt-muted">'+esc(data.estimatedDelivery)+'</p></div>'+
+        '<ol class="bbt-steps">'+data.stages.map(function(stage,index){
+          return '<li class="'+(stage.completed?'done':'')+'"><span class="bbt-dot">'+(index+1)+'</span><div><div class="bbt-step-title">'+esc(stage.label)+'</div><div class="bbt-step-time">'+esc(stage.timestamp || "Pending update")+'</div></div></li>';
+        }).join("")+'</ol>';
+    });
+  }
+  function closeTrack(){
+    $("bbt-track-panel").classList.remove("open");
+    $("bbt-track-panel").setAttribute("aria-hidden","true");
+  }
+  function mockTimestamp(index){
+    return ["2026-06-18 10:20 AM","2026-06-19 04:45 PM","2026-06-21 08:15 AM","2026-06-22 09:30 AM","2026-06-22 05:40 PM"][index];
+  }
+
+  /*
+    Real AWB API handoff example:
+    fetch("/api/track-order", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({ awbId: order.awb })
+    });
+    Keep Shiprocket, Delhivery, or AfterShip API keys inside the serverless function, not in this HTML file.
+  */
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
+</script>
 </body>
 </html>
 
