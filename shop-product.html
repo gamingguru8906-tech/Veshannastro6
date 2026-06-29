@@ -1465,6 +1465,7 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
 }
 </style>
 
+
 <!-- Baseband & Bracelet Tracking System injection -->
 <style id="bbt-tracking-system-styles">
   :root{--bbt-ink:#18110d;--bbt-muted:#6d5e53;--bbt-paper:#fffaf1;--bbt-line:rgba(94,17,25,.15);--bbt-maroon:#5e1119;--bbt-gold:#c59a37;--bbt-blue:#2456c6;--bbt-green:#27784e;}
@@ -1473,9 +1474,15 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
   .bbt-google-btn:hover{transform:translateY(-1px) scale(1.035);box-shadow:0 16px 36px rgba(30,20,12,.24);}
   .bbt-google-btn:focus-visible{outline:3px solid rgba(66,133,244,.32);outline-offset:3px;}
   .bbt-google-btn span{display:grid;place-items:center;width:100%;height:100%;border-radius:inherit;background:#fffdf8;color:#333;font:800 1.08rem/1 var(--body-ui,Jost,sans-serif);}
+  .bbt-google-btn svg{width:21px;height:21px;display:block;}
+  .bbt-google-btn img{width:100%;height:100%;border-radius:999px;display:block;object-fit:cover;background:#fff;}
+  .bbt-google-btn.is-signed-in{background:linear-gradient(135deg,#fff,#f3dfb2);padding:2px;box-shadow:0 12px 30px rgba(38,28,20,.22);}
   .bbt-launcher{margin-left:.15rem;}
   .bbt-checkout-launcher{position:absolute;right:4.45rem;top:1rem;z-index:6;width:40px;height:40px;}
   .co-head{padding-right:7.9rem!important;}
+  .bbt-delivery-promise{width:min(1180px,calc(100% - 32px));margin:.7rem auto 0;display:flex;align-items:center;justify-content:center;gap:.55rem;border:1px solid rgba(184,144,47,.35);border-radius:999px;background:linear-gradient(135deg,#fffaf0,#f4e0b8);box-shadow:0 10px 26px rgba(38,28,20,.08);color:#4a261d;font-family:var(--body-ui,Jost,sans-serif);font-size:.8rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:.62rem 1rem;text-align:center;}
+  .bbt-delivery-promise strong{color:var(--maroon,#5e1119);}
+  .bbt-checkout-delivery{display:inline-flex;align-items:center;gap:.4rem;align-self:flex-start;margin:.55rem 0 .25rem;border:1px solid rgba(184,144,47,.36);border-radius:999px;background:#fff5df;color:#5a3025;font-family:var(--body-ui,Jost,sans-serif);font-size:.7rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .72rem;}
   .bbt-shell{position:fixed;inset:0;z-index:12000;display:none;background:rgba(22,10,13,.72);backdrop-filter:blur(10px);padding:18px;}
   .bbt-shell.open{display:block;}
   .bbt-app{height:100%;max-width:1180px;margin:0 auto;background:linear-gradient(180deg,#fffaf1,#f7eddb);border:1px solid rgba(230,200,120,.62);box-shadow:0 32px 90px rgba(10,7,6,.38);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;color:var(--bbt-ink);font-family:var(--body-ui,Jost,sans-serif);}
@@ -1513,8 +1520,8 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
   .bbt-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem;}
   .bbt-field.full{grid-column:1/-1;}
   .bbt-field label{display:block;font-weight:900;font-size:.75rem;color:#5c4739;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.28rem;}
-  .bbt-field input{width:100%;height:44px;border-radius:10px;border:1px solid rgba(94,17,25,.18);background:#f8efe1;color:#1b120d;padding:0 .8rem;font:600 .93rem var(--body-ui,Jost,sans-serif);}
-  .bbt-field input:not([readonly]){background:#fff;border-color:rgba(36,86,198,.36);box-shadow:0 0 0 4px rgba(36,86,198,.08);}
+  .bbt-field input,.bbt-field select{width:100%;height:44px;border-radius:10px;border:1px solid rgba(94,17,25,.18);background:#f8efe1;color:#1b120d;padding:0 .8rem;font:600 .93rem var(--body-ui,Jost,sans-serif);}
+  .bbt-field input:not([readonly]),.bbt-field select{background:#fff;border-color:rgba(36,86,198,.36);box-shadow:0 0 0 4px rgba(36,86,198,.08);}
   .bbt-actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1rem;}
   .bbt-btn{border:0;border-radius:10px;padding:.78rem 1rem;background:var(--bbt-maroon);color:#fff8e8;cursor:pointer;font-weight:900;letter-spacing:.05em;transition:transform .18s ease,box-shadow .18s ease,background .18s ease;}
   .bbt-btn:hover{transform:translateY(-1px);box-shadow:0 12px 22px rgba(94,17,25,.22);}
@@ -1523,7 +1530,7 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
   .bbt-table{width:100%;min-width:860px;border-collapse:collapse;font-size:.9rem;}
   .bbt-table th{background:#f5e8d0;color:#5b4538;text-align:left;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;padding:.8rem;font-weight:900;}
   .bbt-table td{padding:.85rem;border-top:1px solid rgba(94,17,25,.12);vertical-align:top;color:#25170f;}
-  .bbt-awb{display:inline-block;font-family:Consolas,monospace;background:#f1e7d6;border-radius:7px;padding:.24rem .42rem;font-size:.78rem;color:#3b281d;}
+  .bbt-track-id{display:inline-block;font-family:Consolas,monospace;background:#f1e7d6;border-radius:7px;padding:.24rem .42rem;font-size:.78rem;color:#3b281d;}
   .bbt-status{display:inline-flex;border-radius:999px;padding:.28rem .55rem;font-weight:900;font-size:.74rem;background:#eaf1ff;color:#2456c6;}
   .bbt-status.done{background:#e7f6ee;color:#27784e;}
   .bbt-status.warn{background:#fff2cc;color:#8a6a22;}
@@ -1538,7 +1545,7 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
   .bbt-step-title{font-weight:900;color:#21150f;}
   .bbt-step-time{color:var(--bbt-muted);font-size:.84rem;margin-top:.1rem;}
   .bbt-loader{padding:2rem;text-align:center;color:#5b4538;font-weight:900;}
-  @media(max-width:900px){.bbt-grid.two,.bbt-grid.three{grid-template-columns:1fr}.bbt-shell{padding:8px}.bbt-app{border-radius:14px}.bbt-top{align-items:flex-start}.bbt-brand h2{font-size:1.18rem}.bbt-form,.bbt-summary{grid-template-columns:1fr}.bbt-checkout-launcher{right:4.05rem;top:.85rem;width:38px;height:38px}.co-head{padding-right:7.4rem!important;}}
+  @media(max-width:900px){.bbt-grid.two,.bbt-grid.three{grid-template-columns:1fr}.bbt-shell{padding:8px}.bbt-app{border-radius:14px}.bbt-top{align-items:flex-start}.bbt-brand h2{font-size:1.18rem}.bbt-form,.bbt-summary{grid-template-columns:1fr}.bbt-checkout-launcher{right:4.05rem;top:.85rem;width:38px;height:38px}.co-head{padding-right:7.4rem!important;}.bbt-delivery-promise{width:calc(100% - 20px);border-radius:14px;font-size:.68rem;line-height:1.35;}}
   @media(max-width:760px){.nav-links .bbt-nav-li{display:flex!important}.bbt-launcher{width:40px;height:40px}.bbt-google-btn span{font-size:1rem;}.nav-links{gap:.5rem;}}
 </style>
 </head>
@@ -1559,7 +1566,7 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
     <li class="nav-cart-li"><a class="nav-cart" id="nav-cart" href="#buy">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/><path d="M3 4h2l2.6 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 1.9-1.4L21 8H7"/></svg>
       Cart<span class="cart-count" id="cart-count">0</span></a></li>
-      <li class="bbt-nav-li"><button class="bbt-google-btn bbt-launcher" id="bbt-launcher" data-bbt-open type="button" aria-label="Open Baseband tracking dashboard" title="Open tracking dashboard"><span>G</span></button></li>
+    <li class="bbt-nav-li"><button class="bbt-google-btn bbt-launcher" id="bbt-launcher" data-bbt-open type="button" aria-label="Open Baseband tracking dashboard" title="Open tracking dashboard"><span aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false"><path fill="#EA4335" d="M24 9.5c3.2 0 6.1 1.1 8.4 3.2l6.3-6.3C34.9 2.9 29.8 1 24 1 14.6 1 6.5 6.4 2.6 14.3l7.7 6C12.1 14 17.6 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-2.8-.4-4.1H24v8h12.7c-.3 2.1-1.7 5.2-4.9 7.4l7.5 5.8c4.4-4.1 6.8-10.1 6.8-17.1z"/><path fill="#FBBC05" d="M10.3 28.2c-.5-1.4-.8-2.8-.8-4.2s.3-2.9.8-4.2l-7.7-6C1 17 0 20.4 0 24s1 7 2.6 10.2l7.7-6z"/><path fill="#34A853" d="M24 47c5.8 0 10.7-1.9 14.3-5.2l-7.5-5.8c-2 1.4-4.6 2.3-6.8 2.3-6.4 0-11.9-4.4-13.8-10.3l-7.7 6C6.5 41.6 14.6 47 24 47z"/></svg></span></button></li>
 </ul>
 </nav>
 
@@ -1598,13 +1605,13 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
           <article class="bbt-card">
             <div class="bbt-summary" id="bbt-summary"></div>
             <h3>Your Orders</h3>
-            <p class="bbt-muted">Every bracelet, service, and location order with its AWB tracking ID.</p>
+            <p class="bbt-muted">No-AWB internal tracking for bracelet, service, and location orders.</p>
           </article>
         </div>
         <div class="bbt-card" style="margin-top:1rem">
           <div class="bbt-table-wrap">
-            <table class="bbt-table" aria-label="Your orders and AWB tracking">
-              <thead><tr><th>Order</th><th>Date</th><th>Price</th><th>AWB</th><th>Courier</th><th>Status</th><th>Action</th></tr></thead>
+            <table class="bbt-table" aria-label="Your orders and internal tracking">
+              <thead><tr><th>Order</th><th>Date</th><th>Price</th><th>Tracking ID</th><th>Update Type</th><th>Status</th><th>Action</th></tr></thead>
               <tbody id="bbt-orders-body"></tbody>
             </table>
           </div>
@@ -1626,6 +1633,16 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
               <div class="bbt-kpi"><span>Synced today</span><strong>94%</strong></div>
               <div class="bbt-kpi"><span>Pending QC</span><strong>7</strong></div>
               <div class="bbt-kpi"><span>Alerts</span><strong>2</strong></div>
+            </div>
+            <div style="margin-top:1.2rem;border-top:1px solid var(--bbt-line);padding-top:1rem">
+              <h3>No-AWB Control</h3>
+              <form class="bbt-form" id="bbt-admin-form">
+                <div class="bbt-field full"><label for="bbt-admin-order">Tracking ID</label><select id="bbt-admin-order"></select></div>
+                <div class="bbt-field full"><label for="bbt-admin-status">New Status</label><select id="bbt-admin-status"></select></div>
+                <div class="bbt-field full"><label for="bbt-admin-note">Update Note</label><input id="bbt-admin-note" value="Packed after QC"></div>
+              </form>
+              <button class="bbt-btn" id="bbt-admin-update" type="button" style="width:100%;margin-top:.85rem">Update Tracking</button>
+              <p class="bbt-muted" id="bbt-admin-result" style="margin-top:.7rem"></p>
             </div>
           </aside>
         </div>
@@ -1653,9 +1670,9 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
   <div class="bbt-track-card" role="dialog" aria-modal="true" aria-labelledby="bbt-track-title">
     <header class="bbt-track-head">
       <div>
-        <p class="bbt-muted" id="bbt-track-courier"></p>
+        <p class="bbt-muted" id="bbt-track-channel"></p>
         <h3 id="bbt-track-title" style="margin:.1rem 0 0;font-family:var(--serif,Fraunces,serif)">Tracking</h3>
-        <p class="bbt-awb" id="bbt-track-awb" style="margin-top:.4rem"></p>
+        <p class="bbt-track-id" id="bbt-track-id" style="margin-top:.4rem"></p>
       </div>
       <button class="bbt-close" id="bbt-track-close" type="button" aria-label="Close tracking">&times;</button>
     </header>
@@ -1667,6 +1684,7 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
   <a href="https://www.veshannastro.co.in/#bracelet-shop">Gemstone Bracelets</a> /
   <span id="bc-name">Product</span>
 </nav>
+<div class="bbt-delivery-promise" role="note">Delivery promise: <strong>5 to 7 days</strong> across India after dispatch</div>
 
 <!-- ═══ PRODUCT HERO ═══ -->
 <main class="product" id="buy">
@@ -2136,12 +2154,12 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
         100% Secured Payment
       </div>
+      <div class="bbt-checkout-delivery" role="note">Delivery in 5 to 7 days</div>
       <div class="gk-head-main">
         <div class="gk-head-text">
           <h3 id="gk-step-title">Enter your mobile number</h3>
           <p id="gk-step-sub">Step 1 of 5 · Login</p>
-        </div>
-                <button class="bbt-google-btn bbt-checkout-launcher" data-bbt-open type="button" aria-label="Open Baseband tracking dashboard from checkout" title="Open tracking dashboard"><span>G</span></button><button type="button" class="co-close" id="co-close" aria-label="Close checkout">&times;</button>
+        </div>        <button class="bbt-google-btn bbt-checkout-launcher" data-bbt-open type="button" aria-label="Open Baseband tracking dashboard from checkout" title="Open tracking dashboard"><span aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false"><path fill="#EA4335" d="M24 9.5c3.2 0 6.1 1.1 8.4 3.2l6.3-6.3C34.9 2.9 29.8 1 24 1 14.6 1 6.5 6.4 2.6 14.3l7.7 6C12.1 14 17.6 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-2.8-.4-4.1H24v8h12.7c-.3 2.1-1.7 5.2-4.9 7.4l7.5 5.8c4.4-4.1 6.8-10.1 6.8-17.1z"/><path fill="#FBBC05" d="M10.3 28.2c-.5-1.4-.8-2.8-.8-4.2s.3-2.9.8-4.2l-7.7-6C1 17 0 20.4 0 24s1 7 2.6 10.2l7.7-6z"/><path fill="#34A853" d="M24 47c5.8 0 10.7-1.9 14.3-5.2l-7.5-5.8c-2 1.4-4.6 2.3-6.8 2.3-6.4 0-11.9-4.4-13.8-10.3l-7.7 6C6.5 41.6 14.6 47 24 47z"/></svg></span></button><button type="button" class="co-close" id="co-close" aria-label="Close checkout">&times;</button>
       </div>
       <div class="gk-dots" id="gk-dots" aria-label="Checkout progress">
         <span class="gk-dot gk-dot-active" data-step="1"></span>
@@ -6039,25 +6057,36 @@ body::before{
 
 
 
+
 <script id="bbt-tracking-system-js">
 (function(){
   "use strict";
-  var userProfile = {
-    fullName:"Arjun Sharma",
-    email:"arjun.sharma@example.com",
-    phone:"+91 98765 43210",
-    address:"B-42, Indiranagar, Bengaluru, Karnataka",
-    city:"Bengaluru",
-    pincode:"560038",
-    walletBalance:2450,
-    cashbackEarned:385
+  var mockCustomerData = {
+    "arjun.sharma@example.com": {
+      profile:{fullName:"Arjun Sharma",email:"arjun.sharma@example.com",phone:"+91 98765 43210",address:"B-42, Indiranagar, Bengaluru, Karnataka",city:"Bengaluru",pincode:"560038",walletBalance:2450,cashbackEarned:385},
+      orders:[
+        {id:"ord_9001",orderName:"Kundli-to-Wrist Bracelet Kit",serviceType:"Bracelet order",date:"2026-06-18",price:3499,trackingId:"VA-ORD-2026-000124",trackingMode:"No-AWB manual tracking",updateType:"Manual fulfilment update",status:"Bracelet Preparing",location:"Bengaluru Studio",handler:"Veshannastro Fulfilment",lastUpdated:"2026-06-19 04:45 PM",deliveryWindow:"5 to 7 days",nextAction:"Energising and quality check"},
+        {id:"ord_9002",orderName:"Energised Bracelet Batch",serviceType:"Bulk order",date:"2026-06-09",price:8750,trackingId:"VA-ORD-2026-000119",trackingMode:"No-AWB manual tracking",updateType:"Admin app update",status:"Delivered",location:"Mumbai Center",handler:"Veshannastro Fulfilment",lastUpdated:"2026-06-15 05:40 PM",deliveryWindow:"Delivered",nextAction:"Completed"},
+        {id:"ord_9003",orderName:"Maaya Location Support",serviceType:"Service booking",date:"2026-05-28",price:1499,trackingId:"VA-SVC-2026-000086",trackingMode:"No-AWB service tracking",updateType:"Service desk update",status:"Out for Delivery",location:"Delhi NCR Field Office",handler:"Service Desk",lastUpdated:"2026-06-02 09:30 AM",deliveryWindow:"5 to 7 days",nextAction:"Customer confirmation"},
+        {id:"ord_9004",orderName:"Replacement Gemstone Pack",serviceType:"Replacement",date:"2026-05-14",price:1299,trackingId:"VA-REP-2026-000041",trackingMode:"No-AWB manual tracking",updateType:"Manual fulfilment update",status:"Packed",location:"Pune Sorting Desk",handler:"Replacement Desk",lastUpdated:"2026-05-15 01:10 PM",deliveryWindow:"5 to 7 days",nextAction:"Dispatch handoff"}
+      ]
+    },
+    "meera.iyer@example.com": {
+      profile:{fullName:"Meera Iyer",email:"meera.iyer@example.com",phone:"+91 99887 77665",address:"A-18, Adyar, Chennai, Tamil Nadu",city:"Chennai",pincode:"600020",walletBalance:1280,cashbackEarned:220},
+      orders:[
+        {id:"ord_8101",orderName:"Moonstone Calm Bracelet",serviceType:"Bracelet order",date:"2026-06-21",price:2199,trackingId:"VA-ORD-2026-000151",trackingMode:"No-AWB manual tracking",updateType:"Admin app update",status:"Packed",location:"Chennai Studio",handler:"Veshannastro Fulfilment",lastUpdated:"2026-06-22 11:10 AM",deliveryWindow:"5 to 7 days",nextAction:"Ready for dispatch"},
+        {id:"ord_8102",orderName:"Relationship Numerology Report",serviceType:"Digital service",date:"2026-06-12",price:899,trackingId:"VA-SVC-2026-000097",trackingMode:"No-AWB service tracking",updateType:"Service desk update",status:"Delivered",location:"Online Delivery",handler:"Report Desk",lastUpdated:"2026-06-13 02:25 PM",deliveryWindow:"Delivered",nextAction:"Completed"}
+      ]
+    },
+    default:{
+      profile:{fullName:"Guest Customer",email:"customer@example.com",phone:"+91 90000 00000",address:"Update address after Google login",city:"Your City",pincode:"000000",walletBalance:0,cashbackEarned:0},
+      orders:[
+        {id:"ord_demo_1",orderName:"Demo Prosperity Bracelet",serviceType:"Bracelet order",date:"2026-06-20",price:2499,trackingId:"VA-DEMO-2026-000001",trackingMode:"No-AWB manual tracking",updateType:"Manual fulfilment update",status:"Order Received",location:"Veshannastro Studio",handler:"Veshannastro Fulfilment",lastUpdated:"2026-06-20 10:20 AM",deliveryWindow:"5 to 7 days",nextAction:"Bracelet preparation"}
+      ]
+    }
   };
-  var orders = [
-    {id:"ord_9001",orderName:"Kundli-to-Wrist Bracelet Kit",serviceType:"Bracelet order",date:"2026-06-18",price:3499,awb:"DLVRY890123456",courierName:"Delhivery",status:"In Transit",location:"Bengaluru Hub"},
-    {id:"ord_9002",orderName:"Energised Bracelet Batch",serviceType:"Bulk order",date:"2026-06-09",price:8750,awb:"SRKT672349001",courierName:"Shiprocket",status:"Delivered",location:"Mumbai Center"},
-    {id:"ord_9003",orderName:"Maaya Location Support",serviceType:"Service booking",date:"2026-05-28",price:1499,awb:"AFS998812341",courierName:"AfterShip",status:"Out for Delivery",location:"Delhi NCR Field Office"},
-    {id:"ord_9004",orderName:"Replacement Gemstone Pack",serviceType:"Replacement",date:"2026-05-14",price:1299,awb:"BDTRK445566778",courierName:"Blue Dart",status:"Dispatched",location:"Pune Sorting Facility"}
-  ];
+  var userProfile = {};
+  var orders = [];
   var inventory = [
     {name:"Baseband Pro",tag:"Active BLE tracking",stock:42,price:2499,status:"Ready"},
     {name:"NFC Bracelet",tag:"Guest verification",stock:320,price:149,status:"Ready"},
@@ -6066,8 +6095,11 @@ body::before{
   var fields = [
     ["fullName","Full Name"],["email","Email"],["phone","Phone"],["address","Address"],["city","City"],["pincode","Pincode"]
   ];
-  var stages = ["Ordered","Dispatched","In Transit","Out for Delivery","Delivered"];
-  var stageIndex = {"Ordered":0,"Dispatched":1,"In Transit":2,"Out for Delivery":3,"Delivered":4};
+  var stages = ["Order Received","Bracelet Preparing","Energising / Ritual Process","Packed","Ready for Dispatch","Out for Delivery","Delivered"];
+  var stageIndex = {"Order Received":0,"Bracelet Preparing":1,"Energising / Ritual Process":2,"Packed":3,"Ready for Dispatch":4,"Out for Delivery":5,"Delivered":6};
+  var googleFallbackMarkup = '<span aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false"><path fill="#EA4335" d="M24 9.5c3.2 0 6.1 1.1 8.4 3.2l6.3-6.3C34.9 2.9 29.8 1 24 1 14.6 1 6.5 6.4 2.6 14.3l7.7 6C12.1 14 17.6 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-2.8-.4-4.1H24v8h12.7c-.3 2.1-1.7 5.2-4.9 7.4l7.5 5.8c4.4-4.1 6.8-10.1 6.8-17.1z"/><path fill="#FBBC05" d="M10.3 28.2c-.5-1.4-.8-2.8-.8-4.2s.3-2.9.8-4.2l-7.7-6C1 17 0 20.4 0 24s1 7 2.6 10.2l7.7-6z"/><path fill="#34A853" d="M24 47c5.8 0 10.7-1.9 14.3-5.2l-7.5-5.8c-2 1.4-4.6 2.3-6.8 2.3-6.4 0-11.9-4.4-13.8-10.3l-7.7 6C6.5 41.6 14.6 47 24 47z"/></svg></span>';
+  var googleProfileKey = "vesh_google_profile";
+  var manualTrackingKey = "vesh_manual_tracking_updates";
   var $ = function(id){ return document.getElementById(id); };
   var money = function(value){ return "Rs " + Number(value || 0).toLocaleString("en-IN"); };
   var esc = function(value){
@@ -6075,11 +6107,56 @@ body::before{
       return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch];
     });
   };
+  var clone = function(value){ return JSON.parse(JSON.stringify(value)); };
+
+  function applyMockCustomerData(profile){
+    profile = profile || readGoogleProfile() || {};
+    var email = (profile.email || "").toLowerCase();
+    var source = mockCustomerData[email] || mockCustomerData.default;
+    userProfile = clone(source.profile);
+    orders = clone(source.orders);
+    if(email && !mockCustomerData[email]){
+      userProfile.email = profile.email;
+      userProfile.fullName = profile.name || userProfile.fullName;
+      userProfile.address = "Add delivery address after checkout";
+    }
+    applyManualTrackingUpdates();
+  }
+
+  function readManualTrackingUpdates(){
+    try{
+      var raw = localStorage.getItem(manualTrackingKey);
+      return raw ? JSON.parse(raw) : {};
+    }catch(e){
+      return {};
+    }
+  }
+
+  function applyManualTrackingUpdates(){
+    var updates = readManualTrackingUpdates();
+    orders.forEach(function(order){
+      var update = updates[order.trackingId];
+      if(!update) return;
+      order.status = update.status || order.status;
+      order.lastUpdated = update.updatedAt || order.lastUpdated;
+      order.nextAction = update.nextAction || update.note || order.nextAction;
+      order.manualNote = update.note || "";
+      order.updateType = update.updateType || "Admin app update";
+    });
+  }
+
+  function refreshCustomerView(profile){
+    applyMockCustomerData(profile);
+    if($("bbt-shell") && $("bbt-shell").dataset.ready) renderAll();
+  }
 
   function init(){
     if(!$("bbt-shell") || $("bbt-shell").dataset.ready) return;
     $("bbt-shell").dataset.ready = "1";
+    applyMockCustomerData();
     renderAll();
+    updateGoogleAccountButtons();
+    bridgeGoogleWalletLogin();
     document.querySelectorAll("[data-bbt-open]").forEach(function(btn){
       btn.addEventListener("click", openShell);
     });
@@ -6092,10 +6169,131 @@ body::before{
     });
     $("bbt-edit-profile").addEventListener("click", function(){ setProfileEditing(true); });
     $("bbt-save-profile").addEventListener("click", saveProfile);
+    $("bbt-admin-update").addEventListener("click", handleManualTrackingUpdate);
     document.addEventListener("keydown", function(event){
       if(event.key !== "Escape") return;
       if($("bbt-track-panel").classList.contains("open")) closeTrack();
       else closeShell();
+    });
+    window.addEventListener("storage", function(event){
+      if(event.key === googleProfileKey || event.key === "vesh_wallet_token"){
+        updateGoogleAccountButtons();
+        refreshCustomerView();
+      }
+      if(event.key === manualTrackingKey) refreshCustomerView();
+    });
+    window.setTimeout(updateGoogleAccountButtons, 500);
+    window.setTimeout(updateGoogleAccountButtons, 1800);
+  }
+
+  function bridgeGoogleWalletLogin(){
+    if(window.__bbtWalletBridgeReady) return;
+    window.__bbtWalletBridgeReady = true;
+    var originalCallback = window.walletGoogleCallback;
+    if(typeof originalCallback === "function"){
+      window.walletGoogleCallback = function(response){
+        captureGoogleCredential(response && response.credential);
+        var result = originalCallback.apply(this, arguments);
+        window.setTimeout(updateGoogleAccountButtons, 350);
+        window.setTimeout(captureWalletProfileAndUpdate, 1200);
+        return result;
+      };
+    }
+    var originalWalletLoad = window.walletLoad;
+    if(typeof originalWalletLoad === "function"){
+      window.walletLoad = function(){
+        var result = originalWalletLoad.apply(this, arguments);
+        if(result && typeof result.then === "function"){
+          result.then(function(){ captureWalletProfileAndUpdate(); }).catch(function(){ updateGoogleAccountButtons(); });
+        }else{
+          window.setTimeout(captureWalletProfileAndUpdate, 300);
+        }
+        return result;
+      };
+    }
+    captureWalletProfileAndUpdate();
+  }
+
+  function captureGoogleCredential(credential){
+    var payload = decodeJwtPayload(credential);
+    if(!payload) return null;
+    return saveGoogleProfile({
+      name: payload.name || payload.given_name || "",
+      email: payload.email || "",
+      picture: payload.picture || ""
+    });
+  }
+
+  function captureWalletProfileAndUpdate(){
+    var profile = window.walletProfile || null;
+    if(profile){
+      saveGoogleProfile({
+        name: profile.name || profile.full_name || profile.fullName || "",
+        email: profile.email || "",
+        picture: profile.picture || profile.photo || profile.avatar || profile.photo_url || profile.avatar_url || ""
+      });
+    }else{
+      updateGoogleAccountButtons();
+      refreshCustomerView();
+    }
+  }
+
+  function decodeJwtPayload(token){
+    if(!token || token.indexOf(".") === -1) return null;
+    try{
+      var base64 = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+      while(base64.length % 4) base64 += "=";
+      var binary = atob(base64);
+      var json = "";
+      for(var i = 0; i < binary.length; i++){
+        var code = binary.charCodeAt(i).toString(16);
+        json += "%" + ("00" + code).slice(-2);
+      }
+      return JSON.parse(decodeURIComponent(json));
+    }catch(e){
+      return null;
+    }
+  }
+
+  function saveGoogleProfile(profile){
+    var current = readGoogleProfile() || {};
+    var next = {
+      name: profile.name || current.name || "",
+      email: profile.email || current.email || "",
+      picture: profile.picture || current.picture || ""
+    };
+    try{ localStorage.setItem(googleProfileKey, JSON.stringify(next)); }catch(e){}
+    updateGoogleAccountButtons(next);
+    refreshCustomerView(next);
+    return next;
+  }
+
+  function readGoogleProfile(){
+    try{
+      var raw = localStorage.getItem(googleProfileKey);
+      return raw ? JSON.parse(raw) : null;
+    }catch(e){
+      return null;
+    }
+  }
+
+  function updateGoogleAccountButtons(profile){
+    profile = profile || readGoogleProfile();
+    var photo = profile && profile.picture ? profile.picture : "";
+    var name = profile && profile.name ? profile.name : "Google account";
+    var email = profile && profile.email ? profile.email : "";
+    document.querySelectorAll(".bbt-google-btn").forEach(function(btn){
+      if(photo){
+        btn.classList.add("is-signed-in");
+        btn.innerHTML = '<img src="' + esc(photo) + '" alt="' + esc(name) + '" referrerpolicy="no-referrer">';
+        btn.title = email ? "Open dashboard for " + email : "Open dashboard for " + name;
+        btn.setAttribute("aria-label", btn.title);
+      }else{
+        btn.classList.remove("is-signed-in");
+        if(!btn.querySelector("svg")) btn.innerHTML = googleFallbackMarkup;
+        btn.title = "Open tracking dashboard";
+        btn.setAttribute("aria-label", "Open Baseband tracking dashboard");
+      }
     });
   }
 
@@ -6118,6 +6316,7 @@ body::before{
     renderSummary();
     renderOrders();
     renderInventory();
+    renderAdminControls();
     renderCheckout();
   }
   function renderProfile(){
@@ -6149,10 +6348,10 @@ body::before{
   }
   function renderOrders(){
     $("bbt-orders-body").innerHTML = orders.map(function(order){
-      var statusClass = order.status === "Delivered" ? " done" : (order.status === "Dispatched" ? " warn" : "");
+      var statusClass = order.status === "Delivered" ? " done" : (order.status === "Packed" || order.status === "Ready for Dispatch" ? " warn" : "");
       return '<tr><td><strong>'+esc(order.orderName)+'</strong><br><span class="bbt-muted">'+esc(order.serviceType)+' - '+esc(order.location)+'</span></td>'+
-      '<td>'+esc(order.date)+'</td><td><strong>'+money(order.price)+'</strong></td><td><span class="bbt-awb">'+esc(order.awb)+'</span></td>'+
-      '<td>'+esc(order.courierName)+'</td><td><span class="bbt-status'+statusClass+'">'+esc(order.status)+'</span></td>'+
+      '<td>'+esc(order.date)+'</td><td><strong>'+money(order.price)+'</strong></td><td><span class="bbt-track-id">'+esc(order.trackingId)+'</span></td>'+
+      '<td>'+esc(order.updateType)+'</td><td><span class="bbt-status'+statusClass+'">'+esc(order.status)+'</span></td>'+
       '<td><button class="bbt-btn secondary" type="button" data-bbt-track="'+esc(order.id)+'">Track Order</button></td></tr>';
     }).join("");
     document.querySelectorAll("[data-bbt-track]").forEach(function(btn){
@@ -6168,18 +6367,40 @@ body::before{
       '<div class="bbt-kpis"><div class="bbt-kpi"><span>Stock</span><strong>'+esc(item.stock)+'</strong></div><div class="bbt-kpi"><span>Price</span><strong>'+money(item.price)+'</strong></div></div></article>';
     }).join("");
   }
+  function renderAdminControls(){
+    var orderSelect = $("bbt-admin-order");
+    var statusSelect = $("bbt-admin-status");
+    if(!orderSelect || !statusSelect) return;
+    var selected = orderSelect.value;
+    orderSelect.innerHTML = orders.map(function(order){
+      return '<option value="'+esc(order.trackingId)+'">'+esc(order.trackingId)+' - '+esc(order.orderName)+'</option>';
+    }).join("");
+    if(selected) orderSelect.value = selected;
+    statusSelect.innerHTML = stages.map(function(status){
+      return '<option value="'+esc(status)+'">'+esc(status)+'</option>';
+    }).join("");
+  }
+  function handleManualTrackingUpdate(){
+    var trackingId = $("bbt-admin-order").value;
+    var status = $("bbt-admin-status").value;
+    var note = $("bbt-admin-note").value.trim();
+    if(!trackingId || !status) return;
+    window.updateVeshannTracking(trackingId, status, note || "Manual update added");
+    if($("bbt-admin-result")) $("bbt-admin-result").textContent = trackingId + " updated to " + status + ".";
+  }
   function renderCheckout(){
     var cart = orders.slice(0,2);
     var subtotal = cart.reduce(function(sum,item){ return sum + item.price; },0);
     var walletApplied = Math.min(userProfile.walletBalance,500);
     var cashback = Math.round(subtotal * .04);
     $("bbt-checkout-items").innerHTML = cart.map(function(item){
-      return '<div class="bbt-card" style="margin-bottom:.75rem"><strong>'+esc(item.orderName)+'</strong><p class="bbt-muted">'+esc(item.serviceType)+' - '+esc(item.courierName)+'</p><p style="margin-top:.45rem;font-weight:900">'+money(item.price)+'</p></div>';
+      return '<div class="bbt-card" style="margin-bottom:.75rem"><strong>'+esc(item.orderName)+'</strong><p class="bbt-muted">'+esc(item.serviceType)+' - '+esc(item.trackingMode)+'</p><p style="margin-top:.45rem;font-weight:900">'+money(item.price)+'</p></div>';
     }).join("");
     $("bbt-payment-summary").innerHTML =
       summaryRow("Subtotal", money(subtotal))+
       summaryRow("Wallet applied", "-" + money(walletApplied))+
       summaryRow("Cashback estimate", money(cashback))+
+      summaryRow("Estimated delivery", "5 to 7 days")+
       '<hr style="border:0;border-top:1px solid var(--bbt-line);margin:.9rem 0">'+
       summaryRow("Amount payable", money(subtotal - walletApplied), true);
   }
@@ -6187,33 +6408,48 @@ body::before{
     return '<div style="display:flex;justify-content:space-between;gap:1rem;margin:.55rem 0;color:#4b392e"><span>'+label+'</span><strong style="font-size:'+(strong?'1.2rem':'1rem')+';color:#21150f">'+value+'</strong></div>';
   }
 
-  function fetchTrackingStatus(awbId, currentStatus){
+  function fetchInternalTrackingStatus(trackingId, currentStatus, order){
     return new Promise(function(resolve){
       window.setTimeout(function(){
-        var current = stageIndex[currentStatus] == null ? 2 : stageIndex[currentStatus];
+        var current = stageIndex[currentStatus] == null ? 0 : stageIndex[currentStatus];
         resolve({
-          awbId: awbId,
+          trackingId: trackingId,
+          trackingMode: order.trackingMode || "No-AWB manual tracking",
+          handler: order.handler || "Veshannastro Team",
+          lastUpdated: order.lastUpdated || "",
+          nextAction: order.nextAction || "Next update pending",
           currentStatus: currentStatus,
-          estimatedDelivery: currentStatus === "Delivered" ? "Delivered" : "Expected in 1-3 days",
+          estimatedDelivery: currentStatus === "Delivered" ? "Delivered" : (order.deliveryWindow || "5 to 7 days"),
           stages: stages.map(function(label,index){
-            return {label:label,completed:index <= current,timestamp:index <= current ? mockTimestamp(index) : null};
+            return {label:label,completed:index <= current,timestamp:index <= current ? mockTimestamp(index, order) : null};
           })
         });
       },650);
     });
   }
-  window.fetchTrackingStatus = window.fetchTrackingStatus || fetchTrackingStatus;
+  window.fetchInternalTrackingStatus = window.fetchInternalTrackingStatus || fetchInternalTrackingStatus;
+  window.fetchTrackingStatus = window.fetchTrackingStatus || function(trackingId){
+    var order = orders.find(function(item){ return item.trackingId === trackingId; }) || {};
+    return fetchInternalTrackingStatus(trackingId, order.status || "Order Received", order);
+  };
+  window.updateVeshannTracking = window.updateVeshannTracking || function(trackingId, status, note){
+    var updates = readManualTrackingUpdates();
+    updates[trackingId] = {status:status,note:note || "",nextAction:note || "",updatedAt:new Date().toLocaleString("en-IN"),updateType:"Admin app update"};
+    try{ localStorage.setItem(manualTrackingKey, JSON.stringify(updates)); }catch(e){}
+    refreshCustomerView();
+    return updates[trackingId];
+  };
 
   function openTrack(order){
     $("bbt-track-panel").classList.add("open");
     $("bbt-track-panel").setAttribute("aria-hidden","false");
     $("bbt-track-title").textContent = order.orderName;
-    $("bbt-track-courier").textContent = order.courierName;
-    $("bbt-track-awb").textContent = order.awb;
-    $("bbt-track-body").innerHTML = '<div class="bbt-loader">Fetching live tracking status...</div>';
-    fetchTrackingStatus(order.awb, order.status).then(function(data){
+    $("bbt-track-channel").textContent = order.trackingMode;
+    $("bbt-track-id").textContent = order.trackingId;
+    $("bbt-track-body").innerHTML = '<div class="bbt-loader">Loading internal tracking timeline...</div>';
+    fetchInternalTrackingStatus(order.trackingId, order.status, order).then(function(data){
       $("bbt-track-body").innerHTML =
-        '<div class="bbt-card" style="margin:1rem"><p class="bbt-muted">Current Status</p><h3>'+esc(data.currentStatus)+'</h3><p class="bbt-muted">'+esc(data.estimatedDelivery)+'</p></div>'+
+        '<div class="bbt-card" style="margin:1rem"><p class="bbt-muted">Current Status</p><h3>'+esc(data.currentStatus)+'</h3><p class="bbt-muted">Delivery: '+esc(data.estimatedDelivery)+' | Last update: '+esc(data.lastUpdated || "Pending")+'</p><p class="bbt-muted">Next: '+esc(data.nextAction)+'</p></div>'+
         '<ol class="bbt-steps">'+data.stages.map(function(stage,index){
           return '<li class="'+(stage.completed?'done':'')+'"><span class="bbt-dot">'+(index+1)+'</span><div><div class="bbt-step-title">'+esc(stage.label)+'</div><div class="bbt-step-time">'+esc(stage.timestamp || "Pending update")+'</div></div></li>';
         }).join("")+'</ol>';
@@ -6223,18 +6459,24 @@ body::before{
     $("bbt-track-panel").classList.remove("open");
     $("bbt-track-panel").setAttribute("aria-hidden","true");
   }
-  function mockTimestamp(index){
-    return ["2026-06-18 10:20 AM","2026-06-19 04:45 PM","2026-06-21 08:15 AM","2026-06-22 09:30 AM","2026-06-22 05:40 PM"][index];
+  function mockTimestamp(index, order){
+    var dates = [
+      order.date + " 10:20 AM",
+      order.date + " 04:45 PM",
+      "Next working day 11:30 AM",
+      order.lastUpdated || "Manual update received",
+      "Pending dispatch slot",
+      "Delivery partner handoff",
+      order.lastUpdated || "Customer delivered"
+    ];
+    return dates[index] || order.lastUpdated || "Manual update received";
   }
 
   /*
-    Real AWB API handoff example:
-    fetch("/api/track-order", {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({ awbId: order.awb })
-    });
-    Keep Shiprocket, Delhivery, or AfterShip API keys inside the serverless function, not in this HTML file.
+    No-AWB backend handoff example for your future admin/Android app:
+    PATCH /api/internal-tracking/VA-ORD-2026-000124
+    Body: { status:"Packed", note:"Packed after QC", updatedBy:"admin@veshannastro.com" }
+    Store this in Supabase/Firebase by trackingId, customerEmail, status, note, and updatedAt.
   */
 
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
@@ -6243,4 +6485,5 @@ body::before{
 </script>
 </body>
 </html>
+
 
