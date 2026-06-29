@@ -1467,6 +1467,7 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
 
 
 
+
 <!-- Your Details and Orders injection -->
 <style id="bbt-tracking-system-styles">
   :root{--bbt-ink:#18110d;--bbt-muted:#6d5e53;--bbt-paper:#fffaf1;--bbt-line:rgba(94,17,25,.15);--bbt-maroon:#5e1119;--bbt-gold:#c59a37;--bbt-blue:#2456c6;--bbt-green:#27784e;}
@@ -1525,8 +1526,10 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
   .bbt-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem;}
   .bbt-field.full{grid-column:1/-1;}
   .bbt-field label{display:block;font-weight:900;font-size:.75rem;color:#5c4739;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.28rem;}
-  .bbt-field input,.bbt-field select{width:100%;height:44px;border-radius:10px;border:1px solid rgba(94,17,25,.18);background:#f8efe1;color:#1b120d;padding:0 .8rem;font:600 .93rem var(--body-ui,Jost,sans-serif);}
-  .bbt-field input:not([readonly]),.bbt-field select{background:#fff;border-color:rgba(36,86,198,.36);box-shadow:0 0 0 4px rgba(36,86,198,.08);}
+  .bbt-field input,.bbt-field select,.bbt-field textarea{width:100%;border-radius:10px;border:1px solid rgba(94,17,25,.18);background:#f8efe1;color:#1b120d;padding:0 .8rem;font:600 .93rem var(--body-ui,Jost,sans-serif);}
+  .bbt-field input,.bbt-field select{height:44px;}
+  .bbt-field textarea{min-height:120px;padding:.75rem .8rem;resize:vertical;line-height:1.45;}
+  .bbt-field input:not([readonly]),.bbt-field select,.bbt-field textarea{background:#fff;border-color:rgba(36,86,198,.36);box-shadow:0 0 0 4px rgba(36,86,198,.08);}
   .bbt-actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1rem;}
   .bbt-btn{border:0;border-radius:10px;padding:.78rem 1rem;background:var(--bbt-maroon);color:#fff8e8;cursor:pointer;font-weight:900;letter-spacing:.05em;transition:transform .18s ease,box-shadow .18s ease,background .18s ease;}
   .bbt-btn:hover{transform:translateY(-1px);box-shadow:0 12px 22px rgba(94,17,25,.22);}
@@ -1535,6 +1538,12 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
   .bbt-table{width:100%;min-width:860px;border-collapse:collapse;font-size:.9rem;}
   .bbt-table th{background:#f5e8d0;color:#5b4538;text-align:left;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;padding:.8rem;font-weight:900;}
   .bbt-table td{padding:.85rem;border-top:1px solid rgba(94,17,25,.12);vertical-align:top;color:#25170f;}
+  .bbt-admin-sheet{display:grid;grid-template-columns:1fr;gap:1rem;}
+  .bbt-sheet-toolbar{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin:.9rem 0;}
+  .bbt-sheet-toolbar .bbt-field{min-width:min(420px,100%);flex:1;}
+  .bbt-sheet-table{min-width:1720px;}
+  .bbt-sheet-link{display:inline-flex;align-items:center;gap:.45rem;border:1px solid rgba(36,86,198,.2);background:#eef4ff;color:#2456c6;border-radius:999px;padding:.55rem .8rem;font-weight:900;text-decoration:none;}
+  .bbt-mini{font-size:.78rem;color:var(--bbt-muted);}
   .bbt-track-id{display:inline-block;font-family:Consolas,monospace;background:#f1e7d6;border-radius:7px;padding:.24rem .42rem;font-size:.78rem;color:#3b281d;}
   .bbt-status{display:inline-flex;border-radius:999px;padding:.28rem .55rem;font-weight:900;font-size:.74rem;background:#eaf1ff;color:#2456c6;}
   .bbt-status.done{background:#e7f6ee;color:#27784e;}
@@ -1613,7 +1622,6 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
           <article class="bbt-card">
             <div class="bbt-summary" id="bbt-summary"></div>
             <h3>Your Orders</h3>
-            <p class="bbt-muted">No-AWB internal tracking for bracelet, service, and location orders.</p>
           </article>
         </div>
         <div class="bbt-card" style="margin-top:1rem">
@@ -1627,32 +1635,54 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
       </section>
 
       <section class="bbt-view" id="bbt-view-details">
-        <div class="bbt-grid two">
+        <div class="bbt-admin-sheet">
           <article class="bbt-card">
-            <h3>Owner Operations</h3>
-            <p class="bbt-muted">Private inventory, fulfilment, and QC controls for the admin account only.</p>
-            <div class="bbt-grid three" id="bbt-inventory" style="margin-top:1rem"></div>
-          </article>
-          <aside class="bbt-card">
-            <h3>Location Health</h3>
-            <p class="bbt-muted">Current fulfilment readiness across mapped hubs.</p>
-            <div class="bbt-kpis">
-              <div class="bbt-kpi"><span>Active zones</span><strong>18</strong></div>
-              <div class="bbt-kpi"><span>Synced today</span><strong>94%</strong></div>
-              <div class="bbt-kpi"><span>Pending QC</span><strong>7</strong></div>
-              <div class="bbt-kpi"><span>Alerts</span><strong>2</strong></div>
+            <div style="display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;flex-wrap:wrap">
+              <div>
+                <h3>Orders Sheet Dashboard</h3>
+                <p class="bbt-muted">Admin-only view mapped to your Apps Script Orders sheet headers.</p>
+              </div>
+              <a class="bbt-sheet-link" href="https://docs.google.com/spreadsheets/d/1AGXiDHUkKbWXl8n0Ji-UMYpgA5bJQPtaOf9l1-iaAoA/edit?usp=sharing" target="_blank" rel="noopener">Open Google Sheet</a>
             </div>
-            <div style="margin-top:1.2rem;border-top:1px solid var(--bbt-line);padding-top:1rem">
-              <h3>No-AWB Control</h3>
+            <div class="bbt-summary" id="bbt-admin-summary" style="margin-top:1rem"></div>
+            <div class="bbt-sheet-toolbar">
+              <div class="bbt-field"><label for="bbt-admin-search">Search orders</label><input id="bbt-admin-search" placeholder="Search order id, email, phone, product, status"></div>
+              <button class="bbt-btn secondary" id="bbt-clear-orders" type="button">Clear Local Rows</button>
+            </div>
+            <div class="bbt-table-wrap">
+              <table class="bbt-table bbt-sheet-table" aria-label="Google Sheet order rows">
+                <thead id="bbt-sheet-head"></thead>
+                <tbody id="bbt-sheet-body"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <div class="bbt-grid two">
+            <article class="bbt-card">
+              <h3>Import Sheet Rows</h3>
+              <p class="bbt-muted">Copy rows from the Google Sheet, including or excluding the header row, then import them here.</p>
+              <div class="bbt-field full" style="margin-top:.8rem">
+                <label for="bbt-sheet-paste">Paste CSV/TSV rows</label>
+                <textarea id="bbt-sheet-paste" placeholder="order_id	timestamp_created	status	payment_id	..."></textarea>
+              </div>
+              <div class="bbt-actions">
+                <button class="bbt-btn" id="bbt-import-sheet" type="button">Import Rows</button>
+                <button class="bbt-btn secondary" id="bbt-sample-row" type="button">Fill Sample Format</button>
+              </div>
+              <p class="bbt-mini" id="bbt-import-result" style="margin-top:.75rem"></p>
+            </article>
+            <aside class="bbt-card">
+              <h3>Order Update</h3>
               <form class="bbt-form" id="bbt-admin-form">
-                <div class="bbt-field full"><label for="bbt-admin-order">Tracking ID</label><select id="bbt-admin-order"></select></div>
-                <div class="bbt-field full"><label for="bbt-admin-status">New Status</label><select id="bbt-admin-status"></select></div>
+                <div class="bbt-field full"><label for="bbt-admin-order">Order ID</label><select id="bbt-admin-order"></select></div>
+                <div class="bbt-field"><label for="bbt-admin-status">Sheet Status</label><select id="bbt-admin-status"></select></div>
+                <div class="bbt-field"><label for="bbt-admin-track-status">Tracking Status</label><select id="bbt-admin-track-status"></select></div>
                 <div class="bbt-field full"><label for="bbt-admin-note">Update Note</label><input id="bbt-admin-note" value="Packed after QC"></div>
               </form>
-              <button class="bbt-btn" id="bbt-admin-update" type="button" style="width:100%;margin-top:.85rem">Update Tracking</button>
+              <button class="bbt-btn" id="bbt-admin-update" type="button" style="width:100%;margin-top:.85rem">Update Order</button>
               <p class="bbt-muted" id="bbt-admin-result" style="margin-top:.7rem"></p>
-            </div>
-          </aside>
+            </aside>
+          </div>
         </div>
       </section>
 
@@ -6067,17 +6097,22 @@ body::before{
 
 
 
+
 <script id="bbt-tracking-system-js">
 (function(){
   "use strict";
   var adminEmail = "shashankmmj@gmail.com";
-  var orderStoreKey = "vesh_local_order_records";
-  var initialOrderRecords = [
-    {id:"ord_9001",customerName:"Arjun Sharma",customerEmail:"arjun.sharma@example.com",orderName:"Kundli-to-Wrist Bracelet Kit",serviceType:"Bracelet order",date:"2026-06-18",price:3499,trackingId:"VA-ORD-2026-000124",trackingMode:"No-AWB manual tracking",updateType:"Manual fulfilment update",status:"Bracelet Preparing",location:"Bengaluru Studio",handler:"Veshannastro Fulfilment",lastUpdated:"2026-06-19 04:45 PM",deliveryWindow:"5 to 7 days",nextAction:"Energising and quality check"},
-    {id:"ord_9002",customerName:"Arjun Sharma",customerEmail:"arjun.sharma@example.com",orderName:"Energised Bracelet Batch",serviceType:"Bulk order",date:"2026-06-09",price:8750,trackingId:"VA-ORD-2026-000119",trackingMode:"No-AWB manual tracking",updateType:"Admin app update",status:"Delivered",location:"Mumbai Center",handler:"Veshannastro Fulfilment",lastUpdated:"2026-06-15 05:40 PM",deliveryWindow:"Delivered",nextAction:"Completed"},
-    {id:"ord_8101",customerName:"Meera Iyer",customerEmail:"meera.iyer@example.com",orderName:"Moonstone Calm Bracelet",serviceType:"Bracelet order",date:"2026-06-21",price:2199,trackingId:"VA-ORD-2026-000151",trackingMode:"No-AWB manual tracking",updateType:"Admin app update",status:"Packed",location:"Chennai Studio",handler:"Veshannastro Fulfilment",lastUpdated:"2026-06-22 11:10 AM",deliveryWindow:"5 to 7 days",nextAction:"Ready for dispatch"},
-    {id:"ord_8102",customerName:"Meera Iyer",customerEmail:"meera.iyer@example.com",orderName:"Relationship Numerology Report",serviceType:"Digital service",date:"2026-06-12",price:899,trackingId:"VA-SVC-2026-000097",trackingMode:"No-AWB service tracking",updateType:"Service desk update",status:"Delivered",location:"Online Delivery",handler:"Report Desk",lastUpdated:"2026-06-13 02:25 PM",deliveryWindow:"Delivered",nextAction:"Completed"}
+  var orderStoreKey = "vesh_live_order_records_v2";
+  var initialOrderRecords = [];
+  var sheetHeaders = [
+    "order_id","timestamp_created","status","payment_id","payment_method","paid_at",
+    "name","login_email","email","phone","address1","city","state","pincode",
+    "sku","product","qty","coupon","subtotal","discount",
+    "gross_amount","amount_charged","wallet_redeemed","cashback_given",
+    "wallet_balance_after","currency","source","item_summary"
   ];
+  var sheetStatusOptions = ["Pending payment","Paid","Packing","Ready for Dispatch","Out for Delivery","Delivered","Cancelled","Refunded"];
+  var sheetSearchText = "";
   var userProfile = {};
   var orders = [];
   var isAdminMode = false;
@@ -6109,7 +6144,7 @@ body::before{
     var records = readOrderRecords();
     isAdminMode = email === adminEmail;
     userProfile = buildProfile(profile, records);
-    orders = isAdminMode ? records : (email ? records.filter(function(order){ return (order.customerEmail || "").toLowerCase() === email; }) : []);
+    orders = isAdminMode ? records : (email ? records.filter(function(order){ return getOrderEmail(order) === email; }) : []);
     applyManualTrackingUpdates();
     applyAccessMode();
   }
@@ -6117,11 +6152,23 @@ body::before{
   function buildProfile(profile, records){
     var email = profile.email || "";
     if((email || "").toLowerCase() === adminEmail){
-      var activeOrders = records.filter(function(order){ return order.status !== "Delivered"; }).length;
-      var totalValue = records.reduce(function(sum, order){ return sum + Number(order.price || 0); }, 0);
+      var activeOrders = records.filter(function(order){ return getOrderStatus(order) !== "Delivered"; }).length;
+      var totalValue = records.reduce(function(sum, order){ return sum + getOrderPrice(order); }, 0);
       return {fullName:profile.name || "Shashank Admin",email:email,phone:"+91 00000 00000",address:"Veshannastro Owner Workspace",city:"Admin",pincode:"000000",walletBalance:totalValue,cashbackEarned:activeOrders};
     }
-    return {fullName:profile.name || "Signed-in Customer",email:email || "Sign in with Google",phone:"",address:"Add delivery address after checkout",city:"",pincode:"",walletBalance:0,cashbackEarned:0};
+    var customerRows = records.filter(function(order){ return getOrderEmail(order) === (email || "").toLowerCase(); });
+    var latest = customerRows[customerRows.length - 1] || {};
+    var cashback = customerRows.reduce(function(sum, order){ return sum + Number(order.cashback_given || 0); }, 0);
+    return {
+      fullName:profile.name || latest.name || "Signed-in Customer",
+      email:email || "Sign in with Google",
+      phone:latest.phone || "",
+      address:latest.address1 || "Add delivery address after checkout",
+      city:latest.city || "",
+      pincode:latest.pincode || "",
+      walletBalance:latest.wallet_balance_after || 0,
+      cashbackEarned:cashback
+    };
   }
 
   function readOrderRecords(){
@@ -6134,6 +6181,91 @@ body::before{
 
   function writeOrderRecords(records){
     try{ localStorage.setItem(orderStoreKey, JSON.stringify(records)); }catch(e){}
+  }
+
+  function getOrderKey(order){
+    return order.order_id || order.id || order.trackingId || "";
+  }
+
+  function getOrderEmail(order){
+    return (order.login_email || order.email || order.customerEmail || "").toLowerCase();
+  }
+
+  function getOrderStatus(order){
+    return order.tracking_status || order.status || "Pending payment";
+  }
+
+  function getTrackingId(order){
+    return order.trackingId || order.order_id || "";
+  }
+
+  function getOrderName(order){
+    return order.product || order.orderName || order.item_summary || "Order";
+  }
+
+  function getOrderPrice(order){
+    return Number(order.amount_charged || order.gross_amount || order.subtotal || order.price || 0);
+  }
+
+  function upsertOrderRecords(nextRows){
+    var records = readOrderRecords();
+    nextRows.forEach(function(row){
+      var key = getOrderKey(row);
+      if(!key) return;
+      var index = records.findIndex(function(item){ return getOrderKey(item) === key; });
+      if(index === -1) records.push(row);
+      else records[index] = Object.assign({}, records[index], row);
+    });
+    writeOrderRecords(records);
+    refreshCustomerView();
+    return nextRows.length;
+  }
+
+  function parseSheetRows(text){
+    var lines = String(text || "").split(/\r?\n/).filter(function(line){ return line.trim(); });
+    if(!lines.length) return [];
+    var delimiter = lines[0].indexOf("\t") !== -1 ? "\t" : ",";
+    var rows = lines.map(function(line){ return splitSheetLine(line, delimiter); });
+    var first = rows[0].map(function(cell){ return cell.trim(); });
+    var hasHeader = first.some(function(cell){ return sheetHeaders.indexOf(cell) !== -1; });
+    var headers = hasHeader ? first : sheetHeaders;
+    var dataRows = hasHeader ? rows.slice(1) : rows;
+    return dataRows.map(function(cells){
+      var row = {};
+      headers.forEach(function(header,index){
+        if(sheetHeaders.indexOf(header) !== -1) row[header] = cells[index] || "";
+      });
+      row.tracking_status = row.tracking_status || mapPaymentToTracking(row.status);
+      row.trackingMode = "Google Sheet order";
+      row.updateType = "Sheet import";
+      row.lastUpdated = row.paid_at || row.timestamp_created || "";
+      row.deliveryWindow = row.status === "Delivered" ? "Delivered" : "5 to 7 days";
+      return row;
+    }).filter(function(row){ return row.order_id; });
+  }
+
+  function splitSheetLine(line, delimiter){
+    if(delimiter === "\t") return line.split("\t");
+    var cells = [];
+    var value = "";
+    var quoted = false;
+    for(var i = 0; i < line.length; i++){
+      var ch = line.charAt(i);
+      if(ch === '"' && line.charAt(i + 1) === '"'){ value += '"'; i++; continue; }
+      if(ch === '"'){ quoted = !quoted; continue; }
+      if(ch === "," && !quoted){ cells.push(value); value = ""; continue; }
+      value += ch;
+    }
+    cells.push(value);
+    return cells;
+  }
+
+  function mapPaymentToTracking(status){
+    var value = String(status || "").toLowerCase();
+    if(value.indexOf("delivered") !== -1) return "Delivered";
+    if(value.indexOf("paid") !== -1) return "Order Received";
+    if(value.indexOf("cancel") !== -1 || value.indexOf("refund") !== -1) return "Cancelled";
+    return "Order Received";
   }
 
   function applyAccessMode(){
@@ -6161,9 +6293,10 @@ body::before{
   function applyManualTrackingUpdates(){
     var updates = readManualTrackingUpdates();
     orders.forEach(function(order){
-      var update = updates[order.trackingId];
+      var update = updates[getOrderKey(order)];
       if(!update) return;
       order.status = update.status || order.status;
+      order.tracking_status = update.tracking_status || order.tracking_status;
       order.lastUpdated = update.updatedAt || order.lastUpdated;
       order.nextAction = update.nextAction || update.note || order.nextAction;
       order.manualNote = update.note || "";
@@ -6196,6 +6329,10 @@ body::before{
     $("bbt-edit-profile").addEventListener("click", function(){ setProfileEditing(true); });
     $("bbt-save-profile").addEventListener("click", saveProfile);
     if($("bbt-admin-update")) $("bbt-admin-update").addEventListener("click", handleManualTrackingUpdate);
+    if($("bbt-import-sheet")) $("bbt-import-sheet").addEventListener("click", handleSheetImport);
+    if($("bbt-sample-row")) $("bbt-sample-row").addEventListener("click", fillSampleSheetRows);
+    if($("bbt-clear-orders")) $("bbt-clear-orders").addEventListener("click", clearLocalOrders);
+    if($("bbt-admin-search")) $("bbt-admin-search").addEventListener("input", function(){ sheetSearchText = $("bbt-admin-search").value.trim().toLowerCase(); renderAdminControls(); });
     document.addEventListener("keydown", function(event){
       if(event.key !== "Escape") return;
       if($("bbt-track-panel").classList.contains("open")) closeTrack();
@@ -6381,64 +6518,155 @@ body::before{
   }
   function renderOrders(){
     if(!orders.length){
-      $("bbt-orders-body").innerHTML = '<tr><td colspan="7"><div style="padding:1.2rem;text-align:center"><strong>No orders found for this Google account yet.</strong><p class="bbt-muted" style="margin-top:.35rem">Once an order is connected to your email, it will appear here with internal tracking.</p></div></td></tr>';
+      var emptyTitle = isAdminMode ? "No order records have been added yet." : "No orders found for this Google account yet.";
+      var emptyCopy = isAdminMode ? "Connect this page to your order database, Google Sheet, or admin app to start managing orders here." : "Once an order is connected to your email, it will appear here.";
+      $("bbt-orders-body").innerHTML = '<tr><td colspan="7"><div style="padding:1.2rem;text-align:center"><strong>'+esc(emptyTitle)+'</strong><p class="bbt-muted" style="margin-top:.35rem">'+esc(emptyCopy)+'</p></div></td></tr>';
       return;
     }
     $("bbt-orders-body").innerHTML = orders.map(function(order){
-      var statusClass = order.status === "Delivered" ? " done" : (order.status === "Packed" || order.status === "Ready for Dispatch" ? " warn" : "");
-      var customerLine = isAdminMode ? '<br><span class="bbt-muted">'+esc(order.customerName || "Customer")+' | '+esc(order.customerEmail || "")+'</span>' : "";
-      return '<tr><td><strong>'+esc(order.orderName)+'</strong><br><span class="bbt-muted">'+esc(order.serviceType)+' - '+esc(order.location)+'</span>'+
+      var status = getOrderStatus(order);
+      var statusClass = status === "Delivered" || status === "Paid" ? " done" : (status === "Packing" || status === "Ready for Dispatch" ? " warn" : "");
+      var customerLine = isAdminMode ? '<br><span class="bbt-muted">'+esc(order.name || "Customer")+' | '+esc(order.login_email || order.email || "")+'</span>' : "";
+      var orderMeta = [order.sku || order.source || "Order", order.city || order.state || ""].filter(Boolean).join(" - ");
+      return '<tr><td><strong>'+esc(getOrderName(order))+'</strong><br><span class="bbt-muted">'+esc(orderMeta || order.item_summary || "Order")+'</span>'+
       customerLine+'</td>'+
-      '<td>'+esc(order.date)+'</td><td><strong>'+money(order.price)+'</strong></td><td><span class="bbt-track-id">'+esc(order.trackingId)+'</span></td>'+
-      '<td>'+esc(order.updateType)+'</td><td><span class="bbt-status'+statusClass+'">'+esc(order.status)+'</span></td>'+
-      '<td><button class="bbt-btn secondary" type="button" data-bbt-track="'+esc(order.id)+'">Track Order</button></td></tr>';
+      '<td>'+esc(order.timestamp_created || order.paid_at || "")+'</td><td><strong>'+money(getOrderPrice(order))+'</strong></td><td><span class="bbt-track-id">'+esc(getTrackingId(order))+'</span></td>'+
+      '<td>'+esc(order.updateType || order.source || "Sheet row")+'</td><td><span class="bbt-status'+statusClass+'">'+esc(status)+'</span></td>'+
+      '<td><button class="bbt-btn secondary" type="button" data-bbt-track="'+esc(getOrderKey(order))+'">Track Order</button></td></tr>';
     }).join("");
     document.querySelectorAll("[data-bbt-track]").forEach(function(btn){
       btn.addEventListener("click", function(){
-        var order = orders.find(function(item){ return item.id === btn.getAttribute("data-bbt-track"); });
+        var order = orders.find(function(item){ return getOrderKey(item) === btn.getAttribute("data-bbt-track"); });
         if(order) openTrack(order);
       });
     });
   }
   function renderInventory(){
+    if(!$("bbt-inventory")) return;
     $("bbt-inventory").innerHTML = inventory.map(function(item){
       return '<article class="bbt-card bbt-device"><div><div class="bbt-device-icon">BB</div><h3>'+esc(item.name)+'</h3><p class="bbt-muted">'+esc(item.tag)+'</p></div>'+
       '<div class="bbt-kpis"><div class="bbt-kpi"><span>Stock</span><strong>'+esc(item.stock)+'</strong></div><div class="bbt-kpi"><span>Price</span><strong>'+money(item.price)+'</strong></div></div></article>';
     }).join("");
   }
   function renderAdminControls(){
+    renderAdminSheet();
     var orderSelect = $("bbt-admin-order");
     var statusSelect = $("bbt-admin-status");
-    if(!orderSelect || !statusSelect) return;
+    var trackStatusSelect = $("bbt-admin-track-status");
+    if(!orderSelect || !statusSelect || !trackStatusSelect) return;
     if(!isAdminMode){
       orderSelect.innerHTML = "";
       statusSelect.innerHTML = "";
+      trackStatusSelect.innerHTML = "";
       return;
     }
+    if(!orders.length){
+      orderSelect.innerHTML = '<option value="">No orders available</option>';
+      statusSelect.innerHTML = '<option value="">No status available</option>';
+      trackStatusSelect.innerHTML = '<option value="">No tracking available</option>';
+      orderSelect.disabled = true;
+      statusSelect.disabled = true;
+      trackStatusSelect.disabled = true;
+      if($("bbt-admin-update")) $("bbt-admin-update").disabled = true;
+      return;
+    }
+    orderSelect.disabled = false;
+    statusSelect.disabled = false;
+    trackStatusSelect.disabled = false;
+    if($("bbt-admin-update")) $("bbt-admin-update").disabled = false;
     var selected = orderSelect.value;
     orderSelect.innerHTML = orders.map(function(order){
-      return '<option value="'+esc(order.trackingId)+'">'+esc(order.trackingId)+' - '+esc(order.orderName)+'</option>';
+      return '<option value="'+esc(getOrderKey(order))+'">'+esc(getOrderKey(order))+' - '+esc(getOrderName(order))+'</option>';
     }).join("");
     if(selected) orderSelect.value = selected;
-    statusSelect.innerHTML = stages.map(function(status){
+    statusSelect.innerHTML = sheetStatusOptions.map(function(status){
+      return '<option value="'+esc(status)+'">'+esc(status)+'</option>';
+    }).join("");
+    trackStatusSelect.innerHTML = stages.map(function(status){
       return '<option value="'+esc(status)+'">'+esc(status)+'</option>';
     }).join("");
   }
+
+  function renderAdminSheet(){
+    if(!$("bbt-sheet-head") || !$("bbt-sheet-body") || !isAdminMode) return;
+    var records = orders.slice();
+    var filtered = records.filter(function(order){
+      if(!sheetSearchText) return true;
+      return sheetHeaders.some(function(header){ return String(order[header] || "").toLowerCase().indexOf(sheetSearchText) !== -1; }) ||
+        String(order.tracking_status || "").toLowerCase().indexOf(sheetSearchText) !== -1;
+    });
+    var totalRevenue = records.reduce(function(sum, order){ return sum + getOrderPrice(order); }, 0);
+    var paidCount = records.filter(function(order){ return String(order.status || "").toLowerCase() === "paid"; }).length;
+    var cashback = records.reduce(function(sum, order){ return sum + Number(order.cashback_given || 0); }, 0);
+    if($("bbt-admin-summary")){
+      $("bbt-admin-summary").innerHTML =
+        '<article class="bbt-metric"><span>Total Rows</span><strong>'+esc(records.length)+'</strong></article>'+
+        '<article class="bbt-metric green"><span>Paid Orders</span><strong>'+esc(paidCount)+'</strong></article>'+
+        '<article class="bbt-metric"><span>Revenue</span><strong>'+money(totalRevenue)+'</strong></article>'+
+        '<article class="bbt-metric green"><span>Cashback</span><strong>'+money(cashback)+'</strong></article>';
+    }
+    $("bbt-sheet-head").innerHTML = '<tr>'+sheetHeaders.map(function(header){ return '<th>'+esc(header)+'</th>'; }).join("")+'<th>Action</th></tr>';
+    if(!filtered.length){
+      $("bbt-sheet-body").innerHTML = '<tr><td colspan="'+(sheetHeaders.length + 1)+'"><div style="padding:1.2rem;text-align:center"><strong>No sheet rows loaded yet.</strong><p class="bbt-muted" style="margin-top:.35rem">Paste rows copied from your Orders sheet to populate this admin dashboard.</p></div></td></tr>';
+      return;
+    }
+    $("bbt-sheet-body").innerHTML = filtered.map(function(order){
+      return '<tr>'+sheetHeaders.map(function(header){
+        var value = order[header] == null ? "" : order[header];
+        if(header === "order_id") value = '<span class="bbt-track-id">'+esc(value)+'</span>';
+        else if(header === "status") value = '<span class="bbt-status">'+esc(value)+'</span>';
+        else value = esc(value);
+        return '<td>'+value+'</td>';
+      }).join("")+'<td><button class="bbt-btn secondary" type="button" data-bbt-select-order="'+esc(getOrderKey(order))+'">Select</button></td></tr>';
+    }).join("");
+    document.querySelectorAll("[data-bbt-select-order]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var key = btn.getAttribute("data-bbt-select-order");
+        if($("bbt-admin-order")) $("bbt-admin-order").value = key;
+        if($("bbt-admin-result")) $("bbt-admin-result").textContent = key + " selected for update.";
+      });
+    });
+  }
+
+  function handleSheetImport(){
+    if(!isAdminMode) return;
+    var text = $("bbt-sheet-paste") ? $("bbt-sheet-paste").value : "";
+    var rows = parseSheetRows(text);
+    var count = upsertOrderRecords(rows);
+    if($("bbt-import-result")) $("bbt-import-result").textContent = count ? count + " row(s) imported into the admin dashboard." : "No valid order rows found. Make sure order_id is included.";
+  }
+
+  function fillSampleSheetRows(){
+    if(!$("bbt-sheet-paste")) return;
+    $("bbt-sheet-paste").value = sheetHeaders.join("\t") + "\n" +
+      ["VA-ORDER-001",new Date().toISOString(),"Pending payment","","","",
+      "Customer Name","customer@gmail.com","customer@gmail.com","9876543210","Address line","City","State","110001",
+      "BRACELET-001","Prosperity Bracelet","1","","2499","0","2499","","","","","INR","website","Prosperity Bracelet x 1"].join("\t");
+  }
+
+  function clearLocalOrders(){
+    if(!isAdminMode) return;
+    writeOrderRecords([]);
+    refreshCustomerView();
+    if($("bbt-import-result")) $("bbt-import-result").textContent = "Local imported rows cleared.";
+  }
+
   function handleManualTrackingUpdate(){
-    var trackingId = $("bbt-admin-order").value;
+    var orderId = $("bbt-admin-order").value;
     var status = $("bbt-admin-status").value;
+    var trackingStatus = $("bbt-admin-track-status").value;
     var note = $("bbt-admin-note").value.trim();
-    if(!trackingId || !status) return;
-    window.updateVeshannTracking(trackingId, status, note || "Manual update added");
-    if($("bbt-admin-result")) $("bbt-admin-result").textContent = trackingId + " updated to " + status + ".";
+    if(!orderId || !status) return;
+    window.updateVeshannTracking(orderId, status, trackingStatus, note || "Manual update added");
+    if($("bbt-admin-result")) $("bbt-admin-result").textContent = orderId + " updated to " + status + ".";
   }
   function renderCheckout(){
     var cart = orders.slice(0,2);
-    var subtotal = cart.reduce(function(sum,item){ return sum + item.price; },0);
+    var subtotal = cart.reduce(function(sum,item){ return sum + getOrderPrice(item); },0);
     var walletApplied = Math.min(userProfile.walletBalance,500);
     var cashback = Math.round(subtotal * .04);
     $("bbt-checkout-items").innerHTML = cart.map(function(item){
-      return '<div class="bbt-card" style="margin-bottom:.75rem"><strong>'+esc(item.orderName)+'</strong><p class="bbt-muted">'+esc(item.serviceType)+' - '+esc(item.trackingMode)+'</p><p style="margin-top:.45rem;font-weight:900">'+money(item.price)+'</p></div>';
+      return '<div class="bbt-card" style="margin-bottom:.75rem"><strong>'+esc(getOrderName(item))+'</strong><p class="bbt-muted">'+esc(item.status || "Order")+' - '+esc(item.payment_method || item.source || "Sheet")+'</p><p style="margin-top:.45rem;font-weight:900">'+money(getOrderPrice(item))+'</p></div>';
     }).join("");
     $("bbt-payment-summary").innerHTML =
       summaryRow("Subtotal", money(subtotal))+
@@ -6473,35 +6701,36 @@ body::before{
   }
   window.fetchInternalTrackingStatus = window.fetchInternalTrackingStatus || fetchInternalTrackingStatus;
   window.fetchTrackingStatus = window.fetchTrackingStatus || function(trackingId){
-    var order = orders.find(function(item){ return item.trackingId === trackingId; }) || {};
-    return fetchInternalTrackingStatus(trackingId, order.status || "Order Received", order);
+    var order = orders.find(function(item){ return getTrackingId(item) === trackingId || getOrderKey(item) === trackingId; }) || {};
+    return fetchInternalTrackingStatus(trackingId, order.tracking_status || mapPaymentToTracking(order.status) || "Order Received", order);
   };
-  window.updateVeshannTracking = window.updateVeshannTracking || function(trackingId, status, note){
+  window.updateVeshannTracking = window.updateVeshannTracking || function(orderId, status, trackingStatus, note){
     var updates = readManualTrackingUpdates();
     var updatedAt = new Date().toLocaleString("en-IN");
-    updates[trackingId] = {status:status,note:note || "",nextAction:note || "",updatedAt:updatedAt,updateType:"Admin app update"};
+    updates[orderId] = {status:status,tracking_status:trackingStatus || status,note:note || "",nextAction:note || "",updatedAt:updatedAt,updateType:"Admin app update"};
     try{ localStorage.setItem(manualTrackingKey, JSON.stringify(updates)); }catch(e){}
     var records = readOrderRecords();
     records.forEach(function(order){
-      if(order.trackingId !== trackingId) return;
+      if(getOrderKey(order) !== orderId) return;
       order.status = status;
+      order.tracking_status = trackingStatus || status;
       order.lastUpdated = updatedAt;
       order.nextAction = note || "Manual update added";
       order.updateType = "Admin app update";
     });
     writeOrderRecords(records);
     refreshCustomerView();
-    return updates[trackingId];
+    return updates[orderId];
   };
 
   function openTrack(order){
     $("bbt-track-panel").classList.add("open");
     $("bbt-track-panel").setAttribute("aria-hidden","false");
-    $("bbt-track-title").textContent = order.orderName;
-    $("bbt-track-channel").textContent = order.trackingMode;
-    $("bbt-track-id").textContent = order.trackingId;
+    $("bbt-track-title").textContent = getOrderName(order);
+    $("bbt-track-channel").textContent = (order.status ? "Sheet status: " + order.status : "Google Sheet order");
+    $("bbt-track-id").textContent = getTrackingId(order);
     $("bbt-track-body").innerHTML = '<div class="bbt-loader">Loading internal tracking timeline...</div>';
-    fetchInternalTrackingStatus(order.trackingId, order.status, order).then(function(data){
+    fetchInternalTrackingStatus(getTrackingId(order), order.tracking_status || mapPaymentToTracking(order.status), order).then(function(data){
       $("bbt-track-body").innerHTML =
         '<div class="bbt-card" style="margin:1rem"><p class="bbt-muted">Current Status</p><h3>'+esc(data.currentStatus)+'</h3><p class="bbt-muted">Delivery: '+esc(data.estimatedDelivery)+' | Last update: '+esc(data.lastUpdated || "Pending")+'</p><p class="bbt-muted">Next: '+esc(data.nextAction)+'</p></div>'+
         '<ol class="bbt-steps">'+data.stages.map(function(stage,index){
@@ -6514,9 +6743,10 @@ body::before{
     $("bbt-track-panel").setAttribute("aria-hidden","true");
   }
   function mockTimestamp(index, order){
+    var baseDate = order.timestamp_created || order.paid_at || order.date || "Order date";
     var dates = [
-      order.date + " 10:20 AM",
-      order.date + " 04:45 PM",
+      baseDate,
+      order.paid_at || baseDate,
       "Next working day 11:30 AM",
       order.lastUpdated || "Manual update received",
       "Pending dispatch slot",
@@ -6539,6 +6769,7 @@ body::before{
 </script>
 </body>
 </html>
+
 
 
 
