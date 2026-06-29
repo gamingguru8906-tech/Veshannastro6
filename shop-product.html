@@ -1466,7 +1466,8 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
 </style>
 
 
-<!-- Baseband & Bracelet Tracking System injection -->
+
+<!-- Your Details and Orders injection -->
 <style id="bbt-tracking-system-styles">
   :root{--bbt-ink:#18110d;--bbt-muted:#6d5e53;--bbt-paper:#fffaf1;--bbt-line:rgba(94,17,25,.15);--bbt-maroon:#5e1119;--bbt-gold:#c59a37;--bbt-blue:#2456c6;--bbt-green:#27784e;}
   .bbt-nav-li{display:flex;align-items:center;}
@@ -1487,6 +1488,9 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
   .bbt-shell.open{display:block;}
   .bbt-app{height:100%;max-width:1180px;margin:0 auto;background:linear-gradient(180deg,#fffaf1,#f7eddb);border:1px solid rgba(230,200,120,.62);box-shadow:0 32px 90px rgba(10,7,6,.38);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;color:var(--bbt-ink);font-family:var(--body-ui,Jost,sans-serif);}
   .bbt-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 1.15rem;border-bottom:1px solid var(--bbt-line);background:linear-gradient(135deg,#fffdf7,#f4e5c5);}
+  .bbt-head-actions{display:flex;align-items:center;gap:.65rem;flex-shrink:0;}
+  .bbt-role-pill{display:inline-flex;align-items:center;justify-content:center;min-height:34px;border-radius:999px;border:1px solid rgba(94,17,25,.18);background:#fff8e8;color:#5e1119;padding:.45rem .75rem;font-size:.72rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}
+  .bbt-role-pill.admin{background:#1c2540;color:#fff8e8;border-color:#1c2540;box-shadow:0 10px 22px rgba(28,37,64,.18);}
   .bbt-brand{display:flex;align-items:center;gap:.8rem;min-width:0;}
   .bbt-mark{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--bbt-maroon),#8b2636);display:grid;place-items:center;color:#fff8e8;box-shadow:0 12px 26px rgba(94,17,25,.22);font-weight:900;}
   .bbt-brand small{display:block;color:var(--bbt-maroon);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;font-weight:800;}
@@ -1496,6 +1500,7 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
   .bbt-tabs{display:flex;gap:.55rem;overflow:auto;padding:.8rem 1rem;border-bottom:1px solid var(--bbt-line);background:#fff9ee;}
   .bbt-tab{border:1px solid rgba(94,17,25,.18);background:#fffdf8;color:#4a382d;border-radius:999px;padding:.7rem .95rem;white-space:nowrap;cursor:pointer;font-weight:800;font-size:.78rem;letter-spacing:.04em;}
   .bbt-tab.active{background:var(--bbt-maroon);border-color:var(--bbt-maroon);color:#fff8e8;box-shadow:0 10px 24px rgba(94,17,25,.22);}
+  .bbt-admin-only[hidden]{display:none!important;}
   .bbt-body{overflow:auto;padding:1rem;background:radial-gradient(circle at 0 0,rgba(197,154,55,.13),transparent 34%),radial-gradient(circle at 100% 12%,rgba(94,17,25,.08),transparent 32%),#fbf4e9;}
   .bbt-view{display:none;animation:bbtFade .26s ease both;}
   .bbt-view.active{display:block;}
@@ -1566,28 +1571,31 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
     <li class="nav-cart-li"><a class="nav-cart" id="nav-cart" href="#buy">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/><path d="M3 4h2l2.6 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 1.9-1.4L21 8H7"/></svg>
       Cart<span class="cart-count" id="cart-count">0</span></a></li>
-    <li class="bbt-nav-li"><button class="bbt-google-btn bbt-launcher" id="bbt-launcher" data-bbt-open type="button" aria-label="Open Baseband tracking dashboard" title="Open tracking dashboard"><span aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false"><path fill="#EA4335" d="M24 9.5c3.2 0 6.1 1.1 8.4 3.2l6.3-6.3C34.9 2.9 29.8 1 24 1 14.6 1 6.5 6.4 2.6 14.3l7.7 6C12.1 14 17.6 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-2.8-.4-4.1H24v8h12.7c-.3 2.1-1.7 5.2-4.9 7.4l7.5 5.8c4.4-4.1 6.8-10.1 6.8-17.1z"/><path fill="#FBBC05" d="M10.3 28.2c-.5-1.4-.8-2.8-.8-4.2s.3-2.9.8-4.2l-7.7-6C1 17 0 20.4 0 24s1 7 2.6 10.2l7.7-6z"/><path fill="#34A853" d="M24 47c5.8 0 10.7-1.9 14.3-5.2l-7.5-5.8c-2 1.4-4.6 2.3-6.8 2.3-6.4 0-11.9-4.4-13.8-10.3l-7.7 6C6.5 41.6 14.6 47 24 47z"/></svg></span></button></li>
+    <li class="bbt-nav-li"><button class="bbt-google-btn bbt-launcher" id="bbt-launcher" data-bbt-open type="button" aria-label="Open your details and orders" title="Open your details and orders"><span aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false"><path fill="#EA4335" d="M24 9.5c3.2 0 6.1 1.1 8.4 3.2l6.3-6.3C34.9 2.9 29.8 1 24 1 14.6 1 6.5 6.4 2.6 14.3l7.7 6C12.1 14 17.6 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-2.8-.4-4.1H24v8h12.7c-.3 2.1-1.7 5.2-4.9 7.4l7.5 5.8c4.4-4.1 6.8-10.1 6.8-17.1z"/><path fill="#FBBC05" d="M10.3 28.2c-.5-1.4-.8-2.8-.8-4.2s.3-2.9.8-4.2l-7.7-6C1 17 0 20.4 0 24s1 7 2.6 10.2l7.7-6z"/><path fill="#34A853" d="M24 47c5.8 0 10.7-1.9 14.3-5.2l-7.5-5.8c-2 1.4-4.6 2.3-6.8 2.3-6.4 0-11.9-4.4-13.8-10.3l-7.7 6C6.5 41.6 14.6 47 24 47z"/></svg></span></button></li>
 </ul>
 </nav>
 
-<!-- Baseband & Bracelet Tracking System app shell -->
+<!-- Your Details and Orders app shell -->
 <section class="bbt-shell" id="bbt-shell" aria-hidden="true">
   <div class="bbt-app" role="dialog" aria-modal="true" aria-labelledby="bbt-title">
     <header class="bbt-top">
       <div class="bbt-brand">
         <div class="bbt-mark" aria-hidden="true">BB</div>
         <div>
-          <small>Baseband command center</small>
-          <h2 id="bbt-title">Bracelet Tracking System</h2>
+          <small>Veshannastro account</small>
+          <h2 id="bbt-title">Your Details and Orders</h2>
         </div>
       </div>
-      <button class="bbt-close" id="bbt-close" type="button" aria-label="Close tracking dashboard">&times;</button>
+      <div class="bbt-head-actions">
+        <span class="bbt-role-pill" id="bbt-role-pill">Customer Mode</span>
+        <button class="bbt-close" id="bbt-close" type="button" aria-label="Close details and orders">&times;</button>
+      </div>
     </header>
 
-    <nav class="bbt-tabs" aria-label="Baseband tracking sections">
-      <button class="bbt-tab active" type="button" data-bbt-view="dashboard">User Dashboard</button>
-      <button class="bbt-tab" type="button" data-bbt-view="details">Bracelet Details</button>
-      <button class="bbt-tab" type="button" data-bbt-view="checkout">Checkout</button>
+    <nav class="bbt-tabs" aria-label="Account and order sections">
+      <button class="bbt-tab active" type="button" data-bbt-view="dashboard">Your Details and Orders</button>
+      <button class="bbt-tab bbt-admin-only" data-bbt-admin-only type="button" data-bbt-view="details">Admin Controls</button>
+      <button class="bbt-tab bbt-admin-only" data-bbt-admin-only type="button" data-bbt-view="checkout">Checkout Preview</button>
     </nav>
 
     <div class="bbt-body">
@@ -1621,8 +1629,8 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
       <section class="bbt-view" id="bbt-view-details">
         <div class="bbt-grid two">
           <article class="bbt-card">
-            <h3>Live Bracelet Inventory</h3>
-            <p class="bbt-muted">A compact operations view for basebands, RFID bracelets, NFC packs, and QC status.</p>
+            <h3>Owner Operations</h3>
+            <p class="bbt-muted">Private inventory, fulfilment, and QC controls for the admin account only.</p>
             <div class="bbt-grid three" id="bbt-inventory" style="margin-top:1rem"></div>
           </article>
           <aside class="bbt-card">
@@ -2159,7 +2167,7 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
         <div class="gk-head-text">
           <h3 id="gk-step-title">Enter your mobile number</h3>
           <p id="gk-step-sub">Step 1 of 5 · Login</p>
-        </div>        <button class="bbt-google-btn bbt-checkout-launcher" data-bbt-open type="button" aria-label="Open Baseband tracking dashboard from checkout" title="Open tracking dashboard"><span aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false"><path fill="#EA4335" d="M24 9.5c3.2 0 6.1 1.1 8.4 3.2l6.3-6.3C34.9 2.9 29.8 1 24 1 14.6 1 6.5 6.4 2.6 14.3l7.7 6C12.1 14 17.6 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-2.8-.4-4.1H24v8h12.7c-.3 2.1-1.7 5.2-4.9 7.4l7.5 5.8c4.4-4.1 6.8-10.1 6.8-17.1z"/><path fill="#FBBC05" d="M10.3 28.2c-.5-1.4-.8-2.8-.8-4.2s.3-2.9.8-4.2l-7.7-6C1 17 0 20.4 0 24s1 7 2.6 10.2l7.7-6z"/><path fill="#34A853" d="M24 47c5.8 0 10.7-1.9 14.3-5.2l-7.5-5.8c-2 1.4-4.6 2.3-6.8 2.3-6.4 0-11.9-4.4-13.8-10.3l-7.7 6C6.5 41.6 14.6 47 24 47z"/></svg></span></button><button type="button" class="co-close" id="co-close" aria-label="Close checkout">&times;</button>
+        </div>        <button class="bbt-google-btn bbt-checkout-launcher" data-bbt-open type="button" aria-label="Open your details and orders from checkout" title="Open your details and orders"><span aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false"><path fill="#EA4335" d="M24 9.5c3.2 0 6.1 1.1 8.4 3.2l6.3-6.3C34.9 2.9 29.8 1 24 1 14.6 1 6.5 6.4 2.6 14.3l7.7 6C12.1 14 17.6 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-2.8-.4-4.1H24v8h12.7c-.3 2.1-1.7 5.2-4.9 7.4l7.5 5.8c4.4-4.1 6.8-10.1 6.8-17.1z"/><path fill="#FBBC05" d="M10.3 28.2c-.5-1.4-.8-2.8-.8-4.2s.3-2.9.8-4.2l-7.7-6C1 17 0 20.4 0 24s1 7 2.6 10.2l7.7-6z"/><path fill="#34A853" d="M24 47c5.8 0 10.7-1.9 14.3-5.2l-7.5-5.8c-2 1.4-4.6 2.3-6.8 2.3-6.4 0-11.9-4.4-13.8-10.3l-7.7 6C6.5 41.6 14.6 47 24 47z"/></svg></span></button><button type="button" class="co-close" id="co-close" aria-label="Close checkout">&times;</button>
       </div>
       <div class="gk-dots" id="gk-dots" aria-label="Checkout progress">
         <span class="gk-dot gk-dot-active" data-step="1"></span>
@@ -6058,35 +6066,21 @@ body::before{
 
 
 
+
 <script id="bbt-tracking-system-js">
 (function(){
   "use strict";
-  var mockCustomerData = {
-    "arjun.sharma@example.com": {
-      profile:{fullName:"Arjun Sharma",email:"arjun.sharma@example.com",phone:"+91 98765 43210",address:"B-42, Indiranagar, Bengaluru, Karnataka",city:"Bengaluru",pincode:"560038",walletBalance:2450,cashbackEarned:385},
-      orders:[
-        {id:"ord_9001",orderName:"Kundli-to-Wrist Bracelet Kit",serviceType:"Bracelet order",date:"2026-06-18",price:3499,trackingId:"VA-ORD-2026-000124",trackingMode:"No-AWB manual tracking",updateType:"Manual fulfilment update",status:"Bracelet Preparing",location:"Bengaluru Studio",handler:"Veshannastro Fulfilment",lastUpdated:"2026-06-19 04:45 PM",deliveryWindow:"5 to 7 days",nextAction:"Energising and quality check"},
-        {id:"ord_9002",orderName:"Energised Bracelet Batch",serviceType:"Bulk order",date:"2026-06-09",price:8750,trackingId:"VA-ORD-2026-000119",trackingMode:"No-AWB manual tracking",updateType:"Admin app update",status:"Delivered",location:"Mumbai Center",handler:"Veshannastro Fulfilment",lastUpdated:"2026-06-15 05:40 PM",deliveryWindow:"Delivered",nextAction:"Completed"},
-        {id:"ord_9003",orderName:"Maaya Location Support",serviceType:"Service booking",date:"2026-05-28",price:1499,trackingId:"VA-SVC-2026-000086",trackingMode:"No-AWB service tracking",updateType:"Service desk update",status:"Out for Delivery",location:"Delhi NCR Field Office",handler:"Service Desk",lastUpdated:"2026-06-02 09:30 AM",deliveryWindow:"5 to 7 days",nextAction:"Customer confirmation"},
-        {id:"ord_9004",orderName:"Replacement Gemstone Pack",serviceType:"Replacement",date:"2026-05-14",price:1299,trackingId:"VA-REP-2026-000041",trackingMode:"No-AWB manual tracking",updateType:"Manual fulfilment update",status:"Packed",location:"Pune Sorting Desk",handler:"Replacement Desk",lastUpdated:"2026-05-15 01:10 PM",deliveryWindow:"5 to 7 days",nextAction:"Dispatch handoff"}
-      ]
-    },
-    "meera.iyer@example.com": {
-      profile:{fullName:"Meera Iyer",email:"meera.iyer@example.com",phone:"+91 99887 77665",address:"A-18, Adyar, Chennai, Tamil Nadu",city:"Chennai",pincode:"600020",walletBalance:1280,cashbackEarned:220},
-      orders:[
-        {id:"ord_8101",orderName:"Moonstone Calm Bracelet",serviceType:"Bracelet order",date:"2026-06-21",price:2199,trackingId:"VA-ORD-2026-000151",trackingMode:"No-AWB manual tracking",updateType:"Admin app update",status:"Packed",location:"Chennai Studio",handler:"Veshannastro Fulfilment",lastUpdated:"2026-06-22 11:10 AM",deliveryWindow:"5 to 7 days",nextAction:"Ready for dispatch"},
-        {id:"ord_8102",orderName:"Relationship Numerology Report",serviceType:"Digital service",date:"2026-06-12",price:899,trackingId:"VA-SVC-2026-000097",trackingMode:"No-AWB service tracking",updateType:"Service desk update",status:"Delivered",location:"Online Delivery",handler:"Report Desk",lastUpdated:"2026-06-13 02:25 PM",deliveryWindow:"Delivered",nextAction:"Completed"}
-      ]
-    },
-    default:{
-      profile:{fullName:"Guest Customer",email:"customer@example.com",phone:"+91 90000 00000",address:"Update address after Google login",city:"Your City",pincode:"000000",walletBalance:0,cashbackEarned:0},
-      orders:[
-        {id:"ord_demo_1",orderName:"Demo Prosperity Bracelet",serviceType:"Bracelet order",date:"2026-06-20",price:2499,trackingId:"VA-DEMO-2026-000001",trackingMode:"No-AWB manual tracking",updateType:"Manual fulfilment update",status:"Order Received",location:"Veshannastro Studio",handler:"Veshannastro Fulfilment",lastUpdated:"2026-06-20 10:20 AM",deliveryWindow:"5 to 7 days",nextAction:"Bracelet preparation"}
-      ]
-    }
-  };
+  var adminEmail = "shashankmmj@gmail.com";
+  var orderStoreKey = "vesh_local_order_records";
+  var initialOrderRecords = [
+    {id:"ord_9001",customerName:"Arjun Sharma",customerEmail:"arjun.sharma@example.com",orderName:"Kundli-to-Wrist Bracelet Kit",serviceType:"Bracelet order",date:"2026-06-18",price:3499,trackingId:"VA-ORD-2026-000124",trackingMode:"No-AWB manual tracking",updateType:"Manual fulfilment update",status:"Bracelet Preparing",location:"Bengaluru Studio",handler:"Veshannastro Fulfilment",lastUpdated:"2026-06-19 04:45 PM",deliveryWindow:"5 to 7 days",nextAction:"Energising and quality check"},
+    {id:"ord_9002",customerName:"Arjun Sharma",customerEmail:"arjun.sharma@example.com",orderName:"Energised Bracelet Batch",serviceType:"Bulk order",date:"2026-06-09",price:8750,trackingId:"VA-ORD-2026-000119",trackingMode:"No-AWB manual tracking",updateType:"Admin app update",status:"Delivered",location:"Mumbai Center",handler:"Veshannastro Fulfilment",lastUpdated:"2026-06-15 05:40 PM",deliveryWindow:"Delivered",nextAction:"Completed"},
+    {id:"ord_8101",customerName:"Meera Iyer",customerEmail:"meera.iyer@example.com",orderName:"Moonstone Calm Bracelet",serviceType:"Bracelet order",date:"2026-06-21",price:2199,trackingId:"VA-ORD-2026-000151",trackingMode:"No-AWB manual tracking",updateType:"Admin app update",status:"Packed",location:"Chennai Studio",handler:"Veshannastro Fulfilment",lastUpdated:"2026-06-22 11:10 AM",deliveryWindow:"5 to 7 days",nextAction:"Ready for dispatch"},
+    {id:"ord_8102",customerName:"Meera Iyer",customerEmail:"meera.iyer@example.com",orderName:"Relationship Numerology Report",serviceType:"Digital service",date:"2026-06-12",price:899,trackingId:"VA-SVC-2026-000097",trackingMode:"No-AWB service tracking",updateType:"Service desk update",status:"Delivered",location:"Online Delivery",handler:"Report Desk",lastUpdated:"2026-06-13 02:25 PM",deliveryWindow:"Delivered",nextAction:"Completed"}
+  ];
   var userProfile = {};
   var orders = [];
+  var isAdminMode = false;
   var inventory = [
     {name:"Baseband Pro",tag:"Active BLE tracking",stock:42,price:2499,status:"Ready"},
     {name:"NFC Bracelet",tag:"Guest verification",stock:320,price:149,status:"Ready"},
@@ -6112,15 +6106,47 @@ body::before{
   function applyMockCustomerData(profile){
     profile = profile || readGoogleProfile() || {};
     var email = (profile.email || "").toLowerCase();
-    var source = mockCustomerData[email] || mockCustomerData.default;
-    userProfile = clone(source.profile);
-    orders = clone(source.orders);
-    if(email && !mockCustomerData[email]){
-      userProfile.email = profile.email;
-      userProfile.fullName = profile.name || userProfile.fullName;
-      userProfile.address = "Add delivery address after checkout";
-    }
+    var records = readOrderRecords();
+    isAdminMode = email === adminEmail;
+    userProfile = buildProfile(profile, records);
+    orders = isAdminMode ? records : (email ? records.filter(function(order){ return (order.customerEmail || "").toLowerCase() === email; }) : []);
     applyManualTrackingUpdates();
+    applyAccessMode();
+  }
+
+  function buildProfile(profile, records){
+    var email = profile.email || "";
+    if((email || "").toLowerCase() === adminEmail){
+      var activeOrders = records.filter(function(order){ return order.status !== "Delivered"; }).length;
+      var totalValue = records.reduce(function(sum, order){ return sum + Number(order.price || 0); }, 0);
+      return {fullName:profile.name || "Shashank Admin",email:email,phone:"+91 00000 00000",address:"Veshannastro Owner Workspace",city:"Admin",pincode:"000000",walletBalance:totalValue,cashbackEarned:activeOrders};
+    }
+    return {fullName:profile.name || "Signed-in Customer",email:email || "Sign in with Google",phone:"",address:"Add delivery address after checkout",city:"",pincode:"",walletBalance:0,cashbackEarned:0};
+  }
+
+  function readOrderRecords(){
+    try{
+      var raw = localStorage.getItem(orderStoreKey);
+      if(raw) return JSON.parse(raw);
+    }catch(e){}
+    return clone(initialOrderRecords);
+  }
+
+  function writeOrderRecords(records){
+    try{ localStorage.setItem(orderStoreKey, JSON.stringify(records)); }catch(e){}
+  }
+
+  function applyAccessMode(){
+    document.querySelectorAll("[data-bbt-admin-only]").forEach(function(node){
+      node.hidden = !isAdminMode;
+    });
+    if($("bbt-role-pill")){
+      $("bbt-role-pill").textContent = isAdminMode ? "Admin Mode" : "Customer Mode";
+      $("bbt-role-pill").classList.toggle("admin", isAdminMode);
+    }
+    if(!isAdminMode && $("bbt-view-dashboard") && !$("bbt-view-dashboard").classList.contains("active")){
+      showView("dashboard");
+    }
   }
 
   function readManualTrackingUpdates(){
@@ -6169,7 +6195,7 @@ body::before{
     });
     $("bbt-edit-profile").addEventListener("click", function(){ setProfileEditing(true); });
     $("bbt-save-profile").addEventListener("click", saveProfile);
-    $("bbt-admin-update").addEventListener("click", handleManualTrackingUpdate);
+    if($("bbt-admin-update")) $("bbt-admin-update").addEventListener("click", handleManualTrackingUpdate);
     document.addEventListener("keydown", function(event){
       if(event.key !== "Escape") return;
       if($("bbt-track-panel").classList.contains("open")) closeTrack();
@@ -6180,7 +6206,7 @@ body::before{
         updateGoogleAccountButtons();
         refreshCustomerView();
       }
-      if(event.key === manualTrackingKey) refreshCustomerView();
+      if(event.key === manualTrackingKey || event.key === orderStoreKey) refreshCustomerView();
     });
     window.setTimeout(updateGoogleAccountButtons, 500);
     window.setTimeout(updateGoogleAccountButtons, 1800);
@@ -6291,8 +6317,8 @@ body::before{
       }else{
         btn.classList.remove("is-signed-in");
         if(!btn.querySelector("svg")) btn.innerHTML = googleFallbackMarkup;
-        btn.title = "Open tracking dashboard";
-        btn.setAttribute("aria-label", "Open Baseband tracking dashboard");
+        btn.title = "Open your details and orders";
+        btn.setAttribute("aria-label", "Open your details and orders");
       }
     });
   }
@@ -6307,6 +6333,7 @@ body::before{
     $("bbt-shell").setAttribute("aria-hidden","true");
   }
   function showView(name){
+    if(!isAdminMode && name !== "dashboard") name = "dashboard";
     document.querySelectorAll(".bbt-tab").forEach(function(btn){ btn.classList.toggle("active", btn.getAttribute("data-bbt-view") === name); });
     document.querySelectorAll(".bbt-view").forEach(function(view){ view.classList.toggle("active", view.id === "bbt-view-" + name); });
   }
@@ -6342,14 +6369,26 @@ body::before{
     setProfileEditing(false);
   }
   function renderSummary(){
+    if(isAdminMode){
+      $("bbt-summary").innerHTML =
+        '<article class="bbt-metric"><span>Total Order Value</span><strong>'+money(userProfile.walletBalance)+'</strong></article>'+
+        '<article class="bbt-metric green"><span>Open Updates</span><strong>'+esc(userProfile.cashbackEarned)+'</strong></article>';
+      return;
+    }
     $("bbt-summary").innerHTML =
       '<article class="bbt-metric"><span>Wallet Balance</span><strong>'+money(userProfile.walletBalance)+'</strong></article>'+
       '<article class="bbt-metric green"><span>Cashback Earned</span><strong>'+money(userProfile.cashbackEarned)+'</strong></article>';
   }
   function renderOrders(){
+    if(!orders.length){
+      $("bbt-orders-body").innerHTML = '<tr><td colspan="7"><div style="padding:1.2rem;text-align:center"><strong>No orders found for this Google account yet.</strong><p class="bbt-muted" style="margin-top:.35rem">Once an order is connected to your email, it will appear here with internal tracking.</p></div></td></tr>';
+      return;
+    }
     $("bbt-orders-body").innerHTML = orders.map(function(order){
       var statusClass = order.status === "Delivered" ? " done" : (order.status === "Packed" || order.status === "Ready for Dispatch" ? " warn" : "");
-      return '<tr><td><strong>'+esc(order.orderName)+'</strong><br><span class="bbt-muted">'+esc(order.serviceType)+' - '+esc(order.location)+'</span></td>'+
+      var customerLine = isAdminMode ? '<br><span class="bbt-muted">'+esc(order.customerName || "Customer")+' | '+esc(order.customerEmail || "")+'</span>' : "";
+      return '<tr><td><strong>'+esc(order.orderName)+'</strong><br><span class="bbt-muted">'+esc(order.serviceType)+' - '+esc(order.location)+'</span>'+
+      customerLine+'</td>'+
       '<td>'+esc(order.date)+'</td><td><strong>'+money(order.price)+'</strong></td><td><span class="bbt-track-id">'+esc(order.trackingId)+'</span></td>'+
       '<td>'+esc(order.updateType)+'</td><td><span class="bbt-status'+statusClass+'">'+esc(order.status)+'</span></td>'+
       '<td><button class="bbt-btn secondary" type="button" data-bbt-track="'+esc(order.id)+'">Track Order</button></td></tr>';
@@ -6371,6 +6410,11 @@ body::before{
     var orderSelect = $("bbt-admin-order");
     var statusSelect = $("bbt-admin-status");
     if(!orderSelect || !statusSelect) return;
+    if(!isAdminMode){
+      orderSelect.innerHTML = "";
+      statusSelect.innerHTML = "";
+      return;
+    }
     var selected = orderSelect.value;
     orderSelect.innerHTML = orders.map(function(order){
       return '<option value="'+esc(order.trackingId)+'">'+esc(order.trackingId)+' - '+esc(order.orderName)+'</option>';
@@ -6434,8 +6478,18 @@ body::before{
   };
   window.updateVeshannTracking = window.updateVeshannTracking || function(trackingId, status, note){
     var updates = readManualTrackingUpdates();
-    updates[trackingId] = {status:status,note:note || "",nextAction:note || "",updatedAt:new Date().toLocaleString("en-IN"),updateType:"Admin app update"};
+    var updatedAt = new Date().toLocaleString("en-IN");
+    updates[trackingId] = {status:status,note:note || "",nextAction:note || "",updatedAt:updatedAt,updateType:"Admin app update"};
     try{ localStorage.setItem(manualTrackingKey, JSON.stringify(updates)); }catch(e){}
+    var records = readOrderRecords();
+    records.forEach(function(order){
+      if(order.trackingId !== trackingId) return;
+      order.status = status;
+      order.lastUpdated = updatedAt;
+      order.nextAction = note || "Manual update added";
+      order.updateType = "Admin app update";
+    });
+    writeOrderRecords(records);
     refreshCustomerView();
     return updates[trackingId];
   };
@@ -6485,5 +6539,6 @@ body::before{
 </script>
 </body>
 </html>
+
 
 
