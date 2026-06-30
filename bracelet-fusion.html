@@ -6,6 +6,7 @@
 <title>Gemstone Bracelets — Veshannastro</title>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Cinzel:wght@400;500;600&family=Vollkorn:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="vesh-shared-cart.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -965,6 +966,31 @@ var FX_CONFIG={
   cartLinkEndpoint:""
 };
 var fxCoupon='', fxCelebrated=false;
+function fxLoadSharedCart(){
+  if(!window.VeshSharedCart) return;
+  var cart=VeshSharedCart.read();
+  fxCart={};
+  cart.items.forEach(function(item){
+    if(ALL_PRODUCTS[item.sku]) fxCart[item.sku]=Math.max(1,Math.min(10,Number(item.qty||1)));
+  });
+  if(cart.coupon) fxCoupon=cart.coupon;
+}
+function fxSaveSharedCart(){
+  if(!window.VeshSharedCart) return;
+  VeshSharedCart.setItems(fxItems().map(function(item){
+    var rec=ALL_PRODUCTS[item.sku], p=rec&&rec.p;
+    return {
+      sku:item.sku,
+      name:item.name,
+      qty:item.qty,
+      unit_price:item.unit_price,
+      mrp:p&&p.mrp,
+      gemstones:item.gemstones,
+      image:p&&p.image,
+      source:"index-shop"
+    };
+  }),fxCoupon||"");
+}
 try{
   var fxParams=new URLSearchParams((window.top&&window.top.location?window.top.location.search:window.location.search)||"");
   var fxUrlCoupon=(fxParams.get("coupon")||"").toUpperCase();
@@ -1126,8 +1152,8 @@ function renderCart(){
     if(tv)tv.textContent=money(tot);
   }
 }
-function cartQty(sku,delta){fxCart[sku]=(fxCart[sku]||0)+delta;if(fxCart[sku]<=0)delete fxCart[sku];updateFab(true);renderCart();}
-function cartRemove(sku){delete fxCart[sku];updateFab(true);renderCart();}
+function cartQty(sku,delta){fxCart[sku]=(fxCart[sku]||0)+delta;if(fxCart[sku]<=0)delete fxCart[sku];fxSaveSharedCart();updateFab(true);renderCart();}
+function cartRemove(sku){delete fxCart[sku];fxSaveSharedCart();updateFab(true);renderCart();}
 function fxResetPanes(){
   var items=document.getElementById('fx-cd-items'),foot=document.getElementById('fx-cd-foot'),
       form=document.getElementById('fx-cd-form'),succ=document.getElementById('fx-cd-success'),
@@ -1140,19 +1166,9 @@ function fxResetPanes(){
 }
 function fxStartCheckout(){
   if(!Object.keys(fxCart).length)return;
-  var firstSku=Object.keys(fxCart)[0];
-  var firstQty=Math.min(10,Math.max(1,fxCart[firstSku]||1));
-  var params=new URLSearchParams();
-  params.set("sku",firstSku);
-  params.set("checkout","cart");
-  params.set("qty",String(firstQty));
-  if(fxCoupon) params.set("coupon",fxCoupon);
-  try{
-    var payload={items:fxItems(),coupon:fxCoupon||"",subtotal:fxSubtotal(),discount:fxDiscountAmt(),total:fxTotal(),source:"index-cart"};
-    (window.top||window).sessionStorage.setItem("va_index_cart_checkout",JSON.stringify(payload));
-  }catch(e){}
-  try{(window.top||window).location.href="shop-product.html?"+params.toString();}
-  catch(e){window.location.href="shop-product.html?"+params.toString();}
+  fxSaveSharedCart();
+  try{(window.top||window).location.href="checkout.html?source=index-cart";}
+  catch(e){window.location.href="checkout.html?source=index-cart";}
   return;
   var items=document.getElementById('fx-cd-items'),foot=document.getElementById('fx-cd-foot'),
       form=document.getElementById('fx-cd-form'),title=document.getElementById('fx-cd-title'),
@@ -1270,6 +1286,7 @@ function addToCart(sku,btn){
   }
   setTimeout(function(){
     fxCart[sku]=(fxCart[sku]||0)+1;
+    fxSaveSharedCart();
     updateFab(true);
     renderCart();
     if(typeof fxResetPanes==='function')fxResetPanes();
@@ -1312,6 +1329,7 @@ function fxCelebrateClose(){ var ov=document.getElementById('fx-celebrate'); if(
 
 /* ── Init ── */
 injectCartUI();
+fxLoadSharedCart();
 renderCart();
 updateFab(false);
 switchSection('crystal',document.querySelector('.fx-sb-item.active'));
