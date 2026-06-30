@@ -1140,6 +1140,20 @@ function fxResetPanes(){
 }
 function fxStartCheckout(){
   if(!Object.keys(fxCart).length)return;
+  var firstSku=Object.keys(fxCart)[0];
+  var firstQty=Math.min(10,Math.max(1,fxCart[firstSku]||1));
+  var params=new URLSearchParams();
+  params.set("sku",firstSku);
+  params.set("checkout","cart");
+  params.set("qty",String(firstQty));
+  if(fxCoupon) params.set("coupon",fxCoupon);
+  try{
+    var payload={items:fxItems(),coupon:fxCoupon||"",subtotal:fxSubtotal(),discount:fxDiscountAmt(),total:fxTotal(),source:"index-cart"};
+    (window.top||window).sessionStorage.setItem("va_index_cart_checkout",JSON.stringify(payload));
+  }catch(e){}
+  try{(window.top||window).location.href="shop-product.html?"+params.toString();}
+  catch(e){window.location.href="shop-product.html?"+params.toString();}
+  return;
   var items=document.getElementById('fx-cd-items'),foot=document.getElementById('fx-cd-foot'),
       form=document.getElementById('fx-cd-form'),title=document.getElementById('fx-cd-title'),
       pay=document.getElementById('fx-pay'),err=document.getElementById('fx-form-err');

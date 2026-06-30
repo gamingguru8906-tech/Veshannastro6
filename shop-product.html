@@ -3350,11 +3350,14 @@ function init(){
   // Recommendation unlock for MAAYA15.
   var params = new URLSearchParams(location.search);
   var urlCoupon = (params.get("coupon") || "").toUpperCase();
+  var urlQty = parseInt(params.get("qty") || "", 10);
+  if(!isNaN(urlQty)) qty = Math.min(10, Math.max(1, urlQty));
   recUnlocked = params.get("rec") === "1" || urlCoupon === "MAAYA15" ||
                 params.has("maya_bundle") || sessionStorage.getItem("va_rec_unlocked") === "1";
   if(recUnlocked){ try{ sessionStorage.setItem("va_rec_unlocked", "1"); }catch(e){} }
   // Auto-apply MAAYA15 if the buyer arrived straight from the recommender.
   if(recUnlocked && (urlCoupon === "MAAYA15" || params.has("maya_bundle"))) coupon = "MAAYA15";
+  if(!coupon && urlCoupon && COUPONS[urlCoupon] && urlCoupon !== "MAAYA15") coupon = urlCoupon;
   if(coupon){ var ci = $("coupon-input"); if(ci) ci.value = coupon; }
 
   setupGallery();
@@ -3370,6 +3373,12 @@ function init(){
   renderTotals();
   initWalletLayer();
   bind();
+  if(params.get("checkout") === "cart"){
+    window.setTimeout(function(){
+      cartCount = qty;
+      openCartCheckout();
+    }, 180);
+  }
 }
 
 /* gallery: try sku, sku-2, sku-3, sku-4; show thumbs only for images that load */
