@@ -1563,8 +1563,28 @@ window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
   @media(max-width:900px){.bbt-grid.two,.bbt-grid.three{grid-template-columns:1fr}.bbt-shell{padding:8px}.bbt-app{border-radius:14px}.bbt-top{align-items:flex-start}.bbt-brand h2{font-size:1.18rem}.bbt-form,.bbt-summary{grid-template-columns:1fr}.bbt-checkout-launcher{right:4.05rem;top:.85rem;width:38px;height:38px}.co-head{padding-right:7.4rem!important;}.bbt-delivery-promise{width:calc(100% - 20px);border-radius:14px;font-size:.68rem;line-height:1.35;}}
   @media(max-width:760px){.nav-links .bbt-nav-li{display:flex!important}.bbt-launcher{width:40px;height:40px}.bbt-google-btn span{font-size:1rem;}.nav-links{gap:.5rem;}}
 </style>
+<style id="checkout-only-page-guard">
+body.checkout-only{
+  background:#12080b!important;
+  overflow:hidden!important;
+}
+body.checkout-only > :not(#co-modal):not(script):not(style){
+  display:none!important;
+}
+body.checkout-only #co-modal{
+  display:flex!important;
+}
+body.checkout-only #co-modal:not(.open){
+  opacity:0;
+  pointer-events:none;
+}
+body.checkout-only #co-modal.open{
+  opacity:1;
+  pointer-events:auto;
+}
+</style>
 </head>
-<body>
+<body class="checkout-only">
 
 <div class="announce">
   <span>🚚 <b>Free delivery</b> across India</span>
