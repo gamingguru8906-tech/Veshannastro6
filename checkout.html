@@ -1582,6 +1582,532 @@ body.checkout-only #co-modal.open{
   opacity:1;
   pointer-events:auto;
 }
+@media(max-width:760px){
+  html,body.checkout-only{
+    width:100%;
+    min-height:100%;
+    height:100%;
+    overflow:hidden!important;
+    -webkit-text-size-adjust:100%;
+  }
+  body.checkout-only #co-modal{
+    inset:0!important;
+    padding:0!important;
+    align-items:stretch!important;
+    justify-content:stretch!important;
+    background:#12080b!important;
+  }
+  body.checkout-only .co-card{
+    width:100%!important;
+    height:100dvh!important;
+    min-height:100vh!important;
+    max-height:none!important;
+    border:0!important;
+    border-radius:0!important;
+    grid-template-columns:1fr!important;
+    display:grid!important;
+    overflow:hidden!important;
+  }
+  body.checkout-only .co-left{
+    display:none!important;
+  }
+  body.checkout-only .co-head{
+    position:sticky!important;
+    top:0!important;
+    z-index:20!important;
+    min-height:56px!important;
+    padding:.72rem 3.25rem .72rem .95rem!important;
+    background:rgba(255,248,236,.96)!important;
+    border-bottom:1px solid rgba(110,20,35,.14)!important;
+  }
+  body.checkout-only .co-title,
+  body.checkout-only .co-head h2,
+  body.checkout-only .gk-step-title{
+    font-size:1.08rem!important;
+    line-height:1.2!important;
+    letter-spacing:0!important;
+  }
+  body.checkout-only .co-close{
+    position:absolute!important;
+    top:.62rem!important;
+    right:.72rem!important;
+    width:40px!important;
+    height:40px!important;
+    border-radius:999px!important;
+    display:grid!important;
+    place-items:center!important;
+    z-index:25!important;
+  }
+  body.checkout-only .gk-step{
+    grid-column:1!important;
+    width:100%!important;
+    min-width:0!important;
+    height:calc(100dvh - 56px)!important;
+    overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+  body.checkout-only .gk-step-content,
+  body.checkout-only .co-body{
+    width:100%!important;
+    max-width:none!important;
+    padding:.95rem .9rem calc(6rem + env(safe-area-inset-bottom))!important;
+  }
+  body.checkout-only .co-body{
+    grid-template-columns:1fr!important;
+    overflow-y:auto!important;
+    height:calc(100dvh - 56px)!important;
+  }
+  body.checkout-only .co-form,
+  body.checkout-only .co-grid,
+  body.checkout-only .gk-form-grid{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:.72rem!important;
+  }
+  body.checkout-only input,
+  body.checkout-only textarea,
+  body.checkout-only select{
+    width:100%!important;
+    min-height:46px!important;
+    font-size:16px!important;
+  }
+  body.checkout-only textarea{
+    min-height:84px!important;
+  }
+  body.checkout-only .co-summary,
+  body.checkout-only .gk-summary,
+  body.checkout-only .gk-panel,
+  body.checkout-only .gk-card{
+    width:100%!important;
+    max-width:none!important;
+    border-radius:10px!important;
+  }
+  body.checkout-only .co-pay-row,
+  body.checkout-only .gk-paybar,
+  body.checkout-only .gk-bottom,
+  body.checkout-only .co-actions{
+    position:sticky!important;
+    bottom:0!important;
+    z-index:18!important;
+    margin-left:-.9rem!important;
+    margin-right:-.9rem!important;
+    padding:.72rem .9rem calc(.72rem + env(safe-area-inset-bottom))!important;
+    background:rgba(255,248,236,.98)!important;
+    border-top:1px solid rgba(110,20,35,.14)!important;
+    box-shadow:0 -12px 28px rgba(36,21,13,.12)!important;
+  }
+  body.checkout-only #co-pay,
+  body.checkout-only .gk-primary,
+  body.checkout-only .gk-btn,
+  body.checkout-only button[type="submit"]{
+    width:100%!important;
+    min-height:48px!important;
+    justify-content:center!important;
+    white-space:normal!important;
+    line-height:1.2!important;
+  }
+  body.checkout-only .co-sum-line,
+  body.checkout-only .gk-total-row{
+    gap:.75rem!important;
+    align-items:flex-start!important;
+  }
+  body.checkout-only .co-sum-line span,
+  body.checkout-only .gk-total-row span{
+    min-width:0!important;
+    overflow-wrap:anywhere!important;
+  }
+}
+</style>
+<style id="checkout-mobile-v2">
+@media(max-width:780px){
+  body.checkout-only{
+    background:#fff8ec!important;
+    overscroll-behavior:none;
+  }
+  body.checkout-only #co-modal{
+    background:#fff8ec!important;
+    overflow:hidden!important;
+  }
+  body.checkout-only #co-modal.open{
+    display:block!important;
+  }
+  body.checkout-only .co-card{
+    display:flex!important;
+    flex-direction:column!important;
+    width:100%!important;
+    height:100svh!important;
+    min-height:100dvh!important;
+    max-height:none!important;
+    overflow:hidden!important;
+    border:0!important;
+    border-radius:0!important;
+    background:#fff8ec!important;
+    box-shadow:none!important;
+  }
+  body.checkout-only .co-head{
+    order:1!important;
+    flex:0 0 auto!important;
+    position:relative!important;
+    top:auto!important;
+    z-index:30!important;
+    grid-column:auto!important;
+    display:block!important;
+    min-height:0!important;
+    padding:.62rem 6.4rem .62rem .82rem!important;
+    background:#fff8ec!important;
+    border-bottom:1px solid rgba(94,17,25,.13)!important;
+    box-shadow:0 8px 22px rgba(42,26,14,.08)!important;
+  }
+  body.checkout-only .gk-trust-top{
+    display:inline-flex!important;
+    align-items:center!important;
+    gap:.28rem!important;
+    margin:0 0 .28rem!important;
+    padding:.22rem .42rem!important;
+    border-radius:999px!important;
+    background:#f6ead2!important;
+    color:#6e1423!important;
+    font-size:.58rem!important;
+    line-height:1!important;
+    letter-spacing:.08em!important;
+    white-space:nowrap!important;
+  }
+  body.checkout-only .bbt-checkout-delivery{
+    display:inline-flex!important;
+    align-items:center!important;
+    margin-left:.3rem!important;
+    padding:.22rem .42rem!important;
+    border-radius:999px!important;
+    background:#fff3dc!important;
+    color:#583126!important;
+    border:1px solid rgba(184,144,47,.28)!important;
+    font-size:.58rem!important;
+    line-height:1!important;
+    letter-spacing:.05em!important;
+    white-space:nowrap!important;
+  }
+  body.checkout-only .gk-head-main{
+    display:block!important;
+    min-width:0!important;
+  }
+  body.checkout-only .gk-head-text{
+    min-width:0!important;
+  }
+  body.checkout-only .gk-head-text h3,
+  body.checkout-only #gk-step-title{
+    margin:.1rem 0 .08rem!important;
+    font-family:var(--impact)!important;
+    font-size:1.08rem!important;
+    line-height:1.08!important;
+    color:#24150d!important;
+    letter-spacing:0!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+  }
+  body.checkout-only .gk-head-text p,
+  body.checkout-only #gk-step-sub{
+    margin:0!important;
+    font-size:.72rem!important;
+    line-height:1.25!important;
+    color:#745b4e!important;
+    font-weight:700!important;
+  }
+  body.checkout-only .gk-dots{
+    display:flex!important;
+    align-items:center!important;
+    gap:.22rem!important;
+    margin:.48rem 0 0!important;
+    max-width:190px!important;
+  }
+  body.checkout-only .gk-dot{
+    width:7px!important;
+    height:7px!important;
+    flex:0 0 7px!important;
+  }
+  body.checkout-only .gk-dot-line{
+    height:2px!important;
+    flex:1 1 auto!important;
+  }
+  body.checkout-only .co-close{
+    position:absolute!important;
+    top:.72rem!important;
+    right:.68rem!important;
+    width:38px!important;
+    height:38px!important;
+    min-width:38px!important;
+    min-height:38px!important;
+    display:grid!important;
+    place-items:center!important;
+    border-radius:999px!important;
+    z-index:36!important;
+    background:#fffaf1!important;
+    box-shadow:0 6px 16px rgba(42,26,14,.12)!important;
+  }
+  body.checkout-only .bbt-checkout-launcher{
+    position:absolute!important;
+    top:.72rem!important;
+    right:3.45rem!important;
+    width:38px!important;
+    height:38px!important;
+    min-width:38px!important;
+    min-height:38px!important;
+    z-index:35!important;
+  }
+  body.checkout-only .bbt-checkout-launcher span{
+    width:22px!important;
+    height:22px!important;
+    min-width:22px!important;
+    min-height:22px!important;
+    display:block!important;
+    overflow:hidden!important;
+    line-height:0!important;
+    font-size:0!important;
+  }
+  body.checkout-only .bbt-checkout-launcher svg{
+    width:22px!important;
+    height:22px!important;
+    display:block!important;
+  }
+  body.checkout-only .co-ritual{
+    order:2!important;
+    flex:0 0 auto!important;
+    grid-column:auto!important;
+    grid-row:auto!important;
+    display:block!important;
+    min-height:0!important;
+    overflow:visible!important;
+    padding:.52rem .75rem!important;
+    background:linear-gradient(180deg,#fff8ec,#fff1da)!important;
+    border-bottom:1px solid rgba(94,17,25,.1)!important;
+    color:#24150d!important;
+  }
+  body.checkout-only .co-ritual > :not(.co-mini-order){
+    display:none!important;
+  }
+  body.checkout-only .co-mini-order{
+    display:grid!important;
+    grid-template-columns:1fr auto!important;
+    gap:.42rem!important;
+    width:100%!important;
+    margin:0!important;
+    padding:0!important;
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+  }
+  body.checkout-only .co-mini-row{
+    min-width:0!important;
+    margin:0!important;
+    padding:.5rem .58rem!important;
+    border:1px solid rgba(184,144,47,.24)!important;
+    border-radius:10px!important;
+    background:rgba(255,253,248,.9)!important;
+  }
+  body.checkout-only .co-mini-row:nth-child(1){
+    grid-column:1 / -1!important;
+  }
+  body.checkout-only .co-mini-row:nth-child(2),
+  body.checkout-only .co-mini-row:nth-child(4){
+    display:none!important;
+  }
+  body.checkout-only .co-mini-row span{
+    display:block!important;
+    margin:0 0 .12rem!important;
+    font-size:.54rem!important;
+    line-height:1!important;
+    letter-spacing:.12em!important;
+    color:#7a5a47!important;
+    text-transform:uppercase!important;
+  }
+  body.checkout-only .co-mini-row strong{
+    display:block!important;
+    max-width:100%!important;
+    font-size:.78rem!important;
+    line-height:1.18!important;
+    color:#24150d!important;
+    overflow-wrap:anywhere!important;
+  }
+  body.checkout-only .gk-step,
+  body.checkout-only .co-body,
+  body.checkout-only .co-success{
+    order:3!important;
+    flex:1 1 auto!important;
+    min-height:0!important;
+    height:auto!important;
+    grid-column:auto!important;
+    width:100%!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    background:#fff8ec!important;
+  }
+  body.checkout-only .gk-step-content{
+    width:100%!important;
+    max-width:none!important;
+    min-height:100%!important;
+    padding:.8rem .78rem calc(5.8rem + env(safe-area-inset-bottom))!important;
+  }
+  body.checkout-only .gk-step-hint{
+    margin:0 0 .72rem!important;
+    font-size:.86rem!important;
+    line-height:1.42!important;
+  }
+  body.checkout-only .gk-phone-wrap,
+  body.checkout-only .gk-form-grid,
+  body.checkout-only .co-grid{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:.68rem!important;
+  }
+  body.checkout-only .gk-phone-field,
+  body.checkout-only .co-field input,
+  body.checkout-only .co-field textarea,
+  body.checkout-only .co-field select,
+  body.checkout-only #gk-coupon-inp{
+    width:100%!important;
+    min-height:48px!important;
+    font-size:16px!important;
+    border-radius:10px!important;
+  }
+  body.checkout-only .gk-check-label{
+    display:flex!important;
+    align-items:flex-start!important;
+    gap:.52rem!important;
+    width:100%!important;
+    min-width:0!important;
+    padding:.7rem .78rem!important;
+    border-radius:10px!important;
+  }
+  body.checkout-only .gk-check-label input{
+    flex:0 0 auto!important;
+    width:18px!important;
+    height:18px!important;
+    min-height:18px!important;
+    margin-top:.08rem!important;
+  }
+  body.checkout-only .gk-check-label span{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    width:auto!important;
+    max-width:100%!important;
+    display:block!important;
+    font-size:.82rem!important;
+    line-height:1.35!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+  }
+  body.checkout-only .co-field.full,
+  body.checkout-only .co-field{
+    grid-column:1!important;
+    min-width:0!important;
+  }
+  body.checkout-only .gk-order-card,
+  body.checkout-only .gk-rewards-box,
+  body.checkout-only .gk-review-card,
+  body.checkout-only .gk-ship-row,
+  body.checkout-only .gk-pm-section,
+  body.checkout-only .co-wallet,
+  body.checkout-only .gk-pay-phone-row,
+  body.checkout-only .gk-pay-total-row{
+    width:100%!important;
+    max-width:none!important;
+    margin-left:0!important;
+    margin-right:0!important;
+    border-radius:12px!important;
+  }
+  body.checkout-only .gk-offer-chips{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:.52rem!important;
+  }
+  body.checkout-only .gk-chip{
+    width:100%!important;
+    min-width:0!important;
+    text-align:left!important;
+  }
+  body.checkout-only .gk-coupon-row{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    gap:.48rem!important;
+  }
+  body.checkout-only .co-modal[data-gk-step="3"] .co-body{
+    display:block!important;
+    padding:.8rem .78rem calc(5.8rem + env(safe-area-inset-bottom))!important;
+  }
+  body.checkout-only #co-form{
+    display:block!important;
+    min-width:0!important;
+  }
+  body.checkout-only .co-location-actions,
+  body.checkout-only .co-map-actions{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:.52rem!important;
+  }
+  body.checkout-only .gk-addr-cta,
+  body.checkout-only .gk-step-content > .gk-primary-btn:last-child,
+  body.checkout-only #gk-pay-btn{
+    position:sticky!important;
+    bottom:0!important;
+    z-index:22!important;
+    margin:.85rem -.78rem calc(-5.8rem - env(safe-area-inset-bottom))!important;
+    padding:.72rem .78rem calc(.72rem + env(safe-area-inset-bottom))!important;
+    background:rgba(255,248,236,.98)!important;
+    border-top:1px solid rgba(94,17,25,.12)!important;
+    box-shadow:0 -12px 26px rgba(42,26,14,.12)!important;
+  }
+  body.checkout-only .gk-primary-btn,
+  body.checkout-only .gk-pay-btn,
+  body.checkout-only #co-pay{
+    width:100%!important;
+    min-height:50px!important;
+    border-radius:10px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    white-space:normal!important;
+    line-height:1.2!important;
+    text-align:center!important;
+  }
+  body.checkout-only .gk-pm-row{
+    display:grid!important;
+    grid-template-columns:auto minmax(0,1fr) auto auto!important;
+    gap:.6rem!important;
+    align-items:center!important;
+    min-height:58px!important;
+  }
+  body.checkout-only .gk-pm-info,
+  body.checkout-only .gk-pm-name,
+  body.checkout-only .gk-pm-disc{
+    min-width:0!important;
+    overflow-wrap:anywhere!important;
+  }
+  body.checkout-only .co-helper,
+  body.checkout-only .gk-addr-hint{
+    font-size:.78rem!important;
+    line-height:1.4!important;
+  }
+}
+@media(max-width:390px){
+  body.checkout-only .co-head{
+    padding-left:.68rem!important;
+    padding-right:5.9rem!important;
+  }
+  body.checkout-only .bbt-checkout-delivery{
+    display:none!important;
+  }
+  body.checkout-only .gk-head-text h3,
+  body.checkout-only #gk-step-title{
+    font-size:1rem!important;
+  }
+  body.checkout-only .co-mini-order{
+    grid-template-columns:1fr!important;
+  }
+  body.checkout-only .co-mini-row:nth-child(3),
+  body.checkout-only .co-mini-row:nth-child(5){
+    grid-column:1!important;
+  }
+}
 </style>
 </head>
 <body class="checkout-only">
@@ -1652,6 +2178,7 @@ body.checkout-only #co-modal.open{
               <tbody id="bbt-orders-body"></tbody>
             </table>
           </div>
+          <p class="bbt-muted" style="margin-top:.9rem;font-size:.8rem">Something we could do better? <a href="https://forms.gle/PkYkRQkJ34iGJkYv9" target="_blank" rel="noopener" style="color:#7a1f2b;font-weight:600;text-decoration:underline">Share your feedback</a> — we read every response.</p>
         </div>
       </section>
 
@@ -1703,7 +2230,29 @@ body.checkout-only #co-modal.open{
               <button class="bbt-btn" id="bbt-admin-update" type="button" style="width:100%;margin-top:.85rem">Update Order</button>
               <p class="bbt-muted" id="bbt-admin-result" style="margin-top:.7rem"></p>
             </aside>
+            <aside class="bbt-card">
+              <h3>Customer Cashback Control</h3>
+              <p class="bbt-muted">Admin-only wallet adjustment. Positive amount gives cashback; negative amount takes cashback back.</p>
+              <form class="bbt-form" id="bbt-cashback-form">
+                <div class="bbt-field full"><label for="bbt-cashback-email">Customer Gmail</label><input id="bbt-cashback-email" type="email" placeholder="customer@gmail.com"></div>
+                <div class="bbt-field"><label for="bbt-cashback-amount">Amount INR</label><input id="bbt-cashback-amount" type="number" step="1" placeholder="400 or -100"></div>
+                <div class="bbt-field"><label for="bbt-cashback-action">Action</label><select id="bbt-cashback-action"><option value="give">Give cashback</option><option value="take">Take cashback</option></select></div>
+                <div class="bbt-field full"><label for="bbt-cashback-reason">Reason</label><input id="bbt-cashback-reason" value="Manual admin wallet adjustment"></div>
+              </form>
+              <button class="bbt-btn" id="bbt-cashback-submit" type="button" style="width:100%;margin-top:.85rem">Apply Cashback Change</button>
+              <p class="bbt-muted" id="bbt-cashback-result" style="margin-top:.7rem"></p>
+            </aside>
           </div>
+          <article class="bbt-card">
+            <h3>Google Account Registry</h3>
+            <p class="bbt-muted">Every successful Google login is stored here locally and posted to your Google Sheet webhook.</p>
+            <div class="bbt-table-wrap" style="margin-top:.85rem">
+              <table class="bbt-table" aria-label="Google account registry">
+                <thead><tr><th>Gmail</th><th>Name</th><th>First Seen</th><th>Last Seen</th><th>Logins</th><th>Cashback Ledger</th><th>Action</th></tr></thead>
+                <tbody id="bbt-account-body"></tbody>
+              </table>
+            </div>
+          </article>
         </div>
       </section>
 
@@ -2520,6 +3069,8 @@ body.checkout-only #co-modal.open{
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 1 1 12 20z"/></svg>
         Send order details on WhatsApp
       </a>
+      <p style="margin-top:1rem;font-size:.82rem;color:var(--muted,#6b5844)">How was your experience?
+        <a href="https://forms.gle/PkYkRQkJ34iGJkYv9" target="_blank" rel="noopener" style="color:#7a1f2b;font-weight:600;text-decoration:underline">Share quick feedback</a> — it takes 30 seconds and helps us serve you better.</p>
     </div>
 
   </div>
@@ -2610,6 +3161,7 @@ body.checkout-only #co-modal.open{
       <li><a href="https://www.veshannastro.co.in/terms.html">Terms</a></li>
       <li><a href="https://www.veshannastro.co.in/privacy-policy.html">Privacy</a></li>
       <li><a href="https://www.veshannastro.co.in/refund-policy.html">Refund Policy</a></li>
+      <li><a href="https://forms.gle/PkYkRQkJ34iGJkYv9" target="_blank" rel="noopener">Feedback</a></li>
     </ul>
   </nav>
   <span class="footer-copy">&copy; 2026 Veshannastro · All rights reserved · India</span>
@@ -4218,6 +4770,7 @@ var walletMaxRedeemPaise = 0;
 var walletProfile = null;
 function walletGoogleCallback(response){
   if(!response || !response.credential){ setWalletMsg("Google login did not return a valid credential.", "bad"); return; }
+  try{ sessionStorage.setItem("vesh_google_credential", response.credential); }catch(e){}
   setWalletMsg("Connecting your Google wallet...", "");
   walletApi("/wallet/auth/google", { method:"POST", body:JSON.stringify({ credential:response.credential }) })
     .then(function(r){
@@ -4503,9 +5056,10 @@ function showGkStep(step){
     l.classList.toggle("gk-done", (i + 1) < stepNum);
   });
   // Run per-step setup
+  if(step === 1) { gkMoveGoogleToStep1(); }
   if(step === 2) { updateGkSummary(); }
   if(step === 4) { gkBuildDeliveryReview(); }
-  if(step === 5) { gkInitPaymentRows(); updateGkSummary(); coSyncAuthState(); }
+  if(step === 5) { gkMoveGoogleToPayment(); gkInitPaymentRows(); updateGkSummary(); coSyncAuthState(); }
 }
 
 function gkSyncPhoneFromSession(){
@@ -4545,6 +5099,13 @@ function gkMoveGoogleToStep1(){
   var slot = $("gk-step1-google");
   var wallet = $("co-wallet");
   if(slot && wallet && wallet.parentNode !== slot) slot.appendChild(wallet);
+}
+function gkMoveGoogleToPayment(){
+  var wallet = $("co-wallet");
+  var payBtn = $("gk-pay-btn");
+  if(wallet && payBtn && payBtn.parentNode && wallet.parentNode !== payBtn.parentNode){
+    payBtn.parentNode.insertBefore(wallet, payBtn);
+  }
 }
 
 function updateGkSummary(){
@@ -5047,10 +5608,8 @@ function gkBind(){
       return;
     }
     if(!walletToken()){
-      if(errEl) errEl.textContent = "Continue with Google before moving ahead.";
-      setWalletMsg("Continue with Google to attach cashback and unlock payment.", "bad");
+      setWalletMsg("You can attach Google on the payment step to unlock payment and cashback.", "");
       coSyncAuthState();
-      return;
     }
     if(errEl) errEl.textContent = "";
     gkLoggedPhone = ph;
@@ -6229,6 +6788,8 @@ body::before{
   "use strict";
   var adminEmail = "shashankmmj@gmail.com";
   var orderStoreKey = "vesh_live_order_records_v2";
+  var accountStoreKey = "vesh_google_account_registry_v1";
+  var cashbackLedgerKey = "vesh_cashback_admin_ledger_v1";
   var initialOrderRecords = [];
   var sheetHeaders = [
     "order_id","timestamp_created","status","payment_id","payment_method","paid_at",
@@ -6307,6 +6868,99 @@ body::before{
 
   function writeOrderRecords(records){
     try{ localStorage.setItem(orderStoreKey, JSON.stringify(records)); }catch(e){}
+  }
+
+  function readAccountRecords(){
+    try{
+      var raw = localStorage.getItem(accountStoreKey);
+      return raw ? JSON.parse(raw) : [];
+    }catch(e){
+      return [];
+    }
+  }
+
+  function writeAccountRecords(records){
+    try{ localStorage.setItem(accountStoreKey, JSON.stringify(records)); }catch(e){}
+  }
+
+  function markOncePerSession(prefix, email){
+    var key = prefix + String(email || "").trim().toLowerCase();
+    try{
+      if(sessionStorage.getItem(key)) return false;
+      sessionStorage.setItem(key, "1");
+      return true;
+    }catch(e){
+      return true;
+    }
+  }
+
+  function upsertAccountRecord(profile, source){
+    profile = profile || {};
+    var email = String(profile.email || "").trim().toLowerCase();
+    if(!email) return null;
+    var records = readAccountRecords();
+    var now = new Date().toLocaleString("en-IN",{timeZone:"Asia/Kolkata"});
+    var shouldCountLogin = source !== "Admin cashback target";
+    var countThisLogin = shouldCountLogin ? markOncePerSession("vesh_account_seen_", email) : false;
+    var found = records.find(function(row){ return String(row.email || "").toLowerCase() === email; });
+    if(!found){
+      found = {email:email, name:"", picture:"", first_seen:now, last_seen:now, login_count:0, source:""};
+      records.push(found);
+    }
+    found.name = profile.name || found.name || "";
+    found.picture = profile.picture || found.picture || "";
+    found.last_seen = now;
+    found.login_count = Number(found.login_count || 0) + (countThisLogin ? 1 : 0);
+    found.source = source || found.source || "Google login";
+    writeAccountRecords(records);
+    return found;
+  }
+
+  function readCashbackLedger(){
+    try{
+      var raw = localStorage.getItem(cashbackLedgerKey);
+      return raw ? JSON.parse(raw) : [];
+    }catch(e){
+      return [];
+    }
+  }
+
+  function writeCashbackLedger(rows){
+    try{ localStorage.setItem(cashbackLedgerKey, JSON.stringify(rows)); }catch(e){}
+  }
+
+  function postSheetEvent(payload){
+    var webhook = (window.CONFIG && CONFIG.orderWebhook) || "";
+    if(!webhook) return;
+    try{
+      fetch(webhook, {
+        method:"POST",
+        mode:"no-cors",
+        headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify(payload)
+      });
+    }catch(e){}
+  }
+
+  function logGoogleAccountToSheet(profile, source){
+    profile = profile || {};
+    var email = String(profile.email || "").trim().toLowerCase();
+    if(!email) return;
+    if(!markOncePerSession("vesh_account_sheet_log_", email)) return;
+    var nowIso = new Date().toISOString();
+    postSheetEvent({
+      event_type:"google_login",
+      order_id:"LOGIN-" + Date.now(),
+      timestamp:nowIso,
+      status:"Google Login",
+      payment_status:"Google Login",
+      login_email:email,
+      email:email,
+      name:profile.name || "",
+      source:source || "Google Sign-In",
+      item_summary:"Google login captured for wallet/customer registry",
+      customer:{name:profile.name || "", email:email, phone:""}
+    });
   }
 
   function getOrderKey(order){
@@ -6455,6 +7109,7 @@ body::before{
     $("bbt-edit-profile").addEventListener("click", function(){ setProfileEditing(true); });
     $("bbt-save-profile").addEventListener("click", saveProfile);
     if($("bbt-admin-update")) $("bbt-admin-update").addEventListener("click", handleManualTrackingUpdate);
+    if($("bbt-cashback-submit")) $("bbt-cashback-submit").addEventListener("click", handleCashbackAdjustment);
     if($("bbt-import-sheet")) $("bbt-import-sheet").addEventListener("click", handleSheetImport);
     if($("bbt-sample-row")) $("bbt-sample-row").addEventListener("click", fillSampleSheetRows);
     if($("bbt-clear-orders")) $("bbt-clear-orders").addEventListener("click", clearLocalOrders);
@@ -6506,6 +7161,7 @@ body::before{
   function captureGoogleCredential(credential){
     var payload = decodeJwtPayload(credential);
     if(!payload) return null;
+    try{ if(credential) sessionStorage.setItem("vesh_google_credential", credential); }catch(e){}
     return saveGoogleProfile({
       name: payload.name || payload.given_name || "",
       email: payload.email || "",
@@ -6552,6 +7208,8 @@ body::before{
       picture: profile.picture || current.picture || ""
     };
     try{ localStorage.setItem(googleProfileKey, JSON.stringify(next)); }catch(e){}
+    upsertAccountRecord(next, "Google Sign-In");
+    logGoogleAccountToSheet(next, "Google Sign-In");
     updateGoogleAccountButtons(next);
     refreshCustomerView(next);
     return next;
@@ -6676,6 +7334,7 @@ body::before{
   }
   function renderAdminControls(){
     renderAdminSheet();
+    renderAccountRegistry();
     var orderSelect = $("bbt-admin-order");
     var statusSelect = $("bbt-admin-status");
     var trackStatusSelect = $("bbt-admin-track-status");
@@ -6716,6 +7375,8 @@ body::before{
   function renderAdminSheet(){
     if(!$("bbt-sheet-head") || !$("bbt-sheet-body") || !isAdminMode) return;
     var records = orders.slice();
+    var accounts = readAccountRecords();
+    var ledger = readCashbackLedger();
     var filtered = records.filter(function(order){
       if(!sheetSearchText) return true;
       return sheetHeaders.some(function(header){ return String(order[header] || "").toLowerCase().indexOf(sheetSearchText) !== -1; }) ||
@@ -6724,12 +7385,15 @@ body::before{
     var totalRevenue = records.reduce(function(sum, order){ return sum + getOrderPrice(order); }, 0);
     var paidCount = records.filter(function(order){ return String(order.status || "").toLowerCase() === "paid"; }).length;
     var cashback = records.reduce(function(sum, order){ return sum + Number(order.cashback_given || 0); }, 0);
+    var manualCashback = ledger.reduce(function(sum,row){ return sum + Number(row.amount || 0); }, 0);
     if($("bbt-admin-summary")){
       $("bbt-admin-summary").innerHTML =
         '<article class="bbt-metric"><span>Total Rows</span><strong>'+esc(records.length)+'</strong></article>'+
         '<article class="bbt-metric green"><span>Paid Orders</span><strong>'+esc(paidCount)+'</strong></article>'+
+        '<article class="bbt-metric"><span>Google Accounts</span><strong>'+esc(accounts.length)+'</strong></article>'+
+        '<article class="bbt-metric green"><span>Cashback Ledger</span><strong>'+money(manualCashback)+'</strong></article>'+
         '<article class="bbt-metric"><span>Revenue</span><strong>'+money(totalRevenue)+'</strong></article>'+
-        '<article class="bbt-metric green"><span>Cashback</span><strong>'+money(cashback)+'</strong></article>';
+        '<article class="bbt-metric green"><span>Order Cashback</span><strong>'+money(cashback)+'</strong></article>';
     }
     $("bbt-sheet-head").innerHTML = '<tr>'+sheetHeaders.map(function(header){ return '<th>'+esc(header)+'</th>'; }).join("")+'<th>Action</th></tr>';
     if(!filtered.length){
@@ -6750,6 +7414,37 @@ body::before{
         var key = btn.getAttribute("data-bbt-select-order");
         if($("bbt-admin-order")) $("bbt-admin-order").value = key;
         if($("bbt-admin-result")) $("bbt-admin-result").textContent = key + " selected for update.";
+      });
+    });
+  }
+
+  function renderAccountRegistry(){
+    if(!$("bbt-account-body") || !isAdminMode) return;
+    var accounts = readAccountRecords();
+    var ledger = readCashbackLedger();
+    if(!accounts.length){
+      $("bbt-account-body").innerHTML = '<tr><td colspan="7"><div style="padding:1rem;text-align:center"><strong>No Google accounts captured yet.</strong><p class="bbt-muted" style="margin-top:.35rem">When customers sign in with Google, their Gmail will appear here and in your sheet webhook.</p></div></td></tr>';
+      return;
+    }
+    $("bbt-account-body").innerHTML = accounts.slice().sort(function(a,b){
+      return String(b.last_seen || "").localeCompare(String(a.last_seen || ""));
+    }).map(function(account){
+      var email = String(account.email || "").toLowerCase();
+      var total = ledger.filter(function(row){ return String(row.customer_email || "").toLowerCase() === email; })
+        .reduce(function(sum,row){ return sum + Number(row.amount || 0); }, 0);
+      return '<tr><td><strong>'+esc(email)+'</strong></td>'+
+        '<td>'+esc(account.name || "")+'</td>'+
+        '<td>'+esc(account.first_seen || "")+'</td>'+
+        '<td>'+esc(account.last_seen || "")+'</td>'+
+        '<td>'+esc(account.login_count || 0)+'</td>'+
+        '<td><strong>'+money(total)+'</strong></td>'+
+        '<td><button class="bbt-btn secondary" type="button" data-bbt-cashback-email="'+esc(email)+'">Adjust</button></td></tr>';
+    }).join("");
+    document.querySelectorAll("[data-bbt-cashback-email]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var email = btn.getAttribute("data-bbt-cashback-email") || "";
+        if($("bbt-cashback-email")) $("bbt-cashback-email").value = email;
+        if($("bbt-cashback-result")) $("bbt-cashback-result").textContent = email + " selected for cashback adjustment.";
       });
     });
   }
@@ -6785,6 +7480,80 @@ body::before{
     if(!orderId || !status) return;
     window.updateVeshannTracking(orderId, status, trackingStatus, note || "Manual update added");
     if($("bbt-admin-result")) $("bbt-admin-result").textContent = orderId + " updated to " + status + ".";
+  }
+
+  function handleCashbackAdjustment(){
+    if(!isAdminMode) return;
+    var email = String(($("bbt-cashback-email") && $("bbt-cashback-email").value) || "").trim().toLowerCase();
+    var amount = Number(($("bbt-cashback-amount") && $("bbt-cashback-amount").value) || 0);
+    var action = ($("bbt-cashback-action") && $("bbt-cashback-action").value) || "give";
+    var reason = String(($("bbt-cashback-reason") && $("bbt-cashback-reason").value) || "").trim() || "Manual admin wallet adjustment";
+    var result = $("bbt-cashback-result");
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
+      if(result) result.textContent = "Enter a valid customer Gmail first.";
+      return;
+    }
+    if(!amount || !isFinite(amount)){
+      if(result) result.textContent = "Enter a valid cashback amount.";
+      return;
+    }
+    var signedAmount = Math.abs(amount) * (action === "take" ? -1 : 1);
+    var nowIso = new Date().toISOString();
+    var adminProfile = readGoogleProfile() || {};
+    var entry = {
+      adjustment_id:"CB-" + Date.now(),
+      timestamp:nowIso,
+      customer_email:email,
+      amount:signedAmount,
+      action:signedAmount >= 0 ? "give" : "take",
+      reason:reason,
+      admin_email:(adminProfile.email || adminEmail).toLowerCase(),
+      source:"Admin dashboard"
+    };
+    var ledger = readCashbackLedger();
+    ledger.unshift(entry);
+    writeCashbackLedger(ledger.slice(0,250));
+    upsertAccountRecord({email:email,name:""}, "Admin cashback target");
+    postSheetEvent({
+      event_type:"cashback_adjustment",
+      order_id:entry.adjustment_id,
+      timestamp:nowIso,
+      status:"Admin Cashback Adjustment",
+      payment_status:"Admin Cashback Adjustment",
+      login_email:email,
+      email:email,
+      name:"",
+      cashback_given:signedAmount,
+      wallet_balance_after:"",
+      source:"Admin dashboard",
+      item_summary:(signedAmount >= 0 ? "Cashback credited: " : "Cashback debited: ") + money(Math.abs(signedAmount)) + " | " + reason,
+      admin_email:entry.admin_email,
+      adjustment_reason:reason,
+      customer:{name:"", email:email, phone:""}
+    });
+    tryWalletAdminAdjustment(entry);
+    if(result) result.textContent = (signedAmount >= 0 ? "Added " : "Removed ") + money(Math.abs(signedAmount)) + " for " + email + ". Sheet event sent.";
+    if($("bbt-cashback-amount")) $("bbt-cashback-amount").value = "";
+    renderAdminControls();
+  }
+
+  function tryWalletAdminAdjustment(entry){
+    if(!window.CONFIG || !CONFIG.walletApiBase) return;
+    var cred = "";
+    try{ cred = sessionStorage.getItem("vesh_google_credential") || ""; }catch(e){}
+    if(!cred) return; /* backend verifies this token server-side; without it, skip */
+    try{
+      fetch(CONFIG.walletApiBase + "/wallet/admin/cashback-adjust", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json", "X-Admin-Google-Token":cred },
+        body:JSON.stringify({
+          customer_email:entry.customer_email,
+          amount_rupees:entry.amount,
+          reason:entry.reason,
+          adjustment_id:entry.adjustment_id
+        })
+      }).catch(function(){});
+    }catch(e){}
   }
   function renderCheckout(){
     var cart = orders.slice(0,2);

@@ -5,8 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gemstone Bracelets — Veshannastro</title>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Cinzel:wght@400;500;600&family=Vollkorn:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>window.VESHANN_GOOGLE_CLIENT_ID = "946598106017-o84r674jg4qr35fuedq8i5c3rtm3gqa9.apps.googleusercontent.com";</script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="vesh-shared-cart.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -994,15 +996,25 @@ function fxSaveSharedCart(){
 try{
   var fxParams=new URLSearchParams((window.top&&window.top.location?window.top.location.search:window.location.search)||"");
   var fxUrlCoupon=(fxParams.get("coupon")||"").toUpperCase();
-  if(["MAAYA15","NEW15","WELCOME15","PAIR10","HAPPY10"].indexOf(fxUrlCoupon)>-1) fxCoupon=fxUrlCoupon;
+  if(["MAAYA15","NEW15","WELCOME15","FIRSTBLESSING15","PAIR10","HAPPY10","MAAYA25","COMEBACK25","KINDLYCOMEBACK25"].indexOf(fxUrlCoupon)>-1) fxCoupon=fxUrlCoupon;
 }catch(e){}
 function fxSubtotal(){var t=0;for(var s in fxCart){var r=ALL_PRODUCTS[s];if(r)t+=r.p.price*fxCart[s];}return t;}
 function fxDiscountRate(){
-  if((fxCoupon==='PAIR10' || fxCoupon==='HAPPY10') && cartCountTotal()>=2) return 0.10;   // 2+ bracelets
-  if(fxCoupon==='MAAYA15' || fxCoupon==='NEW15' || fxCoupon==='WELCOME15') return 0.15;
+  var sub=fxSubtotal();
+  return sub>0 ? fxDiscountAmt()/sub : 0;
+}
+function fxDiscountAmt(){
+  /* Single source of truth: same coupon math as checkout.html via VeshSharedCart. */
+  if(window.VeshSharedCart && VeshSharedCart.discount){
+    return VeshSharedCart.discount({items:fxItems().map(function(i){return {sku:i.sku,qty:i.qty,unit_price:i.unit_price};}),coupon:fxCoupon||""});
+  }
+  var code=String(fxCoupon||'').toUpperCase(), sub=fxSubtotal();
+  if((code==='PAIR10'||code==='HAPPY10') && cartCountTotal()>=2) return Math.round(sub*0.10);
+  if(code==='MAAYA15'||code==='NEW15'||code==='WELCOME15'||code==='FIRSTBLESSING15') return Math.round(sub*0.15);
+  if(code==='MAAYA25') return Math.round(sub*0.25);
+  if(code==='COMEBACK25'||code==='KINDLYCOMEBACK25') return Math.min(25,sub);
   return 0;
 }
-function fxDiscountAmt(){return Math.round(fxSubtotal()*fxDiscountRate());}
 function fxTotal(){return Math.max(0, fxSubtotal()-fxDiscountAmt());}
 function fxItems(){var a=[];for(var s in fxCart){var r=ALL_PRODUCTS[s];if(r)a.push({sku:s,name:r.p.name,qty:fxCart[s],unit_price:r.p.price,line_total:r.p.price*fxCart[s],gemstones:r.p.gemstones});}return a;}
 function fxBuildOrder(c,paymentId,status){
@@ -1070,6 +1082,7 @@ function injectCartUI(){
         '<h4>Order placed</h4>'+
         '<p id="fx-success-msg"></p>'+
         '<a id="fx-success-wa" class="fx-cd-checkout" target="_top" rel="noopener">Share order on WhatsApp</a>'+
+        '<p style="font-family:Jost,sans-serif;font-size:.82rem;color:var(--muted);margin-top:1rem">How was your experience? <a href="https://forms.gle/PkYkRQkJ34iGJkYv9" target="_blank" rel="noopener" style="color:#7a1f2b;font-weight:600;text-decoration:underline">Share quick feedback</a></p>'+
         '<button class="fx-cd-back" id="fx-success-close" type="button" style="margin-top:.8rem">Close</button>'+
       '</div>'+
     '</div>'+
@@ -1339,6 +1352,272 @@ document.querySelectorAll('.fx-sb-item').forEach(function(item){
   });
 });
 document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ fxCelebrateClose(); closeCart(); } });
+
+/* ═══════════════════════════════════════════════════════════════════
+   GOOGLE LOGIN + ADMIN CASHBACK CONSOLE  (mirrors checkout.html)
+   - Captures email to the Google Sheet the moment someone signs in,
+     even if they never open the cart or checkout.
+   - Shares the same localStorage profile key as checkout.html, so a
+     login on either page carries over to the other.
+   - When the admin signs in, a cashback console appears: give or take
+     any amount for any email. Every action is logged to the Sheet
+     (Cashback tab + Orders tab) and mirrored to the wallet backend
+     when reachable.
+═══════════════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  var ADMIN_EMAIL = "shashankmmj@gmail.com";
+  var PROFILE_KEY = "vesh_google_profile";            // same key checkout.html uses
+  var CLIENT_ID = (typeof window !== "undefined" && window.VESHANN_GOOGLE_CLIENT_ID) || "";
+  var WALLET_API = (typeof window !== "undefined" && window.VESHANN_WALLET_API_BASE) || "https://veshannastro-wallet.onrender.com";
+
+  function esc2(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(m){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m];}); }
+  function readProfile(){ try{ var raw=localStorage.getItem(PROFILE_KEY); return raw?JSON.parse(raw):null; }catch(e){ return null; } }
+  function writeProfile(p){ try{ localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); }catch(e){} }
+  function clearProfile(){ try{ localStorage.removeItem(PROFILE_KEY); }catch(e){} }
+
+  function postSheetEvent(payload){
+    var webhook = (typeof FX_CONFIG!=="undefined" && FX_CONFIG.orderWebhook) || "";
+    if(!webhook) return;
+    try{
+      fetch(webhook,{ method:"POST", mode:"no-cors",
+        headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify(payload) });
+    }catch(e){}
+  }
+
+  function markOncePerSession(prefix, email){
+    var key = prefix + email;
+    try{
+      if(sessionStorage.getItem(key)) return false;
+      sessionStorage.setItem(key, "1");
+      return true;
+    }catch(e){ return true; }
+  }
+
+  function logLoginToSheet(profile){
+    var email = String(profile.email||"").trim().toLowerCase();
+    if(!email) return;
+    if(!markOncePerSession("vesh_account_sheet_log_", email)) return;
+    postSheetEvent({
+      event_type:"google_login",
+      order_id:"LOGIN-"+Date.now(),
+      timestamp:new Date().toISOString(),
+      status:"Google Login",
+      payment_status:"Google Login",
+      login_email:email,
+      email:email,
+      name:profile.name||"",
+      picture:profile.picture||"",
+      source:"Bracelet Shop Sign-In",
+      item_summary:"Google login captured on bracelet shop page",
+      customer:{ name:profile.name||"", email:email, phone:"" }
+    });
+  }
+
+  function decodeJwtPayload(token){
+    if(!token || token.indexOf(".")===-1) return null;
+    try{
+      var base64 = token.split(".")[1].replace(/-/g,"+").replace(/_/g,"/");
+      while(base64.length % 4) base64 += "=";
+      var binary = atob(base64), json="";
+      for(var i=0;i<binary.length;i++){
+        json += "%" + ("00"+binary.charCodeAt(i).toString(16)).slice(-2);
+      }
+      return JSON.parse(decodeURIComponent(json));
+    }catch(e){ return null; }
+  }
+
+  /* ── UI ── */
+  var css = document.createElement("style");
+  css.textContent = [
+    ".vg-chip{position:fixed;left:16px;bottom:16px;z-index:9600;display:flex;align-items:center;gap:.55rem;",
+    "  background:#fffdf8;border:1px solid #d9c9a8;border-radius:999px;padding:.4rem .85rem .4rem .5rem;",
+    "  box-shadow:0 10px 26px rgba(43,26,18,.18);font:600 .8rem/1.2 Jost,system-ui,sans-serif;color:#3a2a1c;cursor:pointer;}",
+    ".vg-chip img{width:26px;height:26px;border-radius:50%;}",
+    ".vg-chip .vg-dot{width:26px;height:26px;border-radius:50%;background:#7a1f2b;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}",
+    ".vg-pop{position:fixed;left:16px;bottom:64px;z-index:9600;background:#fffdf8;border:1px solid #d9c9a8;border-radius:14px;",
+    "  padding:1rem;box-shadow:0 18px 44px rgba(43,26,18,.24);width:min(320px,calc(100vw - 32px));display:none;font-family:Jost,system-ui,sans-serif;}",
+    ".vg-pop.show{display:block;}",
+    ".vg-pop h4{margin:0 0 .55rem;font:700 .95rem Cinzel,serif;color:#3a2a1c;}",
+    ".vg-pop p{margin:.2rem 0 .7rem;font-size:.78rem;color:#6b5844;}",
+    ".vg-pop .vg-signout{margin-top:.6rem;background:none;border:none;color:#7a1f2b;font:600 .78rem Jost;cursor:pointer;text-decoration:underline;padding:0;}",
+    ".vg-admin{position:fixed;right:16px;bottom:16px;z-index:9600;background:#7a1f2b;color:#fff;border:none;border-radius:999px;",
+    "  padding:.6rem 1.1rem;font:700 .8rem Jost;letter-spacing:.04em;cursor:pointer;box-shadow:0 10px 26px rgba(43,26,18,.3);display:none;}",
+    ".vg-admin.show{display:block;}",
+    ".vg-panel{position:fixed;right:16px;bottom:64px;z-index:9601;background:#fffdf8;border:1px solid #d9c9a8;border-radius:16px;",
+    "  padding:1.1rem;box-shadow:0 22px 54px rgba(43,26,18,.3);width:min(340px,calc(100vw - 32px));display:none;font-family:Jost,system-ui,sans-serif;}",
+    ".vg-panel.show{display:block;}",
+    ".vg-panel h4{margin:0 0 .3rem;font:700 1rem Cinzel,serif;color:#3a2a1c;}",
+    ".vg-panel .vg-sub{margin:0 0 .8rem;font-size:.75rem;color:#6b5844;}",
+    ".vg-panel label{display:block;font:600 .72rem Jost;color:#6b5844;margin:.55rem 0 .2rem;letter-spacing:.03em;text-transform:uppercase;}",
+    ".vg-panel input{width:100%;box-sizing:border-box;border:1px solid #d9c9a8;border-radius:9px;padding:.55rem .7rem;font:500 .85rem Jost;background:#fff;color:#3a2a1c;}",
+    ".vg-panel .vg-row{display:flex;gap:.55rem;margin-top:.85rem;}",
+    ".vg-panel .vg-give,.vg-panel .vg-take{flex:1;border:none;border-radius:10px;padding:.65rem 0;font:700 .82rem Jost;cursor:pointer;}",
+    ".vg-panel .vg-give{background:#1f6b3a;color:#fff;}",
+    ".vg-panel .vg-take{background:#8c2f39;color:#fff;}",
+    ".vg-panel .vg-msg{margin:.7rem 0 0;font-size:.76rem;min-height:1em;color:#6b5844;}",
+    ".vg-panel .vg-msg.ok{color:#1f6b3a;} .vg-panel .vg-msg.bad{color:#8c2f39;}",
+    ".vg-panel .vg-close{position:absolute;top:.45rem;right:.7rem;background:none;border:none;font-size:1.15rem;color:#6b5844;cursor:pointer;}"
+  ].join("\n");
+  document.head.appendChild(css);
+
+  var wrap = document.createElement("div");
+  wrap.innerHTML = [
+    '<button class="vg-chip" id="vg-chip" type="button"><span class="vg-dot" id="vg-dot">G</span><span id="vg-chip-label">Sign in</span></button>',
+    '<div class="vg-pop" id="vg-pop">',
+    '  <h4 id="vg-pop-title">Sign in with Google</h4>',
+    '  <p id="vg-pop-copy">Sign in to attach cashback and track your bracelet orders.</p>',
+    '  <div id="vg-gsi-host"></div>',
+    '  <button class="vg-signout" id="vg-signout" type="button" style="display:none">Sign out</button>',
+    '</div>',
+    '<button class="vg-admin" id="vg-admin-btn" type="button">Admin &middot; Cashback</button>',
+    '<div class="vg-panel" id="vg-panel">',
+    '  <button class="vg-close" id="vg-panel-close" type="button" aria-label="Close">&times;</button>',
+    '  <h4>Cashback Console</h4>',
+    '  <p class="vg-sub">Give or take cashback for any Gmail that has signed in. Logged to your Google Sheet instantly.</p>',
+    '  <label for="vg-email">Customer Gmail</label>',
+    '  <input id="vg-email" type="email" placeholder="customer@gmail.com" autocomplete="off">',
+    '  <label for="vg-amount">Amount (Rs)</label>',
+    '  <input id="vg-amount" type="number" min="1" step="1" placeholder="e.g. 100">',
+    '  <label for="vg-reason">Reason</label>',
+    '  <input id="vg-reason" type="text" placeholder="Why? (goes in the sheet)" autocomplete="off">',
+    '  <div class="vg-row">',
+    '    <button class="vg-give" id="vg-give" type="button">Give</button>',
+    '    <button class="vg-take" id="vg-take" type="button">Take</button>',
+    '  </div>',
+    '  <p class="vg-msg" id="vg-msg"></p>',
+    '</div>'
+  ].join("");
+  document.body.appendChild(wrap);
+
+  function $g(id){ return document.getElementById(id); }
+  function setMsg(text, kind){ var el=$g("vg-msg"); if(!el) return; el.textContent=text||""; el.className="vg-msg"+(kind?" "+kind:""); }
+
+  function refreshUi(){
+    var p = readProfile();
+    var chipLabel = $g("vg-chip-label"), dot = $g("vg-dot"),
+        popTitle = $g("vg-pop-title"), popCopy = $g("vg-pop-copy"),
+        gsiHost = $g("vg-gsi-host"), signout = $g("vg-signout"),
+        adminBtn = $g("vg-admin-btn");
+    var email = p && p.email ? String(p.email).toLowerCase() : "";
+    if(email){
+      chipLabel.textContent = p.name ? p.name.split(" ")[0] : email;
+      if(p.picture){ dot.outerHTML = '<img id="vg-dot" src="'+esc2(p.picture)+'" alt="" referrerpolicy="no-referrer">'; }
+      popTitle.textContent = "Signed in";
+      popCopy.textContent = email;
+      gsiHost.style.display = "none";
+      signout.style.display = "inline";
+    }else{
+      chipLabel.textContent = "Sign in";
+      popTitle.textContent = "Sign in with Google";
+      popCopy.textContent = CLIENT_ID ? "Sign in to attach cashback and track your bracelet orders." : "Set window.VESHANN_GOOGLE_CLIENT_ID on this page to enable Google sign-in (same ID as checkout).";
+      gsiHost.style.display = "";
+      signout.style.display = "none";
+    }
+    adminBtn.classList.toggle("show", email === ADMIN_EMAIL);
+    if(email !== ADMIN_EMAIL) $g("vg-panel").classList.remove("show");
+  }
+
+  function onCredential(response){
+    var payload = response && response.credential ? decodeJwtPayload(response.credential) : null;
+    if(!payload || !payload.email) return;
+    try{ sessionStorage.setItem("vesh_google_credential", response.credential); }catch(e){}
+    var profile = { name:payload.name||payload.given_name||"", email:String(payload.email).toLowerCase(), picture:payload.picture||"" };
+    writeProfile(profile);
+    logLoginToSheet(profile);
+    $g("vg-pop").classList.remove("show");
+    refreshUi();
+  }
+
+  function initGsi(){
+    var host = $g("vg-gsi-host");
+    if(!CLIENT_ID || !host) return;
+    (function render(){
+      if(!(window.google && google.accounts && google.accounts.id)){ setTimeout(render, 150); return; }
+      if(host.dataset.rendered === "1") return;
+      google.accounts.id.initialize({ client_id:CLIENT_ID, callback:onCredential });
+      google.accounts.id.renderButton(host, { theme:"outline", size:"large", width:260, text:"continue_with" });
+      host.dataset.rendered = "1";
+      /* One Tap: surfaces login on the FIRST page without any click */
+      try{ google.accounts.id.prompt(); }catch(e){}
+    })();
+  }
+
+  function sendAdjustment(sign){
+    var admin = readProfile();
+    if(!admin || String(admin.email).toLowerCase() !== ADMIN_EMAIL){ setMsg("Admin login required.", "bad"); return; }
+    var email = String($g("vg-email").value||"").trim().toLowerCase();
+    var amount = Math.abs(Number($g("vg-amount").value));
+    var reason = String($g("vg-reason").value||"").trim();
+    if(!email || email.indexOf("@") === -1){ setMsg("Enter a valid customer email.", "bad"); return; }
+    if(!amount || isNaN(amount)){ setMsg("Enter an amount greater than 0.", "bad"); return; }
+    if(!reason){ setMsg("A reason is required — it goes in the sheet.", "bad"); return; }
+    var signed = sign * amount;
+    var id = "CB-" + Date.now();
+    postSheetEvent({
+      event_type:"cashback_adjustment",
+      order_id:id,
+      adjustment_id:id,
+      timestamp:new Date().toISOString(),
+      status:"Admin Cashback Adjustment",
+      payment_status:"Admin Cashback Adjustment",
+      login_email:email,
+      email:email,
+      name:"",
+      cashback_given:signed,
+      amount:signed,
+      source:"Bracelet shop admin console",
+      item_summary:(signed>=0?"Cashback credited: ":"Cashback debited: ")+"Rs "+amount+" | "+reason,
+      admin_email:ADMIN_EMAIL,
+      adjustment_reason:reason,
+      customer:{ name:"", email:email, phone:"" }
+    });
+    /* Mirror to the wallet backend so the LIVE balance moves. The backend
+       verifies the Google ID token server-side (wallet_admin_secure.py) —
+       nothing in this request body is trusted for authorization. */
+    var cred = "";
+    try{ cred = sessionStorage.getItem("vesh_google_credential") || ""; }catch(e){}
+    if(!cred){
+      setMsg("Logged to sheet. Live wallet skipped: sign in again on THIS page so the secure token is fresh.", "bad");
+    }else{
+      try{
+        fetch(WALLET_API + "/wallet/admin/cashback-adjust", {
+          method:"POST",
+          headers:{ "Content-Type":"application/json", "X-Admin-Google-Token":cred },
+          body:JSON.stringify({ customer_email:email, amount_rupees:signed, reason:reason, adjustment_id:id })
+        }).then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return { ok:r.ok, d:d }; }); })
+          .then(function(res){
+            if(res.ok){
+              var bal = (res.d && res.d.balance_rupees !== undefined) ? " New balance: Rs " + res.d.balance_rupees : "";
+              setMsg((signed>=0?"Gave Rs ":"Took Rs ")+amount+" "+(signed>=0?"to ":"from ")+email+". Sheet + live wallet updated."+bal+(res.d && res.d.clamped ? " (clamped at zero)" : ""), "ok");
+            }else{
+              setMsg("Logged to sheet, but live wallet said: "+((res.d && res.d.detail) || "rejected")+". Sign in again if the token expired.", "bad");
+            }
+          })
+          .catch(function(){ setMsg("Logged to sheet. Live wallet unreachable (Render may be waking up).", "bad"); });
+      }catch(e){}
+    }
+    if(cred) setMsg((signed>=0?"Gave Rs ":"Took Rs ")+amount+" "+(signed>=0?"to ":"from ")+email+". Logged to sheet, updating live wallet...", "ok");
+    $g("vg-amount").value=""; $g("vg-reason").value="";
+  }
+
+  $g("vg-chip").addEventListener("click", function(){ $g("vg-pop").classList.toggle("show"); });
+  $g("vg-signout").addEventListener("click", function(){ clearProfile(); $g("vg-pop").classList.remove("show"); refreshUi(); });
+  $g("vg-admin-btn").addEventListener("click", function(){ $g("vg-panel").classList.toggle("show"); });
+  $g("vg-panel-close").addEventListener("click", function(){ $g("vg-panel").classList.remove("show"); });
+  $g("vg-give").addEventListener("click", function(){ sendAdjustment(1); });
+  $g("vg-take").addEventListener("click", function(){ sendAdjustment(-1); });
+  window.addEventListener("storage", function(ev){ if(ev.key === PROFILE_KEY) refreshUi(); });
+
+  refreshUi();
+  initGsi();
+  /* If the visitor is already signed in from checkout.html, still capture
+     their email on THIS page's first view (session-deduped). */
+  var existing = readProfile();
+  if(existing && existing.email) logLoginToSheet(existing);
+})();
+
 </script>
 </body>
 </html>

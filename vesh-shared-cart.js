@@ -28,7 +28,7 @@
     return {
       sku:String(item.sku || ""),
       name:String(item.name || "Bracelet"),
-      qty:Math.max(1, Math.min(10, Number(item.qty || 1))),
+      qty:Math.max(1, Math.min(10, Number(item.qty) || 1)),
       unit_price:Number(item.unit_price || item.price || 0),
       mrp:Number(item.mrp || 0),
       gemstones:String(item.gemstones || ""),
@@ -87,6 +87,7 @@
     var qty = count(cart);
     if((code === "PAIR10" || code === "HAPPY10") && qty >= 2) return Math.round(sub * 0.10);
     if(code === "MAAYA15" || code === "NEW15" || code === "WELCOME15" || code === "FIRSTBLESSING15") return Math.round(sub * 0.15);
+    if(code === "MAAYA25") return Math.round(sub * 0.25);
     if(code === "COMEBACK25" || code === "KINDLYCOMEBACK25") return Math.min(25, sub);
     return 0;
   }
