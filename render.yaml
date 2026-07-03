@@ -1,0 +1,26 @@
+# Render Blueprint for the Veshannastro cashback wallet.
+# Put wallet.py, requirements.txt, and this file in a GitHub repo, then in Render:
+#   New +  ->  Blueprint  ->  pick the repo.  Render reads this file and creates the service.
+# It will PROMPT you for DATABASE_URL (your Neon string) because it is marked secret below.
+services:
+  - type: web
+    name: veshannastro-wallet
+    runtime: python
+    plan: free
+    region: singapore            # closest to India; change if you prefer
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn wallet:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /
+    envVars:
+      - key: DATABASE_URL        # your Neon connection string (…sslmode=require)
+        sync: false              # Render asks you to paste this at deploy time (kept secret)
+      - key: ALLOWED_ORIGIN
+        value: https://www.veshannastro.co.in,https://veshannastro.co.in
+      - key: ADMIN_TOKEN         # secret for manual cashback credits
+        generateValue: true      # Render generates a strong random value for you
+      - key: SIGNUP_BONUS        # paise granted once on first login (10000 = ₹100; 0 = off)
+        value: "10000"
+      - key: EARN_RATE           # fraction of amount paid credited back for next time
+        value: "0.05"
+      - key: SLOTS_PER_WEEK      # weekly capacity shown on the checkout scarcity banner
+        value: "10"

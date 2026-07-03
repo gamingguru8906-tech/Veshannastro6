@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Complete Your Booking · Veshannastro</title>
+<meta name="description" content="Secure your Vedic astrology consultation with Veshannastro. Verified sign-in, cashback wallet, and encrypted payment.">
+<meta name="theme-color" content="#6E1423">
+<meta name="robots" content="noindex, follow">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- Firebase (compat build — works on a plain static page, no build step) -->
+<script>window.__fbLoadError=false;</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js" onerror="window.__fbLoadError=true"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js" onerror="window.__fbLoadError=true"></script>
+<!-- Razorpay -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<style>
+:root{
+  --cream:#F9F5EE; --beige:#F2EBDD; --paper:#FFFDF8;
+  --ink:#1A1A1A; --ink-soft:#2F2A25; --muted:#63584E;
+  --maroon:#6E1423; --maroon-2:#8C1C2E;
+  --gold:#C9A84C; --gold-soft:#E4D29A;
+  --line:rgba(110,20,35,0.15); --line-strong:rgba(110,20,35,0.28);
+  --ok:#3f7d55; --err:#a12631;
+  --shadow:0 24px 70px rgba(83,55,31,0.10);
+  --paper-fiber:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.015 .04' numOctaves='5' seed='8'/%3E%3CfeColorMatrix type='matrix' values='.34 0 0 0 .62 0 .27 0 0 .54 0 0 .18 0 .42 0 0 0 .29 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23paper)' opacity='.72'/%3E%3Cpath d='M0 39h240M0 101h240M0 171h240M45 0v240M129 0v240M208 0v240' stroke='%236E1423' stroke-opacity='.045' stroke-width='.45'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth; background:var(--cream);}
+body{
+  min-height:100vh; color:var(--ink);
+  font-family:'Poppins',Arial,sans-serif; font-weight:400; line-height:1.6; overflow-x:hidden;
+  background:
+    radial-gradient(circle at 18% 14%,rgba(201,168,76,.12),transparent 26rem),
+    radial-gradient(circle at 82% 22%,rgba(110,20,35,.08),transparent 30rem),
+    linear-gradient(115deg,rgba(255,255,255,.32),transparent 38%),
+    var(--cream);
+  background-attachment:fixed;
+  text-rendering:optimizeLegibility; -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.36;
+  background:
+    var(--paper-fiber) 0 0/340px 340px,
+    linear-gradient(90deg,rgba(110,20,35,.016) 1px,transparent 1px) 0 0/86px 86px,
+    linear-gradient(rgba(110,20,35,.012) 1px,transparent 1px) 0 0/86px 86px,
+    radial-gradient(ellipse at 30% 0%,rgba(255,253,248,.8),transparent 42rem);
+}
+::selection{background:rgba(110,20,35,.16); color:var(--maroon);}
+svg{display:block;}
+.wrap{position:relative; z-index:1; max-width:1080px; margin:0 auto; padding:42px 20px 80px;}
+
+/* header */
+.top{display:flex; align-items:center; justify-content:space-between; margin-bottom:34px;}
+.brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--maroon);}
+.brand .mark{
+  width:38px; height:38px; border:1px solid var(--gold); border-radius:50%;
+  display:grid; place-items:center; color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:20px;
+  background:var(--paper);
+}
+.brand b{font-family:'Cinzel',serif; font-weight:500; letter-spacing:.28em; font-size:12px; text-transform:uppercase;}
+.secure{display:flex; align-items:center; gap:7px; font-family:'Cinzel',serif; font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted);}
+.secure svg{width:13px; height:13px; stroke:var(--maroon); fill:none; stroke-width:1.6;}
+
+.layout{display:grid; grid-template-columns:1fr 1.15fr; gap:28px; align-items:start;}
+@media(max-width:860px){ .layout{grid-template-columns:1fr;} }
+
+/* panels */
+.panel{
+  background:linear-gradient(180deg, var(--paper), rgba(242,235,221,.85));
+  border:.5px solid var(--line-strong); border-radius:14px; box-shadow:var(--shadow); overflow:visible;
+}
+.panel-pad{padding:30px 28px;}
+@media(max-width:520px){ .panel-pad{padding:24px 18px;} }
+
+/* left: offering */
+.eyebrow{font-family:'Cinzel',serif; font-size:10px; letter-spacing:.3em; text-transform:uppercase; color:var(--maroon); margin-bottom:14px;}
+.svc-name{position:relative; font-family:'Cormorant Garamond',serif; font-weight:500; font-size:clamp(2.6rem,6vw,4.2rem); line-height:.96; letter-spacing:-.005em; color:var(--ink); margin-bottom:20px;}
+.svc-name::after{content:''; display:block; width:clamp(88px,42%,180px); height:2px; margin-top:16px; background:linear-gradient(90deg,var(--maroon),rgba(201,168,76,.85),transparent);}
+.svc-name em{font-style:italic; font-weight:300; color:var(--maroon);}
+.svc-sub{font-family:'Cormorant Garamond',serif; font-size:1.2rem; color:var(--muted); font-style:italic; margin-bottom:24px;}
+
+.includes{list-style:none; display:flex; flex-direction:column; gap:12px; margin:22px 0 26px;}
+.includes li{display:flex; gap:11px; align-items:flex-start; font-size:.9rem; color:var(--ink-soft);}
+.includes svg{width:16px; height:16px; stroke:var(--gold); fill:none; stroke-width:1.8; flex-shrink:0; margin-top:3px;}
+.includes b{font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.05rem; color:var(--maroon);}
+
+.hr{height:.5px; background:var(--line); margin:22px 0;}
+
+/* price ledger */
+.ledger{display:flex; flex-direction:column; gap:9px;}
+.ledger .row{display:flex; justify-content:space-between; align-items:baseline; font-size:.9rem; color:var(--ink-soft);}
+.ledger .row span:first-child{color:var(--muted);}
+.ledger .row .v{font-variant-numeric:tabular-nums;}
+.ledger .row.discount .v{color:var(--ok);}
+.ledger .row.cashback .v{color:var(--maroon);}
+.ledger .strike{text-decoration:line-through; color:var(--muted); opacity:.55;}
+.ledger .total{margin-top:8px; padding-top:14px; border-top:.5px dashed var(--line-strong);}
+.ledger .total span:first-child{font-family:'Cinzel',serif; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--maroon);}
+.ledger .total .v{font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.9rem; color:var(--ink);}
+
+.trust-note{margin-top:22px; font-size:.78rem; color:var(--muted); line-height:1.7; display:flex; gap:9px; align-items:flex-start;}
+.trust-note svg{width:15px; height:15px; stroke:var(--maroon); fill:none; stroke-width:1.4; flex-shrink:0; margin-top:2px;}
+
+/* right: steps */
+.form-head{margin-bottom:8px;}
+.form-title{font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.75rem; color:var(--ink);}
+.form-desc{font-size:.86rem; color:var(--muted); margin-top:2px;}
+
+.step{border:.5px solid var(--line); border-radius:11px; padding:18px; margin-top:16px; position:relative; background:rgba(255,253,248,.5); transition:border-color .3s, opacity .3s;}
+.step.locked{opacity:.5; pointer-events:none; filter:saturate(.75);}
+.step.done{border-color:rgba(63,125,85,.45);}
+.step-head{display:flex; align-items:center; gap:11px; margin-bottom:2px;}
+.step-num{
+  width:26px; height:26px; border-radius:50%; flex-shrink:0; display:grid; place-items:center;
+  font-family:'Cinzel',serif; font-size:11px; color:var(--maroon); border:1px solid var(--line-strong); background:var(--paper);
+}
+.step.done .step-num{background:var(--ok); border-color:var(--ok); color:#fff;}
+.step.done .step-num::after{content:"\2713"; font-size:14px;}
+.step.done .step-num span{display:none;}
+.step-title{font-family:'Cinzel',serif; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--ink-soft);}
+.step-body{margin-top:14px;}
+
+/* google button */
+.gbtn{
+  width:100%; display:flex; align-items:center; justify-content:center; gap:11px;
+  padding:14px; border-radius:9px; cursor:pointer; border:.5px solid var(--line-strong);
+  background:var(--paper); color:var(--ink); font-family:'Poppins',sans-serif; font-weight:500; font-size:.95rem;
+  transition:transform .15s, box-shadow .25s, border-color .2s;
+}
+.gbtn:hover{transform:translateY(-1px); box-shadow:0 12px 26px -14px rgba(110,20,35,.4); border-color:var(--maroon);}
+.gbtn svg{width:19px; height:19px;}
+.gbtn-note{text-align:center; font-size:.76rem; color:var(--muted); margin-top:10px; line-height:1.6;}
+
+/* signed-in chip */
+.who{display:flex; align-items:center; gap:12px;}
+.who img{width:42px; height:42px; border-radius:50%; border:1px solid var(--gold);}
+.avatar-fallback{width:42px; height:42px; border-radius:50%; display:grid; place-items:center; background:var(--maroon); color:var(--gold-soft); font-family:'Cormorant Garamond',serif; font-size:1.25rem; border:1px solid var(--gold);}
+.who .nm{font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.2rem; color:var(--ink); line-height:1.2;}
+.who .em{font-size:.78rem; color:var(--muted);}
+.who .signout{margin-left:auto; background:none; border:none; color:var(--muted); font-size:.72rem; text-decoration:underline; cursor:pointer;}
+
+/* wallet */
+.wallet{
+  margin-top:14px; border:.5px solid var(--gold); border-radius:10px; padding:14px 16px;
+  background:linear-gradient(120deg, rgba(201,168,76,.14), rgba(255,253,248,.6));
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  opacity:0; transform:translateY(6px); transition:opacity .5s, transform .5s;
+}
+.wallet.show{opacity:1; transform:none;}
+.wallet .wl{font-family:'Cinzel',serif; font-size:9px; letter-spacing:.24em; text-transform:uppercase; color:var(--maroon);}
+.wallet .wv{font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.7rem; color:var(--maroon); line-height:1.1;}
+.wallet .wnote{font-size:.72rem; color:var(--muted); margin-top:2px;}
+.wallet .coin{width:34px; height:34px; stroke:var(--gold); fill:none; stroke-width:1.4;}
+
+/* fields */
+.fld{margin-bottom:15px;}
+.fld:last-child{margin-bottom:0;}
+label.lbl{display:block; font-family:'Cinzel',serif; font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin-bottom:7px;}
+label.lbl .req{color:var(--maroon);}
+.inp, select.inp, textarea.inp{
+  width:100%; padding:12px 13px; border-radius:8px; background:var(--paper);
+  border:.5px solid var(--line-strong); color:var(--ink); font-family:'Poppins',sans-serif; font-size:.92rem;
+  transition:border-color .2s, box-shadow .2s; -webkit-appearance:none; appearance:none;
+}
+.inp:focus, select.inp:focus, textarea.inp:focus{outline:none; border-color:var(--maroon); box-shadow:0 0 0 3px rgba(110,20,35,.08);}
+.inp::placeholder, textarea.inp::placeholder{color:rgba(99,88,78,.5);}
+textarea.inp{resize:vertical; min-height:78px; line-height:1.55;}
+select.inp{cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236E1423' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; background-size:15px; padding-right:34px;}
+.row3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;}
+.row2{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+.hint{font-size:.72rem; color:var(--muted); margin-top:5px;}
+.ferr{font-size:.75rem; color:var(--err); margin-top:6px; display:none;}
+.ferr.show{display:block;}
+
+/* phone verify */
+.phone-row{display:flex; gap:8px;}
+.cc{width:82px; flex-shrink:0;}
+.mini-btn{
+  padding:12px 14px; border-radius:8px; cursor:pointer; white-space:nowrap;
+  background:transparent; border:.5px solid var(--maroon); color:var(--maroon);
+  font-family:'Cinzel',serif; font-size:9px; letter-spacing:.14em; text-transform:uppercase; transition:background .2s, color .2s;
+}
+.mini-btn:hover{background:var(--maroon); color:var(--cream);}
+.mini-btn:disabled{opacity:.45; cursor:not-allowed;}
+.otp-box{display:none; margin-top:11px;}
+.otp-box.show{display:block;}
+.verified{display:none; align-items:center; gap:7px; margin-top:10px; color:var(--ok); font-size:.82rem;}
+.verified.show{display:flex;}
+.verified svg{width:15px; height:15px; stroke:var(--ok); fill:none; stroke-width:2;}
+.status-line{font-size:.78rem; margin-top:8px; color:var(--muted); min-height:1em;}
+
+/* cashback apply */
+.cb-apply{margin-top:16px; border:.5px solid var(--gold); border-radius:10px; padding:14px 16px; background:rgba(201,168,76,.08); display:none;}
+.cb-apply.show{display:block;}
+.cb-toggle{display:flex; align-items:center; justify-content:space-between; gap:12px; cursor:pointer;}
+.cb-toggle .cbt{font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.12rem; color:var(--maroon);}
+.cb-toggle .cbn{display:block; font-size:.75rem; color:var(--muted); margin-top:1px;}
+.switch{position:relative; width:44px; height:24px; flex-shrink:0;}
+.switch input{opacity:0; width:0; height:0;}
+.slider{position:absolute; inset:0; border-radius:24px; background:rgba(110,20,35,.14); border:.5px solid var(--line-strong); transition:.25s;}
+.slider::before{content:""; position:absolute; width:16px; height:16px; left:3px; top:3px; border-radius:50%; background:var(--muted); transition:.25s;}
+.switch input:checked + .slider{background:var(--maroon);}
+.switch input:checked + .slider::before{transform:translateX(20px); background:var(--gold-soft);}
+
+/* pay */
+.pay{
+  width:100%; margin-top:20px; padding:16px; border-radius:9px; cursor:pointer;
+  border:1px solid var(--maroon); background:var(--maroon); color:var(--cream);
+  font-family:'Cinzel',serif; font-size:11px; letter-spacing:.2em; text-transform:uppercase; font-weight:500;
+  transition:transform .15s, box-shadow .25s, background .2s, opacity .2s;
+}
+.pay:hover:not(:disabled){transform:translateY(-1px); background:var(--maroon-2); box-shadow:0 14px 30px -14px rgba(110,20,35,.6);}
+.pay:disabled{opacity:.4; cursor:not-allowed;}
+
+/* success */
+.success{display:none; text-align:center; padding:20px 6px;}
+.success.show{display:block; animation:rise .6s ease both;}
+@keyframes rise{from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:none;}}
+.success .glyph{font-family:'Cormorant Garamond',serif; font-size:2.8rem; color:var(--gold);}
+.success h2{font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.85rem; color:var(--ink); margin:8px 0 6px;}
+.success p{font-size:.9rem; color:var(--muted); line-height:1.7;}
+.success .earned{margin-top:18px; padding:12px 16px; border:.5px solid var(--gold); border-radius:9px; background:rgba(201,168,76,.1); font-size:.86rem; color:var(--maroon);}
+
+.scarcity{display:flex; gap:11px; align-items:flex-start; padding:12px 14px; margin-bottom:22px; border:.5px solid var(--line-strong); border-left:2px solid var(--maroon); border-radius:8px; background:rgba(110,20,35,.05);}
+.scarcity .dot{width:9px; height:9px; border-radius:50%; background:var(--maroon); flex-shrink:0; margin-top:5px; box-shadow:0 0 0 0 rgba(110,20,35,.5); animation:pulse 1.8s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(110,20,35,.45);}70%{box-shadow:0 0 0 8px rgba(110,20,35,0);}100%{box-shadow:0 0 0 0 rgba(110,20,35,0);}}
+.scarcity b{display:block; font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.05rem; color:var(--maroon); letter-spacing:.01em; margin-bottom:2px;}
+.scarcity span{font-size:.8rem; color:var(--muted); line-height:1.55;}
+.scarcity em{font-style:normal; color:var(--maroon); font-weight:600;}
+.elite-badge{display:inline-flex; align-items:center; gap:6px; padding:6px 13px; margin-bottom:16px; border:.5px solid var(--gold); border-radius:999px; background:rgba(201,168,76,.12); font-family:'Cinzel',serif; font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--maroon);}
+@media (prefers-reduced-motion: reduce){ .scarcity .dot{animation:none;} }
+/* ── pickers: shared ── */
+.picker-wrap{position:relative;}
+.picker-display{
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  width:100%; padding:12px 13px; border-radius:8px; background:var(--paper);
+  border:.5px solid var(--line-strong); cursor:pointer; transition:border-color .2s, box-shadow .2s;
+}
+.picker-display:hover{border-color:var(--maroon);}
+.picker-display:focus-visible{outline:none; border-color:var(--maroon); box-shadow:0 0 0 3px rgba(110,20,35,.08);}
+.picker-display .pk-text{font-family:'Poppins',sans-serif; font-size:.92rem; color:rgba(99,88,78,.55);}
+.picker-display.filled .pk-text{color:var(--ink);}
+.picker-display svg{width:17px; height:17px; stroke:var(--maroon); fill:none; stroke-width:1.6; flex-shrink:0;}
+.pop{position:absolute; z-index:60; top:calc(100% + 6px); left:0; background:var(--paper); border:.5px solid var(--line-strong); border-radius:12px; box-shadow:var(--shadow); padding:14px; display:none;}
+.pop.show{display:block; animation:popIn .16s ease both;}
+@keyframes popIn{from{opacity:0; transform:translateY(-4px);} to{opacity:1; transform:none;}}
+.cal-pop{width:290px;} .clock-pop{width:236px;}
+@media(max-width:520px){ .cal-pop{width:min(290px,86vw);} }
+
+/* ── calendar ── */
+.cal-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+.cal-head button{width:30px; height:30px; border:.5px solid var(--line-strong); border-radius:7px; background:none; color:var(--maroon); cursor:pointer; display:grid; place-items:center; font-size:1.1rem; line-height:1;}
+.cal-head button:hover{background:rgba(110,20,35,.06);}
+.cal-title{display:flex; gap:6px;}
+.cal-title select{font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.02rem; color:var(--maroon); background:transparent; border:none; cursor:pointer; -webkit-appearance:none; appearance:none; padding:2px 4px;}
+.cal-title select:focus{outline:none;}
+.cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:2px;}
+.cal-dow{font-family:'Cinzel',serif; font-size:8px; letter-spacing:.08em; color:var(--muted); text-align:center; padding:4px 0; text-transform:uppercase;}
+.cal-day{aspect-ratio:1; border:none; background:none; border-radius:7px; cursor:pointer; color:var(--ink-soft); font-family:'Poppins',sans-serif; font-size:.82rem;}
+.cal-day:hover{background:rgba(110,20,35,.08);}
+.cal-day.sel{background:var(--maroon); color:var(--cream);}
+.cal-day.empty{visibility:hidden; cursor:default;}
+
+/* ── clock ── */
+.clock-top{display:flex; align-items:center; justify-content:center; gap:2px; font-family:'Cormorant Garamond',serif; font-size:1.75rem; color:var(--ink); margin-bottom:6px;}
+.clock-top .ct-h,.clock-top .ct-m{cursor:pointer; padding:0 5px; border-radius:6px;}
+.clock-top .on{color:var(--maroon); background:rgba(110,20,35,.08);}
+.clock-top .ct-ap{display:flex; flex-direction:column; gap:3px; margin-left:12px;}
+.clock-top .ap{font-family:'Cinzel',serif; font-size:8px; letter-spacing:.1em; padding:3px 8px; border:.5px solid var(--line-strong); border-radius:6px; background:none; color:var(--muted); cursor:pointer;}
+.clock-top .ap.on{background:var(--maroon); color:var(--cream); border-color:var(--maroon);}
+.clock-face{position:relative; width:200px; height:200px; margin:6px auto 10px; border-radius:50%; background:radial-gradient(circle at 50% 45%, var(--paper), var(--beige)); border:.5px solid var(--line-strong);}
+.clock-num{position:absolute; width:30px; height:30px; margin:-15px 0 0 -15px; display:grid; place-items:center; border-radius:50%; font-family:'Poppins',sans-serif; font-size:.82rem; color:var(--ink-soft); background:none; border:none; cursor:pointer;}
+.clock-num:hover{background:rgba(201,168,76,.3);}
+.clock-num.sel{background:var(--maroon); color:var(--cream);}
+.clock-center{position:absolute; left:50%; top:50%; width:8px; height:8px; background:var(--maroon); border-radius:50%; transform:translate(-50%,-50%);}
+.clock-min-exact{display:flex; align-items:center; justify-content:space-between; font-size:.76rem; color:var(--muted); margin-bottom:10px;}
+.clock-min-exact .me-inp{width:62px; padding:6px 8px; border:.5px solid var(--line-strong); border-radius:7px; background:var(--paper); color:var(--ink); font-family:'Poppins',sans-serif;}
+.clock-done{width:100%; padding:11px; border:1px solid var(--maroon); background:var(--maroon); color:var(--cream); border-radius:8px; font-family:'Cinzel',serif; font-size:9px; letter-spacing:.2em; text-transform:uppercase; cursor:pointer;}
+.clock-done:hover{background:var(--maroon-2);}
+
+/* ── city autocomplete ── */
+.ac-wrap{position:relative;}
+.ac-list{position:absolute; z-index:60; top:calc(100% + 4px); left:0; right:0; background:var(--paper); border:.5px solid var(--line-strong); border-radius:9px; box-shadow:var(--shadow); max-height:240px; overflow:auto; display:none;}
+.ac-list.show{display:block;}
+.ac-item{padding:10px 12px; cursor:pointer; font-size:.86rem; color:var(--ink-soft); border-bottom:.5px solid var(--line);}
+.ac-item:last-child{border-bottom:none;}
+.ac-item:hover,.ac-item.active{background:rgba(110,20,35,.06);}
+.ac-item b{font-weight:500; color:var(--ink);}
+.ac-item small{color:var(--muted);}
+
+#recaptcha-container{margin-top:4px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a href="index.html" class="brand"><span class="mark">✦</span><b>Veshannastro</b></a>
+    <span class="secure">
+      <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Secure checkout
+    </span>
+  </div>
+
+  <div class="layout">
+    <!-- LEFT: offering -->
+    <div class="panel panel-pad" style="align-self:start;">
+      <div class="scarcity" role="note">
+        <span class="dot" aria-hidden="true"></span>
+        <div><b>Booked out until 27 July 2026</b><span>Every session through late July is reserved. New bookings open from <em>27 July</em> — only <em id="slots-remaining">10</em> slots available this week.</span></div>
+      </div>
+      <div class="eyebrow" id="cat-eyebrow">Logic-Based Vedic Astrology</div>
+      <div class="elite-badge">&#10022; Elite Offering &middot; 25% Off</div>
+      <h1 class="svc-name" id="svc-name">Complete <em>Kundli</em> Consultation</h1>
+      <p class="svc-sub" id="svc-sub">A full-length personal reading — clarity over fear.</p>
+
+      <ul class="includes">
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span><b>Live consultation</b> — a personal session on your chart, in Hindi or English.</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span><b>Written PDF report</b> — a detailed analysis delivered to your email.</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span><b>Session recording</b> — the full recording, shared after the call.</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span><b>Official invoice</b> — a proper billing document for your records.</span></li>
+      </ul>
+
+      <div class="hr"></div>
+
+      <div class="ledger">
+        <div class="row"><span>Full price</span><span class="v" id="l-mrp">₹0</span></div>
+        <div class="row discount" id="l-coupon-row"><span>Elite discount (<span id="l-elite-pct">25</span>% off)</span><span class="v" id="l-coupon">− ₹0</span></div>
+        <div class="row cashback" id="l-cashback-row" style="display:none;"><span>Cashback applied</span><span class="v" id="l-cashback">− ₹0</span></div>
+        <div class="row total"><span>You pay</span><span class="v" id="l-total">₹0</span></div>
+      </div>
+
+      <div class="trust-note">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Payments are processed by Razorpay over an encrypted connection. Your birth details are kept strictly confidential and used only for your reading.</span>
+      </div>
+    </div>
+
+    <!-- RIGHT: steps -->
+    <div class="panel panel-pad">
+      <div id="checkout-view">
+        <div class="form-head">
+          <div class="form-title">Complete your booking</div>
+          <div class="form-desc">Three quick steps. Sessions are limited — the next opening is 27 July 2026.</div>
+        </div>
+
+        <!-- STEP 1 — Google -->
+        <div class="step" id="step1">
+          <div class="step-head"><span class="step-num"><span>1</span></span><span class="step-title">Sign in with Google</span></div>
+          <div class="step-body" id="s1-body">
+            <button class="gbtn" id="google-btn">
+              <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.6 30.2 0 24 0 14.6 0 6.4 5.4 2.5 13.3l7.8 6.1C12.2 13.2 17.6 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.6c0-1.6-.1-3.1-.4-4.6H24v9.1h12.4c-.5 2.9-2.1 5.3-4.6 7l7.1 5.5c4.2-3.9 6.6-9.6 6.6-16z"/><path fill="#FBBC05" d="M10.3 28.6c-.5-1.4-.8-3-.8-4.6s.3-3.2.8-4.6l-7.8-6.1C.9 16.5 0 20.1 0 24s.9 7.5 2.5 10.7l7.8-6.1z"/><path fill="#34A853" d="M24 48c6.2 0 11.5-2 15.3-5.5l-7.1-5.5c-2 1.3-4.6 2.1-8.2 2.1-6.4 0-11.8-3.7-13.7-9.1l-7.8 6.1C6.4 42.6 14.6 48 24 48z"/></svg>
+              Continue with Google
+            </button>
+            <p class="gbtn-note">We use your Google account to verify you and to hold your cashback securely.</p>
+          </div>
+          <!-- signed-in state -->
+          <div class="step-body" id="s1-signed" style="display:none;">
+            <div class="who">
+              <img id="u-photo" alt="" style="display:none;">
+              <div class="avatar-fallback" id="u-fallback">✦</div>
+              <div><div class="nm" id="u-name">—</div><div class="em" id="u-email">—</div></div>
+              <button class="signout" id="signout-btn">Not you?</button>
+            </div>
+            <div class="wallet" id="wallet">
+              <div>
+                <div class="wl">Your cashback wallet</div>
+                <div class="wv" id="wallet-amt">₹0</div>
+                <div class="wnote" id="wallet-note">Redeemable on this booking.</div>
+              </div>
+              <svg class="coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5h4a1.5 1.5 0 0 1 0 3h-3a1.5 1.5 0 0 0 0 3h4"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2 — Phone -->
+        <div class="step locked" id="step2">
+          <div class="step-head"><span class="step-num"><span>2</span></span><span class="step-title">Verify your phone</span></div>
+          <div class="step-body">
+            <label class="lbl">Phone number <span class="req">*</span></label>
+            <div class="phone-row">
+              <select class="inp cc" id="cf-cc">
+                <option value="+91" selected>🇮🇳 +91</option>
+                <option value="+1">🇺🇸 +1</option>
+                <option value="+44">🇬🇧 +44</option>
+                <option value="+971">🇦🇪 +971</option>
+                <option value="+61">🇦🇺 +61</option>
+                <option value="+65">🇸🇬 +65</option>
+              </select>
+              <input class="inp" id="cf-phone" type="tel" inputmode="numeric" placeholder="10-digit mobile number" autocomplete="tel-national" style="flex:1;">
+              <button class="mini-btn" id="otp-send" type="button">Send code</button>
+            </div>
+            <div class="ferr" id="phone-err">Enter a valid phone number.</div>
+            <div class="otp-box" id="otp-box">
+              <div class="phone-row" style="margin-top:2px;">
+                <input class="inp" id="otp-code" type="tel" inputmode="numeric" maxlength="6" placeholder="Enter 6-digit code" autocomplete="one-time-code" style="flex:1;">
+                <button class="mini-btn" id="otp-verify" type="button">Verify</button>
+              </div>
+            </div>
+            <div class="status-line" id="otp-status"></div>
+            <div class="verified" id="phone-verified"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span>Phone verified</span></div>
+            <div id="recaptcha-container"></div>
+          </div>
+        </div>
+
+        <!-- STEP 3 — Details + pay -->
+        <div class="step locked" id="step3">
+          <div class="step-head"><span class="step-num"><span>3</span></span><span class="step-title">Birth details &amp; payment</span></div>
+          <div class="step-body">
+
+            <div class="fld">
+              <label class="lbl">Full name <span class="req">*</span></label>
+              <input class="inp" id="cf-name" placeholder="As on your ID">
+              <div class="ferr" id="name-err">Please enter your name.</div>
+            </div>
+
+            <div class="fld">
+              <label class="lbl">Gender <span class="req">*</span></label>
+              <select class="inp" id="cf-gender">
+                <option value="">Select…</option>
+                <option>Female</option><option>Male</option><option>Other / Prefer not to say</option>
+              </select>
+              <div class="ferr" id="gender-err">Please select.</div>
+            </div>
+
+            <div class="fld">
+              <label class="lbl">Date of birth <span class="req">*</span></label>
+              <div class="picker-wrap">
+                <div class="picker-display" id="cf-dob-display" tabindex="0" role="button" aria-label="Choose date of birth">
+                  <span class="pk-text">Select date</span>
+                  <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
+                </div>
+                <input type="hidden" id="cf-dob-val">
+                <div class="pop cal-pop" id="cal-dob"></div>
+              </div>
+              <div class="ferr" id="dob-err">Please select your date of birth.</div>
+            </div>
+
+            <!-- Time of birth — removed on the numerology page via CONFIG -->
+            <div class="fld" id="tob-block">
+              <label class="lbl">Time of birth <span class="req">*</span></label>
+              <div class="picker-wrap">
+                <div class="picker-display" id="cf-tob-display" tabindex="0" role="button" aria-label="Choose time of birth">
+                  <span class="pk-text">Select time</span>
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                </div>
+                <input type="hidden" id="cf-tob-val">
+                <div class="pop clock-pop" id="clk-tob"></div>
+              </div>
+              <div class="hint">If you don't know the exact time, give your closest estimate.</div>
+              <div class="ferr" id="tob-err">Please select your time of birth.</div>
+            </div>
+
+            <div class="fld">
+              <label class="lbl">Place of birth <span class="req">*</span></label>
+              <div class="ac-wrap">
+                <input class="inp" id="cf-place" placeholder="Start typing a city…" autocomplete="off">
+                <div class="ac-list" id="place-list"></div>
+              </div>
+              <div class="hint" id="place-hint">Search any city in the world.</div>
+              <div class="ferr" id="place-err">Please select your birth city from the list.</div>
+            </div>
+
+            <div class="fld">
+              <label class="lbl">What would you like guidance on? <span class="req">*</span></label>
+              <textarea class="inp" id="cf-query" placeholder="Career, relationships, health, life direction, or a specific question…"></textarea>
+              <div class="ferr" id="query-err">Please describe your query (min 10 characters).</div>
+            </div>
+
+            <div class="fld">
+              <label class="lbl">Preferred date &amp; time for the session <span class="req">*</span></label>
+              <div class="row2">
+                <input class="inp" id="cf-sdate" type="date">
+                <div class="picker-wrap">
+                  <div class="picker-display" id="cf-stime-display" tabindex="0" role="button" aria-label="Choose preferred time">
+                    <span class="pk-text">Select time</span>
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                  </div>
+                  <input type="hidden" id="cf-stime-val">
+                  <div class="pop clock-pop" id="clk-stime"></div>
+                </div>
+              </div>
+              <div class="hint" style="color:var(--maroon);">Sessions before 27 July 2026 are fully booked. The calendar opens from the next available date.</div>
+              <div class="ferr" id="sdate-err">Please pick a preferred date and time.</div>
+            </div>
+
+            <!-- cashback apply -->
+            <div class="cb-apply" id="cb-apply">
+              <label class="cb-toggle" for="cb-switch">
+                <span>
+                  <span class="cbt" id="cb-headline">Apply ₹0 cashback</span>
+                  <span class="cbn" id="cb-subline"></span>
+                </span>
+                <span class="switch"><input type="checkbox" id="cb-switch" checked><span class="slider"></span></span>
+              </label>
+            </div>
+
+            <button class="pay" id="pay-btn" disabled>Pay ₹0</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- success -->
+      <div class="success" id="success">
+        <div class="glyph">✦</div>
+        <h2>Payment confirmed</h2>
+        <p>Your booking is in. We'll reach out within 24 hours to confirm your session.<br>A PDF report, session recording, and invoice follow after your reading.</p>
+        <div class="earned" id="earned-line" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   CONFIG — fill the two URLs after you deploy the backends, then go live.
+   ══════════════════════════════════════════════════════════════════ */
+const CONFIG = {
+  IS_NUMEROLOGY : false,                                    // Vedic page → keeps Time of Birth
+  defaultService: 'Complete Kundli Consultation — 40 min',
+  defaultPrice  : 2249,
+  defaultCat    : 'Vedic Kundli',
+  defaultMrp    : 2999,                                     // optional strike-through; 0 to hide
+
+  razorpayKey   : 'rzp_live_T0NA0F3UpQiZxl',
+  walletBase    : 'https://YOUR-WALLET.onrender.com',       // ← wallet.py /  FILL THIS
+  sheetWebhook  : 'https://script.google.com/macros/s/PASTE_CONSULTATIONS_EXEC_URL/exec', // ← consultations-logger.gs  FILL THIS
+
+  elitePct         : 25,             // headline Elite Offering discount (already priced into PRICE)
+  nextOpenDate     : '2026-07-27',   // earliest bookable session — all earlier slots are reserved
+  nextOpenLabel    : '27 July 2026',
+  maxRedeemFraction: 0.5,    // cashback can cover at most 50% of the price
+  earnRateDisplay  : 0.05,   // shown to the user; the server is the source of truth
+  whatsapp         : '918827684725',
+  googleMapsKey    : ''    // paste your Google Maps JS API key (Places API New) for Google city search; blank = free Photon
+};
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDax1k2RQliunx8q88dOTS8M0AuJlzB4Do",
+  authDomain: "veshannastro.firebaseapp.com",
+  projectId: "veshannastro",
+  storageBucket: "veshannastro.firebasestorage.app",
+  messagingSenderId: "946598106017",
+  appId: "1:946598106017:web:e6f9ae9908f3e8776fb1e0"
+};
+
+/* ── read service/price from the link (?service=&price=&cat=) ── */
+const Q = new URLSearchParams(location.search);
+const SERVICE  = Q.get('service') || CONFIG.defaultService;
+const PRICE    = parseInt(Q.get('price'), 10) || CONFIG.defaultPrice;
+const CATEGORY = Q.get('cat') || CONFIG.defaultCat;
+const MRP_PARAM= parseInt(Q.get('mrp'), 10);
+const MRP      = (MRP_PARAM && MRP_PARAM > PRICE) ? MRP_PARAM
+               : Math.round(PRICE / (1 - (CONFIG.elitePct||25)/100));  // keep elite % exact for any price
+
+/* ── money helpers (rupees; UI is whole rupees) ── */
+const inr = n => '₹' + Math.round(n).toLocaleString('en-IN');
+const $ = id => document.getElementById(id);
+
+/* ── state ── */
+let USER = null;                 // firebase user
+let walletRupees = 0;            // balance from server
+let phoneVerified = false;
+let confirmationResult = null;   // firebase phone confirmation
+let paying = false;
+
+/* ── firebase is initialised in boot(), only after the SDK is confirmed loaded ── */
+let auth = null;
+
+/* ═══════════ SERVICE / LEDGER RENDER ═══════════ */
+function eliteSavings(){ return (MRP && MRP > PRICE) ? (MRP - PRICE) : 0; }
+function fullPrice(){ return (MRP && MRP > PRICE) ? MRP : PRICE; }
+function redeemCap(){ return Math.floor(PRICE * CONFIG.maxRedeemFraction); }
+function cashbackApplied(){
+  if(!USER || walletRupees <= 0) return 0;
+  if(!$('cb-switch').checked) return 0;
+  return Math.min(walletRupees, redeemCap());
+}
+function netPayable(){ return Math.max(1, PRICE - cashbackApplied()); }
+
+function renderService(){
+  $('svc-name').innerHTML = SERVICE.split(' — ')[0].replace(/(Kundli|Numerology|Life|Name|Mobile)/, '<em>$1</em>');
+  document.title = 'Book · ' + SERVICE + ' · Veshannastro';
+  const dur = (SERVICE.split(' — ')[1] || '').trim();
+  $('svc-sub').textContent = dur ? ('A ' + dur + ' personal reading — clarity over fear.')
+                                 : 'A personal reading — clarity over fear.';
+  $('cat-eyebrow').textContent = CATEGORY === 'Numerology' ? 'Chaldean-Vedic Numerology' : 'Logic-Based Vedic Astrology';
+  // keep the Elite % accurate even if price/mrp come from the URL
+  const pct = (MRP && MRP > PRICE) ? Math.round((MRP - PRICE) / MRP * 100) : CONFIG.elitePct;
+  const pctEl = $('l-elite-pct'); if(pctEl) pctEl.textContent = pct;
+  const badge = document.querySelector('.elite-badge'); if(badge) badge.innerHTML = '\u2726 Elite Offering \u00B7 ' + pct + '% Off';
+  renderLedger();
+}
+function renderLedger(){
+  $('l-mrp').textContent  = inr(fullPrice());
+  const es = eliteSavings();
+  if(es > 0){ $('l-coupon-row').style.display=''; $('l-coupon').textContent = '− ' + inr(es); }
+  else { $('l-coupon-row').style.display='none'; }
+  const cb = cashbackApplied();
+  if(cb > 0){ $('l-cashback-row').style.display=''; $('l-cashback').textContent = '− ' + inr(cb); }
+  else { $('l-cashback-row').style.display='none'; }
+  $('l-total').textContent = inr(netPayable());
+  if($('pay-btn')) $('pay-btn').textContent = 'Pay ' + inr(netPayable());
+  // cashback apply widget copy
+  if(USER && walletRupees > 0){
+    $('cb-apply').classList.add('show');
+    const usable = Math.min(walletRupees, redeemCap());
+    $('cb-headline').textContent = 'Apply ' + inr(usable) + ' cashback';
+    $('cb-subline').textContent  = 'You have ' + inr(walletRupees) + ' · up to ' + inr(redeemCap()) + ' usable here.';
+  } else {
+    $('cb-apply').classList.remove('show');
+  }
+}
+
+/* ═══════════ STEP GATING ═══════════ */
+function refreshSteps(){
+  const s2 = $('step2'), s3 = $('step3');
+  if(USER){ $('step1').classList.add('done'); s2.classList.remove('locked'); }
+  else    { $('step1').classList.remove('done'); s2.classList.add('locked'); s3.classList.add('locked'); }
+  if(phoneVerified){ s2.classList.add('done'); s3.classList.remove('locked'); }
+  else if(USER){ s3.classList.add('locked'); }
+  updatePayEnabled();
+}
+function updatePayEnabled(){
+  const ready = USER && phoneVerified;
+  $('pay-btn').disabled = !ready || paying;
+}
+
+/* ═══════════ GOOGLE SIGN-IN ═══════════ */
+$('google-btn').addEventListener('click', async () => {
+  if(!auth){ alert('Secure sign-in is still loading — one moment, then tap again.'); return; }
+  const provider = new firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
+  try { await auth.signInWithPopup(provider); }
+  catch(e){ console.error(e); alert('Google sign-in could not complete: ' + (e.message || e.code)); }
+});
+$('signout-btn').addEventListener('click', async () => { await auth.signOut(); location.reload(); });
+
+function wireAuth(){
+auth.onAuthStateChanged(async (user) => {
+  USER = user || null;
+  if(user){
+    $('s1-body').style.display='none';
+    $('s1-signed').style.display='';
+    $('u-name').textContent  = user.displayName || 'Signed in';
+    $('u-email').textContent = user.email || '';
+    if(user.photoURL){ $('u-photo').src=user.photoURL; $('u-photo').style.display=''; $('u-fallback').style.display='none'; }
+    else { $('u-fallback').textContent = (user.displayName||'✦').trim().charAt(0).toUpperCase(); }
+    if(!$('cf-name').value && user.displayName) $('cf-name').value = user.displayName;
+    // phone linked already? treat as verified this session
+    const hasPhone = (user.providerData||[]).some(p => p.providerId === 'phone');
+    if(hasPhone){ phoneVerified = true; $('phone-verified').classList.add('show'); }
+    await grantSignupBonusThenLoad(user);
+  } else {
+    $('s1-body').style.display=''; $('s1-signed').style.display='none';
+    walletRupees = 0; phoneVerified = false;
+  }
+  refreshSteps(); renderLedger();
+});
+}
+
+/* ═══════════ WALLET ═══════════ */
+async function api(path, opts){
+  const res = await fetch(CONFIG.walletBase.replace(/\/$/,'') + path, opts);
+  if(!res.ok) throw new Error('wallet ' + res.status);
+  return res.json();
+}
+async function grantSignupBonusThenLoad(user){
+  try{
+    // one-time welcome bonus (server is idempotent per uid; safe to call every login)
+    await api('/wallet/signup-bonus', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ uid:user.uid, email:user.email||'' })
+    });
+  }catch(e){ /* non-fatal */ }
+  await loadWallet(user);
+}
+async function loadWallet(user){
+  try{
+    const j = await api('/wallet/' + encodeURIComponent(user.uid), {});
+    walletRupees = Math.max(0, Math.floor((j.balance_paise||0)/100));
+  }catch(e){ walletRupees = 0; }
+  $('wallet-amt').textContent = inr(walletRupees);
+  $('wallet').classList.add('show');
+  $('wallet-note').textContent = walletRupees > 0 ? 'Redeemable on this booking.' : 'Earn cashback on this order for next time.';
+  renderLedger();
+}
+
+/* live weekly slot counter (decrements on a real paid booking, resets weekly) */
+async function refreshSlots(){
+  try{
+    const j = await api('/slots', {});
+    const el = $('slots-remaining');
+    if(el && typeof j.remaining === 'number') el.textContent = j.remaining;
+  }catch(e){ /* keep the static number if the counter is unreachable */ }
+}
+$('cb-switch').addEventListener('change', renderLedger);
+
+/* ═══════════ PHONE OTP (Firebase, links to the Google account) ═══════════ */
+function e164(){
+  const cc = $('cf-cc').value || '+91';
+  const num = ($('cf-phone').value || '').replace(/\D/g,'');
+  return { cc, num, full: cc + num };
+}
+function setupRecaptcha(){
+  if(window._recaptcha) return window._recaptcha;
+  window._recaptcha = new firebase.auth.RecaptchaVerifier('recaptcha-container', { size:'invisible' });
+  return window._recaptcha;
+}
+$('otp-send').addEventListener('click', async () => {
+  if(!USER){ return; }
+  const { num, full } = e164();
+  const err = $('phone-err'); err.classList.remove('show');
+  if(num.length < 7){ err.classList.add('show'); return; }
+  $('otp-send').disabled = true; $('otp-status').textContent = 'Sending code…';
+  try{
+    const verifier = setupRecaptcha();
+    confirmationResult = await auth.currentUser.linkWithPhoneNumber(full, verifier);
+    $('otp-box').classList.add('show'); $('otp-code').focus();
+    $('otp-status').textContent = 'Code sent to ' + full + '. It may take a few seconds.';
+  }catch(e){
+    console.error(e);
+    if(e.code === 'auth/provider-already-linked' || e.code === 'auth/credential-already-in-use'){
+      phoneVerified = true; $('phone-verified').classList.add('show'); $('otp-status').textContent='';
+      refreshSteps();
+    } else {
+      $('otp-status').textContent = 'Could not send code: ' + (e.message || e.code);
+      // let them retry
+      try{ if(window._recaptcha){ window._recaptcha.clear(); window._recaptcha=null; } }catch(_){}
+    }
+    $('otp-send').disabled = false;
+  }
+});
+$('otp-code').addEventListener('input', function(){
+  this.value = this.value.replace(/\D/g,'').slice(0,6);
+  if(this.value.length === 6) $('otp-verify').click();
+});
+$('otp-verify').addEventListener('click', async () => {
+  const code = ($('otp-code').value||'').trim();
+  if(code.length !== 6 || !confirmationResult){ $('otp-status').textContent='Enter the 6-digit code first.'; return; }
+  $('otp-verify').disabled = true; $('otp-status').textContent = 'Verifying…';
+  try{
+    await confirmationResult.confirm(code);
+    phoneVerified = true;
+    $('otp-box').classList.remove('show'); $('otp-status').textContent='';
+    $('phone-verified').classList.add('show');
+    refreshSteps();
+  }catch(e){
+    $('otp-status').textContent = 'Incorrect or expired code. Please try again.';
+    $('otp-verify').disabled = false;
+  }
+});
+
+/* ═══════════ PICKERS: calendar (DOB), clock (times), city (place) ═══════════ */
+function pad2(n){ return ('0'+n).slice(-2); }
+function closeAllPops(except){
+  document.querySelectorAll('.pop.show,.ac-list.show').forEach(el=>{ if(el!==except) el.classList.remove('show'); });
+}
+document.addEventListener('click', (e)=>{
+  if(!e.target.closest('.picker-wrap') && !e.target.closest('.ac-wrap')) closeAllPops(null);
+});
+function bindOpen(disp, pop, onOpen){
+  function toggle(){ const show=!pop.classList.contains('show'); closeAllPops(pop); pop.classList.toggle('show',show); if(show) onOpen(); }
+  disp.addEventListener('click', toggle);
+  disp.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggle(); } });
+}
+
+/* ---- Calendar (DOB) ---- */
+function makeCalendar(displayId, valId, popId, minYear, maxYear){
+  const disp=$(displayId), val=$(valId), pop=$(popId);
+  const MON=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const view=new Date(); view.setDate(1);
+  let sel=null;
+  bindOpen(disp, pop, render);
+  function head(){
+    let ys=''; for(let y=maxYear;y>=minYear;y--) ys+='<option value="'+y+'"'+(y===view.getFullYear()?' selected':'')+'>'+y+'</option>';
+    let ms=''; MON.forEach((m,i)=> ms+='<option value="'+i+'"'+(i===view.getMonth()?' selected':'')+'>'+m+'</option>');
+    return '<div class="cal-head"><button type="button" data-nav="-1" aria-label="Previous month">\u2039</button>'
+      +'<div class="cal-title"><select class="cal-m">'+ms+'</select><select class="cal-y">'+ys+'</select></div>'
+      +'<button type="button" data-nav="1" aria-label="Next month">\u203a</button></div>';
+  }
+  function render(){
+    const y=view.getFullYear(), m=view.getMonth();
+    const first=new Date(y,m,1).getDay(), days=new Date(y,m+1,0).getDate();
+    let g='<div class="cal-grid">';
+    ['S','M','T','W','T','F','S'].forEach(d=> g+='<div class="cal-dow">'+d+'</div>');
+    for(let i=0;i<first;i++) g+='<button type="button" class="cal-day empty"></button>';
+    for(let d=1;d<=days;d++){ const iso=y+'-'+pad2(m+1)+'-'+pad2(d);
+      g+='<button type="button" class="cal-day'+(sel===iso?' sel':'')+'" data-iso="'+iso+'">'+d+'</button>'; }
+    g+='</div>';
+    pop.innerHTML=head()+g;
+    pop.querySelector('.cal-m').addEventListener('change',e=>{ view.setMonth(+e.target.value); render(); });
+    pop.querySelector('.cal-y').addEventListener('change',e=>{ view.setFullYear(+e.target.value); render(); });
+    pop.querySelectorAll('[data-nav]').forEach(b=> b.addEventListener('click',()=>{ view.setMonth(view.getMonth()+(+b.dataset.nav)); render(); }));
+    pop.querySelectorAll('.cal-day[data-iso]').forEach(b=> b.addEventListener('click',()=>{
+      sel=b.dataset.iso; val.value=sel;
+      const p=sel.split('-'); disp.querySelector('.pk-text').textContent=(+p[2])+' '+MON[+p[1]-1].slice(0,3)+' '+p[0];
+      disp.classList.add('filled'); pop.classList.remove('show'); showErr('dob-err',false);
+    }));
+  }
+}
+
+/* ---- Circular clock (times) ---- */
+function makeClock(displayId, valId, popId, errId){
+  const disp=$(displayId), val=$(valId), pop=$(popId);
+  let H=null, M=null, AP='AM', mode='hour';
+  bindOpen(disp, pop, ()=>{ if(H===null){ H=6; M=0; AP='AM'; } mode='hour'; render(); });
+  function place(nums){
+    let h=''; const n=nums.length;
+    nums.forEach((num,i)=>{
+      const ang=(i/n)*2*Math.PI - Math.PI/2;
+      const x=100+78*Math.cos(ang), y=100+78*Math.sin(ang);
+      const cur = mode==='hour' ? H : M;
+      const cls = (+num===+cur) ? ' sel' : '';
+      h+='<button type="button" class="clock-num'+cls+'" style="left:'+x+'px;top:'+y+'px" data-v="'+num+'">'+(mode==='minute'?pad2(num):num)+'</button>';
+    });
+    return h;
+  }
+  function render(){
+    const hours=[12,1,2,3,4,5,6,7,8,9,10,11];
+    const mins=[0,5,10,15,20,25,30,35,40,45,50,55];
+    const dial = mode==='hour'?hours:mins;
+    pop.innerHTML =
+      '<div class="clock-top">'
+      +'<span class="ct-h'+(mode==='hour'?' on':'')+'" data-m="hour">'+(H==null?'--':pad2(H))+'</span>:'
+      +'<span class="ct-m'+(mode==='minute'?' on':'')+'" data-m="minute">'+(M==null?'--':pad2(M))+'</span>'
+      +'<span class="ct-ap"><button type="button" class="ap'+(AP==='AM'?' on':'')+'" data-ap="AM">AM</button>'
+      +'<button type="button" class="ap'+(AP==='PM'?' on':'')+'" data-ap="PM">PM</button></span></div>'
+      +'<div class="clock-face">'+place(dial)+'<span class="clock-center"></span></div>'
+      +'<div class="clock-min-exact"><span>Exact minute</span><input type="number" min="0" max="59" class="me-inp" value="'+(M==null?'':M)+'"></div>'
+      +'<button type="button" class="clock-done">Set time</button>';
+    pop.querySelectorAll('.clock-num').forEach(b=> b.addEventListener('click',()=>{
+      if(mode==='hour'){ H=+b.dataset.v; mode='minute'; render(); } else { M=+b.dataset.v; render(); }
+    }));
+    pop.querySelectorAll('[data-m]').forEach(x=> x.addEventListener('click',()=>{ mode=x.dataset.m; render(); }));
+    pop.querySelectorAll('[data-ap]').forEach(b=> b.addEventListener('click',()=>{ AP=b.dataset.ap; render(); }));
+    const me=pop.querySelector('.me-inp');
+    if(me) me.addEventListener('input',()=>{ let v=parseInt(me.value,10); if(isNaN(v))return; M=Math.max(0,Math.min(59,v)); });
+    pop.querySelector('.clock-done').addEventListener('click',()=>{
+      if(H==null||M==null) return;
+      val.value=pad2(H)+':'+pad2(M)+' '+AP;
+      disp.querySelector('.pk-text').textContent=val.value; disp.classList.add('filled');
+      pop.classList.remove('show'); if(errId) showErr(errId,false);
+    });
+  }
+}
+
+/* ---- Worldwide city autocomplete (live search, covers the whole world) ---- */
+/* ---- city data sources: Google Places (New) primary, free Photon fallback ---- */
+async function ensurePlacesLib(){
+  if(!CONFIG.googleMapsKey) return null;
+  try{ if(!window.__placesLib){ window.__placesLib = await google.maps.importLibrary('places'); } return window.__placesLib; }
+  catch(e){ return null; }
+}
+async function searchGoogleCities(q){
+  const lib = await ensurePlacesLib(); if(!lib) return null;
+  if(!window.__gToken) window.__gToken = new lib.AutocompleteSessionToken();
+  const base = { input:q, sessionToken:window.__gToken };
+  async function run(cities){
+    const req = cities ? Object.assign({ includedPrimaryTypes:['(cities)'] }, base) : base;
+    const r = await lib.AutocompleteSuggestion.fetchAutocompleteSuggestions(req);
+    return (r.suggestions||[]).map(su=> (su.placePrediction && su.placePrediction.text) ? su.placePrediction.text.text : null).filter(Boolean);
+  }
+  try{ return await run(true); }catch(e){ try{ return await run(false); }catch(e2){ return null; } }
+}
+async function searchPhotonCities(q){
+  try{
+    const url='https://photon.komoot.io/api/?q='+encodeURIComponent(q)+'&limit=8&lang=en';
+    const res=await fetch(url); const data=await res.json();
+    const ok=['city','town','village','hamlet','municipality','suburb'], out=[];
+    (data.features||[]).forEach(fe=>{ const p=fe.properties||{}; if(!p.name) return;
+      if(p.osm_key!=='place' || ok.indexOf(p.osm_value)<0) return;
+      out.push([p.name,p.state,p.country].filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).join(', ')); });
+    return out;
+  }catch(e){ return null; }
+}
+
+function makeCityAutocomplete(inputId, listId){
+  const inp=$(inputId), list=$(listId); let t=null, items=[], active=-1;
+  inp.addEventListener('input', ()=>{
+    const q=inp.value.trim(); clearTimeout(t);
+    if(q.length<2){ list.classList.remove('show'); list.innerHTML=''; return; }
+    t=setTimeout(()=>search(q), 280);
+  });
+  inp.addEventListener('keydown', e=>{
+    if(!list.classList.contains('show')) return;
+    const els=[].slice.call(list.querySelectorAll('.ac-item'));
+    if(e.key==='ArrowDown'){ e.preventDefault(); active=Math.min(els.length-1,active+1); paint(els); }
+    else if(e.key==='ArrowUp'){ e.preventDefault(); active=Math.max(0,active-1); paint(els); }
+    else if(e.key==='Enter'){ if(active>=0&&els[active]){ e.preventDefault(); els[active].click(); } }
+    else if(e.key==='Escape'){ list.classList.remove('show'); }
+  });
+  function paint(els){ els.forEach((el,i)=> el.classList.toggle('active', i===active)); }
+  async function search(q){
+    let results = await searchGoogleCities(q);                 // Google Places (New) first
+    if(results === null){ results = await searchPhotonCities(q); }  // fallback: free Photon
+    const seen={}; items=[];
+    (results||[]).forEach(label=>{ if(label && !seen[label]){ seen[label]=1; items.push(label); } });
+    render();   // graceful: if both fail, the field still accepts free-typed text
+  }
+  function render(){
+    if(!items.length){ list.classList.remove('show'); list.innerHTML=''; return; }
+    active=-1;
+    list.innerHTML=items.map(l=>{ const p=l.split(', '); const head=p.shift();
+      return '<div class="ac-item"><b>'+head+'</b>'+(p.length?' <small>'+p.join(', ')+'</small>':'')+'</div>'; }).join('');
+    [].slice.call(list.querySelectorAll('.ac-item')).forEach((el,i)=> el.addEventListener('click',()=>{
+      inp.value=items[i]; list.classList.remove('show'); showErr('place-err',false); }));
+    list.classList.add('show');
+  }
+}
+
+/* init the pickers */
+makeCalendar('cf-dob-display','cf-dob-val','cal-dob', 1935, new Date().getFullYear());
+makeClock('cf-tob-display','cf-tob-val','clk-tob','tob-err');
+makeClock('cf-stime-display','cf-stime-val','clk-stime','sdate-err');
+$('cf-sdate').min=CONFIG.nextOpenDate; $('cf-sdate').value='';
+makeCityAutocomplete('cf-place','place-list');
+
+/* numerology: drop the time-of-birth field entirely */
+if(CONFIG.IS_NUMEROLOGY){ const t=$('tob-block'); if(t) t.remove(); }
+
+/* ═══════════ VALIDATION ═══════════ */
+function showErr(id,on){ const e=$(id); if(e) e.classList.toggle('show', !!on); }
+function validate(){
+  let ok = true;
+  const need = (v)=> !!(v && String(v).trim());
+  showErr('name-err', !need($('cf-name').value)); if(!need($('cf-name').value)) ok=false;
+  showErr('gender-err', !need($('cf-gender').value)); if(!need($('cf-gender').value)) ok=false;
+  const dobOk = !!$('cf-dob-val').value;
+  showErr('dob-err', !dobOk); if(!dobOk) ok=false;
+  if(!CONFIG.IS_NUMEROLOGY){
+    const tobOk = !!$('cf-tob-val').value;
+    showErr('tob-err', !tobOk); if(!tobOk) ok=false;
+  }
+  showErr('place-err', !need($('cf-place').value)); if(!need($('cf-place').value)) ok=false;
+  const qOk = ($('cf-query').value||'').trim().length >= 10;
+  showErr('query-err', !qOk); if(!qOk) ok=false;
+  const sOk = $('cf-sdate').value && $('cf-stime-val').value;
+  showErr('sdate-err', !sOk); if(!sOk) ok=false;
+  return ok;
+}
+
+/* ═══════════ COLLECT ═══════════ */
+function collect(){
+  const dv=$('cf-dob-val').value; const dob = dv ? dv.split('-').reverse().join('/') : '';
+  const tob = CONFIG.IS_NUMEROLOGY ? '' : ($('cf-tob-val').value||'');
+  const stime = $('cf-stime-val').value||'';
+  const { full } = e164();
+  return {
+    name:$('cf-name').value.trim(), gender:$('cf-gender').value,
+    phone:full, phoneVerified:phoneVerified,
+    googleEmail:(USER&&USER.email)||'', email:(USER&&USER.email)||'', uid:(USER&&USER.uid)||'',
+    dob, birthTime:tob, birthPlace:$('cf-place').value.trim(),
+    service:SERVICE, category:CATEGORY, query:$('cf-query').value.trim(),
+    sessionDate:$('cf-sdate').value, sessionTime:stime,
+    basePrice:fullPrice(), couponDiscount:eliteSavings(), cashbackUsed:cashbackApplied(),
+    amountPaid:netPayable(),
+    source: CONFIG.IS_NUMEROLOGY ? 'Numerology Checkout' : 'Vedic Checkout'
+  };
+}
+
+/* ═══════════ PAY ═══════════ */
+$('pay-btn').addEventListener('click', () => {
+  if(!USER || !phoneVerified){ return; }
+  if(!validate()){ document.querySelector('.ferr.show')?.scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  if(location.protocol === 'file:'){ alert('Payments need a real https:// address. Upload this page to your hosting first.'); return; }
+  if(typeof Razorpay === 'undefined'){ paying=false; updatePayEnabled(); $('pay-btn').textContent='Pay '+inr(netPayable()); alert('The payment window could not load — this is usually an ad-blocker or a network block. Please disable it and reload the page.'); return; }
+
+  const data = collect();
+  const cbUsed = data.cashbackUsed;
+  paying = true; updatePayEnabled(); $('pay-btn').textContent = 'Opening payment…';
+
+  const options = {
+    key: CONFIG.razorpayKey,
+    amount: data.amountPaid * 100,
+    currency: 'INR',
+    name: 'Veshannastro',
+    description: data.service,
+    prefill: { name:data.name, email:data.googleEmail, contact:data.phone },
+    theme: { color:'#c9a84c' },
+    modal: { ondismiss: () => { paying=false; updatePayEnabled(); $('pay-btn').textContent='Pay '+inr(netPayable()); } },
+    handler: async (resp) => {
+      const pid = resp.razorpay_payment_id;
+      data.payment_id = pid; data.paymentStatus='Paid';
+      let earned = 0;
+      // 1) debit cashback used (idempotent per payment id)
+      try{
+        if(cbUsed > 0){
+          await api('/wallet/redeem', { method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({ uid:data.uid, email:data.googleEmail, amount_paise:cbUsed*100, payment_id:pid }) });
+        }
+      }catch(e){ console.warn('redeem failed', e); }
+      // 2) credit new cashback for next time (server computes the amount)
+      try{
+        const j = await api('/wallet/earn', { method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ uid:data.uid, email:data.googleEmail, amount_paid_paise:data.amountPaid*100, payment_id:pid }) });
+        earned = Math.floor((j.earned_paise||0)/100);
+      }catch(e){ console.warn('earn failed', e); }
+      data.cashbackEarned = earned;
+      // 2b) consume one weekly slot for this paid booking (idempotent per payment id)
+      try{ await api('/slots/consume', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ payment_id:pid }) }); }catch(e){}
+      // 3) log the full order to the Consultations sheet
+      logToSheet(data);
+      showSuccess(earned);
+    }
+  };
+  try{
+    const rzp = new Razorpay(options);
+    rzp.on('payment.failed', (r) => {
+      paying=false; updatePayEnabled(); $('pay-btn').textContent='Pay '+inr(netPayable());
+      alert('Payment failed: ' + ((r.error&&r.error.description)||'Please try again.'));
+    });
+    rzp.open();
+  }catch(e){
+    paying=false; updatePayEnabled(); $('pay-btn').textContent='Pay '+inr(netPayable());
+    alert('Could not open the payment window: ' + e.message);
+  }
+});
+
+function logToSheet(data){
+  try{
+    fetch(CONFIG.sheetWebhook, {
+      method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ ...data, timestamp:new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}) })
+    });
+  }catch(e){ console.warn('sheet log failed', e); }
+}
+
+function showSuccess(earned){
+  $('checkout-view').style.display='none';
+  $('success').classList.add('show');
+  if(earned > 0){
+    $('earned-line').style.display='';
+    $('earned-line').textContent = '✦ You earned ' + inr(earned) + ' cashback for your next booking.';
+  }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+
+
+/* ═══════════ FIREBASE-AWARE BOOT ═══════════ */
+function showAuthLoadError(){
+  const b = $('google-btn');
+  if(b){ b.disabled = true; b.style.opacity = .5; b.style.cursor = 'not-allowed'; }
+  const note = document.querySelector('.gbtn-note');
+  if(note){
+    note.textContent = 'Secure sign-in could not load — this is almost always an ad-blocker or a network block on Google services. Please turn off the blocker and reload the page.';
+    note.style.color = 'var(--err)';
+  }
+}
+
+(function waitForFirebase(tries){
+  if(window.__fbLoadError){ showAuthLoadError(); return; }
+  if(typeof firebase !== 'undefined' && firebase.initializeApp){
+    try{
+      firebase.initializeApp(firebaseConfig);
+      auth = firebase.auth();
+      wireAuth();
+    }catch(e){ console.error('Firebase init failed:', e); showAuthLoadError(); }
+    return;
+  }
+  if(tries <= 0){ showAuthLoadError(); return; }
+  setTimeout(function(){ waitForFirebase(tries - 1); }, 150);  // ~6s grace for a slow CDN
+})(40);
+
+/* ═══════════ BOOT ═══════════ */
+renderService();
+refreshSteps();
+refreshSlots();
+if(CONFIG.googleMapsKey){ const gs=document.createElement('script'); gs.async=true; gs.src='https://maps.googleapis.com/maps/api/js?key='+CONFIG.googleMapsKey+'&v=weekly&libraries=places&loading=async'; document.head.appendChild(gs); }
+</script>
+</body>
+</html>
