@@ -1354,6 +1354,66 @@ document.querySelectorAll('.fx-sb-item').forEach(function(item){
 document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ fxCelebrateClose(); closeCart(); } });
 
 /* ═══════════════════════════════════════════════════════════════════
+   COMEBACK WELCOME BANNER
+   When a visitor left checkout and the ₹25 parting-gift coupon was
+   saved (localStorage "vesh_comeback_offer" / shared-cart coupon),
+   greet them on return: a slim banner confirming the offer is live,
+   and make sure the coupon is applied to the cart totals.
+═══════════════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  var COMEBACK_CODES = { "COMEBACK25":1, "KINDLYCOMEBACK25":1 };
+
+  function readOffer(){
+    try{
+      var raw = localStorage.getItem("vesh_comeback_offer");
+      if(raw){
+        var o = JSON.parse(raw);
+        if(o && COMEBACK_CODES[o.code] && (!o.expiresAt || Date.now() < Number(o.expiresAt))) return o.code;
+        if(o && o.expiresAt && Date.now() >= Number(o.expiresAt)) localStorage.removeItem("vesh_comeback_offer");
+      }
+    }catch(e){}
+    try{
+      if(window.VeshSharedCart){
+        var c = String(VeshSharedCart.read().coupon || "").toUpperCase();
+        if(COMEBACK_CODES[c]) return c;
+      }
+    }catch(e){}
+    return "";
+  }
+
+  var code = readOffer();
+  if(!code) return;
+  try{ if(sessionStorage.getItem("vesh_comeback_banner_dismissed")) return; }catch(e){}
+
+  /* Ensure the coupon is actually applied to cart + totals */
+  try{ if(window.VeshSharedCart) VeshSharedCart.setCoupon(code); }catch(e){}
+  try{ if(typeof fxCoupon !== "undefined"){ fxCoupon = code; if(typeof renderCart === "function") renderCart(); } }catch(e){}
+
+  var css = document.createElement("style");
+  css.textContent =
+    ".vcb-banner{position:sticky;top:0;z-index:9500;display:flex;align-items:center;justify-content:center;gap:.6rem;" +
+    "padding:.6rem 2.4rem .6rem 1rem;background:linear-gradient(90deg,#6E1423,#9a2336);color:#F4DD9B;" +
+    "font:600 .85rem/1.35 Jost,system-ui,sans-serif;letter-spacing:.02em;box-shadow:0 6px 18px rgba(43,26,18,.25);animation:vcbSlide .45s ease;}" +
+    "@keyframes vcbSlide{from{transform:translateY(-100%);}to{transform:translateY(0);}}" +
+    ".vcb-banner strong{color:#fff;background:rgba(255,255,255,.14);border:1px dashed rgba(244,221,155,.7);border-radius:6px;padding:.1rem .45rem;letter-spacing:.06em;}" +
+    ".vcb-close{position:absolute;right:.6rem;top:50%;transform:translateY(-50%);background:none;border:none;color:#F4DD9B;font-size:1.15rem;cursor:pointer;line-height:1;padding:.2rem .4rem;}" +
+    "@media(max-width:560px){.vcb-banner{font-size:.76rem;padding:.55rem 2.2rem .55rem .8rem;text-align:left;}}";
+  document.head.appendChild(css);
+
+  var bar = document.createElement("div");
+  bar.className = "vcb-banner";
+  bar.setAttribute("role","status");
+  bar.innerHTML = 'Welcome back! Your flat &#8377;25 off is saved &mdash; <strong>' + code + '</strong> auto-applies at checkout.' +
+    '<button class="vcb-close" type="button" aria-label="Dismiss">&times;</button>';
+  document.body.insertBefore(bar, document.body.firstChild);
+  bar.querySelector(".vcb-close").addEventListener("click", function(){
+    bar.remove();
+    try{ sessionStorage.setItem("vesh_comeback_banner_dismissed","1"); }catch(e){}
+  });
+})();
+
+/* ═══════════════════════════════════════════════════════════════════
    GOOGLE LOGIN + ADMIN CASHBACK CONSOLE  (mirrors checkout.html)
    - Captures email to the Google Sheet the moment someone signs in,
      even if they never open the cart or checkout.

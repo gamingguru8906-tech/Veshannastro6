@@ -4663,6 +4663,35 @@ function openCartCheckout(){
 var gkExitCount = 0;          // tracks exit attempts this session
 var gkExitCouponUsed = false; // prevent repeat coupon offer
 
+function gkCloseDestination(){
+  /* Where the × should take the customer: same-origin referrer if present,
+     else the main store. Overridable via CONFIG.storeUrl. */
+  try{
+    var ref = document.referrer;
+    if(ref){
+      var u = new URL(ref);
+      if(u.origin === location.origin && u.pathname !== location.pathname) return ref;
+    }
+  }catch(e){}
+  return (window.CONFIG && CONFIG.storeUrl) || "https://www.veshannastro.co.in/#bracelet-shop";
+}
+
+function gkPersistComebackCoupon(code){
+  /* Make the parting-gift coupon survive the visit so the store page can
+     greet the returning customer with it. */
+  code = code || "COMEBACK25";
+  try{
+    if(window.VeshSharedCart && VeshSharedCart.setCoupon) VeshSharedCart.setCoupon(code);
+  }catch(e){}
+  try{
+    localStorage.setItem("vesh_comeback_offer", JSON.stringify({
+      code: code,
+      savedAt: new Date().toISOString(),
+      expiresAt: Date.now() + 24*60*60*1000  /* honoured for 24h on return */
+    }));
+  }catch(e){}
+}
+
 function gkDoClose(){
   /* actual close — bypasses warnings */
   checkoutFromCart = false;
@@ -4671,6 +4700,13 @@ function gkDoClose(){
   document.body.style.overflow = "";
   renderTotals();
   gkExitCount = 0; // reset for next open
+  /* Standalone checkout page: hiding the modal would leave a dead blank
+     page, so navigate back to the store instead. Small delay lets the
+     parting toast/cracker be seen. */
+  if(document.body.classList.contains("checkout-only")){
+    var dest = gkCloseDestination();
+    setTimeout(function(){ window.location.href = dest; }, gkExitCouponUsed ? 1400 : 250);
+  }
 }
 
 function closeCheckout(){
@@ -4683,6 +4719,12 @@ function closeCheckout(){
     if(gkCurrentStep === 2 && !alreadyCoupon && !gkMicroOfferShown){
       setTimeout(gkShowMicroOffer, 320);
     }
+    return;
+  }
+
+  /* Coupon already claimed/saved: never nag again — just close */
+  if(gkExitCouponUsed){
+    gkDoClose();
     return;
   }
 
@@ -5582,6 +5624,9 @@ function gkApplyExitCoupon(){
 /* Force-apply any coupon directly — used by exit flow, bypasses chip validation */
 function gkForceApplyCoupon(code){
   coupon = code;
+  /* Comeback codes must survive the visit — persist so the store greets
+     the returning customer with the offer. */
+  if(code === "COMEBACK25" || code === "KINDLYCOMEBACK25") gkPersistComebackCoupon(code);
   // Sync all coupon input fields so nothing is out of state
   var ci = $("coupon-input");   if(ci) ci.value = code;
   var gci = $("gk-coupon-inp"); if(gci) gci.value = code;
@@ -5722,15 +5767,11 @@ function gkBind(){
     gkExitCouponUsed = true;
     gkHideExitWarn();
     gkForceApplyCoupon("COMEBACK25");
+    gkPersistComebackCoupon("COMEBACK25");
     $("co-modal").classList.add("open");
     $("co-modal").setAttribute("aria-hidden","false");
     document.body.style.overflow = "hidden";
     showGkStep(2);
-  });
-  if(epStay1) epStay1.addEventListener("click", function(){
-    // "Show me the offer" → go straight to stage 2 coupon reveal
-    gkExitCount = 1; // ensure stage 2 counter is correct
-    gkShowExitWarn(2);
   });
 
   var epLeave1 = $("gk-ep-leave1");
@@ -5764,22 +5805,19 @@ function gkBind(){
   var epLeave2 = $("gk-ep-leave2");
   if(epLeave2) epLeave2.addEventListener("click", function(event){
     if(event && event.stopImmediatePropagation) event.stopImmediatePropagation();
-    gkHideExitWarn();
-    gkDoClose();
-    try{ if(navigator.vibrate) navigator.vibrate([60]); }catch(e){}
-  });
-  if(epLeave2) epLeave2.addEventListener("click", function(){
-    // Auto-apply coupon as a parting gift — ready when they return
+    // Auto-apply coupon as a parting gift — and PERSIST it so the store
+    // page can greet them with it when they return.
     gkExitCouponUsed = true;
     gkForceApplyCoupon("COMEBACK25");
+    gkPersistComebackCoupon("COMEBACK25");
     gkHideExitWarn();
-    gkDoClose();
     try{ if(navigator.vibrate) navigator.vibrate([60]); }catch(e){}
     // Fire a small celebration even as they leave — coupon is theirs
-    setTimeout(gkFireCracker, 200);
+    setTimeout(gkFireCracker, 150);
     setTimeout(function(){
       toast("₹25 off saved — COMEBACK25 is ready for your return!");
-    }, 400);
+    }, 300);
+    gkDoClose(); // navigates back to the store after the toast (checkout-only mode)
   });
 
   // Close exit popup on backdrop click
