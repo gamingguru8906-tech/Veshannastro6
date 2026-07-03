@@ -1571,6 +1571,23 @@ body.checkout-only{
 body.checkout-only > :not(#co-modal):not(script):not(style){
   display:none!important;
 }
+/* ── Overlays that MUST stay functional in checkout-only mode ──
+   These are direct children of <body>, so the guard above kills them
+   with !important — which silently disabled the exit-intent warning,
+   the ₹25 comeback offer, toasts, celebrations, and the account panel.
+   Re-enable each one, but only in its "shown" state. */
+body.checkout-only > #toast.toast,
+body.checkout-only > #gk-cracker-layer.gk-cracker-layer{display:block!important;}
+body.checkout-only > #gk-exit-popup{display:none!important;}
+body.checkout-only > #gk-exit-popup.show{display:flex!important;}
+body.checkout-only > #gk-micro-popup{display:none!important;}
+body.checkout-only > #gk-micro-popup.show{display:flex!important;}
+body.checkout-only > #bbt-shell{display:none!important;}
+body.checkout-only > #bbt-shell.open{display:block!important;}
+body.checkout-only > #bbt-track-panel{display:none!important;}
+body.checkout-only > #bbt-track-panel.open{display:grid!important;}
+body.checkout-only > #gk-confetti-canvas{display:none!important;}
+body.checkout-only > #gk-confetti-canvas.show{display:block!important;}
 body.checkout-only #co-modal{
   display:flex!important;
 }
@@ -4722,8 +4739,10 @@ function closeCheckout(){
     return;
   }
 
-  /* Coupon already claimed/saved: never nag again — just close */
-  if(gkExitCouponUsed){
+  /* Coupon already claimed/saved (this visit or restored from a previous
+     one): never nag again — just close */
+  var hasComeback = (coupon === "COMEBACK25" || coupon === "KINDLYCOMEBACK25");
+  if(gkExitCouponUsed || hasComeback){
     gkDoClose();
     return;
   }
@@ -5050,6 +5069,16 @@ function showSuccess(order, msg){
   $("co-success-msg").textContent = msg;
   $("co-wa").href = waLink(order);
   $("co-success").classList.add("show");
+  /* Order completed — the comeback offer served its purpose. Clear it so
+     the customer isn't greeted with a stale ₹25 banner after buying. */
+  try{ localStorage.removeItem("vesh_comeback_offer"); }catch(e){}
+  try{ sessionStorage.removeItem("vesh_comeback_banner_dismissed"); }catch(e){}
+  try{
+    if(window.VeshSharedCart){
+      var c = String(VeshSharedCart.read().coupon || "").toUpperCase();
+      if(c === "COMEBACK25" || c === "KINDLYCOMEBACK25") VeshSharedCart.setCoupon("");
+    }
+  }catch(e){}
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -5318,7 +5347,7 @@ function gkFireCracker(){
   _gkCrackerToken++;
   var myToken = _gkCrackerToken;
 
-  canvas.style.display = "block";
+  canvas.style.display = "block"; canvas.classList.add("show");
   canvas.width  = window.innerWidth;
   canvas.height = window.innerHeight;
   var ctx = canvas.getContext("2d");
@@ -5452,7 +5481,7 @@ function gkFireCracker(){
       requestAnimationFrame(draw);
     } else {
       ctx.clearRect(0,0,canvas.width,canvas.height);
-      canvas.style.display = "none";
+      canvas.style.display = "none"; canvas.classList.remove("show");
     }
   }
   requestAnimationFrame(draw);

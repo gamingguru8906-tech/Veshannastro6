@@ -1275,7 +1275,14 @@ function fxPay(){
         var order=fxBuildOrder(c,resp.razorpay_payment_id,'Paid');
         fxLogOrder(order);
         try{ if(window.top&&window.top.fbq)window.top.fbq('track','Purchase',{value:fxTotal(),currency:'INR'}); }catch(e){}
-        fxCart={}; updateFab(false); renderCart();
+        fxCart={}; fxCoupon=''; updateFab(false);
+        /* Purchase complete — retire the comeback offer + saved cart so the
+           welcome-back banner doesn't greet a customer who just bought. */
+        try{ if(window.VeshSharedCart) VeshSharedCart.clear(); }catch(e){}
+        try{ localStorage.removeItem('vesh_comeback_offer'); }catch(e){}
+        try{ sessionStorage.removeItem('vesh_comeback_banner_dismissed'); }catch(e){}
+        try{ var vb=document.querySelector('.vcb-banner'); if(vb) vb.remove(); }catch(e){}
+        renderCart();
         fxShowSuccess(order,'Thank you for your order. We\u2019ll ship within 1\u20132 working days. A copy of your order is saved.');
       }
     });

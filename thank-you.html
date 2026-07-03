@@ -60,6 +60,8 @@
     </a>
     <a class="home" href="https://www.veshannastro.co.in/">Back to Veshannastro</a>
 
+    <p class="note" style="margin-top:1rem">How was your experience? <a href="https://forms.gle/PkYkRQkJ34iGJkYv9" target="_blank" rel="noopener" style="color:var(--maroon);font-weight:600;text-decoration:underline">Share quick feedback</a> — it takes 30 seconds and helps us serve you better.</p>
+
     <p class="note">Keep your Payment ID for any support queries. If you don't get a confirmation within a few hours, message us on WhatsApp and we'll sort it out.</p>
     <p class="footer">veshannastro.co.in · @veshann.astro</p>
   </div>
@@ -100,6 +102,27 @@
     lines.push("Payment ID: " + paymentId);
   }
   $("wa").href = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(lines.join("\n"));
+
+  /* ── Order complete: retire the ₹25 comeback offer ──
+     Payment-link buyers land here instead of the in-page success screen,
+     so do the same cleanup checkout.html does: remove the saved offer,
+     the banner-dismissal flag, and the comeback coupon from the shared
+     cart (edited directly since vesh-shared-cart.js isn't loaded here). */
+  try{ localStorage.removeItem("vesh_comeback_offer"); }catch(e){}
+  try{ sessionStorage.removeItem("vesh_comeback_banner_dismissed"); }catch(e){}
+  try{
+    var CART_KEY = "veshannastro_shared_cart_v1";
+    var raw = localStorage.getItem(CART_KEY);
+    if(raw){
+      var cart = JSON.parse(raw);
+      var c = String((cart && cart.coupon) || "").toUpperCase();
+      if(c === "COMEBACK25" || c === "KINDLYCOMEBACK25"){
+        cart.coupon = "";
+        cart.updatedAt = new Date().toISOString();
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+      }
+    }
+  }catch(e){}
 })();
 </script>
 </body>
