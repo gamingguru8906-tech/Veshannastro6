@@ -1053,7 +1053,8 @@ a:active,button:active{transform:translateY(1px);}
     document.querySelectorAll('.vbook').forEach(function(a){
       var focus=a.getAttribute('data-focus');
       var svc=focus+' \u2014 '+dur;
-      a.href='booking.html?'+new URLSearchParams({service:svc, price:price, cat:CAT}).toString();
+      var checkoutPath = (a.getAttribute('href') || '').split('?')[0] || 'vedic-checkout.html';
+      a.href=checkoutPath+'?'+new URLSearchParams({service:svc, price:price, cat:CAT}).toString();
       var pe=a.querySelector('.bk-price'); if(pe) pe.textContent=disp;
     });
     var orig=opt.getAttribute('data-orig');
