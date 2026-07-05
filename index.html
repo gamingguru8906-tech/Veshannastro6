@@ -3365,6 +3365,9 @@ canvas#sc{background:#050507!important;z-index:0!important;}
     orderWebhook: "https://script.google.com/macros/s/AKfycbztoMrSKovuP6k6tEQioce6FEJGdbXhjKZTMC3GMq-fJY7kE2EveHIwbzyvqdrVI3rF/exec",
     premiumWebhook: "https://script.google.com/macros/s/AKfycbx82o6EC1UOXqy6Qb4COBaaSR4ZAtT75_6VQtJjETT7gkqBFqI_cBlZtL_gGN7Y6hwp/exec"
   };
+  var VOQ_PRICE = 399;
+  var VOQ_PRICE_TEXT = "\u20B9" + VOQ_PRICE;
+  function voqPayText() { return "Pay " + VOQ_PRICE_TEXT + " with Razorpay"; }
   /* ----------------------------------------------------------- */
 
   var reduceMotion = window.matchMedia &&
@@ -3470,7 +3473,7 @@ canvas#sc{background:#050507!important;z-index:0!important;}
         { ic: "zodiac", t: "Vedic Kundli Consultation", d: "A deep 1-to-1 reading of your full birth chart — career, wealth and timing.", p: "₹2,249", was: "₹2,999", off: "25% off", badge: "Signature", btype: "flagship", give: ["video", "rec"], cta: "Book now", link: "vedic-kundli-booking.html", features: ["45-min live video session", "Career, wealth & marriage timing", "Personalised remedies & gemstones"] },
         { ic: "path", t: "Premium Vedic Life Path Report", d: "Your chart computed precisely, then written up as a complete life-path map.", p: "₹699", was: "₹932", off: "25% off", badge: "NEW", btype: "new", give: ["pdf"], cta: "Get report", link: "report-booking.html?service=astrology-life-path-report", features: ["Built on the Swiss Ephemeris engine", "Dasha timeline & key life phases", "Strengths, cautions & remedies"] },
         { ic: "heartcrack", t: "Divorce & Separation Report", d: "A focused read on marriage strain, timing and the road ahead.", p: "₹599", was: "₹799", off: "25% off", badge: "NEW", btype: "new", give: ["pdf"], cta: "Get report", link: "report-booking.html?service=divorce-separation-report", features: ["Marriage stress & timing analysis", "Reconciliation vs separation outlook", "Practical remedial guidance"] },
-        { ic: "ask", t: "One Question Voice Consultation", d: "Ask one clear question, get a recorded voice answer from your chart.", p: "₹202", unit: "/question", give: ["rec"], cta: "Ask now", pay: "voiceQ", link: "vedic-kundli-booking.html?service=General", features: ["One focused question", "Chart-based voice answer", "Delivered within 24–48 hrs"] }
+        { ic: "ask", t: "One Question Voice Consultation", d: "Ask one clear question, get a recorded voice answer from your chart.", p: "₹399", unit: "/question", give: ["rec"], cta: "Ask now", pay: "voiceQ", link: "vedic-kundli-booking.html?service=General", features: ["One focused question", "Chart-based voice answer", "Delivered within 24–48 hrs"] }
       ]
     },
     {
@@ -3763,9 +3766,10 @@ canvas#sc{background:#050507!important;z-index:0!important;}
         '<button type="button" class="voq-close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 5l14 14M19 5 5 19"/></svg></button>' +
         '<p class="voq-kicker">One Question Voice Consultation</p>' +
         '<h3 class="voq-title">Ask Maaya one question</h3>' +
-        '<p class="voq-price">\u20B9202 <span>\u00B7 one question, one recorded voice answer</span></p>' +
+        '<p class="voq-price">' + VOQ_PRICE_TEXT + ' <span>\u00B7 one question, one recorded voice answer</span></p>' +
         '<label class="voq-field"><span>Your name</span><input type="text" id="voq-name" autocomplete="name" /></label>' +
         '<label class="voq-field"><span>Date of birth</span><input type="date" id="voq-dob" /></label>' +
+        '<label class="voq-field"><span>Time of birth</span><input type="time" id="voq-tob" autocomplete="off" /></label>' +
         '<label class="voq-field"><span>WhatsApp number</span>' +
           '<div class="voq-phone-row">' +
             '<select class="voq-cc" id="voq-cc">' +
@@ -3790,7 +3794,7 @@ canvas#sc{background:#050507!important;z-index:0!important;}
           '<div id="voq-verified-strip"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Email verified \u2014 you\'re all set.</div>' +
         '</div>' +
         '<label class="voq-field"><span>Your question</span><textarea id="voq-question" placeholder="Ask one clear, specific question\u2026"></textarea></label>' +
-        '<p class="voq-err" id="voq-err">Please fill all fields correctly and verify your email before paying.</p>' +
+        '<p class="voq-err" id="voq-err">Please fill all fields correctly, including birth time, and verify your email before paying.</p>' +
         '<button type="button" class="voq-pay" id="voq-pay-btn">Verify Email to Continue</button>' +
         '<p class="voq-note">Secure checkout via Razorpay \u00B7 your question goes only to your astrologer</p>' +
       '</div>';
@@ -3816,6 +3820,14 @@ canvas#sc{background:#050507!important;z-index:0!important;}
     document.body.style.overflow = "";
   }
   function voqValue(id) { var el = document.getElementById(id); return el ? String(el.value || "").trim() : ""; }
+  function voqFormatTime(value) {
+    var parts = String(value || "").split(":");
+    var h = parseInt(parts[0], 10), m = parts[1] || "00";
+    if (isNaN(h)) return value || "";
+    var suffix = h >= 12 ? "PM" : "AM";
+    var hour12 = h % 12 || 12;
+    return hour12 + ":" + m + " " + suffix;
+  }
 
   /* ---- Email OTP verification (mirrors report-booking.html's flow) ---- */
   var VOQ_OTP_EXPIRY_MS = 10 * 60 * 1000;
@@ -3893,13 +3905,13 @@ canvas#sc{background:#050507!important;z-index:0!important;}
     document.getElementById("voq-otp-send-btn").style.display = "none";
     document.getElementById("voq-verified-strip").style.display = "flex";
     statusEl.textContent = "";
-    document.getElementById("voq-pay-btn").textContent = "Pay \u20B9202 with Razorpay";
+    document.getElementById("voq-pay-btn").textContent = voqPayText();
   }
 
   function voqValidate() {
-    var name = voqValue("voq-name"), dob = voqValue("voq-dob"), phone = voqValue("voq-phone"), email = voqValue("voq-email"), q = voqValue("voq-question");
+    var name = voqValue("voq-name"), dob = voqValue("voq-dob"), tob = voqValue("voq-tob"), phone = voqValue("voq-phone"), email = voqValue("voq-email"), q = voqValue("voq-question");
     var phoneOk = phone.replace(/\D/g, "").length === voqExpectedLen();
-    var ok = !!name && !!dob && phoneOk && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) && q.length >= 6;
+    var ok = !!name && !!dob && !!tob && phoneOk && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) && q.length >= 6;
     var errEl = document.getElementById("voq-err");
     if (errEl) errEl.classList.toggle("show", !ok);
     return ok;
@@ -3916,48 +3928,57 @@ canvas#sc{background:#050507!important;z-index:0!important;}
     if (window.location.protocol === "file:") { alert("Payment cannot run from a local file. Please open the live https website to accept Razorpay payments."); return; }
     if (typeof Razorpay === "undefined") { alert("Razorpay could not be loaded. Please check your connection and try again."); return; }
 
-    var name = voqValue("voq-name"), dobRaw = voqValue("voq-dob"), cc = voqValue("voq-cc") || "+91",
+    var name = voqValue("voq-name"), dobRaw = voqValue("voq-dob"), tobRaw = voqValue("voq-tob"), cc = voqValue("voq-cc") || "+91",
         phone = voqValue("voq-phone"), email = voqValue("voq-email"), question = voqValue("voq-question");
     var dobDate = dobRaw ? new Date(dobRaw + "T00:00:00") : null;
     var dobStr = dobDate ? dobDate.toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" }) : "";
+    var tobStr = voqFormatTime(tobRaw);
     var btn = document.getElementById("voq-pay-btn");
     btn.disabled = true; btn.textContent = "Opening Razorpay\u2026";
 
     try {
       var rzp = new Razorpay({
         key: PAY_CONFIG.razorpayKey,
-        amount: 202 * 100,
+        amount: VOQ_PRICE * 100,
         currency: PAY_CONFIG.currency,
         name: PAY_CONFIG.brand,
         description: "One Question Voice Consultation",
         prefill: { name: name, email: email, contact: cc + phone },
-        notes: { category: "One Question Voice Consultation", dob: dobStr, question: question.slice(0, 480) },
+        notes: { category: "One Question Voice Consultation", dob: dobStr, birthTime: tobStr, birth_time: tobStr, question: question.slice(0, 480) },
         theme: { color: "#6E1423" },
-        modal: { ondismiss: function () { btn.disabled = false; btn.textContent = "Pay \u20B9202 with Razorpay"; } },
+        modal: { ondismiss: function () { btn.disabled = false; btn.textContent = voqPayText(); } },
         handler: function (response) {
           var order = {
             timestamp: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
             order_id: "VA-OQ-" + Date.now(),
             category: "One Question Voice Consultation",
+            service: "One Question Voice Consultation",
+            focus: "One Question Voice Consultation",
             source: "Maaya Orrery Widget",
             payment_status: "Paid",
+            paymentStatus: "Paid",
             payment_id: response.razorpay_payment_id,
             payment_method: "Razorpay prepaid",
             currency: "INR",
-            name: name, phone: cc + " " + phone, email: email, dob: dobStr,
+            name: name, phone: cc + " " + phone, email: email, dob: dobStr, birthTime: tobStr, birth_time: tobStr, birthPlace: "",
             customer: { name: name, phone: cc + phone, email: email, country: "India" },
+            query: question,
             question: question,
             message: question,
-            amount: 202
+            amount: VOQ_PRICE,
+            amountPaid: VOQ_PRICE
           };
           try { fetch(PAY_CONFIG.premiumWebhook, { method: "POST", body: JSON.stringify(order), mode: "no-cors" }); } catch (e) {}
-          try { fbq("track", "Purchase", { value: 202, currency: "INR" }); } catch (e) {}
+          try { fbq("track", "Purchase", { value: VOQ_PRICE, currency: "INR" }); } catch (e) {}
           closeVoq();
           var msg = [
             "Hi Veshannastro, I've paid for my One Question Voice Consultation.",
             "",
+            "Service: One Question Voice Consultation",
+            "Amount: " + VOQ_PRICE_TEXT,
             "Name: " + name,
             "DOB: " + dobStr,
+            "Birth Time: " + tobStr,
             "Phone: " + cc + " " + phone,
             "Email: " + email,
             "Payment ID: " + order.payment_id,
@@ -3965,19 +3986,19 @@ canvas#sc{background:#050507!important;z-index:0!important;}
             "My question: " + question
           ].join("\n");
           setTimeout(function () {
-            window.open("https://wa.me/" + PAY_CONFIG.whatsapp + "?text=" + encodeURIComponent(msg), "_blank");
+            window.location.href = "https://wa.me/" + PAY_CONFIG.whatsapp + "?text=" + encodeURIComponent(msg);
           }, 600);
         }
       });
-      try { fbq("track", "InitiateCheckout", { value: 202, currency: "INR" }); } catch (e) {}
+      try { fbq("track", "InitiateCheckout", { value: VOQ_PRICE, currency: "INR" }); } catch (e) {}
       rzp.on("payment.failed", function (response) {
-        btn.disabled = false; btn.textContent = "Pay \u20B9202 with Razorpay";
+        btn.disabled = false; btn.textContent = voqPayText();
         var msgErr = response && response.error && response.error.description ? response.error.description : "Unknown error";
         alert("Payment failed: " + msgErr);
       });
       rzp.open();
     } catch (err) {
-      btn.disabled = false; btn.textContent = "Pay \u20B9202 with Razorpay";
+      btn.disabled = false; btn.textContent = voqPayText();
       alert("Could not open Razorpay: " + err.message);
     }
   }
