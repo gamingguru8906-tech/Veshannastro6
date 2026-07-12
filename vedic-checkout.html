@@ -189,8 +189,6 @@ select.inp{cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns
 }
 .mini-btn:hover{background:var(--maroon); color:var(--cream);}
 .mini-btn:disabled{opacity:.45; cursor:not-allowed;}
-.otp-box{display:none; margin-top:11px;}
-.otp-box.show{display:block;}
 .verified{display:none; align-items:center; gap:7px; margin-top:10px; color:var(--ok); font-size:.82rem;}
 .verified.show{display:flex;}
 .verified svg{width:15px; height:15px; stroke:var(--ok); fill:none; stroke-width:2;}
@@ -295,7 +293,6 @@ select.inp{cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns
 .ac-item b{font-weight:500; color:var(--ink);}
 .ac-item small{color:var(--muted);}
 
-#recaptcha-container{margin-top:4px;}
 </style>
 </head>
 <body>
@@ -381,7 +378,7 @@ select.inp{cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns
 
         <!-- STEP 2 — Phone -->
         <div class="step locked" id="step2">
-          <div class="step-head"><span class="step-num"><span>2</span></span><span class="step-title">Verify your phone</span></div>
+          <div class="step-head"><span class="step-num"><span>2</span></span><span class="step-title">Your phone number</span></div>
           <div class="step-body">
             <label class="lbl">Phone number <span class="req">*</span></label>
             <div class="phone-row">
@@ -394,18 +391,8 @@ select.inp{cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns
                 <option value="+65">🇸🇬 +65</option>
               </select>
               <input class="inp" id="cf-phone" type="tel" inputmode="numeric" placeholder="10-digit mobile number" autocomplete="tel-national" style="flex:1;">
-              <button class="mini-btn" id="otp-send" type="button">Send code</button>
             </div>
             <div class="ferr" id="phone-err">Enter a valid phone number.</div>
-            <div class="otp-box" id="otp-box">
-              <div class="phone-row" style="margin-top:2px;">
-                <input class="inp" id="otp-code" type="tel" inputmode="numeric" maxlength="6" placeholder="Enter 6-digit code" autocomplete="one-time-code" style="flex:1;">
-                <button class="mini-btn" id="otp-verify" type="button">Verify</button>
-              </div>
-            </div>
-            <div class="status-line" id="otp-status"></div>
-            <div class="verified" id="phone-verified"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span>Phone verified</span></div>
-            <div id="recaptcha-container"></div>
           </div>
         </div>
 
@@ -566,8 +553,6 @@ const $ = id => document.getElementById(id);
 /* ── state ── */
 let USER = null;                 // firebase user
 let walletRupees = 0;            // balance from server
-let phoneVerified = false;
-let confirmationResult = null;   // firebase phone confirmation
 let paying = false;
 
 /* ── firebase is initialised in boot(), only after the SDK is confirmed loaded ── */
@@ -623,12 +608,12 @@ function refreshSteps(){
   const s2 = $('step2'), s3 = $('step3');
   if(USER){ $('step1').classList.add('done'); s2.classList.remove('locked'); }
   else    { $('step1').classList.remove('done'); s2.classList.add('locked'); s3.classList.add('locked'); }
-  if(phoneVerified){ s2.classList.add('done'); s3.classList.remove('locked'); }
+  if(phoneOk()){ s2.classList.add('done'); s3.classList.remove('locked'); }
   else if(USER){ s3.classList.add('locked'); }
   updatePayEnabled();
 }
 function updatePayEnabled(){
-  const ready = USER && phoneVerified;
+  const ready = USER && phoneOk();
   $('pay-btn').disabled = !ready || paying;
 }
 
@@ -653,13 +638,10 @@ auth.onAuthStateChanged(async (user) => {
     if(user.photoURL){ $('u-photo').src=user.photoURL; $('u-photo').style.display=''; $('u-fallback').style.display='none'; }
     else { $('u-fallback').textContent = (user.displayName||'✦').trim().charAt(0).toUpperCase(); }
     if(!$('cf-name').value && user.displayName) $('cf-name').value = user.displayName;
-    // phone linked already? treat as verified this session
-    const hasPhone = (user.providerData||[]).some(p => p.providerId === 'phone');
-    if(hasPhone){ phoneVerified = true; $('phone-verified').classList.add('show'); }
     await grantSignupBonusThenLoad(user);
   } else {
     $('s1-body').style.display=''; $('s1-signed').style.display='none';
-    walletRupees = 0; phoneVerified = false;
+    walletRupees = 0;
   }
   refreshSteps(); renderLedger();
 });
@@ -702,61 +684,14 @@ async function refreshSlots(){
 }
 $('cb-switch').addEventListener('change', renderLedger);
 
-/* ═══════════ PHONE OTP (Firebase, links to the Google account) ═══════════ */
+/* ═══════════ PHONE (number only — OTP verification removed) ═══════════ */
 function e164(){
   const cc = $('cf-cc').value || '+91';
   const num = ($('cf-phone').value || '').replace(/\D/g,'');
   return { cc, num, full: cc + num };
 }
-function setupRecaptcha(){
-  if(window._recaptcha) return window._recaptcha;
-  window._recaptcha = new firebase.auth.RecaptchaVerifier('recaptcha-container', { size:'invisible' });
-  return window._recaptcha;
-}
-$('otp-send').addEventListener('click', async () => {
-  if(!USER){ return; }
-  const { num, full } = e164();
-  const err = $('phone-err'); err.classList.remove('show');
-  if(num.length < 7){ err.classList.add('show'); return; }
-  $('otp-send').disabled = true; $('otp-status').textContent = 'Sending code…';
-  try{
-    const verifier = setupRecaptcha();
-    confirmationResult = await auth.currentUser.linkWithPhoneNumber(full, verifier);
-    $('otp-box').classList.add('show'); $('otp-code').focus();
-    $('otp-status').textContent = 'Code sent to ' + full + '. It may take a few seconds.';
-  }catch(e){
-    console.error(e);
-    if(e.code === 'auth/provider-already-linked' || e.code === 'auth/credential-already-in-use'){
-      phoneVerified = true; $('phone-verified').classList.add('show'); $('otp-status').textContent='';
-      refreshSteps();
-    } else {
-      $('otp-status').textContent = 'Could not send code: ' + (e.message || e.code);
-      // let them retry
-      try{ if(window._recaptcha){ window._recaptcha.clear(); window._recaptcha=null; } }catch(_){}
-    }
-    $('otp-send').disabled = false;
-  }
-});
-$('otp-code').addEventListener('input', function(){
-  this.value = this.value.replace(/\D/g,'').slice(0,6);
-  if(this.value.length === 6) $('otp-verify').click();
-});
-$('otp-verify').addEventListener('click', async () => {
-  const code = ($('otp-code').value||'').trim();
-  if(code.length !== 6 || !confirmationResult){ $('otp-status').textContent='Enter the 6-digit code first.'; return; }
-  $('otp-verify').disabled = true; $('otp-status').textContent = 'Verifying…';
-  try{
-    await confirmationResult.confirm(code);
-    phoneVerified = true;
-    $('otp-box').classList.remove('show'); $('otp-status').textContent='';
-    $('phone-verified').classList.add('show');
-    refreshSteps();
-  }catch(e){
-    $('otp-status').textContent = 'Incorrect or expired code. Please try again.';
-    $('otp-verify').disabled = false;
-  }
-});
-
+function phoneOk(){ return (($('cf-phone').value||'').replace(/\D/g,'').length >= 7); }
+$('cf-phone').addEventListener('input', refreshSteps);
 /* ═══════════ PICKERS: calendar (DOB), clock (times), city (place) ═══════════ */
 function pad2(n){ return ('0'+n).slice(-2); }
 function closeAllPops(except){
@@ -954,7 +889,7 @@ function collect(){
   const { full } = e164();
   return {
     name:$('cf-name').value.trim(), gender:$('cf-gender').value,
-    phone:full, phoneVerified:phoneVerified,
+    phone:full, phoneVerified:false,
     googleEmail:(USER&&USER.email)||'', email:(USER&&USER.email)||'', uid:(USER&&USER.uid)||'',
     dob, birthTime:tob, birthPlace:$('cf-place').value.trim(),
     service:SERVICE, category:CATEGORY, query:$('cf-query').value.trim(),
@@ -967,7 +902,7 @@ function collect(){
 
 /* ═══════════ PAY ═══════════ */
 $('pay-btn').addEventListener('click', () => {
-  if(!USER || !phoneVerified){ return; }
+  if(!USER || !phoneOk()){ return; }
   if(!validate()){ document.querySelector('.ferr.show')?.scrollIntoView({behavior:'smooth',block:'center'}); return; }
   if(location.protocol === 'file:'){ alert('Payments need a real https:// address. Upload this page to your hosting first.'); return; }
   if(typeof Razorpay === 'undefined'){ paying=false; updatePayEnabled(); $('pay-btn').textContent='Pay '+inr(netPayable()); alert('The payment window could not load — this is usually an ad-blocker or a network block. Please disable it and reload the page.'); return; }
