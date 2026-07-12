@@ -384,7 +384,7 @@ select.inp{cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns
           <div class="step-body">
             <label class="lbl">Phone number <span class="req">*</span></label>
             <div class="phone-row">
-              <select class="inp cc" id="cf-cc">
+              <select class="inp cc" id="cf-cc" aria-label="Country code">
                 <option value="+91" selected>🇮🇳 +91</option>
                 <option value="+1">🇺🇸 +1</option>
                 <option value="+44">🇬🇧 +44</option>
@@ -392,9 +392,10 @@ select.inp{cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns
                 <option value="+61">🇦🇺 +61</option>
                 <option value="+65">🇸🇬 +65</option>
               </select>
-              <input class="inp" id="cf-phone" type="tel" inputmode="numeric" placeholder="10-digit mobile number" autocomplete="tel-national" style="flex:1;">
+              <input class="inp" id="cf-phone" type="tel" inputmode="numeric" maxlength="12" placeholder="10-digit mobile number" autocomplete="tel-national" style="flex:1;">
             </div>
-            <div class="ferr" id="phone-err">Enter a valid phone number.</div>
+            <div class="ferr" id="phone-err">Enter a valid phone number (at least 7 digits).</div>
+            <div class="verified" id="phone-good"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span>Number saved — we'll reach you on WhatsApp/call here.</span></div>
           </div>
         </div>
 
@@ -740,7 +741,20 @@ function e164(){
   return { cc, num, full: cc + num };
 }
 function phoneOk(){ return (($('cf-phone').value||'').replace(/\D/g,'').length >= 7); }
-$('cf-phone').addEventListener('input', refreshSteps);
+(function(){
+  var inp = $('cf-phone'), err = $('phone-err'), good = $('phone-good'), touched = false;
+  function paint(){
+    var digits = (inp.value||'').replace(/\D/g,'');
+    if(inp.value !== digits) inp.value = digits;          // digits only
+    var ok = digits.length >= 7;
+    good.classList.toggle('show', ok);
+    err.classList.toggle('show', touched && digits.length > 0 && !ok);
+    refreshSteps();
+  }
+  inp.addEventListener('input', paint);
+  inp.addEventListener('blur', function(){ touched = true; paint(); });
+  $('cf-cc').addEventListener('change', paint);
+})();
 /* ═══════════ PICKERS: calendar (DOB), clock (times), city (place) ═══════════ */
 function pad2(n){ return ('0'+n).slice(-2); }
 function closeAllPops(except){
