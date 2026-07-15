@@ -146,6 +146,7 @@ src="https://www.facebook.com/tr?id=1423451529588621&ev=PageView&noscript=1"
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>window.emailjs&&emailjs.init({publicKey:'i35OrY8mtgVZMIQU8'});</script>
 <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+<script src="payment-tracking.js" defer></script>
 <!-- old bracelet-shop.css / bracelet-shop.js removed: gemstone shop is now the embedded bracelet-fusion.html -->
 <!-- Email OTP System -->
 <script>
@@ -3947,7 +3948,13 @@ canvas#sc{background:#050507!important;z-index:0!important;}
         notes: { category: "One Question Voice Consultation", dob: dobStr, birthTime: tobStr, birth_time: tobStr, question: question.slice(0, 480) },
         theme: { color: "#6E1423" },
         modal: { ondismiss: function () { btn.disabled = false; btn.textContent = voqPayText(); } },
-        handler: function (response) {
+        handler: async function (response) {
+          var verified = window.VeshannPayment && await window.VeshannPayment.trackPurchase(response.razorpay_payment_id, VOQ_PRICE * 100);
+          if (!verified) {
+            btn.disabled = false; btn.textContent = voqPayText();
+            alert("Payment confirmation is still pending. No consultation was recorded. Please keep your Payment ID and contact us if this message persists.");
+            return;
+          }
           var order = {
             timestamp: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
             order_id: "VA-OQ-" + Date.now(),
@@ -3969,7 +3976,6 @@ canvas#sc{background:#050507!important;z-index:0!important;}
             amountPaid: VOQ_PRICE
           };
           try { fetch(PAY_CONFIG.premiumWebhook, { method: "POST", body: JSON.stringify(order), mode: "no-cors" }); } catch (e) {}
-          try { fbq("track", "Purchase", { value: VOQ_PRICE, currency: "INR" }); } catch (e) {}
           closeVoq();
           var msg = [
             "Hi Veshannastro, I've paid for my One Question Voice Consultation.",

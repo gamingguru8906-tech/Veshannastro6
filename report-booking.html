@@ -23,6 +23,7 @@ fbq('track', 'PageView');
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>emailjs.init({publicKey:'i35OrY8mtgVZMIQU8'});</script>
 <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+<script src="payment-tracking.js" defer></script>
 
 <style>
 :root{
@@ -737,9 +738,14 @@ document.getElementById('rb-submit').addEventListener('click',function(){
       theme:{color:'#c9a84c'},
       notes:(AUTO_REPORT[key]?{name:params.from_name,dob:document.getElementById('rb-dob').value,email:params.email,phone:params.phone,gender:'',extra:(SVC.extra?document.getElementById('rb-analyze').value.trim():''),source:'veshann_report',product:AUTO_REPORT[key],report_type:AUTO_REPORT[key]}:{}),
       modal:{ondismiss:resetBtn},
-      handler:function(response){
+      handler:async function(response){
         params.payment_id=response.razorpay_payment_id;
-        try{fbq('track','Purchase',{value:SVC.final,currency:'INR'});}catch(e){}
+        var verified=window.VeshannPayment&&await window.VeshannPayment.trackPurchase(params.payment_id,SVC.final*100);
+        if(!verified){
+          resetBtn();
+          alert('Payment confirmation is still pending. No report order was recorded. Please keep your Payment ID and contact us if this message persists.');
+          return;
+        }
 
         /* ── Auto-generate & email PDF report via backend ── */
         /* The Razorpay webhook handles this automatically.

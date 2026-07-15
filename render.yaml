@@ -24,3 +24,7 @@ services:
         value: "0.05"
       - key: SLOTS_PER_WEEK      # weekly capacity shown on the checkout scarcity banner
         value: "10"
+      - key: RAZORPAY_KEY_ID     # server-only credentials used by /payments/verify
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false

@@ -16,9 +16,10 @@
  *   coupon discount, and final amount paid.
  *
  * SETUP (5 minutes)
- *   1. Open your spreadsheet:
- *        https://docs.google.com/spreadsheets/d/1szUQVdkLnQ-3v0VqntabwT-ZE-AIMwG8jZs7vdq0D50/edit
- *   2. Extensions -> Apps Script.
+ *   1. Open the canonical Consultation CRM spreadsheet, then Extensions ->
+ *      Apps Script.
+ *   2. In Project Settings -> Script properties, add SPREADSHEET_ID with the
+ *      ID from the CRM URL (the value between /d/ and /edit).
  *   3. Create a NEW script file (or new project — either is fine), delete the
  *      boilerplate, paste ALL of this in.
  *   4. Deploy -> New deployment -> type: Web app
@@ -34,8 +35,13 @@
  * ===================================================================
  */
 
-var SPREADSHEET_ID = '1szUQVdkLnQ-3v0VqntabwT-ZE-AIMwG8jZs7vdq0D50';
 var TAB_NAME = 'Consultations';
+
+function spreadsheetId() {
+  var id = PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID');
+  if (!id) throw new Error('Missing SPREADSHEET_ID Script Property');
+  return id;
+}
 
 var HEADERS = [
   'Client ID',        // A  CN001, CN002 ...
@@ -94,7 +100,7 @@ function parseBody(e) {
 }
 
 function getOrCreateTab() {
-  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  var ss = SpreadsheetApp.openById(spreadsheetId());
   var sheet = ss.getSheetByName(TAB_NAME);
   if (!sheet) {
     sheet = ss.insertSheet(TAB_NAME);

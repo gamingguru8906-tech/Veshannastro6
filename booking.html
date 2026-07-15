@@ -35,12 +35,6 @@ src="https://www.facebook.com/tr?id=1423451529588621&ev=PageView&noscript=1"
   gtag('js', new Date());
   gtag('config', 'G-R20FKYJK7P');
 </script>
-<!-- Google tag (gtag.js) event -->
-<script>
-  gtag('event', 'ads_conversion_PURCHASE_1', {
-    // <event_parameters>
-  });
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -139,6 +133,7 @@ src="https://www.facebook.com/tr?id=1423451529588621&ev=PageView&noscript=1"
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>emailjs.init({publicKey:'i35OrY8mtgVZMIQU8'});</script>
 <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+<script src="payment-tracking.js" defer></script>
 <!-- Email OTP System -->
 <script>
 (function(){
@@ -2742,9 +2737,14 @@ document.getElementById('cf-submit').addEventListener('click',function(){
         prefill    :{name:params.from_name, email:params.email, contact:(document.getElementById('cf-cc').value||'+91')+document.getElementById('cf-phone').value.replace(/\D/g,'')},
         theme      :{color:'#c9a84c'},
         modal      :{ondismiss:function(){resetBtn();}},
-        handler    :function(response){
+        handler    :async function(response){
           params.payment_id=response.razorpay_payment_id;
-          try{ fbq('track','Purchase',{value:_payable(),currency:'INR'}); }catch(e){}
+          var verified=window.VeshannPayment&&await window.VeshannPayment.trackPurchase(params.payment_id,_payable()*100);
+          if(!verified){
+            resetBtn();
+            alert('Payment confirmation is still pending. No booking was recorded. Please keep your Payment ID and contact us if this message persists.');
+            return;
+          }
           /* ── Split service label into focus area + duration ── */
           var _fullSvc=params.service||'';
           var _parts=_fullSvc.split(' \u2014 ');

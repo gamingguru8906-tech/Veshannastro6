@@ -8,6 +8,7 @@
 <script>window.VESHANN_GOOGLE_CLIENT_ID = "946598106017-o84r674jg4qr35fuedq8i5c3rtm3gqa9.apps.googleusercontent.com";</script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="vesh-shared-cart.js"></script>
+<script src="payment-tracking.js" defer></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -1271,10 +1272,15 @@ function fxPay(){
       notes:{category:'Gemstone Bracelet Cart',items:fxItems().map(function(i){return i.sku+'x'+i.qty;}).join(',')},
       theme:{color:'#6E1423'},
       modal:{ondismiss:function(){ if(pay){pay.disabled=false;pay.textContent='Pay '+money(fxTotal())+' with Razorpay';} }},
-      handler:function(resp){
+      handler:async function(resp){
+        var verified=window.VeshannPayment&&await window.VeshannPayment.trackPurchase(resp.razorpay_payment_id,fxTotal()*100);
+        if(!verified){
+          if(pay){pay.disabled=false;pay.textContent='Pay '+money(fxTotal())+' with Razorpay';}
+          alert('Payment confirmation is still pending. No order was recorded. Please keep your Payment ID and contact us if this message persists.');
+          return;
+        }
         var order=fxBuildOrder(c,resp.razorpay_payment_id,'Paid');
         fxLogOrder(order);
-        try{ if(window.top&&window.top.fbq)window.top.fbq('track','Purchase',{value:fxTotal(),currency:'INR'}); }catch(e){}
         fxCart={}; fxCoupon=''; updateFab(false);
         /* Purchase complete — retire the comeback offer + saved cart so the
            welcome-back banner doesn't greet a customer who just bought. */

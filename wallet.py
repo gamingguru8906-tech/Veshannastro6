@@ -12,6 +12,7 @@ only ever *asks* for it.
 
 Endpoints
   GET  /wallet/{uid}            -> current balance (paise + rupees)
+  POST /payments/verify         -> confirm a captured Razorpay payment server-side
   POST /wallet/signup-bonus     -> one-time welcome cashback (idempotent per uid)
   POST /wallet/redeem           -> debit on a SUCCESSFUL payment (idempotent per payment_id)
   POST /wallet/earn             -> credit cashback for next time (idempotent per payment_id)
@@ -45,10 +46,17 @@ Env vars (Render -> Environment):
     ADMIN_TOKEN      <a long random secret you invent>             (for manual credits)
     SIGNUP_BONUS     10000    (optional; paise granted once on first login. 10000 = Rs 100. 0 = off)
     EARN_RATE        0.05     (optional; fraction of amount paid credited back for next time)
+    RAZORPAY_KEY_ID  rzp_...  (server-side payment verification)
+    RAZORPAY_KEY_SECRET         (matching secret; never expose to the website)
 =====================================================================
 """
 
+import base64
+import json
 import os
+import re
+import urllib.error
+import urllib.request
 import psycopg2
 from fastapi import FastAPI, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
@@ -62,6 +70,8 @@ ADMIN_TOKEN    = os.environ.get("ADMIN_TOKEN", "")
 SIGNUP_BONUS   = int(os.environ.get("SIGNUP_BONUS", "0"))      # paise, one-time
 EARN_RATE      = float(os.environ.get("EARN_RATE", "0.05"))    # 5% back by default
 SLOTS_PER_WEEK = int(os.environ.get("SLOTS_PER_WEEK", "10"))   # weekly consultation capacity shown on the page
+RAZORPAY_KEY_ID = os.environ.get("RAZORPAY_KEY_ID", "")
+RAZORPAY_KEY_SECRET = os.environ.get("RAZORPAY_KEY_SECRET", "")
 
 app = FastAPI(title="Veshannastro Wallet")
 app.add_middleware(
@@ -163,6 +173,32 @@ class SlotConsume(BaseModel):
     payment_id: str
 
 
+class VerifyPaymentBody(BaseModel):
+    payment_id: str
+    expected_amount_paise: int
+    currency: str = "INR"
+
+
+_PAYMENT_ID_RE = re.compile(r"^pay_[A-Za-z0-9]+$")
+
+
+def _fetch_razorpay_payment(payment_id: str) -> dict:
+    credentials = f"{RAZORPAY_KEY_ID}:{RAZORPAY_KEY_SECRET}".encode("utf-8")
+    request = urllib.request.Request(
+        "https://api.razorpay.com/v1/payments/" + payment_id,
+        headers={
+            "Authorization": "Basic " + base64.b64encode(credentials).decode("ascii"),
+            "Accept": "application/json",
+        },
+        method="GET",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=12) as response:
+            return json.loads(response.read().decode("utf-8"))
+    except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, ValueError) as exc:
+        raise HTTPException(502, "Payment verification is temporarily unavailable.") from exc
+
+
 def _week_key() -> str:
     import datetime
     iso = datetime.date.today().isocalendar()      # (year, week, weekday)
@@ -187,7 +223,44 @@ def _slots_remaining(cur, wk: str) -> int:
 def health():
     return {"ok": True, "configured": bool(DATABASE_URL),
             "signup_bonus_paise": SIGNUP_BONUS, "earn_rate": EARN_RATE,
-            "slots_per_week": SLOTS_PER_WEEK}
+            "slots_per_week": SLOTS_PER_WEEK,
+            "payment_verification_configured": bool(RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET)}
+
+
+@app.post("/payments/verify")
+def verify_payment(body: VerifyPaymentBody):
+    """Return verified=true only for an exact captured INR payment.
+
+    Purchase conversions and CRM writes call this endpoint before recording a
+    sale. A browser callback and a payment ID by themselves are not proof that
+    Razorpay captured the expected amount.
+    """
+    payment_id = (body.payment_id or "").strip()
+    currency = (body.currency or "INR").strip().upper()
+    if not _PAYMENT_ID_RE.fullmatch(payment_id):
+        raise HTTPException(400, "Invalid payment ID.")
+    if body.expected_amount_paise <= 0 or body.expected_amount_paise > 100_000_000:
+        raise HTTPException(400, "Invalid expected amount.")
+    if currency != "INR":
+        raise HTTPException(400, "Unsupported currency.")
+    if not RAZORPAY_KEY_ID or not RAZORPAY_KEY_SECRET:
+        raise HTTPException(503, "Payment verification is not configured.")
+
+    payment = _fetch_razorpay_payment(payment_id)
+    actual_amount = int(payment.get("amount") or 0)
+    actual_currency = str(payment.get("currency") or "").upper()
+    status = str(payment.get("status") or "").lower()
+    verified = (
+        status == "captured"
+        and actual_currency == currency
+        and actual_amount == body.expected_amount_paise
+    )
+    return {
+        "verified": verified,
+        "payment_id": payment_id,
+        "amount_paise": actual_amount if verified else 0,
+        "currency": actual_currency if verified else currency,
+    }
 
 
 @app.get("/slots")

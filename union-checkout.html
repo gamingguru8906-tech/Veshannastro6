@@ -19,6 +19,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js" onerror="window.__fbLoadError=true"></script>
 <!-- Razorpay -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="payment-tracking.js" defer></script>
 
 <style>
 :root{
@@ -992,6 +993,12 @@ $('pay-btn').addEventListener('click', () => {
     handler: async (resp) => {
       const pid = resp.razorpay_payment_id;
       data.payment_id = pid; data.paymentStatus='Paid';
+      const verified = window.VeshannPayment && await window.VeshannPayment.trackPurchase(pid, Math.round(data.amountPaid*100));
+      if(!verified){
+        paying=false; updatePayEnabled(); $('pay-btn').textContent='Pay '+inr(netPayable());
+        alert('Payment confirmation is still pending. No consultation was recorded. Please keep your Payment ID and contact us if this message persists.');
+        return;
+      }
       let earned = 0;
       // 1) debit cashback used (idempotent per payment id)
       try{

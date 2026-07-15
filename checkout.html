@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="vesh-shared-cart.js"></script>
+<script src="payment-tracking.js" defer></script>
 <script>
 window.VESHANN_GOOGLE_CLIENT_ID = "946598106017-o84r674jg4qr35fuedq8i5c3rtm3gqa9.apps.googleusercontent.com";
 window.VESHANN_WALLET_API_BASE = "https://veshannastro-wallet.onrender.com";
@@ -5043,12 +5044,17 @@ function payNow(){
       notes:paymentNotes(c, checkoutOrderId),
       theme:{ color:"#6E1423" },
       modal:{ ondismiss:function(){ btn.disabled=false; renderSummary(); } },
-      handler:function(resp){
+      handler:async function(resp){
         var purchaseTotal = total();
+        var verified=window.VeshannPayment&&await window.VeshannPayment.trackPurchase(resp.razorpay_payment_id,purchaseTotal*100);
+        if(!verified){
+          btn.disabled=false; renderSummary();
+          alert("Payment confirmation is still pending. No order was recorded. Please keep your Payment ID and contact us if this message persists.");
+          return;
+        }
         var order = buildOrder(c, resp.razorpay_payment_id, "Paid", checkoutOrderId);
         logOrder(order);
         if(window.VeshSharedCart && checkoutSharedCart()) VeshSharedCart.clear();
-        try{ fbq("track","Purchase",{value:purchaseTotal,currency:"INR"}); }catch(e){}
         showSuccess(order, "Thank you for your order. We'll ship it within 1–2 working days. A copy of these details is below.");
       }
     });
