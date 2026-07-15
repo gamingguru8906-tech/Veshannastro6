@@ -1,0 +1,84 @@
+<!--
+  Maya — AI Query Consultant Widget
+  Framework-agnostic, drop-in chat widget.
+
+  INTEGRATION (any website):
+  Copy the markup below (from <!-- MAYA WIDGET START --> to <!-- MAYA WIDGET END -->)
+  into your site's HTML, OR simply include these two lines before </body>:
+
+    <link rel="stylesheet" href="/path/to/style.css">
+    <script src="/path/to/script.js" data-maya-api="http://localhost:3000/api/chat" defer></script>
+
+  This standalone file is a demo host page you can open directly to see Maya in action.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maya — AI Query Consultant (Demo)</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Demo host page content (represents "any existing website") -->
+  <main class="demo-page">
+    <h1>Your Website</h1>
+    <p>This is a sample host page. The Maya chat widget floats over it, bottom-right.</p>
+  </main>
+
+  <!-- MAYA WIDGET START -->
+  <div id="maya-widget" class="maya-widget" aria-live="polite">
+
+    <!-- Chat window (hidden until launcher clicked) -->
+    <section id="maya-window" class="maya-window" role="dialog" aria-label="Maya chat" aria-hidden="true">
+      <header class="maya-header">
+        <div class="maya-header-id">
+          <span class="maya-avatar" aria-hidden="true">M</span>
+          <div class="maya-header-text">
+            <span class="maya-name">Maya</span>
+            <span class="maya-role">
+              <span class="maya-status-dot" aria-hidden="true"></span>
+              Query Consultant · Online
+            </span>
+          </div>
+        </div>
+        <button id="maya-close" class="maya-close" type="button" aria-label="Close chat">&times;</button>
+      </header>
+
+      <div id="maya-messages" class="maya-messages" role="log" aria-live="polite"></div>
+
+      <div id="maya-typing" class="maya-typing" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </div>
+
+      <form id="maya-form" class="maya-input-bar" autocomplete="off">
+        <input
+          id="maya-input"
+          class="maya-input"
+          type="text"
+          placeholder="Ask about your order or our services…"
+          aria-label="Type your message"
+          maxlength="1000"
+          required
+        />
+        <button id="maya-send" class="maya-send" type="submit" aria-label="Send message">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path fill="currentColor" d="M2 21l21-9L2 3v7l15 2-15 2z"/>
+          </svg>
+        </button>
+      </form>
+    </section>
+
+    <!-- Bright, pulsing launch button -->
+    <button id="maya-launcher" class="maya-launcher" type="button" aria-label="Chat with Maya">
+      <span class="maya-launcher-pulse" aria-hidden="true"></span>
+      <svg class="maya-launcher-icon" viewBox="0 0 24 24" width="30" height="30" aria-hidden="true">
+        <path fill="currentColor" d="M12 2C6.48 2 2 6.03 2 11c0 2.38 1.02 4.55 2.71 6.19L4 22l5.13-1.6c.9.26 1.86.4 2.87.4 5.52 0 10-4.03 10-9S17.52 2 12 2z"/>
+      </svg>
+    </button>
+  </div>
+  <!-- MAYA WIDGET END -->
+
+  <script src="script.js" data-maya-api="http://localhost:3000/api/chat" defer></script>
+</body>
+</html>
