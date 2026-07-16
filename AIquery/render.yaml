@@ -10,7 +10,7 @@ services:
     plan: free
     # If this file is at the repo root, remove rootDir.
     # If the "AI query" folder is a subfolder of the repo, set it here:
-    rootDir: AI query
+    rootDir: AIquery
     buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /health
@@ -19,6 +19,8 @@ services:
         sync: false          # set this secret manually in the dashboard
       - key: GEMINI_MODEL
         value: gemini-2.5-flash
+      - key: DATABASE_URL
+        sync: false          # same PostgreSQL database used by the admin app
       - key: ALLOWED_ORIGINS
         sync: false          # e.g. https://veshannastro.com,https://www.veshannastro.com
       - key: RATE_MAX

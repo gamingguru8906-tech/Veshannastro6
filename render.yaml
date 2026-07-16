@@ -28,3 +28,9 @@ services:
         sync: false
       - key: RAZORPAY_KEY_SECRET
         sync: false
+      - key: GEMINI_API_KEY      # server-only Maaya model credential
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+      - key: MAAYA_RATE_MAX
+        value: "20"

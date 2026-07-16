@@ -1,5 +1,5 @@
 /* ============================================================
-   Maya — AI Query Consultant Widget (frontend logic)
+   Maaya — AI Query Consultant Widget (frontend logic)
    Vanilla JS. No dependencies. Framework-agnostic.
 
    The backend endpoint is read from the <script> tag's
@@ -19,7 +19,7 @@
     "/api/chat";
 
   var WELCOME =
-    "Hello, I'm Maya, your query consultant. I handle everything about your " +
+    "Hello, I'm Maaya, your query consultant. I handle everything about your " +
     "orders and our services — tracking, status, issues, and what we offer. " +
     "How can I help you today?";
 
@@ -84,7 +84,11 @@
       var res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text, history: history })
+        body: JSON.stringify({
+          message: text,
+          history: history,
+          session_id: window.localStorage.getItem("maya_session_id") || ""
+        })
       });
 
       if (!res.ok) {
@@ -92,6 +96,13 @@
       }
 
       var data = await res.json();
+      if (data && data.session_id) {
+        try {
+          window.localStorage.setItem("maya_session_id", data.session_id);
+        } catch (_storageError) {
+          // Same-origin deployments can still use the secure cookie.
+        }
+      }
       var reply = (data && data.reply) ? data.reply : "";
 
       setTyping(false);
@@ -108,7 +119,7 @@
         "error"
       );
       // eslint-disable-next-line no-console
-      console.error("[Maya] request failed:", err);
+      console.error("[Maaya] request failed:", err);
     } finally {
       setBusy(false);
       input.focus();

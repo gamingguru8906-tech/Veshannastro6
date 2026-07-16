@@ -1,28 +1,27 @@
-# Maya — AI Query Consultant Widget
+# Maaya AI — Operations & Leads Widget
 
-An autonomous, framework-agnostic chat widget for handling **order** and **service** inquiries. Built with plain HTML, CSS, and Vanilla JavaScript on the frontend and a small Node.js/Express backend that proxies to the Google Gemini API. Drops into any existing website.
+An empathetic operations assistant for astrology services, order questions, and human follow-up requests. The backend keeps Gemini credentials private, persists complete conversation transcripts to PostgreSQL, and emits structured lead escalations for the admin dashboard.
 
 ## Files
 
 | File | Purpose |
 |------|---------|
 | `index.html` | Widget markup + a demo host page |
-| `style.css` | Widget UI, bright pulsing launcher, Maya header |
+| `style.css` | Widget UI, bright pulsing launcher, Maaya header |
 | `script.js` | Frontend chat logic (Vanilla JS, no dependencies) |
-| `server.js` | Express backend: injects Maya's system prompt, calls Gemini |
+| `server.js` | Express backend: injects Maaya's system prompt, calls Gemini |
 | `package.json` | Backend dependencies and scripts |
-| `.env.example` | Template for your API key and config |
+| `render.yaml` | Render service and environment-variable blueprint |
 
 ## Run the demo
 
 ```bash
-cd "AI query"
+cd AIquery
 npm install
-cp .env.example .env      # then edit .env and add your GEMINI_API_KEY
-npm start
+GEMINI_API_KEY=replace-me DATABASE_URL=postgresql://... npm start
 ```
 
-Open http://localhost:3000/index.html — Maya floats bottom-right.
+Open http://localhost:3000/index.html — Maaya floats bottom-right.
 
 ## Embed in your own website
 
@@ -37,16 +36,18 @@ The `data-maya-api` attribute points the widget at your deployed backend. Becaus
 
 ## How it works
 
-The browser never sees the API key. `script.js` POSTs `{ message, history }` to `/api/chat`; `server.js` prepends Maya's strict system prompt, forwards the conversation to Gemini, and returns `{ reply }`.
+The browser never sees the API key. The widget posts its message, recent context, and opaque session ID to `/api/chat`. The backend loads the server-side transcript, forwards only the latest context to Gemini, removes the hidden escalation marker from the customer-facing answer, and stores the complete conversation in the shared PostgreSQL `sessions` table. The admin app reads that same table.
 
-### Maya's system prompt (enforced server-side)
+### Maaya's system prompt (enforced server-side)
 
-- **Identity:** Maya, an autonomous, professional query consultant.
-- **Scope:** Only order inquiries (tracking, status, issues) and services offered.
-- **Execution:** Definitive, absolute, complete answers. Resolves every query on its own with no human escalation and zero ambiguity.
+- **Identity:** Maaya AI for authentic Vedic astrology, numerology, Kundli, reports, consultations, and gemstone orders.
+- **Accuracy:** Never invents delivery, refund, payment, or order-status confirmations.
+- **Escalation:** Collects name, WhatsApp/mobile, email, and a summary before creating a high-priority founder follow-up.
+- **Privacy:** The structured `LEAD_ESCALATION` payload is removed before the browser receives the reply.
 
 ## Production notes
 
-- Restrict CORS in `server.js` to your site's origin instead of the open default.
-- Put the backend behind HTTPS and add rate limiting.
+- Set `DATABASE_URL` to the same PostgreSQL database used by the admin dashboard.
+- Restrict `ALLOWED_ORIGINS` to the production website origins.
+- Keep the default rate limit or tune `RATE_MAX` deliberately.
 - Never commit your `.env` file.
