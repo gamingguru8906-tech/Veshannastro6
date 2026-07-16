@@ -29,7 +29,7 @@
   var API_URL =
     (currentScript && currentScript.getAttribute("data-maya-api")) ||
     window.MAYA_API_URL ||
-    "http://localhost:3000/api/chat";
+    "/api/chat";
 
   var WELCOME =
     "Hello, I'm Maya, your query consultant. I handle everything about your " +
