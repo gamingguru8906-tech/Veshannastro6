@@ -2,6 +2,8 @@
 
 An empathetic operations assistant for astrology services, order questions, and human follow-up requests. The backend keeps Gemini credentials private, persists complete conversation transcripts to PostgreSQL, and emits structured lead escalations for the admin dashboard.
 
+Production traffic currently reaches this Node backend through the `/api/chat` rewrite in the repository's root `vercel.json`.
+
 ## Files
 
 | File | Purpose |

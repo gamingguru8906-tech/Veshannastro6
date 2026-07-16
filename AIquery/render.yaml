@@ -2,10 +2,9 @@
 # In Render: New + > Blueprint > connect this repo. Render reads this file.
 # After it deploys, add the secret GEMINI_API_KEY in the service's Environment tab.
 services:
-  # IMPORTANT: keep this name as "veshannastro-maya" so the live URL becomes
-  # https://veshannastro-maya.onrender.com — which is what vercel.json forwards to.
+  # Keep this aligned with vercel.json's existing production destination.
   - type: web
-    name: veshannastro-maya
+    name: veshannastro6
     runtime: node
     plan: free
     # If this file is at the repo root, remove rootDir.
