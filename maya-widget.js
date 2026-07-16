@@ -135,7 +135,7 @@
         '</button>' +
       '</form>' +
     '</section>' +
-    '<button class="maya-launcher" type="button" aria-label="Chat with Maya" data-maya-open>' +
+    '<button class="maya-launcher" type="button" aria-label="Chat with Maya">' +
       '<span class="maya-launcher-pulse" aria-hidden="true"></span>' +
       '<svg class="maya-launcher-icon" viewBox="0 0 24 24" width="30" height="30" aria-hidden="true">' +
         '<path fill="currentColor" d="M12 2C6.48 2 2 6.03 2 11c0 2.38 1.02 4.55 2.71 6.19L4 22l5.13-1.6c.9.26 1.86.4 2.87.4 5.52 0 10-4.03 10-9S17.52 2 12 2z"/>' +
