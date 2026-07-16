@@ -139,6 +139,28 @@ setInterval(() => {
   for (const [ip, e] of rateHits) if (now > e.reset) rateHits.delete(ip);
 }, 5 * 60 * 1000).unref();
 
+// Deterministic fallback: pull escalation contact details out of a user message
+// when it contains BOTH an email and a phone number. Returns null otherwise.
+function extractContact(text) {
+  if (!text || typeof text !== "string") return null;
+  const email = (text.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/) || [])[0] || "";
+  let phone = "";
+  const candidates = text.match(/\+?\d[\d\s-]{8,}\d/g) || [];
+  for (const c of candidates) {
+    const digits = c.replace(/\D/g, "");
+    if (digits.length >= 10 && digits.length <= 15) { phone = c.trim(); break; }
+  }
+  if (!email || !phone) return null;
+  const nameM = text.match(/name\s*[:\-]\s*([^,\n]+)/i);
+  const issueM = text.match(/issue\s*[:\-]\s*([^\n]+)/i);
+  return {
+    name: nameM ? nameM[1].trim() : "",
+    phone: phone,
+    email: email,
+    issue: issueM ? issueM[1].trim() : text.slice(0, 200)
+  };
+}
+
 // Log an escalation to the Google Sheet Apps Script webhook (fire-and-forget).
 function logEscalation(details) {
   if (!SHEET_WEBHOOK_URL) {
@@ -224,7 +246,7 @@ app.post("/api/chat", rateLimit, async (req, res) => {
       body: JSON.stringify({
         system_instruction: { parts: [{ text: MAYA_SYSTEM_PROMPT }] },
         contents,
-        generationConfig: { temperature: 0.4, maxOutputTokens: 600 }
+        generationConfig: { temperature: 0.4, maxOutputTokens: 1024 }
       })
     });
 
@@ -249,15 +271,20 @@ app.post("/api/chat", rateLimit, async (req, res) => {
 
     // Extract the silent escalation data block (if present), strip it from the
     // user-facing reply, and log it to the Google Sheet webhook.
+    // 1) Preferred: if the model emitted the machine block, use it and strip it.
     const escMatch = reply.match(/\[\[ESCALATION\]\]([\s\S]*?)\[\[\/ESCALATION\]\]/);
     if (escMatch) {
       reply = reply.replace(escMatch[0], "").trim();
       try {
-        const details = JSON.parse(escMatch[1].trim());
-        logEscalation(details); // fire-and-forget
+        logEscalation(JSON.parse(escMatch[1].trim()));
       } catch (e) {
         console.error("[Maya] escalation JSON parse failed:", e.message);
       }
+    } else {
+      // 2) Reliable fallback: if the user's message itself contains both an
+      //    email and a phone number, log it as an escalation contact hand-off.
+      const details = extractContact(message);
+      if (details) logEscalation(details);
     }
 
     return res.json({ reply });
