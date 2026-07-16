@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="https://veshann-admin.onrender.com/track.js" defer></script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Authentic Gemstone Band — Veshannastro</title>
@@ -17,6 +18,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="payment-tracking.js" defer></script>
 
 <style>
   /* ── design tokens (lifted from bracelet-shop.css / veshannastro.co.in light theme) ── */
@@ -1881,10 +1883,15 @@ function payNow(){
       notes:{ category:"Gemstone Bracelet", sku:sku, coupon:coupon||"", qty:String(qty) },
       theme:{ color:"#6E1423" },
       modal:{ ondismiss:function(){ btn.disabled=false; renderSummary(); } },
-      handler:function(resp){
+      handler:async function(resp){
+        var verified=window.VeshannPayment&&await window.VeshannPayment.trackPurchase(resp.razorpay_payment_id,total()*100);
+        if(!verified){
+          btn.disabled=false; renderSummary();
+          alert("Payment confirmation is still pending. No order was recorded. Please keep your Payment ID and contact us if this message persists.");
+          return;
+        }
         var order = buildOrder(c, resp.razorpay_payment_id, "Paid");
         logOrder(order);
-        try{ fbq("track","Purchase",{value:total(),currency:"INR"}); }catch(e){}
         showSuccess(order, "Thank you for your order. We'll ship it within 1–2 working days. A copy of these details is below.");
       }
     });

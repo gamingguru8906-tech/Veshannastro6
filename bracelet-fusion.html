@@ -1,6 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="https://veshann-admin.onrender.com/track.js" defer></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gemstone Bracelets — Veshannastro</title>
@@ -8,6 +9,7 @@
 <script>window.VESHANN_GOOGLE_CLIENT_ID = "946598106017-o84r674jg4qr35fuedq8i5c3rtm3gqa9.apps.googleusercontent.com";</script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="vesh-shared-cart.js"></script>
+<script src="payment-tracking.js" defer></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -1271,10 +1273,15 @@ function fxPay(){
       notes:{category:'Gemstone Bracelet Cart',items:fxItems().map(function(i){return i.sku+'x'+i.qty;}).join(',')},
       theme:{color:'#6E1423'},
       modal:{ondismiss:function(){ if(pay){pay.disabled=false;pay.textContent='Pay '+money(fxTotal())+' with Razorpay';} }},
-      handler:function(resp){
+      handler:async function(resp){
+        var verified=window.VeshannPayment&&await window.VeshannPayment.trackPurchase(resp.razorpay_payment_id,fxTotal()*100);
+        if(!verified){
+          if(pay){pay.disabled=false;pay.textContent='Pay '+money(fxTotal())+' with Razorpay';}
+          alert('Payment confirmation is still pending. No order was recorded. Please keep your Payment ID and contact us if this message persists.');
+          return;
+        }
         var order=fxBuildOrder(c,resp.razorpay_payment_id,'Paid');
         fxLogOrder(order);
-        try{ if(window.top&&window.top.fbq)window.top.fbq('track','Purchase',{value:fxTotal(),currency:'INR'}); }catch(e){}
         fxCart={}; fxCoupon=''; updateFab(false);
         /* Purchase complete — retire the comeback offer + saved cart so the
            welcome-back banner doesn't greet a customer who just bought. */
@@ -1686,7 +1693,7 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ fxCelebra
 })();
 
 </script>
-<!-- ===== Maya AI Query Consultant widget (self-contained, no external files) =====
+<!-- ===== Maaya AI Query Consultant widget (self-contained, no external files) =====
      Backend endpoint: set window.MAYA_API_URL before this block to override.
      Default "/api/chat" works when the page is served from the same origin as
      the Node backend. The OpenAI API key lives ONLY on that backend — never here. -->
@@ -1697,7 +1704,7 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ fxCelebra
   window.__mayaWidgetLoaded = true;
 
   var API_URL = window.MAYA_API_URL || "/api/chat";
-  var WELCOME = "Hello, I'm Maya, your query consultant. I handle everything about your " +
+  var WELCOME = "Hello, I'm Maaya, your query consultant. I handle everything about your " +
     "orders and our services — tracking, status, issues, and what we offer. How can I help you today?";
 
   var CSS = ".maya-widget{position:fixed;left:24px;bottom:24px;z-index:2147483000;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:15px;}"
@@ -1741,9 +1748,9 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ fxCelebra
   document.head.appendChild(styleEl);
 
   var HTML =
-    '<section class="maya-window" role="dialog" aria-label="Maya chat" aria-hidden="true">'
+    '<section class="maya-window" role="dialog" aria-label="Maaya chat" aria-hidden="true">'
     + '<header class="maya-header"><div class="maya-header-id"><span class="maya-avatar" aria-hidden="true">M</span>'
-    + '<div class="maya-header-text"><span class="maya-name">Maya</span>'
+    + '<div class="maya-header-text"><span class="maya-name">Maaya</span>'
     + '<span class="maya-role"><span class="maya-status-dot" aria-hidden="true"></span>Query Consultant · Online</span></div></div>'
     + '<button class="maya-close" type="button" aria-label="Close chat">&times;</button></header>'
     + '<div class="maya-messages" role="log" aria-live="polite"></div>'
@@ -1751,7 +1758,7 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ fxCelebra
     + '<form class="maya-input-bar" autocomplete="off">'
     + '<input class="maya-input" type="text" placeholder="Ask about your order or our services…" aria-label="Type your message" maxlength="1000" required />'
     + '<button class="maya-send" type="submit" aria-label="Send message"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button></form></section>'
-    + '<button class="maya-launcher" type="button" aria-label="Chat with Maya" data-maya-open>'
+    + '<button class="maya-launcher" type="button" aria-label="Chat with Maaya" data-maya-open>'
     + '<span class="maya-launcher-pulse" aria-hidden="true"></span>'
     + '<svg class="maya-launcher-icon" viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path fill="currentColor" d="M12 2C6.48 2 2 6.03 2 11c0 2.38 1.02 4.55 2.71 6.19L4 22l5.13-1.6c.9.26 1.86.4 2.87.4 5.52 0 10-4.03 10-9S17.52 2 12 2z"/></svg></button>';
 
@@ -1807,10 +1814,13 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ fxCelebra
       var res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text, history: history })
+        body: JSON.stringify({ message: text, history: history, session_id: window.localStorage.getItem("maya_session_id") || "" })
       });
       if (!res.ok) throw new Error("Server responded with " + res.status);
       var data = await res.json();
+      if (data && data.session_id) {
+        try { window.localStorage.setItem("maya_session_id", data.session_id); } catch (_storageError) { /* Cookie fallback remains active. */ }
+      }
       var reply = data && data.reply ? data.reply : "";
       setTyping(false);
       if (reply) { addMessage(reply, "bot"); history.push({ role: "assistant", content: reply }); }
@@ -1818,7 +1828,7 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ fxCelebra
     } catch (err) {
       setTyping(false);
       addMessage("I'm unable to reach the service right now. Please check the connection and try again.", "error");
-      if (window.console) console.error("[Maya] request failed:", err);
+      if (window.console) console.error("[Maaya] request failed:", err);
     } finally { setBusy(false); input.focus(); }
   }
 

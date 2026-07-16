@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="https://veshann-admin.onrender.com/track.js" defer></script>
 <meta charset="UTF-8">
 <script>
 window.VESHANN_GOOGLE_CLIENT_ID = "946598106017-o84r674jg4qr35fuedq8i5c3rtm3gqa9.apps.googleusercontent.com";
@@ -146,6 +147,7 @@ src="https://www.facebook.com/tr?id=1423451529588621&ev=PageView&noscript=1"
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>window.emailjs&&emailjs.init({publicKey:'i35OrY8mtgVZMIQU8'});</script>
 <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+<script src="payment-tracking.js" defer></script>
 <!-- old bracelet-shop.css / bracelet-shop.js removed: gemstone shop is now the embedded bracelet-fusion.html -->
 <!-- Email OTP System -->
 <script>
@@ -3967,7 +3969,13 @@ body{background:var(--vm-paper-2)!important;color:var(--vm-ink)!important}.manus
         notes: { category: "One Question Voice Consultation", dob: dobStr, question: question.slice(0, 480) },
         theme: { color: "#6E1423" },
         modal: { ondismiss: function () { btn.disabled = false; btn.textContent = "Pay \u20B9202 with Razorpay"; } },
-        handler: function (response) {
+        handler: async function (response) {
+          var verified = window.VeshannPayment && await window.VeshannPayment.trackPurchase(response.razorpay_payment_id, 202 * 100);
+          if (!verified) {
+            btn.disabled = false; btn.textContent = voqPayText();
+            alert("Payment confirmation is still pending. No consultation was recorded. Please keep your Payment ID and contact us if this message persists.");
+            return;
+          }
           var order = {
             timestamp: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
             order_id: "VA-OQ-" + Date.now(),
@@ -3984,7 +3992,6 @@ body{background:var(--vm-paper-2)!important;color:var(--vm-ink)!important}.manus
             amount: 202
           };
           try { fetch(PAY_CONFIG.premiumWebhook, { method: "POST", body: JSON.stringify(order), mode: "no-cors" }); } catch (e) {}
-          try { fbq("track", "Purchase", { value: 202, currency: "INR" }); } catch (e) {}
           closeVoq();
           var msg = [
             "Hi Veshannastro, I've paid for my One Question Voice Consultation.",

@@ -460,10 +460,16 @@
         notes: { category: "Gemstone Bracelet", coupon: state.couponCode || "", country: CONFIG.country },
         theme: { color: "#6E1423" },
         modal: { ondismiss: function () { els["br-pay-btn"].disabled = false; renderOrderSummary(); } },
-        handler: function (response) {
+        handler: async function (response) {
+          var verified = window.VeshannPayment && await window.VeshannPayment.trackPurchase(response.razorpay_payment_id, amount * 100);
+          if (!verified) {
+            els["br-pay-btn"].disabled = false;
+            renderOrderSummary();
+            alert("Payment confirmation is still pending. No order was recorded. Please keep your Payment ID and contact us if this message persists.");
+            return;
+          }
           var order = buildOrderPayload(customer, response.razorpay_payment_id);
           logBraceletOrder(order);
-          try { fbq("track", "Purchase", { value: amount, currency: "INR" }); } catch (err) {}
           state.cart = [];
           state.couponCode = null;
           renderCart();

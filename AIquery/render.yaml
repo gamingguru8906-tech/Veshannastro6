@@ -2,15 +2,14 @@
 # In Render: New + > Blueprint > connect this repo. Render reads this file.
 # After it deploys, add the secret GEMINI_API_KEY in the service's Environment tab.
 services:
-  # IMPORTANT: keep this name as "veshannastro-maya" so the live URL becomes
-  # https://veshannastro-maya.onrender.com — which is what vercel.json forwards to.
+  # Keep this aligned with vercel.json's existing production destination.
   - type: web
-    name: veshannastro-maya
+    name: veshannastro6
     runtime: node
     plan: free
     # If this file is at the repo root, remove rootDir.
     # If the "AI query" folder is a subfolder of the repo, set it here:
-    rootDir: AI query
+    rootDir: AIquery
     buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /health
@@ -19,6 +18,10 @@ services:
         sync: false          # set this secret manually in the dashboard
       - key: GEMINI_MODEL
         value: gemini-2.5-flash
+      - key: DATABASE_URL
+        sync: false          # same PostgreSQL database used by the admin app
+      - key: SHEET_WEBHOOK_URL
+        sync: false          # existing Maaya lead logger Apps Script /exec URL
       - key: ALLOWED_ORIGINS
         sync: false          # e.g. https://veshannastro.com,https://www.veshannastro.com
       - key: RATE_MAX

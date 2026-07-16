@@ -1,5 +1,5 @@
 /* ============================================================
-   Maya — AI Query Consultant : self-contained embeddable widget
+   Maaya — AI Query Consultant : self-contained embeddable widget
    Vanilla JS. No dependencies. Framework-agnostic.
 
    USAGE — add ONE line before </body> on any page:
@@ -32,7 +32,7 @@
     "/api/chat";
 
   var WELCOME =
-    "Hello, I'm Maya, your query consultant. I handle everything about your " +
+    "Hello, I'm Maaya, your query consultant. I handle everything about your " +
     "orders and our services — tracking, status, issues, and what we offer. " +
     "How can I help you today?";
 
@@ -115,12 +115,12 @@
 
   // ---- Inject markup ----
   var HTML =
-    '<section class="maya-window" role="dialog" aria-label="Maya chat" aria-hidden="true">' +
+    '<section class="maya-window" role="dialog" aria-label="Maaya chat" aria-hidden="true">' +
       '<header class="maya-header">' +
         '<div class="maya-header-id">' +
           '<span class="maya-avatar" aria-hidden="true">M</span>' +
           '<div class="maya-header-text">' +
-            '<span class="maya-name">Maya</span>' +
+            '<span class="maya-name">Maaya</span>' +
             '<span class="maya-role"><span class="maya-status-dot" aria-hidden="true"></span>Query Consultant · Online</span>' +
           '</div>' +
         '</div>' +
@@ -135,7 +135,7 @@
         '</button>' +
       '</form>' +
     '</section>' +
-    '<button class="maya-launcher" type="button" aria-label="Chat with Maya">' +
+    '<button class="maya-launcher" type="button" aria-label="Chat with Maaya" data-maya-open>' +
       '<span class="maya-launcher-pulse" aria-hidden="true"></span>' +
       '<svg class="maya-launcher-icon" viewBox="0 0 24 24" width="30" height="30" aria-hidden="true">' +
         '<path fill="currentColor" d="M12 2C6.48 2 2 6.03 2 11c0 2.38 1.02 4.55 2.71 6.19L4 22l5.13-1.6c.9.26 1.86.4 2.87.4 5.52 0 10-4.03 10-9S17.52 2 12 2z"/>' +
@@ -206,10 +206,13 @@
       var res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text, history: history })
+        body: JSON.stringify({ message: text, history: history, session_id: window.localStorage.getItem("maya_session_id") || "" })
       });
       if (!res.ok) throw new Error("Server responded with " + res.status);
       var data = await res.json();
+      if (data && data.session_id) {
+        try { window.localStorage.setItem("maya_session_id", data.session_id); } catch (_storageError) { /* Cookie fallback remains active. */ }
+      }
       var reply = data && data.reply ? data.reply : "";
       setTyping(false);
       if (reply) {
@@ -221,7 +224,7 @@
     } catch (err) {
       setTyping(false);
       addMessage("I'm unable to reach the service right now. Please check the connection and try again.", "error");
-      if (window.console) console.error("[Maya] request failed:", err);
+      if (window.console) console.error("[Maaya] request failed:", err);
     } finally {
       setBusy(false);
       input.focus();
