@@ -32,6 +32,7 @@ const GEMINI_URL =
   ":generateContent";
 const DATABASE_URL = process.env.DATABASE_URL || "";
 const db = DATABASE_URL ? new Pool({ connectionString: DATABASE_URL }) : null;
+const SHEET_WEBHOOK_URL = process.env.SHEET_WEBHOOK_URL || "";
 
 // --- Maaya operations and lead prompt (server-side only) ---
 const MAYA_SYSTEM_PROMPT = `# SYSTEM INSTRUCTIONS: MAAYA AI (OPERATIONS & LEADS ENGINE)
@@ -105,6 +106,53 @@ function extractMaayaEvent(rawReply) {
     .every((key) => String(lead[key] || "").trim());
   if (!event || event.event !== "LEAD_ESCALATION" || !completeLead) event = null;
   return { reply, event };
+}
+
+function extractEscalationContact(turns) {
+  const userText = sanitizeTurns(turns)
+    .filter((item) => item.role === "user")
+    .map((item) => item.content)
+    .join("\n");
+  const intent = /\b(owner|founder|human|call\s*back|callback|whats\s*app|payment\s+(?:issue|failed|problem)|complain|complaint|frustrat(?:ed|ing)|refund)\b/i;
+  if (!intent.test(userText)) return null;
+  const email = (userText.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/) || [])[0] || "";
+  const phoneCandidates = userText.match(/\+?\d[\d\s-]{8,}\d/g) || [];
+  const phone = phoneCandidates.find((candidate) => {
+    const length = candidate.replace(/\D/g, "").length;
+    return length >= 10 && length <= 15;
+  }) || "";
+  const nameMatch = userText.match(/(?:my\s+name\s+is|name\s*[:=-]?)\s*([A-Za-z][A-Za-z .'-]{1,80}?)(?=\s*(?:,|;|\n|phone|mobile|whats\s*app|email|$))/i);
+  const name = nameMatch ? nameMatch[1].trim() : "";
+  if (!name || !phone || !email) return null;
+  const latest = sanitizeTurns(turns).filter((item) => item.role === "user").at(-1);
+  return {
+    event: "LEAD_ESCALATION",
+    priority: "HIGH",
+    lead_data: {
+      name,
+      phone: phone.trim(),
+      email,
+      summary: String((latest && latest.content) || "Priority contact request").slice(0, 320)
+    }
+  };
+}
+
+function logEscalation(event) {
+  if (!SHEET_WEBHOOK_URL || !event || !event.lead_data) return;
+  const lead = event.lead_data;
+  const payload = {
+    type: "escalation",
+    name: String(lead.name || "").slice(0, 120),
+    phone: String(lead.phone || "").slice(0, 40),
+    email: String(lead.email || "").slice(0, 200),
+    issue: String(lead.summary || "").slice(0, 1000),
+    ts: new Date().toISOString()
+  };
+  fetch(SHEET_WEBHOOK_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  }).catch((error) => console.error("[Maaya] escalation webhook failed:", error.message));
 }
 
 function sanitizeTurns(value) {
@@ -211,7 +259,13 @@ setInterval(() => {
 
 // --- Health check ---
 app.get("/health", (req, res) => {
-  res.json({ status: "ok", model: GEMINI_MODEL, keyConfigured: Boolean(GEMINI_API_KEY), databaseConfigured: Boolean(db) });
+  res.json({
+    status: "ok",
+    model: GEMINI_MODEL,
+    keyConfigured: Boolean(GEMINI_API_KEY),
+    databaseConfigured: Boolean(db),
+    sheetLogging: Boolean(SHEET_WEBHOOK_URL)
+  });
 });
 
 // --- Chat route ---
@@ -241,6 +295,7 @@ app.post("/api/chat", rateLimit, async (req, res) => {
     if (!last || last.role !== "user" || last.content !== userMessage) {
       turns.push({ role: "user", content: userMessage });
     }
+    const alreadyEscalated = turns.some((item) => item.event && item.event.event === "LEAD_ESCALATION");
 
     // Gemini format: system prompt goes in `system_instruction`; conversation
     // turns go in `contents` with roles "user" and "model" (not "assistant").
@@ -281,12 +336,17 @@ app.post("/api/chat", rateLimit, async (req, res) => {
         ? candidate.content.parts[0].text.trim()
         : "";
     const parsedReply = extractMaayaEvent(rawReply);
+    let escalationEvent = alreadyEscalated ? null : parsedReply.event;
+    if (!alreadyEscalated && !escalationEvent) {
+      escalationEvent = extractEscalationContact(turns);
+    }
+    if (escalationEvent) logEscalation(escalationEvent);
     const storedHistory = [
       ...turns,
-      { role: "assistant", content: parsedReply.reply, ...(parsedReply.event ? { event: parsedReply.event } : {}) }
+      { role: "assistant", content: parsedReply.reply, ...(escalationEvent ? { event: escalationEvent } : {}) }
     ];
     try {
-      await persistSession(sessionId, storedHistory, parsedReply.event);
+      await persistSession(sessionId, storedHistory, escalationEvent);
     } catch (databaseError) {
       console.error("[Maaya] session persistence failed:", databaseError.message);
     }
@@ -294,15 +354,19 @@ app.post("/api/chat", rateLimit, async (req, res) => {
       httpOnly: true, secure: true, sameSite: "lax", maxAge: 180 * 24 * 60 * 60 * 1000
     });
 
-    return res.json({ reply: parsedReply.reply, session_id: sessionId, escalated: Boolean(parsedReply.event) });
+    return res.json({ reply: parsedReply.reply, session_id: sessionId, escalated: Boolean(alreadyEscalated || escalationEvent) });
   } catch (err) {
     console.error("[Maaya] server error:", err);
     return res.status(500).json({ error: "Internal server error." });
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Maaya backend running at http://localhost:${PORT}`);
-  console.log(`  Demo widget:  http://localhost:${PORT}/index.html`);
-  console.log(`  Health check: http://localhost:${PORT}/health`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Maaya backend running at http://localhost:${PORT}`);
+    console.log(`  Demo widget:  http://localhost:${PORT}/index.html`);
+    console.log(`  Health check: http://localhost:${PORT}/health`);
+  });
+}
+
+module.exports = { app, extractMaayaEvent, extractEscalationContact };

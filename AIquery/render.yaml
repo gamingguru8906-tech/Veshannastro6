@@ -21,6 +21,8 @@ services:
         value: gemini-2.5-flash
       - key: DATABASE_URL
         sync: false          # same PostgreSQL database used by the admin app
+      - key: SHEET_WEBHOOK_URL
+        sync: false          # existing Maaya lead logger Apps Script /exec URL
       - key: ALLOWED_ORIGINS
         sync: false          # e.g. https://veshannastro.com,https://www.veshannastro.com
       - key: RATE_MAX

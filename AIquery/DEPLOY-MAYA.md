@@ -23,7 +23,7 @@ The browser receives only an opaque session ID. Complete transcripts and structu
 
 ## Optional standalone Node service
 
-`AIquery/server.js` provides the same Maaya behavior for a separate Node deployment. Use `AIquery/render.yaml`, set `GEMINI_API_KEY`, `DATABASE_URL`, and restrictive `ALLOWED_ORIGINS`, then point `vercel.json` to its `/api/chat` endpoint. Do not deploy both backends for one site unless traffic is intentionally routed between them.
+`AIquery/server.js` provides the same Maaya behavior for a separate Node deployment. Use `AIquery/render.yaml`, set `GEMINI_API_KEY`, `DATABASE_URL`, the existing `SHEET_WEBHOOK_URL`, and restrictive `ALLOWED_ORIGINS`, then point `vercel.json` to its `/api/chat` endpoint. The database feeds the admin dashboard while the Sheet webhook remains a backup lead log. Do not deploy both backends for one site unless traffic is intentionally routed between them.
 
 ## Local Node demo
 

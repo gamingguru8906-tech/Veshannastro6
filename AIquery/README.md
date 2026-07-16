@@ -48,6 +48,7 @@ The browser never sees the API key. The widget posts its message, recent context
 ## Production notes
 
 - Set `DATABASE_URL` to the same PostgreSQL database used by the admin dashboard.
+- Keep `SHEET_WEBHOOK_URL` set to the existing Maaya lead-logging Apps Script URL if the Sheet backup is required.
 - Restrict `ALLOWED_ORIGINS` to the production website origins.
 - Keep the default rate limit or tune `RATE_MAX` deliberately.
 - Never commit your `.env` file.
