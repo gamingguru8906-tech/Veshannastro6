@@ -73,17 +73,81 @@ var HEADERS = [
   'Notes'             // AA
 ];
 
+/* ── ALL CRM tabs + their exact headers (matches your existing sheet) ──
+   Any tab that is missing gets created with these headers; existing tabs
+   and their data are never touched. */
+var ALL_TABS = {
+  'Bookings': [
+    'Client ID','Booked On','Full Name','Phone','Email','Date of Birth',
+    'Birth Time','Birth Place','Service','Message','Source','Payment Status',
+    'Amount (₹)','Consultation Date','Status','Notes'
+  ],
+  'Consultations': HEADERS,
+  'Premium Reports': [
+    'Client ID','Booked On','Full Name','Phone','Email','Date of Birth',
+    'Birth Time','Birth Place','Service','Message','Source','Payment Status',
+    'Amount (₹)','Consultation Date','Status','Notes'
+  ],
+  'Dashboard': ['STAT','COUNT'],
+  'Follow-ups': ['Client ID','Name','Phone','Follow-up Date','Notes']
+};
+
+function ensureAllTabs() {
+  var ss = SpreadsheetApp.openById(spreadsheetId());
+  var created = [];
+  Object.keys(ALL_TABS).forEach(function (name) {
+    var sheet = ss.getSheetByName(name);
+    if (!sheet) {
+      sheet = ss.insertSheet(name);
+      sheet.appendRow(ALL_TABS[name]);
+      sheet.setFrozenRows(1);
+      sheet.getRange(1, 1, 1, ALL_TABS[name].length).setFontWeight('bold');
+      if (name === 'Dashboard') seedDashboard(sheet);
+      created.push(name);
+    }
+  });
+  return created;
+}
+
+function seedDashboard(sheet) {
+  // simple live counters over the other tabs
+  sheet.appendRow(['Total Bookings',        '=MAX(0,COUNTA(Bookings!A2:A))']);
+  sheet.appendRow(['Total Consultations',   '=MAX(0,COUNTA(Consultations!A2:A))']);
+  sheet.appendRow(['Total Premium Reports', '=MAX(0,COUNTA(\'Premium Reports\'!A2:A))']);
+  sheet.appendRow(['Open Follow-ups',       '=MAX(0,COUNTA(\'Follow-ups\'!A2:A))']);
+  sheet.appendRow(['Consultation Revenue',  '=SUMPRODUCT(IFERROR(VALUE(REGEXREPLACE(Consultations!T2:T,"[^0-9.]","")),0))']);
+}
+
 function doGet() {
-  getOrCreateTab(); // make sure the tab + headers exist
-  return json({ ok: true, service: 'consultations-logger', tab: TAB_NAME });
+  var created = ensureAllTabs(); // make sure ALL tabs + headers exist
+  return json({ ok: true, service: 'consultations-logger',
+                tabs: Object.keys(ALL_TABS), created: created });
 }
 
 function doPost(e) {
   try {
     var data = parseBody(e);
+    ensureAllTabs();
+    var ss = SpreadsheetApp.openById(spreadsheetId());
+    // optional routing: payload {target:"booking"} or {target:"report"} logs a
+    // simple row into Bookings / Premium Reports; default stays Consultations.
+    if (data.target === 'booking' || data.target === 'report') {
+      var tname = data.target === 'booking' ? 'Bookings' : 'Premium Reports';
+      var t = ss.getSheetByName(tname);
+      t.appendRow([
+        nextClientId(t),
+        data.timestamp || new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+        data.name || '', data.phone || '', data.googleEmail || data.email || '',
+        data.dob || '', data.birthTime || '', data.birthPlace || '',
+        data.service || '', data.query || data.message || '',
+        data.source || 'Website', data.paymentStatus || 'Paid',
+        rupees(data.amountPaid), data.sessionDate || '', 'New', data.notes || ''
+      ]);
+      return json({ ok: true, tab: tname });
+    }
     var sheet = getOrCreateTab();
     sheet.appendRow(buildRow(sheet, data));
-    return json({ ok: true });
+    return json({ ok: true, tab: TAB_NAME });
   } catch (err) {
     return json({ ok: false, error: String(err) });
   }

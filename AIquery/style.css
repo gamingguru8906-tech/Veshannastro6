@@ -1,0 +1,238 @@
+/* ============================================================
+   Maya — AI Query Consultant Widget
+   Framework-agnostic styles. Scoped under .maya-widget so they
+   won't collide with a host site. Uses a high z-index overlay.
+   ============================================================ */
+
+:root {
+  --maya-accent: #ff2e63;          /* bright, high-contrast launcher */
+  --maya-accent-2: #ff6b35;        /* gradient partner */
+  --maya-brand: #4f46e5;           /* header / bot bubble brand */
+  --maya-brand-2: #7c3aed;
+  --maya-bg: #ffffff;
+  --maya-user: #4f46e5;
+  --maya-bot: #f1f3f9;
+  --maya-text: #1f2333;
+  --maya-muted: #6b7280;
+  --maya-radius: 18px;
+  --maya-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Container: fixed overlay, always on top of any page */
+.maya-widget {
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  z-index: 2147483000; /* near max, sits above site content */
+  font-family: var(--maya-font);
+  font-size: 15px;
+}
+
+.maya-widget *,
+.maya-widget *::before,
+.maya-widget *::after { box-sizing: border-box; }
+
+/* ---------- Launch button ---------- */
+.maya-launcher {
+  position: relative;
+  width: 66px;
+  height: 66px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(135deg, var(--maya-accent), var(--maya-accent-2));
+  box-shadow: 0 8px 26px rgba(255, 46, 99, 0.55), 0 2px 8px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  animation: maya-bob 2.6s ease-in-out infinite;
+}
+.maya-launcher:hover { transform: scale(1.08); box-shadow: 0 10px 32px rgba(255, 46, 99, 0.7); }
+.maya-launcher:active { transform: scale(0.96); }
+.maya-launcher-icon { position: relative; z-index: 2; }
+
+/* Continuous pulse ring to draw attention */
+.maya-launcher-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--maya-accent);
+  z-index: 1;
+  animation: maya-pulse 1.9s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes maya-pulse {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  70%  { transform: scale(1.9); opacity: 0;   }
+  100% { transform: scale(1.9); opacity: 0;   }
+}
+@keyframes maya-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-5px); }
+}
+
+/* ---------- Chat window ---------- */
+.maya-window {
+  position: absolute;
+  left: 0;
+  bottom: 84px;
+  width: 370px;
+  max-width: calc(100vw - 32px);
+  height: 560px;
+  max-height: calc(100vh - 120px);
+  background: var(--maya-bg);
+  border-radius: var(--maya-radius);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(16px) scale(0.96);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.22s ease, opacity 0.22s ease;
+}
+.maya-window.maya-open {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Header */
+.maya-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, var(--maya-brand), var(--maya-brand-2));
+  color: #fff;
+}
+.maya-header-id { display: flex; align-items: center; gap: 12px; }
+.maya-avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.22);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 18px;
+}
+.maya-header-text { display: flex; flex-direction: column; line-height: 1.25; }
+.maya-name { font-weight: 700; font-size: 17px; }
+.maya-role { font-size: 12px; opacity: 0.9; display: flex; align-items: center; gap: 6px; }
+.maya-status-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #34d399; box-shadow: 0 0 0 3px rgba(52,211,153,0.3);
+}
+.maya-close {
+  background: none; border: none; color: #fff;
+  font-size: 26px; line-height: 1; cursor: pointer;
+  opacity: 0.85; padding: 0 4px;
+}
+.maya-close:hover { opacity: 1; }
+
+/* Messages */
+.maya-messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #fafbfe;
+}
+.maya-msg {
+  max-width: 82%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  line-height: 1.45;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  animation: maya-fade 0.2s ease;
+}
+.maya-msg-bot {
+  align-self: flex-start;
+  background: var(--maya-bot);
+  color: var(--maya-text);
+  border-bottom-left-radius: 5px;
+}
+.maya-msg-user {
+  align-self: flex-end;
+  background: var(--maya-user);
+  color: #fff;
+  border-bottom-right-radius: 5px;
+}
+.maya-msg-error {
+  align-self: flex-start;
+  background: #fde8e8;
+  color: #9b1c1c;
+  border-bottom-left-radius: 5px;
+}
+@keyframes maya-fade {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Typing indicator */
+.maya-typing {
+  display: none;
+  gap: 4px;
+  padding: 0 20px 8px;
+  align-items: center;
+}
+.maya-typing.maya-show { display: flex; }
+.maya-typing span {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--maya-muted);
+  animation: maya-blink 1.2s infinite ease-in-out;
+}
+.maya-typing span:nth-child(2) { animation-delay: 0.2s; }
+.maya-typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes maya-blink {
+  0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }
+  40%           { opacity: 1;    transform: translateY(-4px); }
+}
+
+/* Input bar */
+.maya-input-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid #eceef5;
+  background: #fff;
+}
+.maya-input {
+  flex: 1;
+  border: 1px solid #d8dcea;
+  border-radius: 22px;
+  padding: 11px 16px;
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+.maya-input:focus { border-color: var(--maya-brand); }
+.maya-send {
+  width: 44px; height: 44px;
+  flex: none;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--maya-brand), var(--maya-brand-2));
+  color: #fff;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.maya-send:hover { transform: scale(1.06); }
+.maya-send:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .maya-launcher, .maya-launcher-pulse, .maya-msg, .maya-typing span { animation: none; }
+}
+
+/* Small screens: near full width */
+@media (max-width: 420px) {
+  .maya-widget { left: 12px; bottom: 12px; }
+  .maya-window { width: calc(100vw - 24px); height: calc(100vh - 96px); }
+}

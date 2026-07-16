@@ -1,0 +1,25 @@
+# Render.com blueprint for the Maya backend.
+# In Render: New + > Blueprint > connect this repo. Render reads this file.
+# After it deploys, add the secret GEMINI_API_KEY in the service's Environment tab.
+services:
+  # IMPORTANT: keep this name as "veshannastro-maya" so the live URL becomes
+  # https://veshannastro-maya.onrender.com — which is what vercel.json forwards to.
+  - type: web
+    name: veshannastro-maya
+    runtime: node
+    plan: free
+    # If this file is at the repo root, remove rootDir.
+    # If the "AI query" folder is a subfolder of the repo, set it here:
+    rootDir: AI query
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false          # set this secret manually in the dashboard
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+      - key: ALLOWED_ORIGINS
+        sync: false          # e.g. https://veshannastro.com,https://www.veshannastro.com
+      - key: RATE_MAX
+        value: "20"
