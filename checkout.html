@@ -2127,20 +2127,21 @@ body.checkout-only #co-modal.open{
 }
 </style>
 </head>
-<body class="checkout-only">
+<body class="checkout-only jp-reference">
 
 <div class="announce">
-  <span>🚚 <b>Free delivery</b> across India</span>
-  <span>🔒 Secure prepaid via <b>Razorpay</b></span>
-  <span>🎁 Maaya First Circle: <b>Maaya note + 21-day guide</b></span>
+  <span><b>100% Cashback</b> available up to Rs. 400</span>
+  <span><b>Free delivery</b> on every bracelet order</span>
+  <span><b>Maaya guidance</b> included with every bracelet</span>
 </div>
 
 <nav id="site-nav">
   <a class="nav-logo" href="https://www.veshannastro.co.in/">Veshan<em>nastro</em></a>
   <ul class="nav-links">
-    <li><a href="https://www.veshannastro.co.in/#bracelet-shop">Bracelets</a></li>
+    <li><a href="https://www.veshannastro.co.in/#bracelet-shop">Gemstone Bracelets</a></li>
+    <li><a href="https://www.veshannastro.co.in/#astral-codex">Energy Products</a></li>
     <li><a href="https://www.veshannastro.co.in/#guidance-paths">Consultations</a></li>
-    <li><a href="https://www.veshannastro.co.in/#astral-codex">Products</a></li>
+    <li><a href="https://www.veshannastro.co.in/contact.html">Support</a></li>
     <li class="nav-cart-li"><a class="nav-cart" id="nav-cart" href="#buy">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/><path d="M3 4h2l2.6 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 1.9-1.4L21 8H7"/></svg>
       Cart<span class="cart-count" id="cart-count">0</span></a></li>
@@ -2399,16 +2400,29 @@ body.checkout-only #co-modal.open{
       </div>
     </div>
 
+    <div class="jp-promise-cards" aria-label="Veshannastro purchase benefits">
+      <div class="jp-promise-card">
+        <span class="jp-promise-icon" aria-hidden="true">%</span>
+        <strong>100% Cashback</strong>
+        <small>up to Rs. 400</small>
+      </div>
+      <div class="jp-promise-card">
+        <span class="jp-promise-icon" aria-hidden="true">✓</span>
+        <strong>7-Day Support</strong>
+        <small>easy replacement help</small>
+      </div>
+    </div>
+
     <div class="tier-choice" aria-label="Choose your order tier">
-      <span class="field-label tier-label">Choose your order tier</span>
+      <span class="field-label tier-label">Optional upgrade</span>
       <div class="tier-grid">
         <button type="button" class="tier-card active" data-tier="bracelet" aria-pressed="true">
           <span class="tier-head"><b>Just Bracelet</b><small>Same price</small></span>
           <span class="tier-copy">Bracelet, pouch, mantra note and dispatch care.</span>
         </button>
         <button type="button" class="tier-card tier-premium" data-tier="maaya" aria-pressed="false">
-          <span class="tier-tag">Most Valuable</span>
-          <span class="tier-head"><b>Maaya First Circle Report</b><small>Only + Rs. 100</small></span>
+          <span class="tier-tag">Upgrade</span>
+          <span class="tier-head"><b>Get Maaya First Circle Report</b><small>+ Rs. 100</small></span>
           <span class="tier-copy">Fully customised Maaya report with intention, ritual, mantra and 21-day wearing guidance.</span>
         </button>
       </div>
@@ -2430,7 +2444,7 @@ body.checkout-only #co-modal.open{
         <button type="button" id="qty-inc" aria-label="Increase quantity">+</button>
       </div>
       <div class="cta-row">
-        <button class="buy-btn" id="buy-btn">Buy now · <span id="buy-amt">₹0</span></button>
+        <button class="buy-btn" id="buy-btn">Order Now - Secure Checkout · <span id="buy-amt">₹0</span></button>
         <button class="cart-btn" id="cart-btn" type="button">
           <span class="cart-btn-label">Add to cart</span>
           <span class="cart-btn-spinner" aria-hidden="true"></span>
@@ -3984,7 +3998,8 @@ function init(){
       el.textContent = product.name;
     }
   })();
-  $("p-eyebrow").textContent = "Maaya First Circle · Veshannastro";
+  var off = Math.round((1 - product.price/product.mrp)*100);
+  $("p-eyebrow").textContent = off + "% off";
   var kitLine = $("p-kit-line"); if(kitLine) kitLine.textContent = product.kit || "Maaya Kundli-to-Wrist Kit";
   $("p-lede").textContent = product.description;
   var whoEl = $("p-who"); if(whoEl) whoEl.textContent = product.who || "Maaya-selected bracelet for your current intention.";
@@ -3998,7 +4013,6 @@ function init(){
   $("rev-score").textContent = rv;
   $("rev-count").textContent = "Based on " + rc + "+ verified customer reviews";
   $("p-review-link").textContent = "(" + rc + " reviews)";
-  var off = Math.round((1 - product.price/product.mrp)*100);
   var lsEl = $("ls-text");
   if(lsEl) lsEl.innerHTML = "Maaya First Circle pricing — <b>" + off + "% off</b> the regular " + money(product.mrp) +
     ", held only while the Maaya First Circle window lasts.";
@@ -4033,7 +4047,8 @@ function init(){
   initWalletLayer();
   bind();
   syncCartCountFromShared();
-  if(/checkout\.html/i.test(location.pathname || "") || params.get("checkout") === "cart" || params.has("source")){
+  var shouldAutoCheckout = params.get("checkout") === "1" || params.get("checkout") === "cart" || params.has("source");
+  if(shouldAutoCheckout){
     window.setTimeout(function(){
       syncCartCountFromShared();
       if(checkoutSharedCart()) openCartCheckout();
@@ -4121,6 +4136,7 @@ function setupGallery(){
   function startGalleryAuto(){
     if(setupGallery.timer) clearInterval(setupGallery.timer);
     if(loaded.length < 2) return;
+    if(document.body && document.body.classList.contains("jp-reference")) return;
     if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     setupGallery.timer = setInterval(function(){ setActive(galleryIndex + 1); }, 5000);
   }
@@ -7729,6 +7745,1052 @@ body::before{
   else init();
 })();
 </script>
+<style id="jp-reference-product-skin">
+body.jp-reference{
+  --jp-bg:#fbf3e8;
+  --jp-panel:#fff7ed;
+  --jp-ink:#282435;
+  --jp-muted:#6f6671;
+  --jp-red:#c93f46;
+  --jp-red-dark:#a92f37;
+  --jp-black:#17131f;
+  --jp-line:#ded2c3;
+  background:var(--jp-bg)!important;
+  background-image:none!important;
+  color:var(--jp-ink)!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  line-height:1.5!important;
+}
+body.jp-reference .announce{
+  height:31px!important;
+  min-height:31px!important;
+  background:#050505!important;
+  color:#fff!important;
+  border:0!important;
+  box-shadow:none!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  font-size:.78rem!important;
+  font-weight:700!important;
+  letter-spacing:0!important;
+}
+body.jp-reference .announce b{color:#fff!important}
+body.jp-reference #site-nav{
+  top:31px!important;
+  min-height:156px!important;
+  height:auto!important;
+  display:flex!important;
+  align-content:flex-start!important;
+  align-items:flex-start!important;
+  flex-wrap:wrap!important;
+  gap:0 2rem!important;
+  padding:30px 5.2vw 0!important;
+  background:var(--jp-bg)!important;
+  border-bottom:1px solid var(--jp-line)!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+body.jp-reference .nav-logo{
+  flex:1 0 auto!important;
+  font-family:var(--label),serif!important;
+  font-size:1.65rem!important;
+  font-weight:700!important;
+  letter-spacing:.02em!important;
+  color:var(--jp-ink)!important;
+  text-decoration:none!important;
+}
+body.jp-reference .nav-logo em{color:var(--jp-red)!important;font-style:normal!important}
+body.jp-reference .nav-links{
+  order:2!important;
+  width:100%!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:2rem!important;
+  margin-top:1.6rem!important;
+  list-style:none!important;
+}
+body.jp-reference .nav-links a{
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  font-size:.93rem!important;
+  font-weight:600!important;
+  letter-spacing:0!important;
+  text-transform:none!important;
+  color:var(--jp-ink)!important;
+  padding:.25rem 0!important;
+}
+body.jp-reference .nav-links a::after{display:none!important}
+body.jp-reference .nav-cart{
+  margin-left:auto!important;
+  height:34px!important;
+  gap:.45rem!important;
+  padding:.48rem .8rem!important;
+  border-radius:4px!important;
+  background:var(--jp-black)!important;
+  color:#fff!important;
+  font-size:.82rem!important;
+  letter-spacing:0!important;
+  text-transform:none!important;
+}
+body.jp-reference #site-nav a.nav-cart,
+body.jp-reference #site-nav a.nav-cart svg{
+  color:#fff!important;
+  stroke:currentColor!important;
+}
+body.jp-reference .cart-count{
+  display:inline-flex!important;
+  min-width:18px!important;
+  height:18px!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border-radius:999px!important;
+  background:#fff!important;
+  color:var(--jp-black)!important;
+  font-size:.68rem!important;
+  margin-left:.15rem!important;
+}
+body.jp-reference .bbt-nav-li{margin-left:.4rem!important}
+body.jp-reference .bbt-google-btn.bbt-launcher{
+  width:36px!important;
+  height:36px!important;
+  border-radius:4px!important;
+  box-shadow:none!important;
+}
+body.jp-reference .breadcrumb,
+body.jp-reference .bbt-delivery-promise,
+body.jp-reference .maaya-prescription,
+body.jp-reference .hero-urgency,
+body.jp-reference .p-kit-line,
+body.jp-reference .trust-mini,
+body.jp-reference .assurance,
+body.jp-reference .lede,
+body.jp-reference .meta-grid,
+body.jp-reference .chips,
+body.jp-reference .total-line,
+body.jp-reference .ritual-journey,
+body.jp-reference .assure-strip,
+body.jp-reference .why-veshan,
+body.jp-reference #rich-sections,
+body.jp-reference .section:not(#related):not(#reviews){
+  display:none!important;
+}
+body.jp-reference .product{
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:0!important;
+  display:grid!important;
+  grid-template-columns:minmax(520px,1.08fr) minmax(420px,.92fr)!important;
+  gap:0!important;
+  align-items:start!important;
+  background:var(--jp-bg)!important;
+  border-bottom:1px solid var(--jp-line)!important;
+}
+body.jp-reference .gallery{
+  position:sticky!important;
+  top:206px!important;
+  max-width:none!important;
+  width:100%!important;
+  justify-self:stretch!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 50px!important;
+  gap:12px!important;
+  padding:48px 28px 44px 5.4vw!important;
+}
+body.jp-reference .gallery-main{
+  aspect-ratio:1/1!important;
+  border:0!important;
+  border-radius:0!important;
+  background:#eee1d2!important;
+  box-shadow:none!important;
+}
+body.jp-reference .gallery-main::after,
+body.jp-reference .gallery-glow{display:none!important}
+body.jp-reference .gallery-main img{
+  object-fit:cover!important;
+  transform:none!important;
+}
+body.jp-reference .gallery-main:hover img{transform:none!important}
+body.jp-reference .gallery-thumbs{
+  margin:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  flex-wrap:nowrap!important;
+  gap:10px!important;
+  max-height:min(560px,calc(100vh - 245px))!important;
+  overflow:auto!important;
+  scrollbar-width:none!important;
+}
+body.jp-reference .gallery-thumbs::-webkit-scrollbar{display:none!important}
+body.jp-reference .gallery-thumb{
+  width:50px!important;
+  height:72px!important;
+  border:1px solid var(--jp-line)!important;
+  border-radius:0!important;
+  background:#f3e9dc!important;
+  box-shadow:none!important;
+  opacity:.82!important;
+  padding:0!important;
+  transform:none!important;
+}
+body.jp-reference .gallery-thumb.active{
+  border-color:var(--jp-red)!important;
+  box-shadow:0 0 0 2px rgba(201,63,70,.18)!important;
+  opacity:1!important;
+}
+body.jp-reference .gallery-nav{
+  width:42px!important;
+  height:42px!important;
+  border-radius:2px!important;
+  border:1px solid var(--jp-line)!important;
+  background:#fff!important;
+  color:var(--jp-ink)!important;
+  box-shadow:0 4px 14px rgba(28,20,15,.08)!important;
+  font-family:Arial,sans-serif!important;
+}
+body.jp-reference .gallery-prev{left:auto!important;right:54px!important}
+body.jp-reference .gallery-next{right:-1px!important}
+body.jp-reference .buybox{
+  min-height:calc(100vh - 187px)!important;
+  display:flex!important;
+  flex-direction:column!important;
+  padding:46px 5.3vw 58px 48px!important;
+  border-left:1px solid var(--jp-line)!important;
+  background:var(--jp-bg)!important;
+  box-shadow:none!important;
+}
+body.jp-reference .eyebrow{
+  order:1!important;
+  align-self:flex-start!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  min-height:28px!important;
+  padding:.34rem .58rem!important;
+  border-radius:2px!important;
+  background:var(--jp-red)!important;
+  color:#fff!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  font-size:.8rem!important;
+  font-weight:700!important;
+  letter-spacing:0!important;
+  text-transform:lowercase!important;
+}
+body.jp-reference .buybox h1{
+  order:2!important;
+  margin:.45rem 0 .55rem!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  font-size:clamp(1.3rem,2.15vw,1.72rem)!important;
+  line-height:1.18!important;
+  font-weight:800!important;
+  letter-spacing:0!important;
+  color:var(--jp-ink)!important;
+}
+body.jp-reference .buybox h1 span{color:inherit!important}
+body.jp-reference .rating{
+  order:3!important;
+  margin:0 0 .55rem!important;
+  gap:.38rem!important;
+  color:var(--jp-ink)!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+}
+body.jp-reference .stars{color:#b83442!important;letter-spacing:.06em!important;font-size:.96rem!important}
+body.jp-reference .rating .rating-num{font-size:.86rem!important;font-weight:700!important}
+body.jp-reference .rating a{
+  color:var(--jp-ink)!important;
+  font-size:.86rem!important;
+  text-decoration:none!important;
+}
+body.jp-reference .price-urgency{
+  order:4!important;
+  display:block!important;
+  margin:0 0 .75rem!important;
+}
+body.jp-reference .price-card{
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+body.jp-reference .price-row{
+  margin:0!important;
+  gap:.55rem!important;
+  align-items:baseline!important;
+}
+body.jp-reference .price-now{
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  color:var(--jp-ink)!important;
+  font-size:1.55rem!important;
+  font-weight:800!important;
+}
+body.jp-reference .price-mrp{
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  color:#8a8188!important;
+  font-size:1rem!important;
+  font-weight:500!important;
+}
+body.jp-reference .price-off{display:none!important}
+body.jp-reference .tax-note{
+  margin:.18rem 0 0!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  color:var(--jp-muted)!important;
+  font-size:.78rem!important;
+}
+body.jp-reference .jp-promise-cards{
+  order:5!important;
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:10px!important;
+  margin:.35rem 0 1rem!important;
+}
+body.jp-reference .jp-promise-card{
+  min-height:50px!important;
+  display:grid!important;
+  grid-template-columns:34px 1fr!important;
+  column-gap:.65rem!important;
+  align-items:center!important;
+  padding:.58rem .72rem!important;
+  background:#130d05!important;
+  color:#fff!important;
+  border-radius:8px!important;
+}
+body.jp-reference .jp-promise-icon{
+  grid-row:1 / span 2!important;
+  width:30px!important;
+  height:30px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border-radius:999px!important;
+  background:#d6a63e!important;
+  color:#180f06!important;
+  font-weight:900!important;
+}
+body.jp-reference .jp-promise-card strong{
+  display:block!important;
+  font-size:.78rem!important;
+  font-weight:800!important;
+  line-height:1.1!important;
+  color:#fff!important;
+}
+body.jp-reference .jp-promise-card small{
+  display:block!important;
+  margin-top:.08rem!important;
+  color:#f0d99b!important;
+  font-size:.7rem!important;
+  font-weight:700!important;
+}
+body.jp-reference .siddh-banner{
+  order:12!important;
+  margin:.7rem 0 .85rem!important;
+  padding:.68rem .78rem!important;
+  display:none!important;
+  gap:.68rem!important;
+  align-items:center!important;
+  border:1px solid var(--jp-line)!important;
+  border-radius:4px!important;
+  background:transparent!important;
+  color:var(--jp-ink)!important;
+  box-shadow:none!important;
+}
+body.jp-reference .siddh-banner::before{display:none!important}
+body.jp-reference .siddh-seal{
+  width:21px!important;
+  height:21px!important;
+  border-radius:3px!important;
+  border:1.5px solid #b8afa6!important;
+  background:#fff!important;
+  color:transparent!important;
+  box-shadow:none!important;
+  flex:0 0 21px!important;
+}
+body.jp-reference .siddh-label{
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  font-size:.88rem!important;
+  font-weight:800!important;
+  color:var(--jp-ink)!important;
+  letter-spacing:0!important;
+  text-transform:none!important;
+}
+body.jp-reference .siddh-sub{
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  font-size:.72rem!important;
+  color:var(--jp-muted)!important;
+  font-weight:500!important;
+}
+body.jp-reference .siddh-free{
+  margin-left:auto!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  font-size:.82rem!important;
+  color:var(--jp-ink)!important;
+  background:transparent!important;
+  border:0!important;
+  letter-spacing:0!important;
+}
+body.jp-reference .tier-choice{
+  order:12!important;
+  margin:.7rem 0 .9rem!important;
+  padding:0!important;
+}
+body.jp-reference .tier-label{
+  margin-bottom:.4rem!important;
+  color:var(--jp-muted)!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  letter-spacing:0!important;
+  text-transform:none!important;
+  font-size:.82rem!important;
+  font-weight:700!important;
+}
+body.jp-reference .tier-grid{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:.45rem!important;
+}
+body.jp-reference .tier-card{
+  min-height:0!important;
+  display:grid!important;
+  grid-template-columns:22px 1fr auto!important;
+  gap:.2rem .7rem!important;
+  align-items:start!important;
+  padding:.62rem .7rem!important;
+  border:1px solid var(--jp-line)!important;
+  border-radius:4px!important;
+  background:#fffaf4!important;
+  color:var(--jp-ink)!important;
+  box-shadow:none!important;
+  transform:none!important;
+}
+body.jp-reference .tier-card::before{
+  content:""!important;
+  grid-row:1 / span 2!important;
+  width:18px!important;
+  height:18px!important;
+  border:1.5px solid #b8afa6!important;
+  border-radius:3px!important;
+  background:#fff!important;
+  margin-top:.1rem!important;
+}
+body.jp-reference .tier-card.active::before{
+  background:var(--jp-red)!important;
+  border-color:var(--jp-red)!important;
+  box-shadow:inset 0 0 0 4px #fff!important;
+}
+body.jp-reference .tier-card.active{
+  border-color:#cfc3b6!important;
+  background:#fff!important;
+}
+body.jp-reference .tier-tag{
+  grid-column:3!important;
+  grid-row:1!important;
+  align-self:start!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  color:var(--jp-red)!important;
+  font-size:.72rem!important;
+  font-weight:800!important;
+}
+body.jp-reference .tier-head,
+body.jp-reference .tier-copy{grid-column:2 / span 1!important}
+body.jp-reference .tier-head b{
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  font-size:.88rem!important;
+  font-weight:800!important;
+  color:var(--jp-ink)!important;
+}
+body.jp-reference .tier-head small{
+  color:var(--jp-ink)!important;
+  font-size:.78rem!important;
+  font-weight:700!important;
+}
+body.jp-reference .tier-copy{
+  margin-top:.12rem!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  font-size:.72rem!important;
+  color:var(--jp-muted)!important;
+  line-height:1.35!important;
+}
+body.jp-reference .tier-note{
+  margin:.35rem 0 0!important;
+  color:var(--jp-muted)!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  font-size:.74rem!important;
+}
+body.jp-reference .kit-badges{
+  order:8!important;
+  display:none!important;
+}
+body.jp-reference .buy-actions{
+  order:6!important;
+  display:grid!important;
+  grid-template-columns:150px 1fr!important;
+  gap:.55rem .85rem!important;
+  margin:0 0 1rem!important;
+}
+body.jp-reference .buy-actions > .field-label{
+  grid-column:1 / -1!important;
+  margin:0!important;
+  color:var(--jp-ink)!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  letter-spacing:0!important;
+  text-transform:none!important;
+  font-size:.82rem!important;
+  font-weight:800!important;
+}
+body.jp-reference .qty{
+  grid-column:1!important;
+  width:150px!important;
+  height:50px!important;
+  margin:0!important;
+  display:grid!important;
+  grid-template-columns:44px 1fr 44px!important;
+  border:1px solid var(--jp-line)!important;
+  border-radius:4px!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+body.jp-reference .qty button{
+  width:auto!important;
+  height:48px!important;
+  border:0!important;
+  background:#fff!important;
+  color:var(--jp-ink)!important;
+  font-size:1.2rem!important;
+}
+body.jp-reference .qty button:hover{background:#f2e8dc!important;color:var(--jp-ink)!important}
+body.jp-reference .qty span{
+  min-width:0!important;
+  line-height:48px!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  font-size:.86rem!important;
+  font-weight:700!important;
+}
+body.jp-reference .cta-row{display:contents!important}
+body.jp-reference .cart-btn,
+body.jp-reference .buy-btn,
+body.jp-reference .ai-btn{
+  min-height:50px!important;
+  border-radius:5px!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  font-size:.78rem!important;
+  font-weight:900!important;
+  letter-spacing:.01em!important;
+  text-transform:uppercase!important;
+  box-shadow:none!important;
+  transform:none!important;
+}
+body.jp-reference .cart-btn{
+  grid-column:2!important;
+  order:1!important;
+  border:0!important;
+  background:#292337!important;
+  color:#fff!important;
+}
+body.jp-reference .buy-btn{
+  grid-column:1 / -1!important;
+  order:2!important;
+  border:1px solid #8e2028!important;
+  background:var(--jp-red)!important;
+  color:#fff!important;
+}
+body.jp-reference .buy-btn:hover{background:var(--jp-red-dark)!important}
+body.jp-reference .buy-btn::before{display:none!important}
+body.jp-reference .ai-btn{
+  grid-column:1 / -1!important;
+  order:3!important;
+  min-height:42px!important;
+  border:1px solid var(--jp-line)!important;
+  background:#fff8ef!important;
+  color:var(--jp-ink)!important;
+  text-transform:none!important;
+  font-weight:800!important;
+}
+body.jp-reference .ai-btn svg{width:16px!important;height:16px!important}
+body.jp-reference .delivery{
+  order:7!important;
+  margin:.2rem 0 1.15rem!important;
+  padding:1rem!important;
+  border:1px solid #ead7b4!important;
+  border-radius:8px!important;
+  background:#faedcf!important;
+  box-shadow:none!important;
+}
+body.jp-reference .delivery .dl-head{
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  font-size:.98rem!important;
+  color:var(--jp-ink)!important;
+  letter-spacing:0!important;
+  text-transform:none!important;
+  font-weight:900!important;
+}
+body.jp-reference .delivery .dl-row{
+  max-width:none!important;
+  margin-top:.72rem!important;
+  grid-template-columns:1fr 84px!important;
+  gap:.55rem!important;
+}
+body.jp-reference .delivery input{
+  height:48px!important;
+  border-radius:8px!important;
+  background:#fffdf8!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  font-size:.94rem!important;
+}
+body.jp-reference .delivery button{
+  height:48px!important;
+  border-radius:7px!important;
+  border:0!important;
+  background:var(--jp-red)!important;
+  color:#fff!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  font-weight:900!important;
+  letter-spacing:0!important;
+  text-transform:none!important;
+}
+body.jp-reference .offers-box{
+  order:8!important;
+  margin:0 0 1rem!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+body.jp-reference .offers-box h4{
+  margin:0 0 .55rem!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  font-size:1rem!important;
+  letter-spacing:0!important;
+  text-transform:uppercase!important;
+  color:var(--jp-ink)!important;
+  font-weight:900!important;
+}
+body.jp-reference .offers-box ul{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:.5rem!important;
+}
+body.jp-reference .offers-box li{
+  display:grid!important;
+  grid-template-columns:110px 1fr!important;
+  gap:.7rem!important;
+  align-items:center!important;
+  padding:.72rem .85rem!important;
+  border:1px dashed #d8cdc1!important;
+  border-radius:4px!important;
+  background:#fffaf4!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+}
+body.jp-reference .offers-box code{
+  justify-self:start!important;
+  background:transparent!important;
+  border:0!important;
+  color:var(--jp-red)!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  font-size:.75rem!important;
+  font-weight:900!important;
+  letter-spacing:.02em!important;
+}
+body.jp-reference .offers-box li span{
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  color:var(--jp-muted)!important;
+  font-size:.83rem!important;
+  line-height:1.35!important;
+}
+body.jp-reference .buybox > .field-label:not(.tier-label),
+body.jp-reference .coupon,
+body.jp-reference .coupon-msg,
+body.jp-reference .coupon-actions{
+  order:9!important;
+}
+body.jp-reference .buybox > .field-label:not(.tier-label){
+  margin:.15rem 0 .35rem!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  letter-spacing:0!important;
+  text-transform:none!important;
+  color:var(--jp-ink)!important;
+  font-weight:900!important;
+}
+body.jp-reference .coupon{
+  max-width:none!important;
+  grid-template-columns:1fr 86px!important;
+  gap:.5rem!important;
+}
+body.jp-reference .coupon input,
+body.jp-reference .coupon button{
+  height:44px!important;
+  border-radius:4px!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+}
+body.jp-reference .coupon input{background:#fff!important;border-color:var(--jp-line)!important}
+body.jp-reference .coupon button{background:var(--jp-black)!important;color:#fff!important;border:0!important}
+body.jp-reference .pinfo{
+  order:13!important;
+  max-width:none!important;
+  width:100%!important;
+  margin:.55rem 0 0!important;
+  padding:0!important;
+}
+body.jp-reference .pinfo .acc{
+  border:0!important;
+  border-top:1px solid var(--jp-line)!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+body.jp-reference .pinfo .acc:last-child{border-bottom:1px solid var(--jp-line)!important}
+body.jp-reference .pinfo summary{
+  padding:1rem 0!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  font-size:1.02rem!important;
+  font-weight:900!important;
+  color:var(--jp-ink)!important;
+}
+body.jp-reference .pinfo .acc-body{
+  padding:0 0 1rem!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  color:var(--jp-muted)!important;
+  font-size:.92rem!important;
+}
+body.jp-reference .india-strip{
+  display:block!important;
+  margin:0!important;
+  padding:3.5rem 1.5rem!important;
+  background:#fffaf4!important;
+  border-top:1px solid var(--jp-line)!important;
+  border-bottom:1px solid var(--jp-line)!important;
+  color:var(--jp-ink)!important;
+}
+body.jp-reference .india-strip .inner{
+  max-width:920px!important;
+  margin:0 auto!important;
+  display:block!important;
+  text-align:center!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+}
+body.jp-reference .india-strip b{
+  display:block!important;
+  margin:.7rem 0 .4rem!important;
+  font-size:1.65rem!important;
+  color:var(--jp-ink)!important;
+}
+body.jp-reference #reviews{
+  display:block!important;
+  max-width:1100px!important;
+  padding:3.6rem 1.5rem 0!important;
+}
+body.jp-reference #reviews .section-eyebrow,
+body.jp-reference #related .section-eyebrow{display:none!important}
+body.jp-reference #reviews h2,
+body.jp-reference #related h2{
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  font-size:1.65rem!important;
+  font-weight:900!important;
+  letter-spacing:0!important;
+  text-align:left!important;
+  color:var(--jp-ink)!important;
+}
+body.jp-reference #related{
+  display:block!important;
+  max-width:1180px!important;
+  padding:3.8rem 1.5rem!important;
+}
+body.jp-reference #related .section-sub{
+  margin:0 0 1.4rem!important;
+  max-width:620px!important;
+  text-align:left!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+  font-size:.95rem!important;
+}
+body.jp-reference .intent-bar,
+body.jp-reference .maaya-pick{display:none!important}
+body.jp-reference .rel-grid{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:18px!important;
+}
+body.jp-reference .rel-card{
+  border:1px solid var(--jp-line)!important;
+  border-radius:4px!important;
+  background:#fffaf4!important;
+  box-shadow:none!important;
+  transform:none!important;
+}
+body.jp-reference .rel-badge{background:var(--jp-red)!important;border-radius:2px!important}
+body.jp-reference .site-footer{
+  margin-top:0!important;
+  background:#111!important;
+  color:#fff!important;
+  border:0!important;
+}
+body.jp-reference .stickybuy{
+  background:#fff!important;
+  border-top:1px solid var(--jp-line)!important;
+  box-shadow:0 -8px 24px rgba(28,20,15,.08)!important;
+}
+body.jp-reference .stickybuy button{
+  background:var(--jp-red)!important;
+  border-radius:5px!important;
+  font-family:var(--body-ui),Arial,sans-serif!important;
+}
+@media(max-width:1080px){
+  body.jp-reference #site-nav{min-height:126px!important;padding:24px 22px 0!important}
+  body.jp-reference .nav-links{gap:1.2rem!important;overflow:auto!important;padding-bottom:.7rem!important}
+  body.jp-reference .product{grid-template-columns:1fr!important}
+  body.jp-reference .gallery{
+    position:relative!important;
+    top:auto!important;
+    padding:22px 18px 0!important;
+    grid-template-columns:1fr!important;
+  }
+  body.jp-reference .gallery-thumbs{
+    flex-direction:row!important;
+    max-height:none!important;
+    overflow:auto!important;
+    order:2!important;
+  }
+  body.jp-reference .gallery-thumb{width:62px!important;height:62px!important}
+  body.jp-reference .buybox{
+    min-height:0!important;
+    border-left:0!important;
+    padding:24px 18px 42px!important;
+  }
+}
+@media(max-width:720px){
+  body.jp-reference{padding-bottom:76px!important}
+  body.jp-reference .announce{font-size:.68rem!important}
+  body.jp-reference #site-nav{
+    top:31px!important;
+    min-height:82px!important;
+    padding:18px 16px 0!important;
+  }
+  body.jp-reference .nav-logo{font-size:1.18rem!important}
+  body.jp-reference .nav-links{
+    order:3!important;
+    margin-top:.7rem!important;
+    gap:1rem!important;
+  }
+  body.jp-reference .nav-links li:not(.nav-cart-li):not(.bbt-nav-li){display:none!important}
+  body.jp-reference .nav-cart{margin-left:0!important}
+  body.jp-reference .gallery{padding:16px 12px 0!important}
+  body.jp-reference .buybox{padding:18px 14px 34px!important}
+  body.jp-reference .jp-promise-cards{grid-template-columns:1fr 1fr!important;gap:8px!important}
+  body.jp-reference .jp-promise-card{grid-template-columns:28px 1fr!important;padding:.5rem!important}
+  body.jp-reference .jp-promise-icon{width:25px!important;height:25px!important;font-size:.78rem!important}
+  body.jp-reference .buy-actions{grid-template-columns:128px 1fr!important;gap:.5rem!important}
+  body.jp-reference .qty{width:128px!important;grid-template-columns:38px 1fr 38px!important}
+  body.jp-reference .cart-btn,
+  body.jp-reference .buy-btn{font-size:.72rem!important}
+  body.jp-reference .delivery .dl-row{grid-template-columns:1fr!important}
+  body.jp-reference .offers-box li{grid-template-columns:1fr!important;gap:.18rem!important}
+  body.jp-reference .rel-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+  body.jp-reference #reviews{display:none!important}
+}
+@media(max-width:390px){
+  body.jp-reference .buy-actions{grid-template-columns:1fr!important}
+  body.jp-reference .qty,
+  body.jp-reference .cart-btn,
+  body.jp-reference .buy-btn,
+  body.jp-reference .ai-btn{grid-column:1!important;width:100%!important}
+  body.jp-reference .jp-promise-cards{grid-template-columns:1fr!important}
+}
+</style>
+<style id="jp-reference-checkout-guard-override">
+body.checkout-only.jp-reference{
+  overflow:auto!important;
+  background:var(--jp-bg,#fbf3e8)!important;
+}
+body.checkout-only.jp-reference:has(#co-modal.open){
+  overflow:hidden!important;
+}
+body.checkout-only.jp-reference > .announce:not(#co-modal){display:flex!important}
+body.checkout-only.jp-reference > nav#site-nav{display:flex!important}
+body.checkout-only.jp-reference > .breadcrumb:not(#co-modal){display:none!important}
+body.checkout-only.jp-reference > .bbt-delivery-promise:not(#co-modal){display:none!important}
+body.checkout-only.jp-reference > main.product#buy{display:grid!important}
+body.checkout-only.jp-reference > .ritual-journey:not(#co-modal),
+body.checkout-only.jp-reference > .assure-strip:not(#co-modal),
+body.checkout-only.jp-reference > .why-veshan:not(#co-modal),
+body.checkout-only.jp-reference > #rich-sections{display:none!important}
+body.checkout-only.jp-reference > .india-strip:not(#co-modal){display:block!important}
+body.checkout-only.jp-reference > section.section:not(#co-modal){display:block!important}
+body.checkout-only.jp-reference > section.section:not(#related):not(#reviews):not(#co-modal){display:none!important}
+body.checkout-only.jp-reference > footer.site-footer:not(#co-modal){display:block!important}
+body.checkout-only.jp-reference > .stickybuy:not(#co-modal){display:none!important}
+@media(max-width:760px){
+  body.checkout-only.jp-reference > .stickybuy:not(#co-modal){display:flex!important}
+}
+</style>
+<script id="jp-reference-product-polish">
+(function(){
+  function applyReferencePolish(){
+    var pinfo = document.getElementById("pinfo");
+    var buybox = document.querySelector(".buybox");
+    var offers = document.querySelector(".offers-box");
+    if(pinfo && buybox && offers && pinfo.parentNode !== buybox){
+      buybox.insertBefore(pinfo, offers.nextSibling);
+    }
+    var relatedTitle = document.querySelector("#related h2");
+    if(relatedTitle) relatedTitle.textContent = "Popular Energy Stones";
+    var relatedCopy = document.querySelector("#related .section-sub");
+    if(relatedCopy) relatedCopy.textContent = "More Veshannastro bracelets with your own prices, offers and secure checkout.";
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", applyReferencePolish);
+  else applyReferencePolish();
+  window.addEventListener("load", applyReferencePolish);
+})();
+</script>
+<!-- ===== Maya AI Query Consultant widget (self-contained, no external files) =====
+     Backend endpoint: set window.MAYA_API_URL before this block to override.
+     Default "/api/chat" works when the page is served from the same origin as
+     the Node backend. The OpenAI API key lives ONLY on that backend — never here. -->
+<script>
+(function () {
+  "use strict";
+  if (window.__mayaWidgetLoaded) return;
+  window.__mayaWidgetLoaded = true;
+
+  var API_URL = window.MAYA_API_URL || "/api/chat";
+  var WELCOME = "Hello, I'm Maya, your query consultant. I handle everything about your " +
+    "orders and our services — tracking, status, issues, and what we offer. How can I help you today?";
+
+  var CSS = ".maya-widget{position:fixed;left:24px;bottom:24px;z-index:2147483000;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:15px;}"
+    + ".maya-widget *,.maya-widget *::before,.maya-widget *::after{box-sizing:border-box;}"
+    + ".maya-launcher{position:relative;width:66px;height:66px;border:none;border-radius:50%;cursor:pointer;color:#fff;background:linear-gradient(135deg,#ff2e63,#ff6b35);box-shadow:0 8px 26px rgba(255,46,99,.55),0 2px 8px rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;transition:transform .18s ease,box-shadow .18s ease;animation:maya-bob 2.6s ease-in-out infinite;}"
+    + ".maya-launcher:hover{transform:scale(1.08);box-shadow:0 10px 32px rgba(255,46,99,.7);}"
+    + ".maya-launcher:active{transform:scale(.96);}.maya-launcher-icon{position:relative;z-index:2;}"
+    + ".maya-launcher-pulse{position:absolute;inset:0;border-radius:50%;background:#ff2e63;z-index:1;animation:maya-pulse 1.9s cubic-bezier(.4,0,.6,1) infinite;}"
+    + "@keyframes maya-pulse{0%{transform:scale(1);opacity:.7;}70%{transform:scale(1.9);opacity:0;}100%{transform:scale(1.9);opacity:0;}}"
+    + "@keyframes maya-bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}"
+    + ".maya-window{position:absolute;left:0;bottom:84px;width:370px;max-width:calc(100vw - 32px);height:560px;max-height:calc(100vh - 120px);background:#fff;border-radius:18px;box-shadow:0 24px 60px rgba(0,0,0,.25);display:flex;flex-direction:column;overflow:hidden;transform:translateY(16px) scale(.96);opacity:0;pointer-events:none;transition:transform .22s ease,opacity .22s ease;}"
+    + ".maya-window.maya-open{transform:translateY(0) scale(1);opacity:1;pointer-events:auto;}"
+    + ".maya-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;}"
+    + ".maya-header-id{display:flex;align-items:center;gap:12px;}"
+    + ".maya-avatar{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;}"
+    + ".maya-header-text{display:flex;flex-direction:column;line-height:1.25;}"
+    + ".maya-name{font-weight:700;font-size:17px;}"
+    + ".maya-role{font-size:12px;opacity:.9;display:flex;align-items:center;gap:6px;}"
+    + ".maya-status-dot{width:8px;height:8px;border-radius:50%;background:#34d399;box-shadow:0 0 0 3px rgba(52,211,153,.3);}"
+    + ".maya-close{background:none;border:none;color:#fff;font-size:26px;line-height:1;cursor:pointer;opacity:.85;padding:0 4px;}.maya-close:hover{opacity:1;}"
+    + ".maya-messages{flex:1;padding:16px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:#fafbfe;}"
+    + ".maya-msg{max-width:82%;padding:10px 14px;border-radius:16px;line-height:1.45;word-wrap:break-word;white-space:pre-wrap;animation:maya-fade .2s ease;}"
+    + ".maya-msg-bot{align-self:flex-start;background:#f1f3f9;color:#1f2333;border-bottom-left-radius:5px;}"
+    + ".maya-msg-user{align-self:flex-end;background:#4f46e5;color:#fff;border-bottom-right-radius:5px;}"
+    + ".maya-msg-error{align-self:flex-start;background:#fde8e8;color:#9b1c1c;border-bottom-left-radius:5px;}"
+    + "@keyframes maya-fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}"
+    + ".maya-typing{display:none;gap:4px;padding:0 20px 8px;align-items:center;}.maya-typing.maya-show{display:flex;}"
+    + ".maya-typing span{width:7px;height:7px;border-radius:50%;background:#6b7280;animation:maya-blink 1.2s infinite ease-in-out;}"
+    + ".maya-typing span:nth-child(2){animation-delay:.2s;}.maya-typing span:nth-child(3){animation-delay:.4s;}"
+    + "@keyframes maya-blink{0%,80%,100%{opacity:.25;transform:translateY(0);}40%{opacity:1;transform:translateY(-4px);}}"
+    + ".maya-input-bar{display:flex;align-items:center;gap:8px;padding:12px;border-top:1px solid #eceef5;background:#fff;}"
+    + ".maya-input{flex:1;border:1px solid #d8dcea;border-radius:22px;padding:11px 16px;font-size:15px;font-family:inherit;outline:none;transition:border-color .15s ease;}.maya-input:focus{border-color:#4f46e5;}"
+    + ".maya-send{width:44px;height:44px;flex:none;border:none;border-radius:50%;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s ease,opacity .15s ease;}"
+    + ".maya-send:hover{transform:scale(1.06);}.maya-send:disabled{opacity:.5;cursor:not-allowed;transform:none;}"
+    + "@media (prefers-reduced-motion:reduce){.maya-launcher,.maya-launcher-pulse,.maya-msg,.maya-typing span{animation:none;}}"
+    + "@media (max-width:420px){.maya-widget{left:12px;bottom:12px;}.maya-window{width:calc(100vw - 24px);height:calc(100vh - 96px);}}";
+
+  var styleEl = document.createElement("style");
+  styleEl.setAttribute("data-maya-style", "");
+  styleEl.textContent = CSS;
+  document.head.appendChild(styleEl);
+
+  var HTML =
+    '<section class="maya-window" role="dialog" aria-label="Maya chat" aria-hidden="true">'
+    + '<header class="maya-header"><div class="maya-header-id"><span class="maya-avatar" aria-hidden="true">M</span>'
+    + '<div class="maya-header-text"><span class="maya-name">Maya</span>'
+    + '<span class="maya-role"><span class="maya-status-dot" aria-hidden="true"></span>Query Consultant · Online</span></div></div>'
+    + '<button class="maya-close" type="button" aria-label="Close chat">&times;</button></header>'
+    + '<div class="maya-messages" role="log" aria-live="polite"></div>'
+    + '<div class="maya-typing" aria-hidden="true"><span></span><span></span><span></span></div>'
+    + '<form class="maya-input-bar" autocomplete="off">'
+    + '<input class="maya-input" type="text" placeholder="Ask about your order or our services…" aria-label="Type your message" maxlength="1000" required />'
+    + '<button class="maya-send" type="submit" aria-label="Send message"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button></form></section>'
+    + '<button class="maya-launcher" type="button" aria-label="Chat with Maya" data-maya-open>'
+    + '<span class="maya-launcher-pulse" aria-hidden="true"></span>'
+    + '<svg class="maya-launcher-icon" viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path fill="currentColor" d="M12 2C6.48 2 2 6.03 2 11c0 2.38 1.02 4.55 2.71 6.19L4 22l5.13-1.6c.9.26 1.86.4 2.87.4 5.52 0 10-4.03 10-9S17.52 2 12 2z"/></svg></button>';
+
+  var root = document.createElement("div");
+  root.className = "maya-widget";
+  root.setAttribute("aria-live", "polite");
+  root.innerHTML = HTML;
+  document.body.appendChild(root);
+
+  var windowEl = root.querySelector(".maya-window");
+  var launcher = root.querySelector(".maya-launcher");
+  var closeBtn = root.querySelector(".maya-close");
+  var messagesEl = root.querySelector(".maya-messages");
+  var typingEl = root.querySelector(".maya-typing");
+  var form = root.querySelector(".maya-input-bar");
+  var input = root.querySelector(".maya-input");
+  var sendBtn = root.querySelector(".maya-send");
+
+  var history = [];
+  var opened = false;
+
+  function openWindow() {
+    windowEl.classList.add("maya-open");
+    windowEl.setAttribute("aria-hidden", "false");
+    launcher.style.display = "none";
+    if (!opened) { opened = true; addMessage(WELCOME, "bot"); }
+    setTimeout(function () { input.focus(); }, 200);
+  }
+  function closeWindow() {
+    windowEl.classList.remove("maya-open");
+    windowEl.setAttribute("aria-hidden", "true");
+    launcher.style.display = "flex";
+  }
+  function addMessage(text, type) {
+    var el = document.createElement("div");
+    el.className = "maya-msg maya-msg-" + type;
+    el.textContent = text;
+    messagesEl.appendChild(el);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    return el;
+  }
+  function setTyping(on) {
+    typingEl.classList.toggle("maya-show", on);
+    if (on) messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+  function setBusy(busy) { input.disabled = busy; sendBtn.disabled = busy; }
+
+  async function sendMessage(text) {
+    addMessage(text, "user");
+    history.push({ role: "user", content: text });
+    setBusy(true); setTyping(true);
+    try {
+      var res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text, history: history })
+      });
+      if (!res.ok) throw new Error("Server responded with " + res.status);
+      var data = await res.json();
+      var reply = data && data.reply ? data.reply : "";
+      setTyping(false);
+      if (reply) { addMessage(reply, "bot"); history.push({ role: "assistant", content: reply }); }
+      else { addMessage("I didn't receive a response. Please send your message again.", "error"); }
+    } catch (err) {
+      setTyping(false);
+      addMessage("I'm unable to reach the service right now. Please check the connection and try again.", "error");
+      if (window.console) console.error("[Maya] request failed:", err);
+    } finally { setBusy(false); input.focus(); }
+  }
+
+  launcher.addEventListener("click", openWindow);
+  closeBtn.addEventListener("click", closeWindow);
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var text = input.value.trim();
+    if (!text) return;
+    input.value = "";
+    sendMessage(text);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && windowEl.classList.contains("maya-open")) closeWindow();
+  });
+})();
+</script>
+
 </body>
 </html>
 
