@@ -1,64 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Veshannastro — XML sitemap
+  Only URLs that return 200 and are set to index are listed. Checkout,
+  thank-you and noindexed pages are deliberately excluded.
+-->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
     <loc>https://www.veshannastro.co.in/</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-07-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
     <loc>https://www.veshannastro.co.in/vedic-kundli-booking.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-07-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
     <loc>https://www.veshannastro.co.in/numerology-booking.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-07-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://www.veshannastro.co.in/blog.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <loc>https://www.veshannastro.co.in/bracelet-fusion.html</loc>
+    <lastmod>2026-07-26</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://www.veshannastro.co.in/about.html</loc>
-    <lastmod>2026-05-31</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://www.veshannastro.co.in/contact.html</loc>
-    <lastmod>2026-05-31</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://www.veshannastro.co.in/terms.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-07-26</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
+
   <url>
-<loc>https://www.veshannastro.co.in/privacy-policy.html</loc>
-<lastmod>2026-06-09</lastmod>
-<changefreq>yearly</changefreq>
-<priority>0.3</priority>
-</url>
-<url>
-<loc>https://www.veshannastro.co.in/refund-policy.html</loc>
-<lastmod>2026-06-09</lastmod>
-<changefreq>yearly</changefreq>
-<priority>0.3</priority>
-</url>
+    <loc>https://www.veshannastro.co.in/privacy-policy.html</loc>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://www.veshannastro.co.in/refund-policy.html</loc>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- blog.html is intentionally excluded: it has no content yet and is
+       set to noindex. Add it here once articles are published. -->
+
 </urlset>

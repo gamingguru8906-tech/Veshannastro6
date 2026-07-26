@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="https://veshann-admin.onrender.com/track.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog | Veshannastro — Vedic Astrology &amp; Numerology</title>
+<meta name="description" content="Practical writing on Vedic astrology, numerology and remedies from Veshannastro — grounded guidance without fear-mongering. First articles coming soon.">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://www.veshannastro.co.in/blog.html">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.veshannastro.co.in/blog.html">
+<meta property="og:title" content="Blog | Veshannastro — Vedic Astrology &amp; Numerology">
+<meta property="og:description" content="Practical writing on Vedic astrology, numerology and remedies from Veshannastro — grounded guidance without fear-mongering.">
+<meta property="og:site_name" content="Veshannastro">
+<meta property="og:image" content="https://www.veshannastro.co.in/images/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.veshannastro.co.in/images/og-image.png">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#c9a84c;--gold-dim:#7a5f28;--gold-light:#f0d080;--gold-pale:#e8d090;
+  --cream:#f5efe0;--deep:#04020a;--deep2:#0a060f;--text-muted:#9a8a6a;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--deep);color:var(--cream);font-family:'Jost',sans-serif;font-weight:300;overflow-x:hidden;min-height:100vh;}
+
+.page-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.9rem 2rem;background:rgba(4,2,10,0.94);border-bottom:1px solid rgba(201,168,76,0.1);backdrop-filter:blur(10px);}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;letter-spacing:.14em;color:var(--cream);text-decoration:none;}
+.nav-logo em{font-style:italic;color:var(--gold-light);}
+.nav-back{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.35em;color:var(--text-muted);text-decoration:none;text-transform:uppercase;display:flex;align-items:center;gap:6px;transition:color .3s;}
+.nav-back:hover{color:var(--gold);}
+.nav-back svg{width:12px;height:12px;stroke:currentColor;fill:none;}
+
+.page-hero{text-align:center;padding:7rem 2rem 5rem;border-bottom:1px solid rgba(201,168,76,0.08);}
+.eyebrow{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.45em;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:1.2rem;}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,6vw,4.5rem);font-weight:300;letter-spacing:.06em;line-height:1.1;margin-bottom:1rem;}
+.page-title em{font-style:italic;color:var(--gold-light);}
+.page-subtitle{font-size:.85rem;color:var(--text-muted);letter-spacing:.05em;line-height:1.8;max-width:520px;margin:0 auto;}
+.gold-rule{width:50px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:1.8rem auto 0;}
+
+.blog-content{max-width:760px;margin:5rem auto;padding:0 2rem;}
+.content-placeholder{
+  text-align:center;padding:4rem 2rem;
+  background:rgba(255,255,255,0.015);
+  border:0.5px solid rgba(201,168,76,0.1);
+  border-radius:3px;margin-bottom:3rem;
+}
+.placeholder-icon{font-family:'Cormorant Garamond',serif;font-size:2.8rem;color:var(--gold);opacity:.3;display:block;margin-bottom:1.5rem;}
+.placeholder-heading{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:300;color:var(--cream);margin-bottom:.8rem;}
+.placeholder-heading em{font-style:italic;color:var(--gold-light);}
+.placeholder-text{font-size:.82rem;color:var(--text-muted);line-height:1.9;letter-spacing:.03em;max-width:520px;margin:0 auto;}
+
+.topics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.2rem;margin-top:3rem;}
+.topic-card{
+  background:rgba(255,255,255,0.018);
+  border:0.5px solid rgba(201,168,76,0.12);
+  border-radius:3px;padding:1.8rem 1.6rem;
+  position:relative;overflow:hidden;
+}
+.topic-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);}
+.topic-sym{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--gold);display:block;margin-bottom:1rem;}
+.topic-name{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--cream);margin-bottom:.5rem;}
+.topic-desc{font-size:.76rem;color:var(--text-muted);line-height:1.75;}
+
+.page-cta{text-align:center;padding:4rem 2rem 6rem;border-top:1px solid rgba(201,168,76,0.08);}
+.cta-text{font-size:.82rem;color:var(--text-muted);letter-spacing:.04em;margin-bottom:1.8rem;}
+.cta-btn{display:inline-block;border:0.5px solid rgba(201,168,76,0.55);color:var(--gold);font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:.35em;text-transform:uppercase;padding:14px 36px;text-decoration:none;transition:background .3s,border-color .3s;}
+.cta-btn:hover{background:rgba(201,168,76,0.06);border-color:var(--gold);}
+
+.page-footer{background:var(--deep2);border-top:1px solid rgba(201,168,76,0.1);padding:2rem;text-align:center;}
+.footer-links{display:flex;justify-content:center;flex-wrap:wrap;gap:0;list-style:none;margin-bottom:1.2rem;}
+.footer-links li:not(:last-child)::after{content:'·';color:var(--gold-dim);padding:0 .8rem;font-size:.65rem;opacity:.5;}
+.footer-links a{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.3em;color:var(--text-muted);text-decoration:none;text-transform:uppercase;transition:color .3s;}
+.footer-links a:hover{color:var(--gold);}
+.footer-copy{font-size:.68rem;color:var(--gold-dim);opacity:.45;letter-spacing:.05em;}
+</style>
+</head>
+<body>
+
+<nav class="page-nav">
+  <a href="index.html" class="nav-logo">Veshan<em>nastro</em></a>
+  <a href="index.html" class="nav-back">
+    <svg viewBox="0 0 24 24" stroke-width="1.5"><polyline points="15 18 9 12 15 6"/></svg>
+    Back to Home
+  </a>
+</nav>
+
+<header class="page-hero">
+  <span class="eyebrow">Writing</span>
+  <h1 class="page-title">The <em>Blog</em></h1>
+  <p class="page-subtitle">Practical writing on Vedic astrology, numerology and remedies — grounded, precise, and free of fear-mongering.</p>
+  <div class="gold-rule"></div>
+</header>
+
+<main>
+  <div class="blog-content">
+    <div class="content-placeholder">
+      <span class="placeholder-icon">✧</span>
+      <h2 class="placeholder-heading">First Articles — <em>In Preparation</em></h2>
+      <p class="placeholder-text">We would rather publish a few genuinely useful pieces than a stream of filler. The opening set is being written now. In the meantime, the fastest way to get a real answer is simply to ask.</p>
+    </div>
+
+    <div class="topics-grid">
+      <div class="topic-card">
+        <span class="topic-sym">☽</span>
+        <h3 class="topic-name">Reading a Kundli</h3>
+        <p class="topic-desc">What a birth chart genuinely reveals about timing and tendency — and why an exact birth time matters more than anything else.</p>
+      </div>
+      <div class="topic-card">
+        <span class="topic-sym">✦</span>
+        <h3 class="topic-name">Numbers &amp; the Lo Shu Grid</h3>
+        <p class="topic-desc">How the grid is built from your date of birth, and what missing or repeated numbers actually mean for you.</p>
+      </div>
+      <div class="topic-card">
+        <span class="topic-sym">♎</span>
+        <h3 class="topic-name">Remedies That Make Sense</h3>
+        <p class="topic-desc">Gemstones, mantras and timing — what is worth doing, what is worth skipping, and how to tell the difference.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="page-cta">
+  <p class="cta-text">Have a question the articles haven't covered yet?</p>
+  <a href="contact.html" class="cta-btn">Ask Us Directly</a>
+</div>
+
+<footer class="page-footer">
+  <ul class="footer-links">
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="contact.html">Contact Us</a></li>
+    <li><a href="terms.html">Terms &amp; Conditions</a></li>
+    <li><a href="privacy-policy.html">Privacy Policy</a></li>
+    <li><a href="refund-policy.html">Refund Policy</a></li>
+  </ul>
+  <p class="footer-copy">&copy; 2026 Veshannastro · Delhi, India · All rights reserved</p>
+</footer>
+
+</body>
+</html>
