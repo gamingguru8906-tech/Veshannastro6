@@ -44,6 +44,15 @@ for f in sorted(glob.glob("calculators/*.html")):
         continue
     urls.append((BASE + f.replace(os.sep, "/"), *CALC_PRIORITY))
 
+# Report landing pages live in /reports/ (the hub gets a higher priority)
+for f in sorted(glob.glob("reports/*.html")):
+    if not indexable(f):
+        continue
+    if f.endswith("index.html"):
+        urls.append((BASE + "reports/", "0.9", "weekly"))
+    else:
+        urls.append((BASE + f.replace(os.sep, "/"), "0.8", "monthly"))
+
 urls.sort(key=lambda u: (-float(u[1]), u[0]))
 
 out = ['<?xml version="1.0" encoding="UTF-8"?>',

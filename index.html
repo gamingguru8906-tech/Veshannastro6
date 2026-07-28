@@ -469,6 +469,7 @@ function cfHideErr(el){ if(!el) return; el.hidden=true;  el.style.display='none'
   <ul class="nav-links">
     <li><a href="#bracelet-shop">Shop</a></li>
     <li><a href="#vesha-chat">Services</a></li>
+    <li><a href="/reports/">Reports</a></li>
     <li><a href="#numerology-section">Calculators</a></li>
     <li><a href="#social-proof">About</a></li>
     <li><button type="button" class="nav-book-btn" id="nav-book-btn" aria-haspopup="dialog" aria-controls="svc-picker-overlay" aria-expanded="false">Book a consultation</button></li>
@@ -480,6 +481,7 @@ function cfHideErr(el){ if(!el) return; el.hidden=true;  el.style.display='none'
 <div id="nav-mobile-menu">
   <a href="#bracelet-shop" class="nav-mob-link">Shop</a>
   <a href="#vesha-chat" class="nav-mob-link">Services</a>
+  <a href="/reports/" class="nav-mob-link">Reports</a>
   <a href="#numerology-section" class="nav-mob-link">Calculators</a>
   <a href="#social-proof" class="nav-mob-link">About</a>
   <button type="button" class="nav-mob-link nav-mob-cta" id="nav-mob-book-btn" aria-haspopup="dialog" aria-controls="svc-picker-overlay" aria-expanded="false">Book a consultation</button>
@@ -818,10 +820,10 @@ function cfHideErr(el){ if(!el) return; el.hidden=true;  el.style.display='none'
     <ul class="vo-fallback" id="vo-fallback">
       <li><a href="/vedic-kundli-booking.html">Vedic Kundli Consultation — 40-minute live video reading, ₹2,249. Includes PDF report, session recording, invoice and a free numerology analysis.</a></li>
       <li><a href="/numerology-booking.html">Numerology Consultation — 20-minute live video session covering Life Path, Destiny and Soul Urge numbers, ₹1,099. Includes PDF report and invoice.</a></li>
-      <li><a href="/report-booking.html?service=palmistry-report">Palm Reading — written report prepared from photographs of both palms, ₹149.</a></li>
-      <li><a href="/report-booking.html?service=astrology-life-path-report">Premium Vedic Life Path Report — 25–30 page PDF using Lagna, Moon sign, Nakshatra, Mahadasha and transits, ₹699.</a></li>
-      <li><a href="/report-booking.html?service=divorce-separation-report">Divorce &amp; Separation Report — private written report combining Vedic marriage timing with numerology compatibility, ₹599.</a></li>
-      <li><a href="/report-booking.html?service=complete-numerology">Complete Numerology Report — 25 hand-written pages covering birth number, destiny number, Lo Shu grid and remedies, ₹999.</a></li>
+      <li><a href="/reports/palmistry-report.html">Palm Reading — written report prepared from photographs of both palms, ₹149.</a></li>
+      <li><a href="/reports/premium-vedic-life-path-report.html">Premium Vedic Life Path Report — 25–30 page PDF using Lagna, Moon sign, Nakshatra, Mahadasha and transits, ₹699.</a></li>
+      <li><a href="/reports/divorce-separation-report.html">Divorce &amp; Separation Report — private written report combining Vedic marriage timing with numerology compatibility, ₹599.</a></li>
+      <li><a href="/reports/complete-numerology-report.html">Complete Numerology Report — 25 hand-written pages covering birth number, destiny number, Lo Shu grid and remedies, ₹999.</a></li>
     </ul>
   </div>
 </section>
@@ -2344,7 +2346,7 @@ function cfHideErr(el){ if(!el) return; el.hidden=true;  el.style.display='none'
               Five-year timing overview with practical next actions
             </li>
           </ul>
-          <a href="https://www.veshannastro.co.in/report-booking.html?service=astrology-life-path-report" class="card-book-btn" aria-labelledby="svc-lifepath-title svc-lifepath-cta">
+          <a href="/reports/premium-vedic-life-path-report.html" class="card-book-btn" aria-labelledby="svc-lifepath-title svc-lifepath-cta">
             <span id="svc-lifepath-cta">Get Report</span>
             <svg aria-hidden="true" viewBox="0 0 24 24" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </a>
@@ -2382,7 +2384,7 @@ function cfHideErr(el){ if(!el) return; el.hidden=true;  el.style.display='none'
               Reconciliation, separation and communication guidance without guarantees
             </li>
           </ul>
-          <a href="https://www.veshannastro.co.in/report-booking.html?service=divorce-separation-report" class="card-book-btn" aria-labelledby="svc-divorce-title svc-divorce-cta">
+          <a href="/reports/divorce-separation-report.html" class="card-book-btn" aria-labelledby="svc-divorce-title svc-divorce-cta">
             <span id="svc-divorce-cta">Get Report</span>
             <svg aria-hidden="true" viewBox="0 0 24 24" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </a>
@@ -4517,6 +4519,7 @@ document.querySelectorAll('.process-step').forEach(el=>stepIO.observe(el));
   </div>
   <nav aria-label="Footer navigation">
     <ul class="footer-nav">
+      <li><a href="/reports/">Reports</a></li>
       <li><a href="blog.html">Blog</a></li>
       <li><a href="about.html">About Us</a></li>
       <li><a href="contact.html">Contact Us</a></li>

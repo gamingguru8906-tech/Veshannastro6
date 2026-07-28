@@ -37,18 +37,24 @@ To book a reading, a client provides date of birth, time of birth (as exact as p
 
 ## Written reports (fixed price, PDF by email)
 
-- **Complete Numerology Report — ₹999.** Twenty-five hand-written pages: birth number, destiny number, Lo Shu grid with missing-number remedies, name vibration, personal year cycle and remedies.
-- **Personal Year Forecast — ₹499.** The personal year cycle mapped month by month.
-- **Business Name Report — ₹499.** A business name tested against the vibration it projects, with corrections.
-- **Name Numerology Report — ₹299.** Compound value of the name, Lo Shu grid, missing numbers and spelling correction.
-- **Mobile Number Analysis — ₹299.** Whether a phone number's frequency supports the owner's money, work and relationships.
-- **Baby Name Report — ₹299.** A shortlist of names built around the child's birth number.
-- **Numerology Compatibility — ₹299.** Both partners' core numbers side by side with a compatibility percentage.
-- **Palmistry Report — ₹149.** A written analysis prepared from photographs of both palms.
-- **Premium Vedic Life Path Report — ₹699.** A 25–30 page calculation-first PDF using Lagna, Moon sign, Nakshatra, Mahadasha, divisional charts and transits, with a five-year timing overview.
-- **Divorce & Separation Report — ₹599.** A private written report combining Vedic marriage timing with numerology compatibility, emotional pattern analysis and practical do/avoid guidance. No guarantees are offered.
+Every report is written by hand by Shashank Agrawal. None are software-generated.
+Each has its own page with full detail; the hub is
+[/reports/](https://www.veshannastro.co.in/reports/).
 
-Reports are delivered within 24–48 hours of payment. Video consultation reports arrive within 48 hours of the session.
+- **[Complete Numerology Report](https://www.veshannastro.co.in/reports/complete-numerology-report.html) — ₹999.** Life Path, Destiny, Soul Urge, name and mobile vibrations â your entire numeric blueprint in one detailed document. Delivered by email within 2â3 hours.
+- **[Premium Vedic Life Path Report](https://www.veshannastro.co.in/reports/premium-vedic-life-path-report.html) — ₹699.** A premium written Vedic astrology report using birth chart, Moon, Nakshatra, Mahadasha, divisional support and five-year timing for career, marriage, money and life direction. 25-30 page PDF report.
+- **[Divorce & Separation Report](https://www.veshannastro.co.in/reports/divorce-separation-report.html) — ₹599.** A private written report combining Vedic relationship timing with numerology compatibility, emotional pattern analysis and practical do / avoid guidance. Private astrology + numerology PDF report.
+- **[Personal Year Forecast](https://www.veshannastro.co.in/reports/personal-year-forecast.html) — ₹499.** Your Personal Year number unlocks the dominant theme of the year ahead â when to act, when to pause, and what the universe is asking of you right now. 12-month PDF Â· email within 2â3 hours.
+- **[Business Name Report](https://www.veshannastro.co.in/reports/business-name-report.html) — ₹499.** Your business name is its energetic foundation. Get a detailed analysis of your current name’s vibration and 3â5 numerologically aligned alternatives for growth and prosperity. 3â5 name options Â· email within 24 hours.
+- **[Name Numerology Report](https://www.veshannastro.co.in/reports/name-numerology-report.html) — ₹299.** How your name’s vibration shapes fortune and relationships â with practical correction suggestions if needed. Delivered by email within 2â3 hours.
+- **[Mobile Number Analysis](https://www.veshannastro.co.in/reports/mobile-number-analysis.html) — ₹299.** Is your mobile number working for you or against you? A complete vibration analysis with lucky-number recommendations. Delivered by email within 2â3 hours.
+- **[Numerology Compatibility](https://www.veshannastro.co.in/reports/numerology-compatibility-report.html) — ₹299.** Two names, two birth dates â one complete picture. Discover whether your numbers harmonise or clash, and how to navigate your relationship’s deepest patterns. PDF report Â· email within 2â3 hours.
+- **[Baby Name Report](https://www.veshannastro.co.in/reports/baby-name-report.html) — ₹299.** Give your child a name that resonates with their soul’s numbers. Receive 5+ name options aligned to their birth date, each explained with its numerological meaning and energy. 5+ name options Â· email within 24 hours.
+- **[Palmistry Report](https://www.veshannastro.co.in/reports/palmistry-report.html) — ₹149.** A detailed written analysis of your lines, mounts and life patterns, read from the photos of your palms. Detailed report by email.
+- **[Palmistry Voice Consultation](https://www.veshannastro.co.in/reports/palmistry-voice-consultation.html) — ₹374.** Everything in the written report, plus a personalised 10-minute voice consultation to walk through your palms together. Report + 10-min voice session.
+
+Order any report at https://www.veshannastro.co.in/report-booking.html?service=<KEY>
+using the keys listed under "Order a written PDF report" below.
 
 ## Actions for AI agents
 
