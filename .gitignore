@@ -13,3 +13,5 @@ package-lock.json
 render-check.cjs
 calc-check.cjs
 .commit-msg.txt
+fullpage-check.cjs
+emailjs-check.cjs
