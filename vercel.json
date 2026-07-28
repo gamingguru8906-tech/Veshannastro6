@@ -1,1 +1,46 @@
-{"rewrites":[{"source":"/api/chat","destination":"https://veshannastro6.onrender.com/api/chat"}]}
+{
+  "rewrites": [
+    {
+      "source": "/api/chat",
+      "destination": "https://veshannastro6.onrender.com/api/chat"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/astrology_websites_dashboard_v2.html",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/index-manuscript-preview.html",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/shop%20product.html",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/(checkout|booking|vedic-checkout|numerology-checkout|union-checkout|thank-you|numerology-thank-you).html",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        }
+      ]
+    }
+  ]
+}

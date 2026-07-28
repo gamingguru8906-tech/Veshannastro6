@@ -5,3 +5,11 @@
 __pycache__/
 *.py[cod]
 .DS_Store
+
+# Local audit / verification tooling (not part of the site)
+node_modules/
+package.json
+package-lock.json
+render-check.cjs
+calc-check.cjs
+.commit-msg.txt

@@ -1,0 +1,369 @@
+/* Veshannastro — late overrides (must load after guidance-rails.css)
+   Extracted from index.html. Order is significant — do not re-sort. */
+
+/* ── maaya-blur-background-fix ── */
+
+/* Maaya AI section: remove the blue/dark wash and use a soft blurred landing-page backdrop. */
+#vesha-chat.vo-host{
+  position:relative!important;
+  overflow:hidden!important;
+  isolation:isolate!important;
+  background:
+    linear-gradient(180deg,rgba(246,239,225,.86),rgba(233,224,205,.9)),
+    linear-gradient(135deg,#f8efe0 0%,#ead8b8 45%,#f6efe4 100%)!important;
+  padding:clamp(2.4rem,5vw,4.6rem) 1rem!important;
+  min-height:0!important;
+}
+#vesha-chat.vo-host::before{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:-36px!important;
+  z-index:-2!important;
+  background:
+    radial-gradient(ellipse 78% 50% at 18% 20%,rgba(126,35,55,.2),transparent 68%),
+    radial-gradient(ellipse 72% 44% at 80% 28%,rgba(201,168,76,.32),transparent 70%),
+    radial-gradient(ellipse 88% 56% at 50% 92%,rgba(255,255,255,.62),transparent 66%),
+    linear-gradient(135deg,#efe2c8 0%,#f8f2e7 46%,#ddc8a4 100%)!important;
+  filter:blur(28px)!important;
+  transform:scale(1.08)!important;
+  opacity:.95!important;
+}
+#vesha-chat.vo-host::after{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:-1!important;
+  pointer-events:none!important;
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.34),transparent 24%,transparent 76%,rgba(255,255,255,.28)),
+    linear-gradient(180deg,rgba(255,252,245,.72),rgba(238,228,209,.5))!important;
+}
+#vesha-chat.vo-host .vo-wrap{
+  background:rgba(255,252,245,.72)!important;
+  -webkit-backdrop-filter:blur(18px) saturate(1.08)!important;
+  backdrop-filter:blur(18px) saturate(1.08)!important;
+  border-color:rgba(184,146,90,.38)!important;
+  box-shadow:0 32px 90px rgba(58,45,28,.16),0 0 0 1px rgba(255,255,255,.46) inset!important;
+}
+#vesha-chat.vo-host .vo-usp,
+#vesha-chat.vo-host .vo-card,
+#vesha-chat.vo-host .vo-chip{
+  background:rgba(255,252,245,.78)!important;
+  -webkit-backdrop-filter:blur(12px)!important;
+  backdrop-filter:blur(12px)!important;
+}
+
+/* ── anton-heading-font-override ── */
+
+h1,h2,h3,h4,h5,h6,
+.lsb-title,
+.lsb-oracle strong,
+.vo-title,
+.vo-card-t,
+.section-title,
+.section-header-wrap h2,
+.gp-title,
+.gp-svc-title,
+.cd-title,
+.site-footer h2,
+.footer-logo{
+  font-family:"Anton", sans-serif !important;
+  font-weight:400 !important;
+  letter-spacing:0 !important;
+}
+h1 em,h2 em,h3 em,h4 em,
+.lsb-title em,
+.vo-title em,
+.section-title em,
+.gp-title em,
+.cd-title em{
+  font-family:"Anton", sans-serif !important;
+  font-style:normal !important;
+  font-weight:400 !important;
+}
+h1,h2,.lsb-title,.vo-title,.section-title,.gp-title,.cd-title{
+  line-height:1.04 !important;
+}
+
+/* ── brand-name-original-font-restore ── */
+
+.nav-logo,
+.hero-title,
+.hero-title em,
+.footer-logo,
+.footer-logo em,
+.footer-strip strong{
+  font-family:'Vollkorn',serif!important;
+}
+.nav-logo{
+  font-family:'Cinzel',serif!important;
+  font-weight:300!important;
+  letter-spacing:.25em!important;
+}
+.footer-strip strong{
+  font-family:inherit!important;
+  font-weight:700!important;
+}
+.hero-title,
+.footer-logo{
+  font-weight:300!important;
+  letter-spacing:.08em!important;
+}
+.hero-title em,
+.footer-logo em{
+  font-style:italic!important;
+  font-weight:300!important;
+  letter-spacing:.08em!important;
+}
+.about-text-col .section-title,
+.about-text-col .section-title em{
+  font-family:'Vollkorn',serif!important;
+  font-weight:300!important;
+  letter-spacing:.05em!important;
+}
+.about-text-col .section-title em{
+  font-style:italic!important;
+}
+
+/* ── receive-section-full-grey-band ── */
+
+#consultation-deliverables{
+  width:100vw!important;
+  margin-left:calc(50% - 50vw)!important;
+  margin-right:calc(50% - 50vw)!important;
+  background:
+    linear-gradient(180deg,#424448 0%,#34363a 48%,#2f3135 100%)!important;
+  border-top:0!important;
+  border-bottom:0!important;
+  box-shadow:none!important;
+}
+#consultation-deliverables::before{
+  background:
+    radial-gradient(ellipse 80% 42% at 18% 0%,rgba(255,255,255,.08),transparent 68%),
+    radial-gradient(ellipse 70% 46% at 86% 18%,rgba(201,168,76,.08),transparent 72%)!important;
+}
+#consultation-deliverables::after{
+  opacity:.025!important;
+}
+#consultation-deliverables .cd-panel{
+  width:min(1240px,calc(100% - 3rem))!important;
+  max-width:none!important;
+  margin:0 auto!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  background:transparent!important;
+  overflow:visible!important;
+}
+#consultation-deliverables .cd-panel::before,
+#consultation-deliverables .cd-panel::after{
+  display:none!important;
+}
+#consultation-deliverables .cd-left,
+#consultation-deliverables .cd-right{
+  background:transparent!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+}
+#consultation-deliverables .cd-left::before,
+#consultation-deliverables .cd-left::after,
+#consultation-deliverables .cd-right::before{
+  display:none!important;
+}
+#consultation-deliverables .cd-divider::after{
+  background:#383a3e!important;
+}
+#consultation-deliverables .cd-footer{
+  background:transparent!important;
+  border-top:1px solid rgba(240,224,178,.16)!important;
+  box-shadow:none!important;
+}
+#consultation-deliverables .eyebrow-label,
+#consultation-deliverables .cd-panel-label,
+#consultation-deliverables .cd-step-label,
+#consultation-deliverables .dlv2-idx,
+#consultation-deliverables .dlv2-sub,
+#consultation-deliverables .cd-footer-note,
+#consultation-deliverables .cd-footer-seal{
+  color:rgba(240,208,128,.82)!important;
+}
+#consultation-deliverables .section-title,
+#consultation-deliverables .dlv2-title,
+#consultation-deliverables .cd-step-title{
+  color:#fff8ec!important;
+}
+#consultation-deliverables .section-title em{
+  color:#f0d080!important;
+}
+#consultation-deliverables .section-subtitle,
+#consultation-deliverables .dlv2-desc,
+#consultation-deliverables .cd-step-detail{
+  color:rgba(255,248,236,.74)!important;
+}
+@media(max-width:900px){
+  #consultation-deliverables .cd-panel{
+    width:min(100% - 2rem,760px)!important;
+  }
+}
+
+/* ── brand-font-and-clean-grey-receive-fix ── */
+
+/* Restore original brand/name typography after the Anton heading pass. */
+.nav-logo{
+  font-family:'Cinzel',serif!important;
+  font-weight:300!important;
+  letter-spacing:.25em!important;
+}
+.hero-title,
+.hero-title em,
+.footer-logo,
+.footer-logo em{
+  font-family:'Vollkorn',serif!important;
+  font-weight:300!important;
+  letter-spacing:.08em!important;
+}
+.hero-title em,
+.footer-logo em{
+  font-style:italic!important;
+}
+.about-text-col .section-title,
+.about-text-col .section-title em{
+  font-family:'Vollkorn',serif!important;
+  font-weight:300!important;
+  letter-spacing:.05em!important;
+}
+.about-text-col .section-title em{
+  font-style:italic!important;
+}
+
+/* What You Receive: clean full-width grey band, no card frame, no dusty overlay. */
+#consultation-deliverables{
+  width:100vw!important;
+  margin-left:calc(50% - 50vw)!important;
+  margin-right:calc(50% - 50vw)!important;
+  background:#3a3c40!important;
+  background-image:none!important;
+  border:0!important;
+  box-shadow:none!important;
+  overflow:hidden!important;
+  isolation:isolate!important;
+}
+#consultation-deliverables::before,
+#consultation-deliverables::after{
+  content:none!important;
+  display:none!important;
+  background:none!important;
+  opacity:0!important;
+}
+#consultation-deliverables > *{
+  position:relative!important;
+  z-index:2!important;
+}
+#consultation-deliverables .cd-panel{
+  width:min(1240px,calc(100% - 3rem))!important;
+  max-width:none!important;
+  margin:0 auto!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  background:transparent!important;
+  background-image:none!important;
+  overflow:visible!important;
+}
+#consultation-deliverables .cd-panel::before,
+#consultation-deliverables .cd-panel::after,
+#consultation-deliverables .cd-left::before,
+#consultation-deliverables .cd-left::after,
+#consultation-deliverables .cd-right::before,
+#consultation-deliverables .cd-right::after{
+  content:none!important;
+  display:none!important;
+}
+#consultation-deliverables .cd-left,
+#consultation-deliverables .cd-right{
+  background:transparent!important;
+  background-image:none!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+#consultation-deliverables .cd-divider{
+  background:linear-gradient(180deg,transparent,rgba(240,208,128,.32) 14%,rgba(240,208,128,.32) 86%,transparent)!important;
+}
+#consultation-deliverables .cd-divider::after{
+  background:#3a3c40!important;
+}
+#consultation-deliverables .cd-footer{
+  background:transparent!important;
+  background-image:none!important;
+  border-top:1px solid rgba(240,224,178,.16)!important;
+  box-shadow:none!important;
+}
+#consultation-deliverables .eyebrow-label,
+#consultation-deliverables .cd-panel-label,
+#consultation-deliverables .cd-step-label,
+#consultation-deliverables .dlv2-idx,
+#consultation-deliverables .dlv2-sub,
+#consultation-deliverables .cd-footer-note,
+#consultation-deliverables .cd-footer-seal{
+  color:rgba(240,208,128,.84)!important;
+}
+#consultation-deliverables .section-title,
+#consultation-deliverables .dlv2-title,
+#consultation-deliverables .cd-step-title{
+  color:#fff8ec!important;
+}
+#consultation-deliverables .section-title em{
+  color:#f0d080!important;
+}
+#consultation-deliverables .section-subtitle,
+#consultation-deliverables .dlv2-desc,
+#consultation-deliverables .cd-step-detail{
+  color:rgba(255,248,236,.76)!important;
+}
+@media(max-width:900px){
+  #consultation-deliverables .cd-panel{
+    width:min(100% - 2rem,760px)!important;
+  }
+  #consultation-deliverables .cd-divider{
+    background:linear-gradient(90deg,transparent,rgba(240,208,128,.32) 14%,rgba(240,208,128,.32) 86%,transparent)!important;
+  }
+}
+
+/* ── AGENT / CRAWLER SAFETY ──────────────────────────────────────────
+   Scroll-reveal must never be the reason content is missing. Content is
+   visible by default; the animation only applies when the visitor has
+   not asked for reduced motion. A no-JS visitor sees everything.      */
+.rv{opacity:1!important;transform:none!important;}
+@media (prefers-reduced-motion: no-preference){
+  .rv:not(.in){opacity:0!important;transform:translateY(18px)!important;}
+  .rv{transition:opacity .5s ease, transform .5s ease;}
+}
+[data-reveal]{opacity:1;transform:none;}
+@media (prefers-reduced-motion: no-preference){
+  [data-reveal]:not(.is-visible){opacity:0;transform:translateY(24px);}
+  [data-reveal]{transition:opacity .5s ease, transform .5s ease;}
+}
+
+
+/* ── Nav booking CTAs are <button> now, not <a>. Reset UA button styling so
+      they render identically to the former anchors. ── */
+.nav-book-btn{
+  border:none;cursor:pointer;display:inline-block;line-height:normal;
+  font-family:'Cinzel',serif;
+}
+.nav-mob-cta{
+  border:none;cursor:pointer;width:calc(100% - 4rem);font:inherit;
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:.25em;text-transform:uppercase;
+}
+.nav-book-btn:focus-visible,.nav-mob-cta:focus-visible{
+  outline:2px solid var(--gold-light,#E0C070);outline-offset:2px;
+}
+
+
+/* ── Grouped birth-date / birth-time controls are <fieldset> now so their
+      <legend> is valid and agents read one label for the whole group.
+      Reset UA fieldset chrome so nothing shifts visually. ── */
+fieldset.cf-group{border:0;margin:0 0 1.1rem;padding:0;min-width:0;}
+fieldset.cf-group > legend.cf-label{padding:0;float:none;width:auto;}

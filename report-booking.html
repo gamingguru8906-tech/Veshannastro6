@@ -108,6 +108,10 @@ body{
 .rb-input:focus,.rb-select:focus{border-color:rgba(201,168,76,0.6);box-shadow:0 0 0 3px rgba(201,168,76,0.08);}
 .rb-input.err{border-color:var(--err);}
 input[type=date].rb-input{color-scheme:dark;}
+fieldset.rb-group{border:0;margin:0;padding:0;min-width:0;}
+fieldset.rb-group>legend.rb-label{padding:0;float:none;width:auto;}
+.rb-skip{position:absolute;left:-9999px;}
+.rb-skip:focus{left:8px;top:8px;z-index:99999;background:#C9A84C;color:#14121A;padding:.6rem 1rem;border-radius:0 0 4px 0;}
 .rb-err{display:none;color:var(--err);font-size:.7rem;margin-top:.35rem;letter-spacing:.03em;}
 .rb-hint{color:var(--muted);font-size:.68rem;margin-top:.35rem;letter-spacing:.03em;}
 .rb-phone-row{display:flex;gap:.6rem;}
@@ -203,8 +207,16 @@ input[type=date].rb-input{color-scheme:dark;}
 .rb-wa:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(201,168,76,0.3);}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
 </style>
+<script>
+/* Validation-error visibility helpers — keep the `hidden` attribute in sync
+   with display so agents and screen readers never read a stale error. */
+function rbShowErr(el){ if(!el) return; el.hidden=false; el.style.display='block'; }
+function rbHideErr(el){ if(!el) return; el.hidden=true;  el.style.display='none';  }
+</script>
 </head>
 <body>
+<a class="rb-skip" href="#rb-main">Skip to the booking form</a>
+<main id="rb-main">
 <div class="rb-shell">
 
   <a class="rb-back" href="https://www.veshannastro.co.in/index.html#guidance-paths">
@@ -215,7 +227,7 @@ input[type=date].rb-input{color-scheme:dark;}
   <!-- Service summary -->
   <div class="rb-svc">
     <span class="rb-svc-eyebrow" id="svc-eyebrow">Veshannastro · Report Booking</span>
-    <div class="rb-svc-name" id="svc-name">Loading…</div>
+    <h1 class="rb-svc-name" id="svc-name">Loading…</h1>
     <p class="rb-svc-desc" id="svc-desc"></p>
     <div class="rb-svc-meta">
       <span class="rb-chip" id="svc-delivery"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg><span></span></span>
@@ -224,37 +236,39 @@ input[type=date].rb-input{color-scheme:dark;}
   </div>
 
   <!-- Form -->
-  <div class="rb-form" id="rb-form-wrap">
+  <form class="rb-form" id="rb-form-wrap"
+        name="report-booking" method="post" action="/api/report-booking"
+        aria-labelledby="svc-name" novalidate onsubmit="return false;">
 
     <span class="rb-step">Step 1 · Your Details</span>
 
     <div class="rb-group">
       <label class="rb-label" for="rb-name">Full Name <span class="req">*</span></label>
-      <input type="text" class="rb-input" id="rb-name" placeholder="Your full name (as used daily)" autocomplete="name">
-      <div class="rb-err" id="rb-name-err">Please enter your full name</div>
+      <input type="text" class="rb-input" id="rb-name" placeholder="Your full name (as used daily)" autocomplete="name" name="fullName" required aria-required="true" aria-describedby="rb-name-err">
+      <div class="rb-err" id="rb-name-err" role="alert" hidden>Please enter your full name</div>
     </div>
 
     <div class="rb-group">
       <label class="rb-label" for="rb-dob">Date of Birth <span class="req">*</span></label>
-      <input type="date" class="rb-input" id="rb-dob" max="">
-      <div class="rb-err" id="rb-dob-err">Please select your date of birth</div>
+      <input type="date" class="rb-input" id="rb-dob" max="" name="dateOfBirth" autocomplete="bday" required aria-required="true" aria-describedby="rb-dob-err">
+      <div class="rb-err" id="rb-dob-err" role="alert" hidden>Please select your date of birth</div>
     </div>
 
     <div class="rb-group" id="rb-analyze-group" style="display:none;">
       <label class="rb-label" for="rb-analyze">Mobile Number to Analyse <span class="req">*</span></label>
-      <input type="tel" class="rb-input" id="rb-analyze" placeholder="The 10-digit number you want analysed" maxlength="10" inputmode="numeric">
+      <input type="tel" class="rb-input" id="rb-analyze" placeholder="The 10-digit number you want analysed" maxlength="10" inputmode="numeric" name="mobileToAnalyse" autocomplete="off" aria-describedby="rb-analyze-err">
       <div class="rb-hint">This can be different from your contact number below.</div>
-      <div class="rb-err" id="rb-analyze-err">Please enter the 10-digit number to analyse</div>
+      <div class="rb-err" id="rb-analyze-err" role="alert" hidden>Please enter the 10-digit number to analyse</div>
     </div>
 
     <!-- Palm section -->
     <div class="rb-palm" id="rb-palm-section">
       <span class="rb-step">Step 2 · Your Palms</span>
       <div class="rb-group">
-        <label class="rb-label">Upload Clear Photos of Both Palms <span class="req">*</span></label>
+        <label class="rb-label" id="rb-palms-label">Upload Clear Photos of Both Palms <span class="req">*</span></label>
         <div class="rb-hands">
           <div class="rb-upload" id="up-left">
-            <input type="file" id="rb-left" accept="image/*" capture="environment">
+            <input type="file" id="rb-left" accept="image/*" capture="environment" name="leftPalmPhoto" aria-label="Photo of your left palm">
             <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
             <span class="rb-upload-t">Left Palm</span>
             <span class="rb-upload-s">Tap to upload or take photo</span>
@@ -262,7 +276,7 @@ input[type=date].rb-input{color-scheme:dark;}
             <span class="redo">Tap to change</span>
           </div>
           <div class="rb-upload" id="up-right">
-            <input type="file" id="rb-right" accept="image/*" capture="environment">
+            <input type="file" id="rb-right" accept="image/*" capture="environment" name="rightPalmPhoto" aria-label="Photo of your right palm">
             <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
             <span class="rb-upload-t">Right Palm</span>
             <span class="rb-upload-s">Tap to upload or take photo</span>
@@ -271,16 +285,16 @@ input[type=date].rb-input{color-scheme:dark;}
           </div>
         </div>
         <div class="rb-hint">Use daylight, open your palm fully, keep fingers slightly apart.</div>
-        <div class="rb-err" id="rb-palm-err">Please upload photos of both palms</div>
+        <div class="rb-err" id="rb-palm-err" role="alert" hidden>Please upload photos of both palms</div>
       </div>
-      <div class="rb-group">
-        <label class="rb-label">Which is your dominant hand? <span class="req">*</span></label>
+      <fieldset class="rb-group">
+        <legend class="rb-label">Which is your dominant hand? <span class="req">*</span></legend>
         <div class="rb-handopt">
-          <label><input type="radio" name="rb-hand" value="Right">✋ Right Hand</label>
-          <label><input type="radio" name="rb-hand" value="Left">🤚 Left Hand</label>
+          <label for="rb-hand-right"><input type="radio" id="rb-hand-right" name="rb-hand" value="Right" required aria-required="true">✋ Right Hand</label>
+          <label for="rb-hand-left"><input type="radio" id="rb-hand-left" name="rb-hand" value="Left">🤚 Left Hand</label>
         </div>
-        <div class="rb-err" id="rb-hand-err">Please select your dominant hand</div>
-      </div>
+        <div class="rb-err" id="rb-hand-err" role="alert" hidden>Please select your dominant hand</div>
+      </fieldset>
     </div>
 
     <span class="rb-step" id="contact-step-label">Step 2 · Contact &amp; Verification</span>
@@ -288,7 +302,7 @@ input[type=date].rb-input{color-scheme:dark;}
     <div class="rb-group">
       <label class="rb-label" for="rb-phone">WhatsApp / Phone Number <span class="req">*</span></label>
       <div class="rb-phone-row">
-        <select class="rb-select" id="rb-cc">
+        <select class="rb-select" id="rb-cc" name="countryCode" autocomplete="tel-country-code" required aria-required="true">
           <option value="+91" selected>+91</option>
           <option value="+971">+971</option>
           <option value="+1">+1</option>
@@ -296,21 +310,21 @@ input[type=date].rb-input{color-scheme:dark;}
           <option value="+61">+61</option>
           <option value="+65">+65</option>
         </select>
-        <input type="tel" class="rb-input" id="rb-phone" placeholder="10-digit number" inputmode="numeric" autocomplete="tel">
+        <input type="tel" class="rb-input" id="rb-phone" placeholder="10-digit number" inputmode="numeric" autocomplete="tel" name="phone" required aria-required="true" aria-describedby="rb-phone-err">
       </div>
-      <div class="rb-err" id="rb-phone-err">Please enter a valid phone number</div>
+      <div class="rb-err" id="rb-phone-err" role="alert" hidden>Please enter a valid phone number</div>
     </div>
 
     <div class="rb-group">
       <label class="rb-label" for="rb-email">Email Address <span class="req">*</span></label>
-      <input type="email" class="rb-input" id="rb-email" placeholder="Your report will be delivered here" autocomplete="email">
-      <div class="rb-err" id="rb-email-err">Please enter a valid email address</div>
+      <input type="email" class="rb-input" id="rb-email" placeholder="Your report will be delivered here" autocomplete="email" name="email" required aria-required="true" aria-describedby="rb-email-err">
+      <div class="rb-err" id="rb-email-err" role="alert" hidden>Please enter a valid email address</div>
     </div>
 
     <div class="rb-group">
       <button type="button" class="rb-otp-btn" id="otp-send-btn" onclick="_sendOTP()">Send OTP to Email →</button>
       <div id="otp-input-section">
-        <input type="text" class="rb-input" id="otp-code" placeholder="••••••" maxlength="6" inputmode="numeric" autocomplete="one-time-code">
+        <input type="text" class="rb-input" id="otp-code" placeholder="••••••" maxlength="6" inputmode="numeric" autocomplete="one-time-code" name="otp">
         <button type="button" class="rb-otp-btn" id="otp-verify-btn" style="margin-top:.6rem;" onclick="_verifyOTP()">Verify OTP ✓</button>
       </div>
       <div id="otp-status"></div>
@@ -320,12 +334,13 @@ input[type=date].rb-input{color-scheme:dark;}
       </div>
     </div>
 
-    <button type="button" class="rb-submit" id="rb-submit">Verify Email to Continue</button>
+    <button type="button" class="rb-submit" id="rb-submit" aria-describedby="rb-submit-reason">Verify Email to Continue</button>
+    <p id="rb-submit-reason" class="rb-hint" style="font-size:.72rem;opacity:.7;margin:.4rem 0 0;">Verify your email address to enable payment.</p>
     <div class="rb-secure">
       <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
       Secured by Razorpay · UPI, Cards, Netbanking accepted
     </div>
-  </div>
+  </form>
 
   <!-- Success -->
   <div id="rb-success">
@@ -338,6 +353,7 @@ input[type=date].rb-input{color-scheme:dark;}
   </div>
 
 </div>
+</main>
 
 <script>
 'use strict';
@@ -538,23 +554,23 @@ if(SVC.palm){bindUpload('up-left','rb-left','left');bindUpload('up-right','rb-ri
     const statusEl=document.getElementById('otp-status');
     const email=emailEl.value.trim();
     if(!email||!/^[^@]+@[^@]+\.[^@]+$/.test(email)){
-      document.getElementById('rb-email-err').style.display='block';
+      rbShowErr(document.getElementById('rb-email-err'));
       emailEl.classList.add('err');
       statusEl.textContent='Please enter a valid email address above first.';
       statusEl.style.color='var(--err)';
       emailEl.scrollIntoView({behavior:'smooth',block:'center'});
       return;
     }
-    document.getElementById('rb-email-err').style.display='none';
+    rbHideErr(document.getElementById('rb-email-err'));
     emailEl.classList.remove('err');
     const ph=(document.getElementById('rb-phone').value||'').replace(/\D/g,'');
     if(ph.length!==expectedLen()){
       document.getElementById('rb-phone-err').textContent='Please enter exactly '+expectedLen()+' digits first';
-      document.getElementById('rb-phone-err').style.display='block';
+      rbShowErr(document.getElementById('rb-phone-err'));
       document.getElementById('rb-phone').classList.add('err');
       return;
     }
-    document.getElementById('rb-phone-err').style.display='none';
+    rbHideErr(document.getElementById('rb-phone-err'));
     document.getElementById('rb-phone').classList.remove('err');
 
     btn.disabled=true;btn.textContent='Sending…';statusEl.textContent='';
@@ -685,8 +701,8 @@ document.getElementById('rb-submit').addEventListener('click',function(){
   let valid=true;
   function check(id,errId,fn){
     const el=document.getElementById(id),err=document.getElementById(errId);
-    if(!fn(el?el.value:'')){if(el)el.classList.add('err');if(err)err.style.display='block';valid=false;}
-    else{if(el)el.classList.remove('err');if(err)err.style.display='none';}
+    if(!fn(el?el.value:'')){if(el)el.classList.add('err');if(err)rbShowErr(err);valid=false;}
+    else{if(el)el.classList.remove('err');if(err)rbHideErr(err);}
   }
   check('rb-name','rb-name-err',v=>v.trim().length>2);
   check('rb-dob','rb-dob-err',v=>!!v);
@@ -698,14 +714,14 @@ document.getElementById('rb-submit').addEventListener('click',function(){
   }
   if(SVC.palm){
     if(!palmData.left||!palmData.right){
-      document.getElementById('rb-palm-err').style.display='block';
+      rbShowErr(document.getElementById('rb-palm-err'));
       if(!palmData.left)document.getElementById('up-left').classList.add('err');
       if(!palmData.right)document.getElementById('up-right').classList.add('err');
       valid=false;
-    }else document.getElementById('rb-palm-err').style.display='none';
+    }else rbHideErr(document.getElementById('rb-palm-err'));
     if(!document.querySelector('input[name="rb-hand"]:checked')){
-      document.getElementById('rb-hand-err').style.display='block';valid=false;
-    }else document.getElementById('rb-hand-err').style.display='none';
+      rbShowErr(document.getElementById('rb-hand-err'));valid=false;
+    }else rbHideErr(document.getElementById('rb-hand-err'));
   }
   if(!valid){
     const firstErr=document.querySelector('.rb-err[style*="block"],.rb-input.err,.rb-upload.err');

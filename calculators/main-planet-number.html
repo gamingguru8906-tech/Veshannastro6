@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ruling Planet Calculator — Find Your Planet by Date of Birth</title>
+<meta name="description" content="Find which planet rules your birth number. Free calculator covering the Sun, Moon, Jupiter, Rahu, Mercury, Venus, Ketu, Saturn and Mars.">
+<meta name="keywords" content="ruling planet calculator, main planet number, planet by date of birth">
+<meta name="robots" content="index, follow">
+<meta name="author" content="Shashank Agrawal">
+<link rel="canonical" href="https://www.veshannastro.co.in/calculators/main-planet-number.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Veshannastro">
+<meta property="og:title" content="Ruling Planet Calculator — Find Your Planet by Date of Birth">
+<meta property="og:description" content="Find which planet rules your birth number. Free calculator covering the Sun, Moon, Jupiter, Rahu, Mercury, Venus, Ketu, Saturn and Mars.">
+<meta property="og:url" content="https://www.veshannastro.co.in/calculators/main-planet-number.html">
+<meta property="og:image" content="https://www.veshannastro.co.in/images/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ruling Planet Calculator — Find Your Planet by Date of Birth">
+<meta name="twitter:description" content="Find which planet rules your birth number. Free calculator covering the Sun, Moon, Jupiter, Rahu, Mercury, Venus, Ketu, Saturn and Mars.">
+<link rel="alternate" type="text/plain" href="https://www.veshannastro.co.in/llms.txt" title="llms.txt">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/calculators/calc.css">
+<script type="application/ld+json">
+{
+ "@context":"https://schema.org",
+ "@graph":[
+  {"@type":"WebApplication","@id":"https://www.veshannastro.co.in/calculators/main-planet-number.html#app","name":"Ruling Planet Calculator",
+   "url":"https://www.veshannastro.co.in/calculators/main-planet-number.html","applicationCategory":"UtilitiesApplication",
+   "operatingSystem":"Any (web browser)","browserRequirements":"Requires JavaScript",
+   "description":"Find which planet rules your birth number. Free calculator covering the Sun, Moon, Jupiter, Rahu, Mercury, Venus, Ketu, Saturn and Mars.",
+   "offers":{"@type":"Offer","price":"0","priceCurrency":"INR"},
+   "publisher":{"@id":"https://www.veshannastro.co.in/#organization"},
+   "isAccessibleForFree":true},
+  {"@type":"FAQPage","@id":"https://www.veshannastro.co.in/calculators/main-planet-number.html#faq","mainEntity":[{"@type":"Question","name":"Is this the same as my Vedic birth chart planet?","acceptedAnswer":{"@type":"Answer","text":"No. This uses your date of birth only. A birth chart uses exact time and place and gives a far more specific reading of planetary strength."}},{"@type":"Question","name":"Why are Rahu and Ketu included?","acceptedAnswer":{"@type":"Answer","text":"They are the lunar nodes and are central to Vedic astrology, where they are treated as shadow planets. Western systems generally substitute Uranus and Neptune."}},{"@type":"Question","name":"Does my ruling planet change?","acceptedAnswer":{"@type":"Answer","text":"The numerological ruler does not — it comes from your date of birth. What changes is which planetary period, or dasha, you are running through, and that requires a full chart."}}]},
+  {"@type":"BreadcrumbList","@id":"https://www.veshannastro.co.in/calculators/main-planet-number.html#crumb","itemListElement":[
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://www.veshannastro.co.in/"},
+    {"@type":"ListItem","position":2,"name":"Numerology calculators","item":"https://www.veshannastro.co.in/#numerology-section"},
+    {"@type":"ListItem","position":3,"name":"Ruling Planet Calculator","item":"https://www.veshannastro.co.in/calculators/main-planet-number.html"}]}
+ ]}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to the calculator</a>
+<nav class="site-nav" aria-label="Primary">
+  <a class="nav-logo" href="/">Veshann<em>astro</em></a>
+  <ul>
+    <li><a href="/#numerology-section">All calculators</a></li>
+    <li><a href="/vedic-kundli-booking.html">Kundli reading</a></li>
+    <li><a href="/numerology-booking.html">Numerology</a></li>
+    <li><a class="nav-cta" href="/numerology-booking.html">Book a session</a></li>
+  </ul>
+</nav>
+<main id="main">
+  <div class="wrap">
+
+    <nav class="crumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/#numerology-section">Calculators</a></li>
+        <li aria-current="page">Ruling Planet Calculator</li>
+      </ol>
+    </nav>
+
+    <p class="eyebrow">Planetary Ruler</p>
+    <h1>Ruling Planet Calculator</h1>
+    <p class="lede">One celestial body governs your core frequency. Enter your date of birth to find which.</p>
+
+    <section class="calc-card" aria-labelledby="calc-heading">
+      <h2 id="calc-heading">Calculate now</h2>
+      <div id="calc-status" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+      <div id="calc-mount" data-calc="planet">
+        <noscript>
+          <p>This calculator needs JavaScript to run. The explanation below works without it,
+          and you are welcome to <a href="/contact.html">ask us directly</a> instead.</p>
+        </noscript>
+      </div>
+    </section>
+
+    <section aria-labelledby="s0"><h2 id="s0">How your ruling planet is found</h2><p>Your birth number is reduced from your date of birth, and each of the nine numbers is
+   governed by a planet in the Vedic system. Note that this includes Rahu and Ketu — the lunar
+   nodes — which have no equivalent in Western astrology.</p></section>
+
+    <section aria-labelledby="s1"><h2 id="s1">The nine rulers</h2><table class="meaning-table"><thead><tr><th>No.</th><th>Planet and character</th></tr></thead><tbody>
+   <tr><td>1</td><td><strong>Sun ☉</strong> — vitality, authority, self-expression. Leadership comes naturally; so can pride.</td></tr>
+   <tr><td>2</td><td><strong>Moon ☽</strong> — emotion, intuition, cycles. Highly perceptive, and changeable with it.</td></tr>
+   <tr><td>3</td><td><strong>Jupiter ♃</strong> — expansion, wisdom, teaching. Generous and optimistic; prone to overreach.</td></tr>
+   <tr><td>4</td><td><strong>Rahu ☊</strong> — disruption, ambition, the unconventional. Sudden change, for better and worse.</td></tr>
+   <tr><td>5</td><td><strong>Mercury ☿</strong> — intellect, speech, commerce. Quick and adaptable; can be restless.</td></tr>
+   <tr><td>6</td><td><strong>Venus ♀</strong> — love, beauty, comfort. Magnetic and artistic; can be indulgent.</td></tr>
+   <tr><td>7</td><td><strong>Ketu ☋</strong> — detachment, spirituality, past-life residue. Introspective, sometimes withdrawn.</td></tr>
+   <tr><td>8</td><td><strong>Saturn ♄</strong> — discipline, delay, endurance. Rewards patience; punishes shortcuts.</td></tr>
+   <tr><td>9</td><td><strong>Mars ♂</strong> — courage, energy, conflict. Decisive and forceful; can be combative.</td></tr>
+   </tbody></table></section>
+
+    <section aria-labelledby="s2"><h2 id="s2">What this is and is not</h2><p>Your numerological ruling planet is derived from your date of birth alone. It is not
+   the same as the planetary strengths in your Vedic birth chart, which are calculated from
+   your exact birth time and place and are considerably more specific.</p>
+   <p>Where the two agree, the indication is strong. Where they disagree, the birth chart is
+   the more reliable reading — it is working with far more information. Treat this as a useful
+   first orientation rather than a substitute for the chart.</p></section>
+
+
+    <section class="faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">Common questions</h2>
+      <details><summary>Is this the same as my Vedic birth chart planet?</summary><p>No. This uses your date of birth only. A birth chart uses exact time and place and gives a far more specific reading of planetary strength.</p></details><details><summary>Why are Rahu and Ketu included?</summary><p>They are the lunar nodes and are central to Vedic astrology, where they are treated as shadow planets. Western systems generally substitute Uranus and Neptune.</p></details><details><summary>Does my ruling planet change?</summary><p>The numerological ruler does not — it comes from your date of birth. What changes is which planetary period, or dasha, you are running through, and that requires a full chart.</p></details>
+    </section>
+
+    <aside class="callout" aria-labelledby="cta-heading">
+      <h2 id="cta-heading" style="margin-top:0">Want this read properly?</h2>
+      <p>A calculator gives you a number. It cannot tell you how that number interacts with
+      the rest of your chart, or what to do about it. A full reading is conducted personally
+      by Shashank Agrawal — a practising numerologist and author of
+      <em>Numbers &amp; Navgraha: Untold Secret of Numerology</em> — over live video, with a
+      written report afterwards.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="/numerology-booking.html">Book a numerology session</a>
+        <a class="btn btn-ghost" href="/vedic-kundli-booking.html">Full Vedic kundli reading</a>
+      </div>
+    </aside>
+
+    <section class="related"><h2>Other free calculators</h2><ul><li><a href="/calculators/lo-shu-grid.html">Lo Shu Grid Calculator</a></li><li><a href="/calculators/life-path-number.html">Life Path Number Calculator</a></li><li><a href="/calculators/name-numerology.html">Name Numerology Calculator</a></li><li><a href="/calculators/destiny-number.html">Destiny Number Calculator</a></li><li><a href="/calculators/lucky-number.html">Lucky Number Calculator</a></li><li><a href="/calculators/lucky-mobile-number.html">Lucky Mobile Number Calculator</a></li></ul></section>
+
+  </div>
+</main>
+<footer class="site-foot">
+  <div class="wrap">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/about.html">About</a></li>
+      <li><a href="/contact.html">Contact</a></li>
+      <li><a href="/terms.html">Terms</a></li>
+      <li><a href="/privacy-policy.html">Privacy</a></li>
+      <li><a href="/refund-policy.html">Refunds</a></li>
+    </ul>
+    <p class="disclaimer">These calculators are provided free for personal interest.
+    Numerology is interpretive and advisory. It is not a guarantee of any outcome, and it is
+    not a substitute for medical, legal or financial advice.</p>
+    <p>&copy; 2026 Veshannastro &middot; Delhi, India</p>
+  </div>
+</footer>
+<script src="/calculators/calc-engine.js" defer></script>
+</body>
+</html>
