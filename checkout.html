@@ -4388,8 +4388,11 @@ function injectJsonLd(){
     "sku":sku,
     "brand":{"@type":"Brand","name":"Veshannastro"},
     "offers":{"@type":"Offer","priceCurrency":"INR","price":String(product.price),
-      "availability":"https://schema.org/InStock","url":location.href},
-    "aggregateRating":{"@type":"AggregateRating","ratingValue":ratingFor(sku),"reviewCount":String(reviewsFor(sku))}
+      "availability":"https://schema.org/InStock","url":location.href}
+    /* aggregateRating removed 2026-07-29: ratingFor()/reviewsFor() generate values
+       from a SKU hash rather than real customer reviews. Emitting fabricated
+       ratings as structured data breaches Google's review-snippet policy and
+       risks a site-wide manual action. Re-add only when backed by real reviews. */
   };
   $("product-jsonld").textContent = JSON.stringify(data);
 }

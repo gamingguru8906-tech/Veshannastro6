@@ -17,6 +17,7 @@ SKIP = {"astrology_websites_dashboard_v2.html", "index-manuscript-preview.html",
 PRIORITY = {
     "index.html": ("1.0", "weekly"),
     "premium-consultation.html": ("0.9", "monthly"),
+    "vedic-astrologer-raipur.html": ("0.9", "monthly"),
     "vedic-kundli-booking.html": ("0.9", "monthly"),
     "numerology-booking.html": ("0.9", "monthly"),
     "bracelet-fusion.html": ("0.8", "weekly"),
