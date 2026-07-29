@@ -10,11 +10,13 @@ BASE = "https://www.veshannastro.co.in/"
 TODAY = datetime.date.today().isoformat()
 
 # Pages we never list regardless of their meta tag.
+# entity-schema-unified.html is a code snippet for developers, not a page.
 SKIP = {"astrology_websites_dashboard_v2.html", "index-manuscript-preview.html",
-        "shop product.html"}
+        "shop product.html", "entity-schema-unified.html"}
 
 PRIORITY = {
     "index.html": ("1.0", "weekly"),
+    "premium-consultation.html": ("0.9", "monthly"),
     "vedic-kundli-booking.html": ("0.9", "monthly"),
     "numerology-booking.html": ("0.9", "monthly"),
     "bracelet-fusion.html": ("0.8", "weekly"),
