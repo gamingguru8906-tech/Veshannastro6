@@ -8,6 +8,17 @@ Run from the repo root:  python3 calculators/build-calculators.py
 """
 import io, os, datetime
 
+# ---------------------------------------------------------------------------
+# WARNING - THIS GENERATOR HAS DIVERGED FROM THE COMMITTED HTML.
+# The .html files in this directory were hand-edited after they were last
+# generated. Re-running this script WILL overwrite those edits, specifically:
+#   * per-page report CTAs (Name Numerology 299, Mobile Analysis 299,
+#     Business Name 499, Personal Year 499, Premium Life Path 699) get
+#     flattened into a single generic "Complete Numerology Report 999" link
+# The footer location and the Chaldean value-7 row have been resynced here,
+# but the CTA divergence has NOT. Reconcile the per-page CTAs into PAGES
+# before running this again.
+# ---------------------------------------------------------------------------
 BASE = "https://www.veshannastro.co.in"
 OUT = os.path.dirname(os.path.abspath(__file__))
 TODAY = datetime.date.today().isoformat()
@@ -44,6 +55,7 @@ quality of each sound, and deliberately never assigns 9, which is treated as sac
     <tr><td>4</td><td>D, M, T</td></tr>
     <tr><td>5</td><td>E, H, N, X</td></tr>
     <tr><td>6</td><td>U, V, W</td></tr>
+    <tr><td>7</td><td>O, Z</td></tr>
     <tr><td>8</td><td>F, P</td></tr>
   </tbody>
 </table>"""
@@ -640,7 +652,7 @@ FOOT = """<footer class="site-foot">
     <p class="disclaimer">These calculators are provided free for personal interest.
     Numerology is interpretive and advisory. It is not a guarantee of any outcome, and it is
     not a substitute for medical, legal or financial advice.</p>
-    <p>&copy; %s Veshannastro &middot; Delhi, India</p>
+    <p>&copy; %s Veshannastro &middot; Raipur, Chhattisgarh</p>
   </div>
 </footer>""" % datetime.date.today().year
 
@@ -760,6 +772,7 @@ PAGE = """<!DOCTYPE html>
       written report afterwards.</p>
       <div class="cta-row">
         <a class="btn btn-primary" href="/numerology-booking.html">Book a numerology session</a>
+        <a class="btn btn-ghost" href="/reports/complete-numerology-report.html">Complete Numerology Report &mdash; &#8377;999</a>
         <a class="btn btn-ghost" href="/vedic-kundli-booking.html">Full Vedic kundli reading</a>
       </div>
     </aside>
