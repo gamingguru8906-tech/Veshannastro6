@@ -47,7 +47,7 @@ function appendGuideMe(resEl, calcType){
 }
 
 /* ═══════════ CALCULATOR ENGINE ═══════════ */
-const CHEIRO={A:1,I:1,J:1,Q:1,Y:1,B:2,K:2,R:2,C:3,G:3,L:3,S:3,D:4,M:4,T:4,E:5,H:5,N:5,X:5,U:6,V:6,W:6,F:8,P:8};
+const CHEIRO={A:1,I:1,J:1,Q:1,Y:1,B:2,K:2,R:2,C:3,G:3,L:3,S:3,D:4,M:4,T:4,E:5,H:5,N:5,X:5,U:6,V:6,W:6,O:7,Z:7,F:8,P:8};
 function charVal(c){return CHEIRO[c.toUpperCase()]||0;}
 function reduceNum(n){while(n>9&&n!==11&&n!==22&&n!==33){let s=0,t=n;while(t>0){s+=t%10;t=Math.floor(t/10);}n=s;}return n;}
 function nameToNum(name){return name.split('').reduce((a,c)=>a+charVal(c),0);}
