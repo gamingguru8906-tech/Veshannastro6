@@ -42,5 +42,228 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/shop-product.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "sku",
+          "value": "VA-BR-TP-001(-.*)?"
+        }
+      ],
+      "destination": "https://shop.veshannastro.co.in/products/triple-protection-bracelet",
+      "permanent": true
+    },
+    {
+      "source": "/shop-product.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "sku",
+          "value": "VA-BR-AM-002(-.*)?"
+        }
+      ],
+      "destination": "https://shop.veshannastro.co.in/products/amethyst-bracelet",
+      "permanent": true
+    },
+    {
+      "source": "/shop-product.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "sku",
+          "value": "VA-BR-CQ-003(-.*)?"
+        }
+      ],
+      "destination": "https://shop.veshannastro.co.in/products/clear-quartz-bracelet",
+      "permanent": true
+    },
+    {
+      "source": "/shop-product.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "sku",
+          "value": "VA-BR-BT-004(-.*)?"
+        }
+      ],
+      "destination": "https://shop.veshannastro.co.in/products/black-tourmaline-bracelet",
+      "permanent": true
+    },
+    {
+      "source": "/shop-product.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "sku",
+          "value": "VA-BR-CT-005(-.*)?"
+        }
+      ],
+      "destination": "https://shop.veshannastro.co.in/products/natural-citrine-bracelet",
+      "permanent": true
+    },
+    {
+      "source": "/shop-product.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "sku",
+          "value": "VA-BR-YA-006(-.*)?"
+        }
+      ],
+      "destination": "https://shop.veshannastro.co.in/products/yellow-aventurine-bracelet",
+      "permanent": true
+    },
+    {
+      "source": "/shop-product.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "sku",
+          "value": "VA-BR-RJ-007(-.*)?"
+        }
+      ],
+      "destination": "https://shop.veshannastro.co.in/products/red-jasper-bracelet",
+      "permanent": true
+    },
+    {
+      "source": "/shop-product.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "sku",
+          "value": "VA-BR-TE-008(-.*)?"
+        }
+      ],
+      "destination": "https://shop.veshannastro.co.in/products/tiger-eye-bracelet",
+      "permanent": true
+    },
+    {
+      "source": "/shop-product.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "sku",
+          "value": "VA-BR-RQ-009(-.*)?"
+        }
+      ],
+      "destination": "https://shop.veshannastro.co.in/products/rose-quartz-bracelet",
+      "permanent": true
+    },
+    {
+      "source": "/shop-product.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "sku",
+          "value": "VA-BR-GA-010(-.*)?"
+        }
+      ],
+      "destination": "https://shop.veshannastro.co.in/products/green-aventurine-bracelet",
+      "permanent": true
+    },
+    {
+      "source": "/shop-product.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "sku",
+          "value": "VA-BR-LL-011(-.*)?"
+        }
+      ],
+      "destination": "https://shop.veshannastro.co.in/products/lapis-lazuli-bracelet",
+      "permanent": true
+    },
+    {
+      "source": "/shop-product.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "sku",
+          "value": "VA-BR-MN-012(-.*)?"
+        }
+      ],
+      "destination": "https://shop.veshannastro.co.in/products/peach-moonstone-bracelet",
+      "permanent": true
+    },
+    {
+      "source": "/shop-product.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "sku",
+          "value": "VA-BR-7C-013(-.*)?"
+        }
+      ],
+      "destination": "https://shop.veshannastro.co.in/products/7-chakra-bracelet",
+      "permanent": true
+    },
+    {
+      "source": "/shop-product.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "sku",
+          "value": "VA-BR-IO-014(-.*)?"
+        }
+      ],
+      "destination": "https://shop.veshannastro.co.in/products/iolite-neeli-bracelet",
+      "permanent": true
+    },
+    {
+      "source": "/shop-product.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "sku",
+          "value": "VA-BR-WM-015(-.*)?"
+        }
+      ],
+      "destination": "https://shop.veshannastro.co.in/products/white-moonstone-bracelet",
+      "permanent": true
+    },
+    {
+      "source": "/shop-product.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "sku",
+          "value": "VA-BR-LK-016(-.*)?"
+        }
+      ],
+      "destination": "https://shop.veshannastro.co.in/products/lakshmi-loom-dhan-yog-bracelet",
+      "permanent": true
+    },
+    {
+      "source": "/shop-product.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "sku",
+          "value": "VA-BR-RE-017(-.*)?"
+        }
+      ],
+      "destination": "https://shop.veshannastro.co.in/products/rose-embrace-love-bracelet",
+      "permanent": true
+    },
+    {
+      "source": "/shop-product.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "sku",
+          "value": "VA-BR-PY-018(-.*)?"
+        }
+      ],
+      "destination": "https://shop.veshannastro.co.in/products/sunforge-pyrite-bracelet",
+      "permanent": true
+    },
+    {
+      "source": "/shop-product.html",
+      "destination": "https://shop.veshannastro.co.in/collections/all-bracelets",
+      "permanent": true
+    }
   ]
 }
