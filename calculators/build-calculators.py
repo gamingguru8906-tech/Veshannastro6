@@ -396,6 +396,18 @@ PAGES = [
    stored or logged anywhere. That said, there is no need to enter a full real account
    number to satisfy curiosity — the calculation only reads digits, so any accurate
    digit sequence gives you the same total.</p>"""),
+  ("A worked example",
+   """<p>Take the account number <strong>1234 5678 9012</strong>. Only the digits matter, and
+   they are simply added in sequence.</p>
+   <p>1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 0 + 1 + 2 = <strong>48</strong><br>
+   4 + 8 = <strong>12</strong> &rarr; 1 + 2 = <strong>3</strong></p>
+   <p>Three is the expansive, windfall-leaning vibration — associated with money that arrives
+   in bursts rather than in a steady line. Whether that suits you depends on what the account
+   is for. A three is a poor fit for an emergency fund you want to sit still and a good fit
+   for a business current account that should keep moving.</p>
+   <p>Two accounts at the same bank will usually share a long leading branch prefix, which is
+   why numbers from one branch often cluster around the same few totals. That is a property
+   of how the bank allots numbers, not a sign about the branch.</p>"""),
  ],
  "faqs":[
   ("Is my account number sent anywhere?",
@@ -436,6 +448,23 @@ PAGES = [
    a rested driver protect you; a favourable total does not. Where numerology is genuinely
    useful here is at the point of choice — if you are allotted a set of options for a new
    registration, there is no cost to picking the one that suits your chart.</p>"""),
+  ("A worked example",
+   """<p>Take the plate <strong>MH12AB1234</strong>. Every character counts, letters by their
+   Chaldean value and digits as they stand.</p>
+   <table class="meaning-table"><thead><tr><th>Character</th><th>Value</th></tr></thead><tbody>
+   <tr><td>M</td><td>4</td></tr><tr><td>H</td><td>5</td></tr>
+   <tr><td>1</td><td>1</td></tr><tr><td>2</td><td>2</td></tr>
+   <tr><td>A</td><td>1</td></tr><tr><td>B</td><td>2</td></tr>
+   <tr><td>1</td><td>1</td></tr><tr><td>2</td><td>2</td></tr>
+   <tr><td>3</td><td>3</td></tr><tr><td>4</td><td>4</td></tr>
+   <tr><td><strong>Total</strong></td><td><strong>25</strong></td></tr>
+   <tr><td><strong>Reduced</strong></td><td><strong>2 + 5 = 7</strong></td></tr>
+   </tbody></table>
+   <p>Seven is the solitary vibration — fine for a personal vehicle, less suited to one that
+   is shared or used commercially. If this were a taxi or a delivery van, five would sit far
+   more comfortably. Note that the state code carries real weight here: MH alone contributes
+   nine of the twenty-five, so two otherwise identical numbers registered in different states
+   will not reduce to the same total.</p>"""),
  ],
  "faqs":[
   ("Do the state letters count, like MH or DL?",
@@ -616,6 +645,19 @@ PAGES = [
    <p>Numerology is a reasonable tie-breaker once you have two or three names that pass all
    those tests. It is a poor primary criterion. A numerologically perfect name that customers
    cannot pronounce will lose to an ordinary name that they can.</p>"""),
+  ("A worked example",
+   """<p>Take a trading name like <strong>NOVA CRAFTS</strong>. Spaces are ignored; every
+   letter is converted using its Chaldean value.</p>
+   <p><strong>NOVA</strong> &mdash; N 5 + O 7 + V 6 + A 1 = <strong>19</strong><br>
+   <strong>CRAFTS</strong> &mdash; C 3 + R 2 + A 1 + F 8 + T 4 + S 3 = <strong>21</strong><br>
+   Total 19 + 21 = <strong>40</strong> &rarr; 4 + 0 = <strong>4</strong></p>
+   <p>Four is the builder — steady, structural, and traditionally cautioned for businesses
+   that depend on fast turnover or public glamour, while suiting manufacturing, logistics and
+   trades that reward reliability.</p>
+   <p>Note the O carrying 7. It is the value most often dropped by calculators that only
+   implement the letters they remember, and on a name with two or three O's in it that single
+   omission is enough to move the final digit. If a tool elsewhere gives you a different
+   answer for the same name, this is usually why.</p>"""),
  ],
  "faqs":[
   ("Should I include Pvt Ltd or LLP?",
@@ -772,7 +814,7 @@ PAGE = """<!DOCTYPE html>
       written report afterwards.</p>
       <div class="cta-row">
         <a class="btn btn-primary" href="/numerology-booking.html">Book a numerology session</a>
-        <a class="btn btn-ghost" href="/reports/complete-numerology-report.html">Complete Numerology Report &mdash; &#8377;999</a>
+        <a class="btn btn-ghost" href="{cta_url}">{cta_label}</a>
         <a class="btn btn-ghost" href="/vedic-kundli-booking.html">Full Vedic kundli reading</a>
       </div>
     </aside>
@@ -787,12 +829,32 @@ PAGE = """<!DOCTYPE html>
 </html>
 """
 
+# Per-page report CTA. These were hand-tuned in the HTML after the pages were
+# last generated; encoding them here is what stops a rebuild flattening them
+# back to the generic Complete Numerology Report link.
+CTA_DEFAULT = ("/reports/complete-numerology-report.html",
+               "Complete Numerology Report &mdash; &#8377;999")
+CTA = {
+    "lucky-business-name":  ("/reports/business-name-report.html",
+                             "Business Name Report &mdash; &#8377;499"),
+    "lucky-mobile-number":  ("/reports/mobile-number-analysis.html",
+                             "Mobile Number Analysis &mdash; &#8377;299"),
+    "lucky-number":         ("/reports/personal-year-forecast.html",
+                             "Personal Year Forecast &mdash; &#8377;499"),
+    "main-planet-number":   ("/reports/premium-vedic-life-path-report.html",
+                             "Premium Vedic Life Path Report &mdash; &#8377;699"),
+    "name-numerology":      ("/reports/name-numerology-report.html",
+                             "Name Numerology Report &mdash; &#8377;299"),
+}
+
 count = 0
 for p in PAGES:
     body = "\n".join(
         '    <section aria-labelledby="s%d"><h2 id="s%d">%s</h2>%s</section>\n'
         % (i, i, title, html) for i, (title, html) in enumerate(p["sections"]))
+    cta_url, cta_label = CTA.get(p["slug"], CTA_DEFAULT)
     out = PAGE.format(
+        cta_url=cta_url, cta_label=cta_label,
         title=p["title"], desc=p["desc"], kw=p["kw"], slug=p["slug"], base=BASE,
         h1=p["h1"], eyebrow=p["eyebrow"], lede=p["lede"], calc=p["calc"],
         body=body, faq=faq_html(p["faqs"]), related=related_block(p["slug"]),
