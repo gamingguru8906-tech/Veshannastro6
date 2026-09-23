@@ -15,23 +15,21 @@
  *   cashback used (Y/N + amount), cashback earned, base price,
  *   coupon discount, and final amount paid.
  *
- * SETUP (5 minutes)
- *   1. Open the canonical Consultation CRM spreadsheet, then Extensions ->
- *      Apps Script.
- *   2. In Project Settings -> Script properties, add SPREADSHEET_ID with the
- *      ID from the CRM URL (the value between /d/ and /edit).
- *   3. Create a NEW script file (or new project — either is fine), delete the
- *      boilerplate, paste ALL of this in.
- *   4. Deploy -> New deployment -> type: Web app
- *        Execute as:      Me
- *        Who has access:  Anyone
- *   5. Copy the resulting .../exec URL and paste it back to me. It goes into:
- *        - vedic-checkout.html       -> CONFIG.sheetWebhook
- *        - numerology-checkout.html  -> CONFIG.sheetWebhook
- *
- * TESTING: after deploying, open the /exec URL directly in a browser — you
- * should see {"ok":true,"service":"consultations-logger"}. That confirms it
- * is live. A GET also creates the tab + header row so it's ready.
+ * SETUP & DEPLOYMENT INSTRUCTIONS:
+ *   1. Open your Consultation CRM Google Sheet -> Extensions -> Apps Script.
+ *   2. Paste this entire updated code into your Apps Script editor.
+ *   3. ⚠️ AUTHORIZE EMAIL (ONE-TIME):
+ *        - At the top toolbar, select 'testSendEmail' from the function dropdown.
+ *        - Click '▶ Run'.
+ *        - Google will pop up "Authorization required" -> Click "Review permissions"
+ *          -> Select your Google account -> "Advanced" -> "Go to ... (unsafe)" -> "Allow".
+ *        - Check your email inbox to verify you received the test email!
+ *   4. ⚠️ UPDATE THE LIVE DEPLOYMENT (CRITICAL):
+ *        - Click 'Deploy' (top right) -> 'Manage deployments'.
+ *        - Click the pencil icon (✏️ Edit) next to your active Web App deployment.
+ *        - Under 'Version', click the dropdown and choose 'New version'.
+ *        - Click 'Deploy' -> 'Done'.
+ *        (Note: Simply pressing Save (Ctrl+S) does not update the live /exec URL!)
  * ===================================================================
  */
 
@@ -200,34 +198,20 @@ function doPost(e) {
         rupees(data.amountPaid), data.sessionDate || '', 'New', data.notes || ''
       ]);
 
-      // Send Automated Confirmation Email (only for WhatsApp bookings with an email address)
-      if (data.target === 'booking' && clientEmail && data.meetLink) {
-        var subject = "Your Consultation is Confirmed! 🕉️ - Veshannastro";
-        var body = "Hari Om, " + (data.name || 'Seeker') + "!\n\n" +
-                   "Thank you for booking the " + data.service + ".\n\n" +
-                   "Here are the birth details we received from you:\n" +
-                   "- Gender: " + (data.gender || 'Not specified') + "\n" +
-                   "- Date of Birth: " + data.dob + "\n" +
-                   "- Time of Birth: " + data.birthTime + "\n" +
-                   "- Place of Birth: " + data.birthPlace + "\n\n" +
-                   "Your consultation has been successfully booked.\n" +
-                   "Date & Time: " + (data.eventTime || "Tomorrow at 11:00 AM (Tentative)") + "\n" +
-                   "Google Meet Link: " + data.meetLink + "\n\n" +
-                   "Shashank Agrawal will also reach out to you shortly to re-confirm.\n\n" +
-                   "Warmly,\nKamala\nVeshannastro Team";
-                   
-        MailApp.sendEmail({
-          to: clientEmail,
-          subject: subject,
-          body: body,
-          name: "Veshannastro"
-        });
+      // Send Automated Confirmation Email for bookings
+      if (data.target === 'booking') {
+        sendConsultationConfirmationEmail(data);
       }
 
       return json({ ok: true, tab: tname });
     }
+
     var sheet = getOrCreateTab();
     sheet.appendRow(buildRow(sheet, data));
+
+    // Send Automated Confirmation Email for Website Consultations
+    sendConsultationConfirmationEmail(data);
+
     return json({ ok: true, tab: TAB_NAME });
   } catch (err) {
     return json({ ok: false, error: String(err) });
@@ -305,3 +289,138 @@ function buildRow(sheet, d) {
     d.notes || ''                                 // Notes
   ];
 }
+
+/**
+ * Sends a confirmation email to the customer with full details and Google Meet link.
+ * Works seamlessly for both WhatsApp direct bookings and Website consultations.
+ */
+function sendConsultationConfirmationEmail(data) {
+  var clientEmail = data.googleEmail || data.email || '';
+  if (!clientEmail || clientEmail.indexOf('@') === -1) {
+    console.warn('Skipping confirmation email: no valid email found for customer: ' + (data.name || 'Seeker'));
+    return;
+  }
+
+  try {
+    var customerName = data.name || 'Seeker';
+    var serviceName = data.service || 'Astrology Consultation';
+    var meetLink = data.meetLink || '';
+    var sessionTime = data.eventTime || (data.sessionDate ? (data.sessionDate + (data.sessionTime ? ' (' + data.sessionTime + ')' : '')) : 'Tomorrow at 11:00 AM IST (Tentative)');
+    
+    var birthDetailsList = [
+      '- Gender: ' + (data.gender || 'Not specified'),
+      '- Date of Birth: ' + (data.dob || 'Not specified'),
+      '- Time of Birth: ' + (data.birthTime || 'Not specified'),
+      '- Place of Birth: ' + (data.birthPlace || 'Not specified')
+    ];
+    if (data.query) {
+      birthDetailsList.push('- Topic / Query: ' + data.query);
+    }
+    var birthDetailsText = birthDetailsList.join('\n');
+
+    var subject = "Your Consultation is Confirmed! 🕉️ - Veshannastro";
+    
+    var textBody = "Hari Om, " + customerName + "!\n\n" +
+      "Thank you for booking your consultation with Veshannastro (" + serviceName + ").\n\n" +
+      "Here are the details we received from you:\n" + birthDetailsText + "\n\n" +
+      "Scheduled Slot: " + sessionTime + "\n" +
+      (meetLink ? ("Google Meet Link: " + meetLink + "\n\n") : ("We will share your Google Meet link shortly prior to the session.\n\n")) +
+      "Shashank Agrawal will also reach out to you shortly to re-confirm.\n\n" +
+      "Warm regards,\nKamala & Shashank Agrawal\nVeshannastro Team\n\nShri Radharamano Vijayate";
+
+    var htmlBody = '<div style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #e0d0b0; border-radius: 12px; overflow: hidden; color: #222222;">' +
+      '<div style="background: linear-gradient(135deg, #1a162b, #2b1f47); padding: 28px 24px; text-align: center; color: #ffffff;">' +
+        '<div style="font-size: 26px; font-weight: bold; letter-spacing: 1px; color: #f5cf6d;">🕉️ VESHANNASTRO</div>' +
+        '<div style="font-size: 14px; margin-top: 6px; color: #dfd8f5;">Consultation Booking Confirmation</div>' +
+      '</div>' +
+      '<div style="padding: 28px 24px;">' +
+        '<p style="font-size: 16px; margin: 0 0 16px;">Hari Om, <strong>' + customerName + '</strong>! 🙏</p>' +
+        '<p style="font-size: 15px; line-height: 1.6; color: #444444; margin: 0 0 20px;">' +
+          'Thank you for scheduling your session. We have received your booking and details for <strong>' + serviceName + '</strong>.' +
+        '</p>' +
+        '<div style="background: #fdfaf3; border: 1px solid #f0e2c8; border-radius: 8px; padding: 18px 20px; margin-bottom: 22px;">' +
+          '<div style="font-weight: bold; color: #7a5818; margin-bottom: 10px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">Session Details</div>' +
+          '<div style="font-size: 14px; line-height: 1.8; color: #333333;">' +
+            '<div><strong>Service:</strong> ' + serviceName + '</div>' +
+            '<div><strong>Schedule:</strong> ' + sessionTime + '</div>' +
+            (data.amountPaid ? ('<div><strong>Amount Paid:</strong> ' + rupees(data.amountPaid) + '</div>') : '') +
+            (data.payment_id ? ('<div><strong>Payment ID:</strong> <span style="font-family: monospace;">' + data.payment_id + '</span></div>') : '') +
+          '</div>' +
+        '</div>' +
+        '<div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 18px 20px; margin-bottom: 22px;">' +
+          '<div style="font-weight: bold; color: #495057; margin-bottom: 10px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">Birth Details Provided</div>' +
+          '<div style="font-size: 14px; line-height: 1.8; color: #555555;">' +
+            '<div><strong>Gender:</strong> ' + (data.gender || 'Not specified') + '</div>' +
+            '<div><strong>Date of Birth:</strong> ' + (data.dob || 'Not specified') + '</div>' +
+            '<div><strong>Time of Birth:</strong> ' + (data.birthTime || 'Not specified') + '</div>' +
+            '<div><strong>Place of Birth:</strong> ' + (data.birthPlace || 'Not specified') + '</div>' +
+            (data.query ? ('<div><strong>Topic / Query:</strong> ' + data.query + '</div>') : '') +
+          '</div>' +
+        '</div>' +
+        (meetLink ? (
+          '<div style="text-align: center; margin: 28px 0;">' +
+            '<a href="' + meetLink + '" style="background: linear-gradient(135deg, #c9a84c, #e5c368); color: #1a162b; font-weight: bold; text-decoration: none; padding: 14px 28px; border-radius: 8px; display: inline-block; font-size: 15px; box-shadow: 0 4px 12px rgba(201, 168, 76, 0.3);">' +
+              '👉 Join Google Meet Consultation' +
+            '</a>' +
+            '<div style="font-size: 12px; color: #888888; margin-top: 8px;">Link: <a href="' + meetLink + '" style="color: #666666;">' + meetLink + '</a></div>' +
+          '</div>'
+        ) : (
+          '<div style="background: #f0f7ff; border: 1px solid #cce5ff; border-radius: 8px; padding: 14px 18px; margin-bottom: 22px; font-size: 14px; color: #004085;">' +
+            '📹 <strong>Video Link:</strong> Shashank Agrawal will share your Google Meet link shortly before your scheduled consultation.' +
+          '</div>'
+        )) +
+        '<p style="font-size: 14px; line-height: 1.6; color: #666666; margin: 20px 0 0;">' +
+          'If you need to make any corrections or have urgent questions, feel free to reply to this email or reach us on WhatsApp.' +
+        '</p>' +
+        '<div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid #eeeeee; font-size: 13px; color: #888888; line-height: 1.6;">' +
+          'Warm regards,<br><strong>Kamala &amp; Shashank Agrawal</strong><br>Veshannastro Team<br>' +
+          '<span style="color: #c9a84c; font-style: italic;">Shri Radharamano Vijayate</span>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+    MailApp.sendEmail({
+      to: clientEmail,
+      subject: subject,
+      body: textBody,
+      htmlBody: htmlBody,
+      name: "Veshannastro"
+    });
+    console.log("Confirmation email successfully sent to: " + clientEmail);
+  } catch (mailErr) {
+    console.error("MailApp.sendEmail failed for " + clientEmail + ": " + mailErr);
+  }
+}
+
+/**
+ * TEST FUNCTION: Run this in Apps Script editor to authorize MailApp permissions!
+ * 1. Select 'testSendEmail' in the function dropdown at the top of the Apps Script editor.
+ * 2. Click ▶ Run.
+ * 3. Grant Google authorization when prompted.
+ * 4. Check your inbox for the test email.
+ */
+function testSendEmail() {
+  var myEmail = Session.getActiveUser().getEmail();
+  if (!myEmail) {
+    Logger.log("No active user email detected. Please replace myEmail with your actual email address in testSendEmail().");
+    return;
+  }
+  Logger.log("Sending test confirmation email to: " + myEmail);
+  sendConsultationConfirmationEmail({
+    target: "booking",
+    name: "Test Seeker",
+    email: myEmail,
+    gender: "Not specified",
+    dob: "15/08/1995",
+    birthTime: "10:30 AM",
+    birthPlace: "Bhopal, MP",
+    service: "Vedic Complete Consultation",
+    amountPaid: 1100,
+    payment_id: "pay_test123456",
+    meetLink: "https://meet.google.com/abc-defg-hij",
+    eventTime: "Tomorrow at 11:00 AM IST",
+    query: "Career and Marriage guidance"
+  });
+  Logger.log("Test finished! Please check your email inbox: " + myEmail);
+}
+
