@@ -37,9 +37,13 @@
 
 var TAB_NAME = 'Consultations';
 
+// 🛑 IF YOU GET A "MISSING SPREADSHEET_ID" ERROR, PASTE YOUR GOOGLE SHEET ID BELOW:
+// (It is the long string of letters and numbers in the URL between /d/ and /edit)
+var HARDCODED_SPREADSHEET_ID = ''; 
+
 function spreadsheetId() {
-  var id = PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID');
-  if (!id) throw new Error('Missing SPREADSHEET_ID Script Property');
+  var id = HARDCODED_SPREADSHEET_ID || PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID');
+  if (!id) throw new Error('Missing SPREADSHEET_ID. Please paste it into line 41 of the script.');
   return id;
 }
 
@@ -61,7 +65,7 @@ var HEADERS = [
   'Preferred Date',   // O
   'Preferred Time',   // P
   'Base Price',       // Q  what the service costs before discounts
-  'Coupon Discount',  // R  10% new-user coupon amount
+  'Coupon Discount',  // R  5% new-user coupon amount
   'Cashback Used',    // S  rupees redeemed from wallet
   'Amount Paid',      // T  net actually charged on Razorpay
   'Used Cashback?',   // U  Yes / No
@@ -89,7 +93,11 @@ var ALL_TABS = {
     'Amount (₹)','Consultation Date','Status','Notes'
   ],
   'Dashboard': ['STAT','COUNT'],
-  'Follow-ups': ['Client ID','Name','Phone','Follow-up Date','Notes']
+  'Follow-ups': ['Client ID','Name','Phone','Follow-up Date','Notes'],
+  'WA Funnel Dashboard': ['Metric', 'Value'],
+  'WA All Leads': ['Phone', 'First Contact', 'Last Contact', 'Total Messages', 'Converted?', 'Status'],
+  'WA Suspicious': ['Phone', 'Last Contact', 'Total Messages'],
+  'WhatsApp Chat History': ['Timestamp', 'Phone', 'Sender', 'Message', 'Notes']
 };
 
 function ensureAllTabs() {
@@ -102,7 +110,7 @@ function ensureAllTabs() {
       sheet.appendRow(ALL_TABS[name]);
       sheet.setFrozenRows(1);
       sheet.getRange(1, 1, 1, ALL_TABS[name].length).setFontWeight('bold');
-      if (name === 'Dashboard') seedDashboard(sheet);
+      if (name === 'Dashboard' || name === 'WA Funnel Dashboard' || name === 'WA Suspicious') seedDashboard(sheet);
       created.push(name);
     }
   });
@@ -110,12 +118,21 @@ function ensureAllTabs() {
 }
 
 function seedDashboard(sheet) {
-  // simple live counters over the other tabs
-  sheet.appendRow(['Total Bookings',        '=MAX(0,COUNTA(Bookings!A2:A))']);
-  sheet.appendRow(['Total Consultations',   '=MAX(0,COUNTA(Consultations!A2:A))']);
-  sheet.appendRow(['Total Premium Reports', '=MAX(0,COUNTA(\'Premium Reports\'!A2:A))']);
-  sheet.appendRow(['Open Follow-ups',       '=MAX(0,COUNTA(\'Follow-ups\'!A2:A))']);
-  sheet.appendRow(['Consultation Revenue',  '=SUMPRODUCT(IFERROR(VALUE(REGEXREPLACE(Consultations!T2:T,"[^0-9.]","")),0))']);
+  if (sheet.getName() === 'Dashboard') {
+    sheet.appendRow(['Total Bookings',        '=MAX(0,COUNTA(Bookings!A2:A))']);
+    sheet.appendRow(['Total Consultations',   '=MAX(0,COUNTA(Consultations!A2:A))']);
+    sheet.appendRow(['Total Premium Reports', '=MAX(0,COUNTA(\'Premium Reports\'!A2:A))']);
+    sheet.appendRow(['Open Follow-ups',       '=MAX(0,COUNTA(\'Follow-ups\'!A2:A))']);
+    sheet.appendRow(['Consultation Revenue',  '=SUMPRODUCT(IFERROR(VALUE(REGEXREPLACE(Consultations!T2:T,"[^0-9.]","")),0))']);
+  } else if (sheet.getName() === 'WA Funnel Dashboard') {
+    sheet.appendRow(['Total Leads', '=MAX(0,COUNTA(\'WA All Leads\'!A2:A))']);
+    sheet.appendRow(['Total Converted', '=COUNTIF(\'WA All Leads\'!E2:E, "Yes")']);
+    sheet.appendRow(['Conversion Rate', '=IFERROR(COUNTIF(\'WA All Leads\'!E2:E, "Yes") / MAX(1,COUNTA(\'WA All Leads\'!A2:A)), 0)']);
+    sheet.getRange(4, 2).setNumberFormat('0.00%');
+    sheet.appendRow(['Total Suspicious', '=COUNTIF(\'WA All Leads\'!F2:F, "Suspicious")']);
+  } else if (sheet.getName() === 'WA Suspicious') {
+    sheet.getRange("A2").setFormula('=QUERY(\'WA All Leads\'!A2:F, "SELECT A, C, D WHERE F = \'Suspicious\'", 0)');
+  }
 }
 
 function doGet() {
@@ -129,20 +146,84 @@ function doPost(e) {
     var data = parseBody(e);
     ensureAllTabs();
     var ss = SpreadsheetApp.openById(spreadsheetId());
+
+    if (data.target === 'lead_update') {
+      var lt = ss.getSheetByName('WA All Leads');
+      var ltData = lt.getDataRange().getValues();
+      var foundRow = -1;
+      for(var i=1; i<ltData.length; i++) {
+        if(ltData[i][0] == data.phone) {
+          foundRow = i + 1;
+          break;
+        }
+      }
+      var now = data.timestamp || new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+      var converted = data.is_customer ? 'Yes' : 'No';
+      var status = data.is_customer ? 'Converted' : ((data.message_count || 0) > 15 ? 'Suspicious' : 'Engaging');
+      
+      if (foundRow > -1) {
+        lt.getRange(foundRow, 3).setValue(now);
+        lt.getRange(foundRow, 4).setValue(data.message_count || 1);
+        lt.getRange(foundRow, 5).setValue(converted);
+        lt.getRange(foundRow, 6).setValue(status);
+      } else {
+        lt.appendRow([data.phone, now, now, data.message_count || 1, converted, status]);
+      }
+      return json({ ok: true, tab: 'WA All Leads' });
+    }
+
+    if (data.target === 'chat') {
+      var ct = ss.getSheetByName('WhatsApp Chat History');
+      ct.appendRow([
+        data.timestamp || new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+        data.phone || '',
+        data.sender || 'Unknown',
+        data.message || '',
+        data.notes || ''
+      ]);
+      return json({ ok: true, tab: 'WhatsApp Chat History' });
+    }
+
     // optional routing: payload {target:"booking"} or {target:"report"} logs a
     // simple row into Bookings / Premium Reports; default stays Consultations.
     if (data.target === 'booking' || data.target === 'report') {
       var tname = data.target === 'booking' ? 'Bookings' : 'Premium Reports';
       var t = ss.getSheetByName(tname);
+      var clientEmail = data.googleEmail || data.email || '';
       t.appendRow([
         nextClientId(t),
         data.timestamp || new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
-        data.name || '', data.phone || '', data.googleEmail || data.email || '',
+        data.name || '', data.phone || '', clientEmail,
         data.dob || '', data.birthTime || '', data.birthPlace || '',
         data.service || '', data.query || data.message || '',
         data.source || 'Website', data.paymentStatus || 'Paid',
         rupees(data.amountPaid), data.sessionDate || '', 'New', data.notes || ''
       ]);
+
+      // Send Automated Confirmation Email (only for WhatsApp bookings with an email address)
+      if (data.target === 'booking' && clientEmail && data.meetLink) {
+        var subject = "Your Consultation is Confirmed! 🕉️ - Veshannastro";
+        var body = "Hari Om, " + (data.name || 'Seeker') + "!\n\n" +
+                   "Thank you for booking the " + data.service + ".\n\n" +
+                   "Here are the birth details we received from you:\n" +
+                   "- Gender: " + (data.gender || 'Not specified') + "\n" +
+                   "- Date of Birth: " + data.dob + "\n" +
+                   "- Time of Birth: " + data.birthTime + "\n" +
+                   "- Place of Birth: " + data.birthPlace + "\n\n" +
+                   "Your consultation has been successfully booked.\n" +
+                   "Date & Time: " + (data.eventTime || "Tomorrow at 11:00 AM (Tentative)") + "\n" +
+                   "Google Meet Link: " + data.meetLink + "\n\n" +
+                   "Shashank Agrawal will also reach out to you shortly to re-confirm.\n\n" +
+                   "Warmly,\nKamala\nVeshannastro Team";
+                   
+        MailApp.sendEmail({
+          to: clientEmail,
+          subject: subject,
+          body: body,
+          name: "Veshannastro"
+        });
+      }
+
       return json({ ok: true, tab: tname });
     }
     var sheet = getOrCreateTab();
