@@ -318,19 +318,19 @@ function sendConsultationConfirmationEmail(data) {
     }
     var birthDetailsText = birthDetailsList.join('\n');
 
-    var subject = "Your Consultation is Confirmed! 🕉️ - Shri Shashank ji";
+    var subject = "Your Consultation is Confirmed! 🕉️ - Veshannastro";
     
     var textBody = "Hari Om, " + customerName + "!\n\n" +
-      "Thank you for booking your consultation with Shri Shashank ji (" + serviceName + ").\n\n" +
+      "Thank you for booking your consultation with Veshannastro (" + serviceName + ").\n\n" +
       "Here are the details we received from you:\n" + birthDetailsText + "\n\n" +
       "Scheduled Slot: " + sessionTime + "\n" +
       (meetLink ? ("Google Meet Link: " + meetLink + "\n\n") : ("We will share your Google Meet link shortly prior to the session.\n\n")) +
       "Shashank Agrawal will also reach out to you shortly to re-confirm.\n\n" +
-      "Warm regards,\nKamala & Shashank Agrawal\n\nShri Radharamano Vijayate";
+      "Warm regards,\nKamala & Shashank Agrawal\nVeshannastro Team\n\nShri Radharamano Vijayate";
 
     var htmlBody = '<div style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #e0d0b0; border-radius: 12px; overflow: hidden; color: #222222;">' +
       '<div style="background: linear-gradient(135deg, #1a162b, #2b1f47); padding: 28px 24px; text-align: center; color: #ffffff;">' +
-        '<div style="font-size: 26px; font-weight: bold; letter-spacing: 1px; color: #f5cf6d;">🕉️ SHRI SHASHANK JI</div>' +
+        '<div style="font-size: 26px; font-weight: bold; letter-spacing: 1px; color: #f5cf6d;">🕉️ VESHANNASTRO</div>' +
         '<div style="font-size: 14px; margin-top: 6px; color: #dfd8f5;">Consultation Booking Confirmation</div>' +
       '</div>' +
       '<div style="padding: 28px 24px;">' +
@@ -373,7 +373,7 @@ function sendConsultationConfirmationEmail(data) {
           'If you need to make any corrections or have urgent questions, feel free to reply to this email or reach us on WhatsApp.' +
         '</p>' +
         '<div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid #eeeeee; font-size: 13px; color: #888888; line-height: 1.6;">' +
-          'Warm regards,<br><strong>Kamala &amp; Shashank Agrawal</strong><br>' +
+          'Warm regards,<br><strong>Kamala &amp; Shashank Agrawal</strong><br>Veshannastro Team<br>' +
           '<span style="color: #c9a84c; font-style: italic;">Shri Radharamano Vijayate</span>' +
         '</div>' +
       '</div>' +
@@ -384,7 +384,7 @@ function sendConsultationConfirmationEmail(data) {
       subject: subject,
       body: textBody,
       htmlBody: htmlBody,
-      name: "Shri Shashank ji"
+      name: "Veshannastro"
     });
     console.log("Confirmation email successfully sent to: " + clientEmail);
   } catch (mailErr) {
