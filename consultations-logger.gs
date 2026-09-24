@@ -355,55 +355,54 @@ function sendConsultationConfirmationEmail(data) {
       "Scheduled Slot: " + sessionTime + "\n" +
       (meetLink ? ("Google Meet Link: " + meetLink + "\n\n") : ("We will share your Google Meet link shortly prior to the session.\n\n")) +
       "Shashank Agrawal will also reach out to you shortly to re-confirm.\n\n" +
-      "Warm regards,\nKamala & Shashank Agrawal\nVeshannastro Team\n\nShri Radharamano Vijayate";
+      "Warm regards,\n" +
+      "Veshannastro Team\n\n" +
+      "Shri Radharamano Vijayate";
 
-    var htmlBody = '<div style="font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #e0d0b0; border-radius: 12px; overflow: hidden; color: #222222;">' +
-      '<div style="background: linear-gradient(135deg, #1a162b, #2b1f47); padding: 28px 24px; text-align: center; color: #ffffff;">' +
-        '<div style="font-size: 26px; font-weight: bold; letter-spacing: 1px; color: #f5cf6d;">🕉️ VESHANNASTRO</div>' +
-        '<div style="font-size: 14px; margin-top: 6px; color: #dfd8f5;">Consultation Booking Confirmation</div>' +
+    var htmlBody = '<div style="font-family: \'Playfair Display\', \'Georgia\', serif; max-width: 650px; margin: 0 auto; background: #ffffff; border: 1px solid #d4af37; border-radius: 16px; overflow: hidden; color: #2c2c2c; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">' +
+      '<div style="background: linear-gradient(135deg, #1c1c1c, #2a2a2a); padding: 40px 30px; text-align: center; color: #ffffff; border-bottom: 3px solid #d4af37;">' +
+        '<div style="font-size: 32px; font-weight: 700; letter-spacing: 2px; color: #d4af37; text-transform: uppercase;">🕉️ Veshannastro</div>' +
+        '<div style="font-size: 16px; margin-top: 10px; color: #a9a9a9; font-family: -apple-system, sans-serif; font-weight: 300; letter-spacing: 1px;">Sacred Consultation Confirmed</div>' +
       '</div>' +
-      '<div style="padding: 28px 24px;">' +
-        '<p style="font-size: 16px; margin: 0 0 16px;">Hari Om, <strong>' + customerName + '</strong>! 🙏</p>' +
-        '<p style="font-size: 15px; line-height: 1.6; color: #444444; margin: 0 0 20px;">' +
-          'Thank you for scheduling your session. We have received your booking and details for <strong>' + serviceName + '</strong>.' +
+      '<div style="padding: 40px 30px; font-family: -apple-system, sans-serif;">' +
+        '<p style="font-size: 18px; margin: 0 0 20px; color: #1c1c1c;">Hari Om, <strong>' + customerName + '</strong> 🙏</p>' +
+        '<p style="font-size: 16px; line-height: 1.7; color: #4a4a4a; margin: 0 0 30px;">' +
+          'Your sacred consultation for <strong>' + serviceName + '</strong> is fully confirmed. We deeply honor your trust and look forward to guiding you through the planetary energies.' +
         '</p>' +
-        '<div style="background: #fdfaf3; border: 1px solid #f0e2c8; border-radius: 8px; padding: 18px 20px; margin-bottom: 22px;">' +
-          '<div style="font-weight: bold; color: #7a5818; margin-bottom: 10px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">Session Details</div>' +
-          '<div style="font-size: 14px; line-height: 1.8; color: #333333;">' +
-            '<div><strong>Service:</strong> ' + serviceName + '</div>' +
-            '<div><strong>Schedule:</strong> ' + sessionTime + '</div>' +
-            (data.amountPaid ? ('<div><strong>Amount Paid:</strong> ' + rupees(data.amountPaid) + '</div>') : '') +
-            (data.payment_id ? ('<div><strong>Payment ID:</strong> <span style="font-family: monospace;">' + data.payment_id + '</span></div>') : '') +
+        '<div style="background: #faf8f5; border-left: 4px solid #d4af37; padding: 25px; margin-bottom: 30px; border-radius: 0 8px 8px 0;">' +
+          '<div style="font-weight: 600; color: #8b7322; margin-bottom: 15px; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">Session Schedule</div>' +
+          '<div style="font-size: 16px; line-height: 1.8; color: #2c2c2c;">' +
+            '<div><strong>Time:</strong> ' + sessionTime + '</div>' +
+            (data.amountPaid ? ('<div><strong>Contribution:</strong> ' + rupees(data.amountPaid) + '</div>') : '') +
+            (data.payment_id ? ('<div><strong>Transaction ID:</strong> <span style="font-family: monospace; font-size: 13px; color: #8b7322;">' + data.payment_id + '</span></div>') : '') +
           '</div>' +
         '</div>' +
-        '<div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 18px 20px; margin-bottom: 22px;">' +
-          '<div style="font-weight: bold; color: #495057; margin-bottom: 10px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">Birth Details Provided</div>' +
-          '<div style="font-size: 14px; line-height: 1.8; color: #555555;">' +
-            '<div><strong>Gender:</strong> ' + (data.gender || 'Not specified') + '</div>' +
-            '<div><strong>Date of Birth:</strong> ' + (data.dob || 'Not specified') + '</div>' +
-            '<div><strong>Time of Birth:</strong> ' + (data.birthTime || 'Not specified') + '</div>' +
-            '<div><strong>Place of Birth:</strong> ' + (data.birthPlace || 'Not specified') + '</div>' +
-            (data.query ? ('<div><strong>Topic / Query:</strong> ' + data.query + '</div>') : '') +
+        '<div style="padding: 0 10px; margin-bottom: 35px;">' +
+          '<div style="font-weight: 600; color: #1c1c1c; margin-bottom: 15px; font-size: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px;">Your Birth Details</div>' +
+          '<div style="font-size: 15px; line-height: 1.8; color: #555555; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">' +
+            '<div><strong style="color: #1c1c1c;">Date of Birth:</strong><br>' + (data.dob || 'Not specified') + '</div>' +
+            '<div><strong style="color: #1c1c1c;">Time of Birth:</strong><br>' + (data.birthTime || 'Not specified') + '</div>' +
+            '<div><strong style="color: #1c1c1c;">Place of Birth:</strong><br>' + (data.birthPlace || 'Not specified') + '</div>' +
+            '<div><strong style="color: #1c1c1c;">Gender:</strong><br>' + (data.gender || 'Not specified') + '</div>' +
+            (data.query ? ('<div style="grid-column: 1 / -1; margin-top: 10px;"><strong style="color: #1c1c1c;">Core Query:</strong><br><span style="font-style: italic;">"' + data.query + '"</span></div>') : '') +
           '</div>' +
         '</div>' +
         (meetLink ? (
-          '<div style="text-align: center; margin: 28px 0;">' +
-            '<a href="' + meetLink + '" style="background: linear-gradient(135deg, #c9a84c, #e5c368); color: #1a162b; font-weight: bold; text-decoration: none; padding: 14px 28px; border-radius: 8px; display: inline-block; font-size: 15px; box-shadow: 0 4px 12px rgba(201, 168, 76, 0.3);">' +
-              '👉 Join Google Meet Consultation' +
+          '<div style="text-align: center; margin: 40px 0;">' +
+            '<a href="' + meetLink + '" style="background: #1c1c1c; color: #d4af37; font-weight: 600; text-decoration: none; padding: 16px 36px; border-radius: 30px; display: inline-block; font-size: 16px; letter-spacing: 0.5px; border: 1px solid #d4af37; transition: all 0.3s ease;">' +
+              'Join Video Consultation' +
             '</a>' +
-            '<div style="font-size: 12px; color: #888888; margin-top: 8px;">Link: <a href="' + meetLink + '" style="color: #666666;">' + meetLink + '</a></div>' +
+            '<div style="font-size: 13px; color: #888888; margin-top: 15px;">Meeting Link: <a href="' + meetLink + '" style="color: #8b7322; text-decoration: underline;">' + meetLink + '</a></div>' +
           '</div>'
         ) : (
-          '<div style="background: #f0f7ff; border: 1px solid #cce5ff; border-radius: 8px; padding: 14px 18px; margin-bottom: 22px; font-size: 14px; color: #004085;">' +
-            '📹 <strong>Video Link:</strong> Shashank Agrawal will share your Google Meet link shortly before your scheduled consultation.' +
+          '<div style="text-align: center; margin: 40px 0; padding: 20px; border: 1px dashed #d4af37; border-radius: 8px; color: #8b7322; background: #faf8f5;">' +
+            '📹 <strong>Video Link Pending:</strong> We will share your secure Google Meet link shortly before the session begins.' +
           '</div>'
         )) +
-        '<p style="font-size: 14px; line-height: 1.6; color: #666666; margin: 20px 0 0;">' +
-          'If you need to make any corrections or have urgent questions, feel free to reply to this email or reach us on WhatsApp.' +
-        '</p>' +
-        '<div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid #eeeeee; font-size: 13px; color: #888888; line-height: 1.6;">' +
-          'Warm regards,<br><strong>Kamala &amp; Shashank Agrawal</strong><br>Veshannastro Team<br>' +
-          '<span style="color: #c9a84c; font-style: italic;">Shri Radharamano Vijayate</span>' +
+        '<div style="margin-top: 40px; text-align: center; padding-top: 30px; border-top: 1px solid #eeeeee;">' +
+          '<div style="font-size: 15px; font-weight: 600; color: #1c1c1c; margin-bottom: 5px;">Veshannastro Team</div>' +
+          '<div style="font-size: 13px; color: #888888; margin-bottom: 15px;">Guidance for the soul.</div>' +
+          '<div style="color: #d4af37; font-style: italic; font-family: \'Georgia\', serif; font-size: 16px; letter-spacing: 1px;">Shri Radharamano Vijayate</div>' +
         '</div>' +
       '</div>' +
     '</div>';
