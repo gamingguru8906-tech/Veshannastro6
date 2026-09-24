@@ -79,6 +79,7 @@ var HEADERS = [
    Any tab that is missing gets created with these headers; existing tabs
    and their data are never touched. */
 var ALL_TABS = {
+  'Customers': ['Customer ID','Full Name','Phone','Email','Date of Birth','Birth Time','Birth Place','Gender','Remedies Prescribed'],
   'Bookings': [
     'Client ID','Booked On','Full Name','Phone','Email','Date of Birth',
     'Birth Time','Birth Place','Service','Message','Source','Payment Status',
@@ -180,6 +181,34 @@ function doPost(e) {
         data.notes || ''
       ]);
       return json({ ok: true, tab: 'WhatsApp Chat History' });
+    }
+
+    if (data.target === 'customer_update') {
+      var ctab = ss.getSheetByName('Customers');
+      var cData = ctab.getDataRange().getValues();
+      var foundRow = -1;
+      for(var i=1; i<cData.length; i++) {
+        if(cData[i][2] == data.phone) { // Match by phone
+          foundRow = i + 1;
+          break;
+        }
+      }
+      if (foundRow > -1) {
+        if (data.customerId) ctab.getRange(foundRow, 1).setValue(data.customerId);
+        if (data.name) ctab.getRange(foundRow, 2).setValue(data.name);
+        if (data.email) ctab.getRange(foundRow, 4).setValue(data.email);
+        if (data.dob) ctab.getRange(foundRow, 5).setValue(data.dob);
+        if (data.tob) ctab.getRange(foundRow, 6).setValue(data.tob);
+        if (data.pob) ctab.getRange(foundRow, 7).setValue(data.pob);
+        if (data.gender) ctab.getRange(foundRow, 8).setValue(data.gender);
+        if (data.remedies) ctab.getRange(foundRow, 9).setValue(data.remedies);
+      } else {
+        ctab.appendRow([
+          data.customerId || '', data.name || '', data.phone || '', data.email || '', 
+          data.dob || '', data.tob || '', data.pob || '', data.gender || '', data.remedies || ''
+        ]);
+      }
+      return json({ ok: true, tab: 'Customers' });
     }
 
     // optional routing: payload {target:"booking"} or {target:"report"} logs a
