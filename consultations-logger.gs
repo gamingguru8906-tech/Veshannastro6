@@ -407,12 +407,23 @@ function sendConsultationConfirmationEmail(data) {
       '</div>' +
     '</div>';
 
+    var attachments = [];
+    if (data.invoiceBase64) {
+      try {
+        var blob = Utilities.newBlob(Utilities.base64Decode(data.invoiceBase64), 'application/pdf', data.invoiceName || 'Invoice.pdf');
+        attachments.push(blob);
+      } catch (e) {
+        console.error('Error decoding invoice base64:', e);
+      }
+    }
+
     MailApp.sendEmail({
       to: clientEmail,
       subject: subject,
       body: textBody,
       htmlBody: htmlBody,
-      name: "Veshannastro"
+      name: "Veshannastro",
+      attachments: attachments
     });
     console.log("Confirmation email successfully sent to: " + clientEmail);
   } catch (mailErr) {
