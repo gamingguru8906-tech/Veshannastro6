@@ -295,10 +295,12 @@ function doPost(e) {
         if (!data.name || !data.phone || !data.service || !Number.isFinite(amountPaid) || amountPaid <= 0) {
           return json({ ok: false, error: 'The paid booking is missing required customer, service, or amount details.' });
         }
-        if (!data.invoiceBase64 || String(data.invoiceBase64).length > 12 * 1024 * 1024
-          || !/^JVBERi0/.test(String(data.invoiceBase64))) {
+        var invoicePdf = data.invoiceBase64 || data.invoicePdfBase64;
+        if (!invoicePdf || String(invoicePdf).length > 12 * 1024 * 1024
+          || !/^JVBERi0/.test(String(invoicePdf))) {
           return json({ ok: false, error: 'A valid PDF payment receipt under the attachment size limit is required.' });
         }
+        data.invoiceBase64 = invoicePdf;
         if (!validMeetLink_(data.meetLink)) return json({ ok: false, error: 'A valid Google Meet URL is required before booking confirmation.' });
 
         var requestsSheet = ss.getSheetByName('WA Payment Requests');
@@ -444,15 +446,21 @@ function updateWhatsAppLead_(data) {
   }
 }
 
+function ensureCalendarService_() {
+  if (typeof Calendar === 'undefined' || !Calendar.Calendars || !Calendar.Events) {
+    throw new Error('Google Calendar API service is not added in Apps Script. In Google Apps Script, click "+" next to Services in the left sidebar, add "Google Calendar API", and redeploy a new version.');
+  }
+}
+
 function calendarId_() {
   var id = PropertiesService.getScriptProperties().getProperty('GOOGLE_CALENDAR_ID');
-  if (!id) throw new Error('GOOGLE_CALENDAR_ID is not configured in Apps Script properties.');
-  return id;
+  return id || 'primary';
 }
 
 // Run once manually in Apps Script to authorize Calendar and confirm that the
 // selected owner calendar advertises Google Meet before enabling payment links.
 function testCalendarOwnerAccess() {
+  ensureCalendarService_();
   var calendar = Calendar.Calendars.get(calendarId_());
   var allowed = calendar.conferenceProperties && calendar.conferenceProperties.allowedConferenceSolutionTypes || [];
   if (allowed.indexOf('hangoutsMeet') === -1) {
@@ -463,6 +471,7 @@ function testCalendarOwnerAccess() {
 }
 
 function createWhatsAppCalendarHold_(data) {
+  ensureCalendarService_();
   var start = new Date(String(data.startTime || ''));
   var end = new Date(String(data.endTime || ''));
   var customerName = String(data.customerName || '').trim();
@@ -547,22 +556,44 @@ function createWhatsAppCalendarHold_(data) {
 }
 
 function finalizeWhatsAppCalendarHold_(data) {
+  ensureCalendarService_();
   var eventId = String(data.eventId || '').trim();
   if (!eventId) throw new Error('A calendar event ID is required to finalize the hold.');
   var id = calendarId_();
-  var event = Calendar.Events.get(id, eventId);
+  var event;
+  try {
+    event = Calendar.Events.get(id, eventId);
+  } catch (err) {
+    throw new Error('Calendar event ' + eventId + ' could not be found: ' + (err && err.message || err));
+  }
   var meetLink = calendarMeetLink_(event);
-  if (!meetLink) throw new Error('The calendar hold has no Google Meet link; booking confirmation cannot continue.');
   var summary = String(data.summary || '').trim();
   var description = String(data.description || '').trim();
   if (!summary || !description) throw new Error('Calendar finalization requires the booking title and details.');
-  var updated = Calendar.Events.patch({ summary: summary, description: description }, id, eventId,
+
+  var patchPayload = { summary: summary, description: description };
+  if (!meetLink) {
+    patchPayload.conferenceData = {
+      createRequest: {
+        requestId: Utilities.getUuid(),
+        conferenceSolutionKey: { type: 'hangoutsMeet' }
+      }
+    };
+  }
+  var updated = Calendar.Events.patch(patchPayload, id, eventId,
     { conferenceDataVersion: 1, sendUpdates: 'none' });
   meetLink = calendarMeetLink_(updated) || meetLink;
+  for (var attempt = 0; !meetLink && attempt < 5; attempt++) {
+    Utilities.sleep(1000);
+    updated = Calendar.Events.get(id, eventId);
+    meetLink = calendarMeetLink_(updated);
+  }
+  if (!meetLink) throw new Error('The calendar hold has no Google Meet link; booking confirmation cannot continue.');
   return { ok: true, eventId: eventId, meetLink: meetLink, htmlLink: updated.htmlLink || event.htmlLink || '' };
 }
 
 function cancelWhatsAppCalendarHold_(data) {
+  ensureCalendarService_();
   var eventId = String(data.eventId || '').trim();
   if (!eventId) return { ok: false, error: 'A calendar event ID is required to cancel the hold.' };
   try {
