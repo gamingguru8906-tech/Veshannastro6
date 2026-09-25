@@ -1,10 +1,8 @@
 /**
  * Veshannastro — "Consultations" tab logger  (v1)
  * ===================================================================
- * A brand-new, INDEPENDENT Apps Script Web App. It only ever writes into
- * a tab called "Consultations" (auto-created on first run). It does NOT
- * touch your existing "Bookings" tab, your "Premium Reports" tab, or any
- * script that writes to them. Everything you have today keeps working.
+ * Apps Script Web App for the website checkout and WhatsApp CRM. Existing
+ * tabs and records are preserved; missing columns are appended, never reordered.
  *
  * Used by:
  *   - vedic-checkout.html        (Vedic Complete Consultation)
@@ -16,27 +14,24 @@
  *   coupon discount, and final amount paid.
  *
  * SETUP & DEPLOYMENT INSTRUCTIONS:
- *   1. Open your Consultation CRM Google Sheet -> Extensions -> Apps Script.
- *   2. Paste this entire updated code into your Apps Script editor.
- *   3. ⚠️ AUTHORIZE EMAIL (ONE-TIME):
- *        - At the top toolbar, select 'testSendEmail' from the function dropdown.
- *        - Click '▶ Run'.
- *        - Google will pop up "Authorization required" -> Click "Review permissions"
- *          -> Select your Google account -> "Advanced" -> "Go to ... (unsafe)" -> "Allow".
- *        - Check your email inbox to verify you received the test email!
- *   4. ⚠️ UPDATE THE LIVE DEPLOYMENT (CRITICAL):
- *        - Click 'Deploy' (top right) -> 'Manage deployments'.
- *        - Click the pencil icon (✏️ Edit) next to your active Web App deployment.
- *        - Under 'Version', click the dropdown and choose 'New version'.
- *        - Click 'Deploy' -> 'Done'.
- *        (Note: Simply pressing Save (Ctrl+S) does not update the live /exec URL!)
+ * SETUP:
+ *   1. Paste this entire file into the Apps Script project attached to the CRM Sheet.
+ *   2. Project Settings -> Script Properties: set SPREADSHEET_ID to the sheet ID and
+ *      GOOGLE_APPS_SCRIPT_SECRET to the same random secret used in Render.
+ *   3. In Script Properties, set PAYMENT_VERIFICATION_URL to
+ *      https://whatsapp-agent-gqg6.onrender.com/payments/verify . If it still
+ *      contains the old wallet URL, replace it with this URL.
+ *   4. Run initializeSpreadsheet() once and approve Sheets permissions.
+ *   5. Run testPaymentVerificationConnection() and testSendEmail() once to grant and
+ *      verify UrlFetch/Mail permissions. testSendEmail sends a real test email to you.
+ *   6. Deploy -> Manage deployments -> Edit -> New version -> Deploy. Save alone
+ *      does not update the active /exec deployment URL.
  * ===================================================================
  */
 
 var TAB_NAME = 'Consultations';
 
-// 🛑 IF YOU GET A "MISSING SPREADSHEET_ID" ERROR, PASTE YOUR GOOGLE SHEET ID BELOW:
-// (It is the long string of letters and numbers in the URL between /d/ and /edit)
+// Set SPREADSHEET_ID in Script Properties (the string between /d/ and /edit in the Sheet URL).
 var HARDCODED_SPREADSHEET_ID = ''; 
 
 function spreadsheetId() {
@@ -72,18 +67,19 @@ var HEADERS = [
   'Payment ID',       // X  Razorpay payment id
   'Source',           // Y
   'Status',           // Z  New (for your ops board)
-  'Notes'             // AA
+  'Notes',            // AA
+  'Email Status'      // AB  retries only the same verified payment if sending previously failed
 ];
 
 /* ── ALL CRM tabs + their exact headers (matches your existing sheet) ──
    Any tab that is missing gets created with these headers; existing tabs
    and their data are never touched. */
 var ALL_TABS = {
-  'Customers': ['Customer ID','Full Name','Phone','Email','Date of Birth','Birth Time','Birth Place','Gender','Remedies Prescribed'],
+  'Customers': ['Customer ID','Full Name','Phone','Email','Date of Birth','Birth Time','Birth Place','Gender','Remedies Prescribed','Billing Address','Customer GSTIN','Last Updated'],
   'Bookings': [
     'Client ID','Booked On','Full Name','Phone','Email','Date of Birth',
     'Birth Time','Birth Place','Service','Message','Source','Payment Status',
-    'Amount (₹)','Consultation Date','Status','Notes'
+    'Amount (₹)','Consultation Date','Status','Notes','Payment Link ID','Payment ID','Email Status'
   ],
   'Consultations': HEADERS,
   'Premium Reports': [
@@ -96,7 +92,14 @@ var ALL_TABS = {
   'WA Funnel Dashboard': ['Metric', 'Value'],
   'WA All Leads': ['Phone', 'First Contact', 'Last Contact', 'Total Messages', 'Converted?', 'Status'],
   'WA Suspicious': ['Phone', 'Last Contact', 'Total Messages'],
-  'WhatsApp Chat History': ['Timestamp', 'Phone', 'Sender', 'Message', 'Notes']
+  'WhatsApp Chat History': ['Timestamp', 'Phone', 'Sender', 'Message', 'Notes'],
+  'WA Payment Requests': [
+    'Payment Link ID','Request Invoice No.','Created At','Customer ID','Full Name','Phone','Email',
+    'Billing Address','Customer GSTIN','Gender','Date of Birth','Birth Time','Birth Place','Service',
+    'Appointment Date/Time','Normal Rate (₹)','Published Discount (₹)','Additional Discount (₹)',
+    'Consultation Total (₹)','Amount Due on Link (₹)','Payment URL','Payment Status','Payment ID',
+    'Gateway Test','Source'
+  ]
 };
 
 function ensureAllTabs() {
@@ -104,16 +107,40 @@ function ensureAllTabs() {
   var created = [];
   Object.keys(ALL_TABS).forEach(function (name) {
     var sheet = ss.getSheetByName(name);
+    var wasCreated = false;
     if (!sheet) {
       sheet = ss.insertSheet(name);
-      sheet.appendRow(ALL_TABS[name]);
       sheet.setFrozenRows(1);
-      sheet.getRange(1, 1, 1, ALL_TABS[name].length).setFontWeight('bold');
-      if (name === 'Dashboard' || name === 'WA Funnel Dashboard' || name === 'WA Suspicious') seedDashboard(sheet);
+      wasCreated = true;
       created.push(name);
     }
+    ensureHeaders_(sheet, ALL_TABS[name]);
+    if (wasCreated && (name === 'Dashboard' || name === 'WA Funnel Dashboard' || name === 'WA Suspicious')) seedDashboard(sheet);
   });
   return created;
+}
+
+// Add only missing columns to existing tabs; never reorder or overwrite data.
+function ensureHeaders_(sheet, expectedHeaders) {
+  var lastColumn = sheet.getLastColumn();
+  var current = lastColumn > 0
+    ? sheet.getRange(1, 1, 1, lastColumn).getValues()[0]
+    : [];
+  if (!current.length || current.every(function (value) { return String(value || '').trim() === ''; })) {
+    if (sheet.getLastRow() > 1) {
+      throw new Error('Tab "' + sheet.getName() + '" has data but no header row; refusing to guess its schema.');
+    }
+    sheet.getRange(1, 1, 1, expectedHeaders.length).setValues([expectedHeaders]).setFontWeight('bold');
+    sheet.setFrozenRows(1);
+    return expectedHeaders.slice();
+  }
+  var missing = expectedHeaders.filter(function (header) { return current.indexOf(header) === -1; });
+  if (missing.length) {
+    sheet.getRange(1, lastColumn + 1, 1, missing.length).setValues([missing]).setFontWeight('bold');
+    current = current.concat(missing);
+  }
+  if (sheet.getFrozenRows() < 1) sheet.setFrozenRows(1);
+  return current;
 }
 
 function seedDashboard(sheet) {
@@ -135,14 +162,25 @@ function seedDashboard(sheet) {
 }
 
 function doGet() {
-  var created = ensureAllTabs(); // make sure ALL tabs + headers exist
-  return json({ ok: true, service: 'consultations-logger',
-                tabs: Object.keys(ALL_TABS), created: created });
+  // Keep the public health endpoint read-only; run initializeSpreadsheet() in the editor for setup.
+  return json({ ok: true, service: 'consultations-logger' });
 }
 
 function doPost(e) {
   try {
     var data = parseBody(e);
+    if (!data || typeof data !== 'object' || Array.isArray(data)) return json({ ok: false, error: 'Request body must be a JSON object.' });
+    var protectedTarget = ['booking', 'report', 'payment_request', 'payment_request_status', 'customer_update', 'lead_update', 'chat'].indexOf(data.target) !== -1;
+    if ((protectedTarget || data.sourceSystem === 'whatsapp') && !isAuthorizedWhatsAppCall_(data)) {
+      return json({ ok: false, error: 'Unauthorized WhatsApp service request.' });
+    }
+    var knownTargets = ['', 'booking', 'report', 'payment_request', 'payment_request_status', 'customer_update', 'lead_update', 'chat'];
+    var target = String(data.target || '');
+    if (knownTargets.indexOf(target) === -1) return json({ ok: false, error: 'Unknown request target.' });
+    if (!target) {
+      if (!data.payment_id) return json({ ok: false, error: 'Missing Razorpay payment ID; no paid consultation was recorded.' });
+      assertCapturedPayment_(data.payment_id, data.amountPaid);
+    }
     ensureAllTabs();
     var ss = SpreadsheetApp.openById(spreadsheetId());
 
@@ -161,17 +199,20 @@ function doPost(e) {
       var status = data.is_customer ? 'Converted' : ((data.message_count || 0) > 15 ? 'Suspicious' : 'Engaging');
       
       if (foundRow > -1) {
-        lt.getRange(foundRow, 3).setValue(now);
-        lt.getRange(foundRow, 4).setValue(data.message_count || 1);
+        lt.getRange(foundRow, 3).setValue(safeSheetValue_(now));
+        lt.getRange(foundRow, 4).setValue(Math.max(1, Number(data.message_count) || 1));
         lt.getRange(foundRow, 5).setValue(converted);
         lt.getRange(foundRow, 6).setValue(status);
       } else {
-        lt.appendRow([data.phone, now, now, data.message_count || 1, converted, status]);
+        lt.appendRow([data.phone, now, now, Math.max(1, Number(data.message_count) || 1), converted, status].map(safeSheetValue_));
       }
       return json({ ok: true, tab: 'WA All Leads' });
     }
 
     if (data.target === 'chat') {
+      if (!data.phone || String(data.message || '').length > 12000) {
+        return json({ ok: false, error: 'Chat record needs a phone number and a message no longer than 12,000 characters.' });
+      }
       var ct = ss.getSheetByName('WhatsApp Chat History');
       ct.appendRow([
         data.timestamp || new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
@@ -179,77 +220,362 @@ function doPost(e) {
         data.sender || 'Unknown',
         data.message || '',
         data.notes || ''
-      ]);
+      ].map(safeSheetValue_));
       return json({ ok: true, tab: 'WhatsApp Chat History' });
     }
 
+    if (data.target === 'payment_request') {
+      var paymentLinkId = String(data.payment_link_id || '');
+      if (!/^plink_[A-Za-z0-9]+$/.test(paymentLinkId) || !data.invoice_number || !data.name || !data.phone || !data.email || !data.billingAddress || !data.paymentUrl) {
+        return json({ ok: false, error: 'Payment request is missing a required customer, invoice, or payment-link field.' });
+      }
+      if (!/^https:\/\/(?:rzp\.io|(?:[a-z0-9-]+\.)*razorpay\.com)\//i.test(String(data.paymentUrl))) {
+        return json({ ok: false, error: 'Payment URL must be a Razorpay HTTPS link.' });
+      }
+      if (!validPaymentRequestAmounts_(data)) {
+        return json({ ok: false, error: 'Payment request prices or discount arithmetic are invalid.' });
+      }
+      var requestLock = LockService.getScriptLock();
+      requestLock.waitLock(10000);
+      try {
+      var requestSheet = ss.getSheetByName('WA Payment Requests');
+      var requestHeaders = requestSheet.getRange(1, 1, 1, requestSheet.getLastColumn()).getValues()[0];
+      var requestRow = findRowByHeader_(requestSheet, 'Payment Link ID', paymentLinkId);
+      var existingStatus = requestRow ? String(requestSheet.getRange(requestRow, requestHeaders.indexOf('Payment Status') + 1).getValue() || '') : '';
+      var existingPaymentId = requestRow ? String(requestSheet.getRange(requestRow, requestHeaders.indexOf('Payment ID') + 1).getValue() || '') : '';
+      if (requestRow && (existingStatus === 'PAID' || existingStatus === 'GATEWAY_TEST_PAID')) {
+        return json({ ok: true, tab: 'WA Payment Requests', paymentLinkId: paymentLinkId, duplicate: true });
+      }
+      var requestValues = {
+        'Payment Link ID': paymentLinkId, 'Request Invoice No.': data.invoice_number,
+        'Created At': data.timestamp || new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+        'Customer ID': data.customerId || '', 'Full Name': data.name, 'Phone': data.phone,
+        'Email': data.email, 'Billing Address': data.billingAddress, 'Customer GSTIN': data.customerGstin || '',
+        'Gender': data.gender || '', 'Date of Birth': data.dob || '', 'Birth Time': data.birthTime || '',
+        'Birth Place': data.birthPlace || '', 'Service': data.service || '',
+        'Appointment Date/Time': data.sessionDate || '', 'Normal Rate (₹)': rupees(data.normalRate),
+        'Published Discount (₹)': rupees(data.websiteDiscount), 'Additional Discount (₹)': rupees(data.additionalDiscount),
+        'Consultation Total (₹)': rupees(data.serviceTotal), 'Amount Due on Link (₹)': rupees(data.amountDue),
+        'Payment URL': data.paymentUrl,
+        'Payment Status': existingStatus && existingStatus !== 'DELIVERY_FAILED' ? existingStatus : 'UNPAID',
+        'Payment ID': existingPaymentId,
+        'Gateway Test': data.isGatewayTest ? 'Yes' : 'No', 'Source': data.source || 'WhatsApp'
+      };
+      var requestValuesRow = requestHeaders.map(function (header) {
+        return Object.prototype.hasOwnProperty.call(requestValues, header) ? requestValues[header] : '';
+      }).map(safeSheetValue_);
+      if (requestRow) requestSheet.getRange(requestRow, 1, 1, requestHeaders.length).setValues([requestValuesRow]);
+      else requestSheet.appendRow(requestValuesRow);
+      upsertWhatsAppCustomer_(ss, data);
+      return json({ ok: true, tab: 'WA Payment Requests', paymentLinkId: paymentLinkId });
+      } finally {
+        requestLock.releaseLock();
+      }
+    }
+
+    if (data.target === 'payment_request_status') {
+      var statusLinkId = String(data.payment_link_id || '');
+      if (!statusLinkId) return json({ ok: false, error: 'Missing payment link ID.' });
+      if (String(data.status || '') !== 'DELIVERY_FAILED') {
+        return json({ ok: false, error: 'This endpoint only records delivery failures; payment status requires verified booking fulfillment.' });
+      }
+      if (!updatePaymentRequestStatus_(ss, statusLinkId, 'DELIVERY_FAILED', '')) {
+        return json({ ok: false, error: 'No matching payment-request row was found.' });
+      }
+      return json({ ok: true, tab: 'WA Payment Requests' });
+    }
+
     if (data.target === 'customer_update') {
-      var ctab = ss.getSheetByName('Customers');
-      var cData = ctab.getDataRange().getValues();
-      var foundRow = -1;
-      for(var i=1; i<cData.length; i++) {
-        if(cData[i][2] == data.phone) { // Match by phone
-          foundRow = i + 1;
-          break;
-        }
-      }
-      if (foundRow > -1) {
-        if (data.customerId) ctab.getRange(foundRow, 1).setValue(data.customerId);
-        if (data.name) ctab.getRange(foundRow, 2).setValue(data.name);
-        if (data.email) ctab.getRange(foundRow, 4).setValue(data.email);
-        if (data.dob) ctab.getRange(foundRow, 5).setValue(data.dob);
-        if (data.tob) ctab.getRange(foundRow, 6).setValue(data.tob);
-        if (data.pob) ctab.getRange(foundRow, 7).setValue(data.pob);
-        if (data.gender) ctab.getRange(foundRow, 8).setValue(data.gender);
-        if (data.remedies) ctab.getRange(foundRow, 9).setValue(data.remedies);
-      } else {
-        ctab.appendRow([
-          data.customerId || '', data.name || '', data.phone || '', data.email || '', 
-          data.dob || '', data.tob || '', data.pob || '', data.gender || '', data.remedies || ''
-        ]);
-      }
+      if (!data.phone) return json({ ok: false, error: 'Customer phone is required for a customer update.' });
+      upsertWhatsAppCustomer_(ss, data);
       return json({ ok: true, tab: 'Customers' });
     }
 
-    // optional routing: payload {target:"booking"} or {target:"report"} logs a
-    // simple row into Bookings / Premium Reports; default stays Consultations.
-    if (data.target === 'booking' || data.target === 'report') {
-      var tname = data.target === 'booking' ? 'Bookings' : 'Premium Reports';
-      var t = ss.getSheetByName(tname);
-      var clientEmail = data.googleEmail || data.email || '';
-      t.appendRow([
-        nextClientId(t),
-        data.timestamp || new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
-        data.name || '', data.phone || '', clientEmail,
-        data.dob || '', data.birthTime || '', data.birthPlace || '',
-        data.service || '', data.query || data.message || '',
-        data.source || 'Website', data.paymentStatus || 'Paid',
-        rupees(data.amountPaid), data.sessionDate || '', 'New', data.notes || ''
-      ]);
+    // WhatsApp booking fulfillment is signed and independently payment-verified.
+    if (data.target === 'booking') {
+      var bookingLock = LockService.getScriptLock();
+      bookingLock.waitLock(10000);
+      try {
+        var paymentLinkId = String(data.payment_link_id || '').trim();
+        var paymentId = String(data.payment_id || '').trim();
+        var clientEmail = String(data.googleEmail || data.email || '').trim();
+        var amountPaid = Number(data.amountPaid);
+        if (!/^plink_[A-Za-z0-9]+$/.test(paymentLinkId)) return json({ ok: false, error: 'A valid Razorpay payment-link ID is required.' });
+        if (!/^pay_[A-Za-z0-9]+$/.test(paymentId)) return json({ ok: false, error: 'A valid Razorpay payment ID is required.' });
+        if (!clientEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clientEmail)) return json({ ok: false, error: 'A valid customer email is required.' });
+        if (!data.name || !data.phone || !data.service || !Number.isFinite(amountPaid) || amountPaid <= 0) {
+          return json({ ok: false, error: 'The paid booking is missing required customer, service, or amount details.' });
+        }
+        if (!data.invoiceBase64 || String(data.invoiceBase64).length > 12 * 1024 * 1024
+          || !/^JVBERi0/.test(String(data.invoiceBase64))) {
+          return json({ ok: false, error: 'A valid PDF payment receipt under the attachment size limit is required.' });
+        }
+        if (!validMeetLink_(data.meetLink)) return json({ ok: false, error: 'A valid Google Meet URL is required before booking confirmation.' });
 
-      // Send Automated Confirmation Email for bookings
-      if (data.target === 'booking') {
-        sendConsultationConfirmationEmail(data);
+        var requestsSheet = ss.getSheetByName('WA Payment Requests');
+        var request = paymentRequestById_(requestsSheet, paymentLinkId);
+        if (!request) return json({ ok: false, error: 'No matching payment request exists; booking was not recorded.' });
+        var requestStatus = String(request.values['Payment Status'] || '');
+        var requestPaymentId = String(request.values['Payment ID'] || '');
+        if ((requestStatus === 'PAID' || requestStatus === 'GATEWAY_TEST_PAID') && requestPaymentId && requestPaymentId !== paymentId) {
+          return json({ ok: false, error: 'This payment link has already been fulfilled by a different payment.' });
+        }
+        var expectedAmount = parseRupees_(request.values['Amount Due on Link (₹)']);
+        if (!Number.isFinite(expectedAmount) || Math.abs(expectedAmount - amountPaid) > 0.005) {
+          return json({ ok: false, error: 'Paid amount does not match the amount recorded for this payment link.' });
+        }
+        if (String(request.values.Phone || '') !== String(data.phone)
+          || String(request.values.Email || '').toLowerCase() !== clientEmail.toLowerCase()
+          || String(request.values.Service || '') !== String(data.service)) {
+          return json({ ok: false, error: 'Booking details do not match the customer and service on the payment request.' });
+        }
+        assertCapturedPayment_(paymentId, amountPaid);
+
+        var bookings = ss.getSheetByName('Bookings');
+        var bookingHeaders = bookings.getRange(1, 1, 1, bookings.getLastColumn()).getValues()[0];
+        var existingRow = findRowByHeader_(bookings, 'Payment Link ID', paymentLinkId);
+        var paymentIdColumn = bookingHeaders.indexOf('Payment ID') + 1;
+        if (existingRow && paymentIdColumn > 0) {
+          var previousPaymentId = String(bookings.getRange(existingRow, paymentIdColumn).getValue() || '');
+          if (previousPaymentId && previousPaymentId !== paymentId) return json({ ok: false, error: 'A different payment is already recorded for this booking.' });
+        }
+        var emailStatusColumn = bookingHeaders.indexOf('Email Status') + 1;
+        var previousEmailStatus = existingRow && emailStatusColumn > 0
+          ? String(bookings.getRange(existingRow, emailStatusColumn).getValue() || 'Pending') : 'Pending';
+        var rowValuesByHeader = {
+          'Client ID': existingRow ? bookings.getRange(existingRow, bookingHeaders.indexOf('Client ID') + 1).getValue() : nextClientId(bookings),
+          'Booked On': data.timestamp || new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+          'Full Name': data.name, 'Phone': data.phone, 'Email': clientEmail,
+          'Date of Birth': data.dob || '', 'Birth Time': data.birthTime || '', 'Birth Place': data.birthPlace || '',
+          'Service': data.service, 'Message': data.query || data.message || '',
+          'Source': data.source || 'WhatsApp Direct Booking',
+          'Payment Status': data.isGatewayTest ? 'Gateway test paid - consultation not paid' : 'Paid',
+          'Amount (₹)': rupees(amountPaid), 'Consultation Date': data.sessionDate || '',
+          'Status': data.isGatewayTest ? 'Gateway test only - not booked' : 'Confirmed',
+          'Notes': data.isGatewayTest ? '₹1 gateway validation only; consultation fee remains unpaid.' : (data.notes || ''),
+          'Payment Link ID': paymentLinkId, 'Payment ID': paymentId,
+          'Email Status': previousEmailStatus
+        };
+        var bookingRow = bookingHeaders.map(function (header) {
+          return Object.prototype.hasOwnProperty.call(rowValuesByHeader, header) ? rowValuesByHeader[header] : '';
+        }).map(safeSheetValue_);
+        if (existingRow) bookings.getRange(existingRow, 1, 1, bookingHeaders.length).setValues([bookingRow]);
+        else { bookings.appendRow(bookingRow); existingRow = bookings.getLastRow(); }
+
+        updatePaymentRequestStatus_(ss, paymentLinkId, data.isGatewayTest ? 'GATEWAY_TEST_PAID' : 'PAID', paymentId);
+        if (String(bookings.getRange(existingRow, emailStatusColumn).getValue()) !== 'SENT') {
+          var mailResult = sendConsultationConfirmationEmail(data);
+          bookings.getRange(existingRow, emailStatusColumn).setValue(mailResult.sent ? 'SENT' : 'FAILED: ' + mailResult.error);
+          if (!mailResult.sent) return json({ ok: false, error: 'Payment was verified and booking recorded, but confirmation email failed: ' + mailResult.error });
+        }
+        return json({ ok: true, tab: 'Bookings', email: 'sent', paymentLinkId: paymentLinkId });
+      } finally {
+        bookingLock.releaseLock();
       }
+    }
 
-      return json({ ok: true, tab: tname });
+    if (data.target === 'report') {
+      var reports = ss.getSheetByName('Premium Reports');
+      reports.appendRow([
+        nextClientId(reports), data.timestamp || new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+        data.name || '', data.phone || '', data.googleEmail || data.email || '', data.dob || '', data.birthTime || '',
+        data.birthPlace || '', data.service || '', data.query || data.message || '', data.source || 'Website',
+        data.paymentStatus || 'Paid', rupees(data.amountPaid), data.sessionDate || '', 'New', data.notes || ''
+      ].map(safeSheetValue_));
+      return json({ ok: true, tab: 'Premium Reports' });
     }
 
     var sheet = getOrCreateTab();
-    sheet.appendRow(buildRow(sheet, data));
-
-    // Send Automated Confirmation Email for Website Consultations
-    sendConsultationConfirmationEmail(data);
-
-    return json({ ok: true, tab: TAB_NAME });
+    var genericLock = LockService.getScriptLock();
+    genericLock.waitLock(10000);
+    try {
+      var existingConsultationRow = findRowByHeader_(sheet, 'Payment ID', data.payment_id);
+      var emailStatusColumn = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0].indexOf('Email Status') + 1;
+      var existingEmailStatus = existingConsultationRow
+        ? String(sheet.getRange(existingConsultationRow, emailStatusColumn).getValue() || 'Pending') : '';
+      if (existingConsultationRow && existingEmailStatus === 'SENT') {
+        return json({ ok: true, tab: TAB_NAME, duplicate: true, email: 'sent' });
+      }
+      var consultationRow = existingConsultationRow;
+      if (!consultationRow) {
+        sheet.appendRow(buildRow(sheet, data).map(safeSheetValue_));
+        consultationRow = sheet.getLastRow();
+      }
+      var genericMailResult = sendConsultationConfirmationEmail(data);
+      sheet.getRange(consultationRow, emailStatusColumn).setValue(genericMailResult.sent ? 'SENT' : 'FAILED: ' + genericMailResult.error);
+      if (!genericMailResult.sent) return json({ ok: false, error: 'Payment was verified and recorded, but the confirmation email failed: ' + genericMailResult.error });
+      return json({ ok: true, tab: TAB_NAME, duplicate: Boolean(existingConsultationRow), email: 'sent' });
+    } finally {
+      genericLock.releaseLock();
+    }
   } catch (err) {
     return json({ ok: false, error: String(err) });
   }
 }
 
+function isAuthorizedWhatsAppCall_(data) {
+  var expected = PropertiesService.getScriptProperties().getProperty('GOOGLE_APPS_SCRIPT_SECRET');
+  var supplied = String(data && data.apiSecret || '');
+  if (!expected || !supplied || expected.length !== supplied.length) return false;
+  var diff = 0;
+  for (var i = 0; i < expected.length; i++) diff |= expected.charCodeAt(i) ^ supplied.charCodeAt(i);
+  return diff === 0;
+}
+
+function paymentVerificationUrl_() {
+  var configured = PropertiesService.getScriptProperties().getProperty('PAYMENT_VERIFICATION_URL');
+  var url = configured || 'https://whatsapp-agent-gqg6.onrender.com/payments/verify';
+  if (!/^https:\/\/[a-z0-9.-]+\/payments\/verify\/?$/i.test(url)) {
+    throw new Error('PAYMENT_VERIFICATION_URL must be an HTTPS /payments/verify endpoint.');
+  }
+  return url;
+}
+
+// Independently confirm the payment with the private-key-backed wallet service.
+// A browser callback or a caller-supplied "Paid" string is never sufficient.
+function assertCapturedPayment_(paymentId, amountRupees) {
+  var id = String(paymentId || '').trim();
+  var amount = Number(amountRupees);
+  var amountPaise = Math.round(amount * 100);
+  if (!/^pay_[A-Za-z0-9]+$/.test(id) || !Number.isFinite(amount) || amount <= 0
+    || amountPaise <= 0 || Math.abs(amount * 100 - amountPaise) > 0.001) {
+    throw new Error('A valid Razorpay payment ID and exact positive INR amount are required.');
+  }
+  var response;
+  try {
+    var secret = PropertiesService.getScriptProperties().getProperty('GOOGLE_APPS_SCRIPT_SECRET');
+    if (!secret) throw new Error('GOOGLE_APPS_SCRIPT_SECRET is not configured in Apps Script properties.');
+    response = UrlFetchApp.fetch(paymentVerificationUrl_(), {
+      method: 'post',
+      contentType: 'application/json',
+      headers: { 'X-Google-Apps-Script-Secret': secret },
+      payload: JSON.stringify({ payment_id: id, expected_amount_paise: amountPaise, currency: 'INR' }),
+      muteHttpExceptions: true
+    });
+  } catch (err) {
+    throw new Error('Payment verification service is unavailable; no paid record was written.');
+  }
+  var code = response.getResponseCode();
+  if (code < 200 || code >= 300) throw new Error('Payment verification service rejected the request (HTTP ' + code + ').');
+  var result;
+  try { result = JSON.parse(response.getContentText()); }
+  catch (err) { throw new Error('Payment verification service returned an invalid response.'); }
+  if (!result || result.verified !== true || String(result.payment_id || '') !== id
+    || Number(result.amount_paise) !== amountPaise || String(result.currency || '').toUpperCase() !== 'INR') {
+    throw new Error('Razorpay has not verified a captured payment for this exact amount.');
+  }
+  return result;
+}
+
+function findRowByHeader_(sheet, headerName, wantedValue) {
+  if (sheet.getLastRow() < 2 || sheet.getLastColumn() < 1) return 0;
+  var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  var column = headers.indexOf(headerName) + 1;
+  if (column < 1) throw new Error('Required column "' + headerName + '" is missing from tab "' + sheet.getName() + '".');
+  var values = sheet.getRange(2, column, sheet.getLastRow() - 1, 1).getValues();
+  for (var i = 0; i < values.length; i++) {
+    if (String(values[i][0]) === String(wantedValue)) return i + 2;
+  }
+  return 0;
+}
+
+function paymentRequestById_(sheet, paymentLinkId) {
+  var row = findRowByHeader_(sheet, 'Payment Link ID', paymentLinkId);
+  if (!row) return null;
+  var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  var values = sheet.getRange(row, 1, 1, headers.length).getValues()[0];
+  var record = {};
+  headers.forEach(function (header, index) { record[header] = values[index]; });
+  return { row: row, values: record };
+}
+
+function parseRupees_(value) {
+  var cleaned = String(value == null ? '' : value).replace(/[^0-9.\-]/g, '');
+  var amount = Number(cleaned);
+  return Number.isFinite(amount) ? amount : NaN;
+}
+
+function validPaymentRequestAmounts_(data) {
+  var normalRate = Number(data.normalRate);
+  var websiteDiscount = Number(data.websiteDiscount || 0);
+  var additionalDiscount = Number(data.additionalDiscount || 0);
+  var serviceTotal = Number(data.serviceTotal);
+  var amountDue = Number(data.amountDue);
+  return [normalRate, websiteDiscount, additionalDiscount, serviceTotal, amountDue].every(Number.isFinite)
+    && normalRate > 0 && websiteDiscount >= 0 && additionalDiscount >= 0 && serviceTotal > 0
+    && amountDue > 0 && amountDue <= serviceTotal
+    && Math.abs(normalRate - websiteDiscount - additionalDiscount - serviceTotal) <= 0.01;
+}
+
+function safeSheetValue_(value) {
+  if (typeof value !== 'string') return value;
+  return /^[\s]*[=+@-]/.test(value) ? "'" + value : value;
+}
+
 function json(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+function upsertWhatsAppCustomer_(ss, data) {
+  var sheet = ss.getSheetByName('Customers');
+  var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  var rows = sheet.getDataRange().getValues();
+  var row = 0;
+  for (var i = 1; i < rows.length; i++) {
+    if (String(rows[i][2]) === String(data.phone || '')) { row = i + 1; break; }
+  }
+  var values = {
+    'Customer ID': data.customerId || '', 'Full Name': data.name || '', 'Phone': data.phone || '',
+    'Email': data.email || '', 'Date of Birth': data.dob || '', 'Birth Time': data.birthTime || '',
+    'Birth Place': data.birthPlace || '', 'Gender': data.gender || '',
+    'Billing Address': data.billingAddress || '', 'Customer GSTIN': data.customerGstin || '',
+    'Last Updated': data.timestamp || new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+  };
+  if (row) {
+    headers.forEach(function (header, index) {
+      if (Object.prototype.hasOwnProperty.call(values, header) && values[header] !== '') {
+        sheet.getRange(row, index + 1).setValue(safeSheetValue_(values[header]));
+      }
+    });
+  } else {
+    sheet.appendRow(headers.map(function (header) {
+      return Object.prototype.hasOwnProperty.call(values, header) ? values[header] : '';
+    }).map(safeSheetValue_));
+  }
+}
+
+function updatePaymentRequestStatus_(ss, paymentLinkId, status, paymentId) {
+  var sheet = ss.getSheetByName('WA Payment Requests');
+  if (!sheet || sheet.getLastRow() < 2) return false;
+  var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  if (['UNPAID', 'DELIVERY_FAILED', 'PAID', 'GATEWAY_TEST_PAID'].indexOf(status) === -1) return false;
+  var row = findRowByHeader_(sheet, 'Payment Link ID', paymentLinkId);
+  if (!row) return false;
+  var statusCol = headers.indexOf('Payment Status') + 1;
+  var paymentIdCol = headers.indexOf('Payment ID') + 1;
+  if (statusCol < 1 || paymentIdCol < 1) return false;
+  var oldStatus = String(sheet.getRange(row, statusCol).getValue() || 'UNPAID');
+  var oldPaymentId = String(sheet.getRange(row, paymentIdCol).getValue() || '');
+  if (oldStatus === 'PAID' || oldStatus === 'GATEWAY_TEST_PAID') {
+    return oldStatus === status && oldPaymentId === String(paymentId || '');
+  }
+  if ((status === 'PAID' || status === 'GATEWAY_TEST_PAID')
+    && (!/^pay_[A-Za-z0-9]+$/.test(String(paymentId || '')) || (oldPaymentId && oldPaymentId !== String(paymentId)))) return false;
+  if (status === 'UNPAID' && oldStatus !== 'UNPAID') return false;
+  sheet.getRange(row, statusCol).setValue(status);
+  if (paymentId && (status === 'PAID' || status === 'GATEWAY_TEST_PAID')) sheet.getRange(row, paymentIdCol).setValue(paymentId);
+  return true;
+}
+
+function escapeHtml_(value) {
+  return String(value == null ? '' : value).replace(/[&<>\"']/g, function (char) {
+    return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', "'": '&#39;' })[char];
+  });
+}
+
+function validMeetLink_(value) {
+  return /^https:\/\/meet\.google\.com\/[A-Za-z0-9-]+(?:\?[A-Za-z0-9_=&%-]*)?$/.test(String(value || ''));
 }
 
 function parseBody(e) {
@@ -279,7 +605,7 @@ function rupees(v) {
   if (v === '' || v === null || v === undefined) return '';
   var n = Number(v);
   if (isNaN(n)) return String(v);
-  return '\u20B9' + n.toLocaleString('en-IN');
+  return '\u20B9' + n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 function buildRow(sheet, d) {
@@ -315,7 +641,8 @@ function buildRow(sheet, d) {
     d.payment_id || '',                           // Payment ID
     d.source || 'Website - Paid',                 // Source
     'New',                                        // Status
-    d.notes || ''                                 // Notes
+    d.notes || '',                                // Notes
+    'Pending'                                     // Email Status
   ];
 }
 
@@ -327,14 +654,26 @@ function sendConsultationConfirmationEmail(data) {
   var clientEmail = data.googleEmail || data.email || '';
   if (!clientEmail || clientEmail.indexOf('@') === -1) {
     console.warn('Skipping confirmation email: no valid email found for customer: ' + (data.name || 'Seeker'));
-    return;
+    return { sent: false, error: 'Customer email is missing or invalid.' };
   }
 
   try {
     var customerName = data.name || 'Seeker';
     var serviceName = data.service || 'Astrology Consultation';
-    var meetLink = data.meetLink || '';
+    var meetLink = validMeetLink_(data.meetLink) ? data.meetLink : '';
+    var isGatewayTest = data.isGatewayTest === true;
+    if (data.target === 'booking' && !data.invoiceBase64) return { sent: false, error: 'Payment receipt PDF is missing.' };
+    if (data.target === 'booking' && !validMeetLink_(meetLink)) return { sent: false, error: 'Google Meet link is missing or invalid.' };
     var sessionTime = data.eventTime || (data.sessionDate ? (data.sessionDate + (data.sessionTime ? ' (' + data.sessionTime + ')' : '')) : 'Tomorrow at 11:00 AM IST (Tentative)');
+    var customerNameHtml = escapeHtml_(customerName);
+    var serviceNameHtml = escapeHtml_(serviceName);
+    var sessionTimeHtml = escapeHtml_(sessionTime);
+    var meetLinkHtml = escapeHtml_(meetLink);
+    var dobHtml = escapeHtml_(data.dob || 'Not specified');
+    var birthTimeHtml = escapeHtml_(data.birthTime || 'Not specified');
+    var birthPlaceHtml = escapeHtml_(data.birthPlace || 'Not specified');
+    var genderHtml = escapeHtml_(data.gender || 'Not specified');
+    var queryHtml = escapeHtml_(data.query || '');
     
     var birthDetailsList = [
       '- Gender: ' + (data.gender || 'Not specified'),
@@ -347,14 +686,18 @@ function sendConsultationConfirmationEmail(data) {
     }
     var birthDetailsText = birthDetailsList.join('\n');
 
-    var subject = "Your Consultation is Confirmed! 🕉️ - Veshannastro";
+    var subject = isGatewayTest
+      ? '₹1 Razorpay gateway test receipt - not a consultation booking'
+      : "Your Consultation is Confirmed! 🕉️ - Veshannastro";
     
     var textBody = "Hari Om, " + customerName + "!\n\n" +
-      "Thank you for booking your consultation with Veshannastro (" + serviceName + ").\n\n" +
+      (isGatewayTest
+        ? 'Razorpay verified your INR ' + Number(data.amountPaid || 1).toFixed(2) + ' gateway test payment. This is only a payment-system test; it does not pay for or confirm a consultation. The published consultation price is INR ' + Number(data.basePrice || 0).toFixed(2) + '.\n\n'
+        : "Thank you for booking your consultation with Veshannastro (" + serviceName + ").\n\n") +
       "Here are the details we received from you:\n" + birthDetailsText + "\n\n" +
-      "Scheduled Slot: " + sessionTime + "\n" +
+      (isGatewayTest ? 'Requested test slot: ' : 'Scheduled Slot: ') + sessionTime + "\n" +
       (meetLink ? ("Google Meet Link: " + meetLink + "\n\n") : ("We will share your Google Meet link shortly prior to the session.\n\n")) +
-      "Shashank Agrawal will also reach out to you shortly to re-confirm.\n\n" +
+      (isGatewayTest ? 'The consultation itself has not been booked or paid for.\n\n' : "Shashank Agrawal will also reach out to you shortly to re-confirm.\n\n") +
       "Warm regards,\n" +
       "Veshannastro Team\n\n" +
       "Shri Radharamano Vijayate";
@@ -362,37 +705,40 @@ function sendConsultationConfirmationEmail(data) {
     var htmlBody = '<div style="font-family: \'Playfair Display\', \'Georgia\', serif; max-width: 650px; margin: 0 auto; background: #ffffff; border: 1px solid #d4af37; border-radius: 16px; overflow: hidden; color: #2c2c2c; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">' +
       '<div style="background: linear-gradient(135deg, #1c1c1c, #2a2a2a); padding: 40px 30px; text-align: center; color: #ffffff; border-bottom: 3px solid #d4af37;">' +
         '<div style="font-size: 32px; font-weight: 700; letter-spacing: 2px; color: #d4af37; text-transform: uppercase;">🕉️ Veshannastro</div>' +
-        '<div style="font-size: 16px; margin-top: 10px; color: #a9a9a9; font-family: -apple-system, sans-serif; font-weight: 300; letter-spacing: 1px;">Sacred Consultation Confirmed</div>' +
+        '<div style="font-size: 16px; margin-top: 10px; color: #a9a9a9; font-family: -apple-system, sans-serif; font-weight: 300; letter-spacing: 1px;">' + (isGatewayTest ? 'Gateway Payment Test Receipt' : 'Sacred Consultation Confirmed') + '</div>' +
       '</div>' +
       '<div style="padding: 40px 30px; font-family: -apple-system, sans-serif;">' +
-        '<p style="font-size: 18px; margin: 0 0 20px; color: #1c1c1c;">Hari Om, <strong>' + customerName + '</strong> 🙏</p>' +
+        (isGatewayTest ? '<div style="background:#fff7e8;color:#78581c;padding:14px 18px;margin:0 0 22px;border-radius:8px;font-family:-apple-system,sans-serif;font-weight:600;">₹1 GATEWAY TEST ONLY - NOT A CONSULTATION PAYMENT OR BOOKING</div>' : '') +
+        '<p style="font-size: 18px; margin: 0 0 20px; color: #1c1c1c;">Hari Om, <strong>' + customerNameHtml + '</strong> 🙏</p>' +
         '<p style="font-size: 16px; line-height: 1.7; color: #4a4a4a; margin: 0 0 30px;">' +
-          'Your sacred consultation for <strong>' + serviceName + '</strong> is fully confirmed. We deeply honor your trust and look forward to guiding you through the planetary energies.' +
+          (isGatewayTest
+            ? 'This INR ' + Number(data.amountPaid || 1).toFixed(2) + ' transaction only validates the payment gateway. It does not pay for or confirm your <strong>' + serviceNameHtml + '</strong> consultation. Published price: INR ' + Number(data.basePrice || 0).toFixed(2) + '.'
+            : 'Your sacred consultation for <strong>' + serviceNameHtml + '</strong> is fully confirmed. We deeply honor your trust and look forward to guiding you through the planetary energies.') +
         '</p>' +
         '<div style="background: #faf8f5; border-left: 4px solid #d4af37; padding: 25px; margin-bottom: 30px; border-radius: 0 8px 8px 0;">' +
-          '<div style="font-weight: 600; color: #8b7322; margin-bottom: 15px; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">Session Schedule</div>' +
+          '<div style="font-weight: 600; color: #8b7322; margin-bottom: 15px; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">' + (isGatewayTest ? 'Gateway Test Details' : 'Session Schedule') + '</div>' +
           '<div style="font-size: 16px; line-height: 1.8; color: #2c2c2c;">' +
-            '<div><strong>Time:</strong> ' + sessionTime + '</div>' +
-            (data.amountPaid ? ('<div><strong>Contribution:</strong> ' + rupees(data.amountPaid) + '</div>') : '') +
-            (data.payment_id ? ('<div><strong>Transaction ID:</strong> <span style="font-family: monospace; font-size: 13px; color: #8b7322;">' + data.payment_id + '</span></div>') : '') +
+            '<div><strong>' + (isGatewayTest ? 'Requested test time:' : 'Time:') + '</strong> ' + sessionTimeHtml + '</div>' +
+            (data.amountPaid ? ('<div><strong>' + (isGatewayTest ? 'Test charge:' : 'Contribution:') + '</strong> ' + rupees(data.amountPaid) + '</div>') : '') +
+            (data.payment_id ? ('<div><strong>Transaction ID:</strong> <span style="font-family: monospace; font-size: 13px; color: #8b7322;">' + escapeHtml_(data.payment_id) + '</span></div>') : '') +
           '</div>' +
         '</div>' +
         '<div style="padding: 0 10px; margin-bottom: 35px;">' +
           '<div style="font-weight: 600; color: #1c1c1c; margin-bottom: 15px; font-size: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px;">Your Birth Details</div>' +
           '<div style="font-size: 15px; line-height: 1.8; color: #555555; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">' +
-            '<div><strong style="color: #1c1c1c;">Date of Birth:</strong><br>' + (data.dob || 'Not specified') + '</div>' +
-            '<div><strong style="color: #1c1c1c;">Time of Birth:</strong><br>' + (data.birthTime || 'Not specified') + '</div>' +
-            '<div><strong style="color: #1c1c1c;">Place of Birth:</strong><br>' + (data.birthPlace || 'Not specified') + '</div>' +
-            '<div><strong style="color: #1c1c1c;">Gender:</strong><br>' + (data.gender || 'Not specified') + '</div>' +
-            (data.query ? ('<div style="grid-column: 1 / -1; margin-top: 10px;"><strong style="color: #1c1c1c;">Core Query:</strong><br><span style="font-style: italic;">"' + data.query + '"</span></div>') : '') +
+            '<div><strong style="color: #1c1c1c;">Date of Birth:</strong><br>' + dobHtml + '</div>' +
+            '<div><strong style="color: #1c1c1c;">Time of Birth:</strong><br>' + birthTimeHtml + '</div>' +
+            '<div><strong style="color: #1c1c1c;">Place of Birth:</strong><br>' + birthPlaceHtml + '</div>' +
+            '<div><strong style="color: #1c1c1c;">Gender:</strong><br>' + genderHtml + '</div>' +
+            (data.query ? ('<div style="grid-column: 1 / -1; margin-top: 10px;"><strong style="color: #1c1c1c;">Core Query:</strong><br><span style="font-style: italic;">"' + queryHtml + '"</span></div>') : '') +
           '</div>' +
         '</div>' +
         (meetLink ? (
           '<div style="text-align: center; margin: 40px 0;">' +
-            '<a href="' + meetLink + '" style="background: #1c1c1c; color: #d4af37; font-weight: 600; text-decoration: none; padding: 16px 36px; border-radius: 30px; display: inline-block; font-size: 16px; letter-spacing: 0.5px; border: 1px solid #d4af37; transition: all 0.3s ease;">' +
-              'Join Video Consultation' +
+            '<a href="' + meetLinkHtml + '" style="background: #1c1c1c; color: #d4af37; font-weight: 600; text-decoration: none; padding: 16px 36px; border-radius: 30px; display: inline-block; font-size: 16px; letter-spacing: 0.5px; border: 1px solid #d4af37; transition: all 0.3s ease;">' +
+              (isGatewayTest ? 'Open Test Google Meet' : 'Join Video Consultation') +
             '</a>' +
-            '<div style="font-size: 13px; color: #888888; margin-top: 15px;">Meeting Link: <a href="' + meetLink + '" style="color: #8b7322; text-decoration: underline;">' + meetLink + '</a></div>' +
+            '<div style="font-size: 13px; color: #888888; margin-top: 15px;">Meeting Link: <a href="' + meetLinkHtml + '" style="color: #8b7322; text-decoration: underline;">' + meetLinkHtml + '</a></div>' +
           '</div>'
         ) : (
           '<div style="text-align: center; margin: 40px 0; padding: 20px; border: 1px dashed #d4af37; border-radius: 8px; color: #8b7322; background: #faf8f5;">' +
@@ -410,10 +756,19 @@ function sendConsultationConfirmationEmail(data) {
     var attachments = [];
     if (data.invoiceBase64) {
       try {
-        var blob = Utilities.newBlob(Utilities.base64Decode(data.invoiceBase64), 'application/pdf', data.invoiceName || 'Invoice.pdf');
+        var encodedPdf = String(data.invoiceBase64);
+        if (encodedPdf.length > 12 * 1024 * 1024 || !/^JVBERi0/.test(encodedPdf)) {
+          return { sent: false, error: 'Receipt attachment is not a valid PDF or exceeds the size limit.' };
+        }
+        var attachmentName = String(data.invoiceName || 'Payment_Receipt.pdf')
+          .replace(/^Invoice_/i, 'Payment_Receipt_')
+          .replace(/[^A-Za-z0-9_.-]/g, '_').slice(0, 120);
+        if (!/\.pdf$/i.test(attachmentName)) attachmentName += '.pdf';
+        var blob = Utilities.newBlob(Utilities.base64Decode(encodedPdf), 'application/pdf', attachmentName);
         attachments.push(blob);
       } catch (e) {
         console.error('Error decoding invoice base64:', e);
+        if (data.target === 'booking') return { sent: false, error: 'Could not decode payment receipt PDF.' };
       }
     }
 
@@ -426,8 +781,10 @@ function sendConsultationConfirmationEmail(data) {
       attachments: attachments
     });
     console.log("Confirmation email successfully sent to: " + clientEmail);
+    return { sent: true };
   } catch (mailErr) {
     console.error("MailApp.sendEmail failed for " + clientEmail + ": " + mailErr);
+    return { sent: false, error: String(mailErr) };
   }
 }
 
@@ -446,7 +803,7 @@ function testSendEmail() {
   }
   Logger.log("Sending test confirmation email to: " + myEmail);
   sendConsultationConfirmationEmail({
-    target: "booking",
+    target: "email_test",
     name: "Test Seeker",
     email: myEmail,
     gender: "Not specified",
@@ -463,3 +820,24 @@ function testSendEmail() {
   Logger.log("Test finished! Please check your email inbox: " + myEmail);
 }
 
+// Run once from the editor to create missing CRM tabs and append missing headers.
+function initializeSpreadsheet() {
+  var created = ensureAllTabs();
+  Logger.log('Spreadsheet setup complete. New tabs: ' + (created.length ? created.join(', ') : 'none'));
+  return { ok: true, created: created };
+}
+
+// Safe connectivity/authorization check; this does not create or verify a payment.
+function testPaymentVerificationConnection() {
+  var verifyUrl = paymentVerificationUrl_();
+  var healthUrl = verifyUrl.replace(/\/payments\/verify\/?$/i, '/payments/verify/health');
+  var response = UrlFetchApp.fetch(healthUrl, { method: 'get', muteHttpExceptions: true });
+  var code = response.getResponseCode();
+  if (code < 200 || code >= 300) throw new Error('WhatsApp service health check failed (HTTP ' + code + ').');
+  var result = JSON.parse(response.getContentText());
+  if (!result || result.ok !== true || result.payment_verification_configured !== true) {
+    throw new Error('WhatsApp service responded, but payment verification is not configured there.');
+  }
+  Logger.log('WhatsApp service is reachable and Razorpay payment verification is configured.');
+  return { ok: true };
+}
