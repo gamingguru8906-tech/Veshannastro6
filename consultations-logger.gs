@@ -14,17 +14,23 @@
  *   coupon discount, and final amount paid.
  *
  * SETUP & DEPLOYMENT INSTRUCTIONS:
- * SETUP:
  *   1. Paste this entire file into the Apps Script project attached to the CRM Sheet.
  *   2. Project Settings -> Script Properties: set SPREADSHEET_ID to the sheet ID and
- *      GOOGLE_APPS_SCRIPT_SECRET to the same random secret used in Render.
+ *      GOOGLE_APPS_SCRIPT_SECRET to the same strong random secret used in Render;
+ *      set GOOGLE_CALENDAR_ID to the owner calendar ID (or "primary").
  *   3. In Script Properties, set PAYMENT_VERIFICATION_URL to
  *      https://whatsapp-agent-gqg6.onrender.com/payments/verify . If it still
  *      contains the old wallet URL, replace it with this URL.
- *   4. Run initializeSpreadsheet() once and approve Sheets permissions.
- *   5. Run testPaymentVerificationConnection() and testSendEmail() once to grant and
+ *   4. In the Apps Script editor, add the advanced Google service "Calendar API" v3.
+ *      If this script uses a standard Cloud project, enable Google Calendar API there too.
+ *   5. Run initializeSpreadsheet() once and approve Sheets permissions.
+ *   6. Run testCalendarOwnerAccess() once and approve Calendar permissions using
+ *      the Google account that owns the booking calendar. It must report Meet available.
+ *   7. Run testPaymentVerificationConnection() and testSendEmail() once to grant and
  *      verify UrlFetch/Mail permissions. testSendEmail sends a real test email to you.
- *   6. Deploy -> Manage deployments -> Edit -> New version -> Deploy. Save alone
+ *   8. Deploy as a Web app that executes as you (the calendar owner), with access
+ *      set to Anyone so Render can call it. The API secret protects POST actions.
+ *      Deploy -> Manage deployments -> Edit -> New version -> Deploy. Save alone
  *      does not update the active /exec deployment URL.
  * ===================================================================
  */
@@ -170,13 +176,18 @@ function doPost(e) {
   try {
     var data = parseBody(e);
     if (!data || typeof data !== 'object' || Array.isArray(data)) return json({ ok: false, error: 'Request body must be a JSON object.' });
-    var protectedTarget = ['booking', 'report', 'payment_request', 'payment_request_status', 'customer_update', 'lead_update', 'chat'].indexOf(data.target) !== -1;
+    var protectedTarget = ['booking', 'report', 'payment_request', 'payment_request_status', 'customer_update', 'lead_update', 'chat', 'calendar_hold', 'calendar_finalize', 'calendar_cancel'].indexOf(data.target) !== -1;
     if ((protectedTarget || data.sourceSystem === 'whatsapp') && !isAuthorizedWhatsAppCall_(data)) {
       return json({ ok: false, error: 'Unauthorized WhatsApp service request.' });
     }
-    var knownTargets = ['', 'booking', 'report', 'payment_request', 'payment_request_status', 'customer_update', 'lead_update', 'chat'];
+    var knownTargets = ['', 'booking', 'report', 'payment_request', 'payment_request_status', 'customer_update', 'lead_update', 'chat', 'calendar_hold', 'calendar_finalize', 'calendar_cancel'];
     var target = String(data.target || '');
     if (knownTargets.indexOf(target) === -1) return json({ ok: false, error: 'Unknown request target.' });
+    // Calendar operations run as the deploying calendar owner. Handle them
+    // before opening Sheets; they do not need to read or modify CRM data.
+    if (data.target === 'calendar_hold') return json(createWhatsAppCalendarHold_(data));
+    if (data.target === 'calendar_finalize') return json(finalizeWhatsAppCalendarHold_(data));
+    if (data.target === 'calendar_cancel') return json(cancelWhatsAppCalendarHold_(data));
     if (!target) {
       if (!data.payment_id) return json({ ok: false, error: 'Missing Razorpay payment ID; no paid consultation was recorded.' });
       assertCapturedPayment_(data.payment_id, data.amountPaid);
@@ -411,6 +422,146 @@ function doPost(e) {
   } catch (err) {
     return json({ ok: false, error: String(err) });
   }
+}
+
+function calendarId_() {
+  var id = PropertiesService.getScriptProperties().getProperty('GOOGLE_CALENDAR_ID');
+  if (!id) throw new Error('GOOGLE_CALENDAR_ID is not configured in Apps Script properties.');
+  return id;
+}
+
+// Run once manually in Apps Script to authorize Calendar and confirm that the
+// selected owner calendar advertises Google Meet before enabling payment links.
+function testCalendarOwnerAccess() {
+  var calendar = Calendar.Calendars.get(calendarId_());
+  var allowed = calendar.conferenceProperties && calendar.conferenceProperties.allowedConferenceSolutionTypes || [];
+  if (allowed.indexOf('hangoutsMeet') === -1) {
+    throw new Error('The selected Google Calendar does not advertise Google Meet as an allowed conference type. Check the calendar/account Meet settings.');
+  }
+  Logger.log('Calendar owner access is authorized and Google Meet is available.');
+  return { ok: true, calendarId: calendar.id, googleMeetAvailable: true };
+}
+
+function createWhatsAppCalendarHold_(data) {
+  var start = new Date(String(data.startTime || ''));
+  var end = new Date(String(data.endTime || ''));
+  var customerName = String(data.customerName || '').trim();
+  var serviceName = String(data.serviceName || '').trim();
+  var phone = String(data.phone || '').trim();
+  if (!Number.isFinite(start.getTime()) || !Number.isFinite(end.getTime())
+    || end.getTime() <= start.getTime() || end.getTime() - start.getTime() !== 60 * 60 * 1000) {
+    throw new Error('Calendar hold requires a valid one-hour appointment window.');
+  }
+  if (!customerName || !serviceName || !phone) {
+    throw new Error('Calendar hold requires the customer name, phone, and service.');
+  }
+
+  var id = calendarId_();
+  var calendarMeta = Calendar.Calendars.get(id);
+  var allowedTypes = calendarMeta.conferenceProperties && calendarMeta.conferenceProperties.allowedConferenceSolutionTypes || [];
+  if (allowedTypes.indexOf('hangoutsMeet') === -1) {
+    throw new Error('Google Meet is not enabled for the selected calendar. No payment link was created.');
+  }
+  var lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  var created;
+  try {
+    // Enforce the daily cap against the exact local booking date (IST), not a
+    // broad UTC window that could accidentally count appointments on adjacent days.
+    var dateKey = Utilities.formatDate(start, 'Asia/Kolkata', 'yyyy-MM-dd');
+    var queryStart = new Date(dateKey + 'T00:00:00+05:30');
+    var queryEnd = new Date(queryStart.getTime() + 24 * 60 * 60 * 1000);
+    var listed = Calendar.Events.list(id, {
+      timeMin: queryStart.toISOString(), timeMax: queryEnd.toISOString(),
+      singleEvents: true, orderBy: 'startTime', maxResults: 250
+    });
+    var events = (listed.items || []).filter(function (item) { return item.status !== 'cancelled'; });
+    var startMs = start.getTime(), endMs = end.getTime();
+    var overlaps = events.some(function (item) {
+      var eventStart = new Date(item.start && (item.start.dateTime || item.start.date)).getTime();
+      var eventEnd = new Date(item.end && (item.end.dateTime || item.end.date)).getTime();
+      return Number.isFinite(eventStart) && Number.isFinite(eventEnd) && startMs < eventEnd && endMs > eventStart;
+    });
+    if (overlaps) throw new Error('That appointment time is no longer available. Please choose another slot.');
+    var dailyCount = events.filter(function (item) {
+      return /WhatsApp Booking|Veshannastro Consultation|GATEWAY TEST ONLY/.test(String(item.summary || ''));
+    }).length;
+    if (dailyCount >= 3) throw new Error('The daily consultation limit has been reached for that date.');
+
+    var event = {
+      summary: 'GATEWAY TEST ONLY — NOT A BOOKING — ' + serviceName + ' — ' + customerName,
+      description: 'Temporary gateway validation only; this is not a confirmed consultation booking.\n'
+        + 'Customer: ' + customerName + '\nWhatsApp: ' + phone + '\nService: ' + serviceName,
+      start: { dateTime: start.toISOString(), timeZone: 'Asia/Kolkata' },
+      end: { dateTime: end.toISOString(), timeZone: 'Asia/Kolkata' },
+      attendees: [],
+      conferenceData: {
+        createRequest: {
+          requestId: Utilities.getUuid(),
+          conferenceSolutionKey: { type: 'hangoutsMeet' }
+        }
+      }
+    };
+    created = Calendar.Events.insert(event, id, { conferenceDataVersion: 1, sendUpdates: 'none' });
+  } finally {
+    lock.releaseLock();
+  }
+
+  var eventId = String(created && created.id || '');
+  if (!eventId) throw new Error('Google Calendar did not return an event ID. No payment link was created.');
+  var current = created;
+  var meetLink = calendarMeetLink_(current);
+  for (var attempt = 0; !meetLink && attempt < 10; attempt++) {
+    Utilities.sleep(1000);
+    current = Calendar.Events.get(id, eventId);
+    meetLink = calendarMeetLink_(current);
+    var conferenceStatus = current.conferenceData && current.conferenceData.createRequest
+      && current.conferenceData.createRequest.status && current.conferenceData.createRequest.status.statusCode;
+    if (conferenceStatus === 'failure') break;
+  }
+  if (!meetLink) {
+    try { Calendar.Events.remove(id, eventId); } catch (ignore) {}
+    throw new Error('Google Calendar did not return a Google Meet link. No payment link was created. Check the owner calendar and Meet settings.');
+  }
+  return { ok: true, eventId: eventId, meetLink: meetLink, htmlLink: current.htmlLink || created.htmlLink || '' };
+}
+
+function finalizeWhatsAppCalendarHold_(data) {
+  var eventId = String(data.eventId || '').trim();
+  if (!eventId) throw new Error('A calendar event ID is required to finalize the hold.');
+  var id = calendarId_();
+  var event = Calendar.Events.get(id, eventId);
+  var meetLink = calendarMeetLink_(event);
+  if (!meetLink) throw new Error('The calendar hold has no Google Meet link; booking confirmation cannot continue.');
+  var summary = String(data.summary || '').trim();
+  var description = String(data.description || '').trim();
+  if (!summary || !description) throw new Error('Calendar finalization requires the booking title and details.');
+  var updated = Calendar.Events.patch({ summary: summary, description: description }, id, eventId,
+    { conferenceDataVersion: 1, sendUpdates: 'none' });
+  meetLink = calendarMeetLink_(updated) || meetLink;
+  return { ok: true, eventId: eventId, meetLink: meetLink, htmlLink: updated.htmlLink || event.htmlLink || '' };
+}
+
+function cancelWhatsAppCalendarHold_(data) {
+  var eventId = String(data.eventId || '').trim();
+  if (!eventId) return { ok: false, error: 'A calendar event ID is required to cancel the hold.' };
+  try {
+    Calendar.Events.remove(calendarId_(), eventId);
+    return { ok: true, eventId: eventId };
+  } catch (err) {
+    var message = String(err && err.message || err);
+    if (/404|not found|gone/i.test(message)) return { ok: true, eventId: eventId, alreadyMissing: true };
+    throw err;
+  }
+}
+
+function calendarMeetLink_(event) {
+  var link = String(event && event.hangoutLink || '');
+  if (!link && event && event.conferenceData && event.conferenceData.entryPoints) {
+    var video = event.conferenceData.entryPoints.filter(function (point) { return point.entryPointType === 'video'; })[0];
+    link = video && video.uri || '';
+  }
+  return validMeetLink_(link) ? link : '';
 }
 
 function isAuthorizedWhatsAppCall_(data) {
