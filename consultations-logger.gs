@@ -188,37 +188,15 @@ function doPost(e) {
     if (data.target === 'calendar_hold') return json(createWhatsAppCalendarHold_(data));
     if (data.target === 'calendar_finalize') return json(finalizeWhatsAppCalendarHold_(data));
     if (data.target === 'calendar_cancel') return json(cancelWhatsAppCalendarHold_(data));
+    // Lead writes are frequent. Handle this target with a lightweight, bounded
+    // update instead of running ensureAllTabs() (which touches every CRM tab).
+    if (data.target === 'lead_update') return json(updateWhatsAppLead_(data));
     if (!target) {
       if (!data.payment_id) return json({ ok: false, error: 'Missing Razorpay payment ID; no paid consultation was recorded.' });
       assertCapturedPayment_(data.payment_id, data.amountPaid);
     }
     ensureAllTabs();
     var ss = SpreadsheetApp.openById(spreadsheetId());
-
-    if (data.target === 'lead_update') {
-      var lt = ss.getSheetByName('WA All Leads');
-      var ltData = lt.getDataRange().getValues();
-      var foundRow = -1;
-      for(var i=1; i<ltData.length; i++) {
-        if(ltData[i][0] == data.phone) {
-          foundRow = i + 1;
-          break;
-        }
-      }
-      var now = data.timestamp || new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-      var converted = data.is_customer ? 'Yes' : 'No';
-      var status = data.is_customer ? 'Converted' : ((data.message_count || 0) > 15 ? 'Suspicious' : 'Engaging');
-      
-      if (foundRow > -1) {
-        lt.getRange(foundRow, 3).setValue(safeSheetValue_(now));
-        lt.getRange(foundRow, 4).setValue(Math.max(1, Number(data.message_count) || 1));
-        lt.getRange(foundRow, 5).setValue(converted);
-        lt.getRange(foundRow, 6).setValue(status);
-      } else {
-        lt.appendRow([data.phone, now, now, Math.max(1, Number(data.message_count) || 1), converted, status].map(safeSheetValue_));
-      }
-      return json({ ok: true, tab: 'WA All Leads' });
-    }
 
     if (data.target === 'chat') {
       if (!data.phone || String(data.message || '').length > 12000) {
@@ -420,7 +398,49 @@ function doPost(e) {
       genericLock.releaseLock();
     }
   } catch (err) {
-    return json({ ok: false, error: String(err) });
+    return json({ ok: false, target: String((typeof data !== 'undefined' && data && data.target) || ''), error: String(err) });
+  }
+}
+
+function updateWhatsAppLead_(data) {
+  var phone = String(data.phone || '').trim();
+  if (!phone || phone.length > 40) throw new Error('Lead update requires a valid phone number.');
+
+  // Avoid queueing behind longer payment/calendar sheet operations. Render
+  // retries this explicit busy response, while inbound WhatsApp processing
+  // remains independent from the CRM write.
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(5000)) throw new Error('Lead sheet is temporarily busy; retryable.');
+  try {
+    var ss = SpreadsheetApp.openById(spreadsheetId());
+    var sheet = ss.getSheetByName('WA All Leads');
+    if (!sheet) {
+      sheet = ss.insertSheet('WA All Leads');
+      ensureHeaders_(sheet, ALL_TABS['WA All Leads']);
+    } else {
+      ensureHeaders_(sheet, ALL_TABS['WA All Leads']);
+    }
+
+    var now = data.timestamp || new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+    var count = Math.max(1, Number(data.message_count) || 1);
+    var converted = data.is_customer ? 'Yes' : 'No';
+    var status = data.is_customer ? 'Converted' : (count > 15 ? 'Suspicious' : 'Engaging');
+    var lastRow = sheet.getLastRow();
+    var match = lastRow > 1
+      ? sheet.getRange(2, 1, lastRow - 1, 1).createTextFinder(phone).matchEntireCell(true).findNext()
+      : null;
+
+    if (match) {
+      var row = match.getRow();
+      sheet.getRange(row, 3, 1, 4).setValues([[
+        safeSheetValue_(now), count, converted, status
+      ]]);
+    } else {
+      sheet.appendRow([phone, now, now, count, converted, status].map(safeSheetValue_));
+    }
+    return { ok: true, tab: 'WA All Leads' };
+  } finally {
+    lock.releaseLock();
   }
 }
 
