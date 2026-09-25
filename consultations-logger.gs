@@ -616,8 +616,8 @@ function calendarMeetLink_(event) {
 }
 
 function isAuthorizedWhatsAppCall_(data) {
-  var expected = PropertiesService.getScriptProperties().getProperty('GOOGLE_APPS_SCRIPT_SECRET');
-  var supplied = String(data && data.apiSecret || '');
+  var expected = String(PropertiesService.getScriptProperties().getProperty('GOOGLE_APPS_SCRIPT_SECRET') || '').trim();
+  var supplied = String(data && data.apiSecret || '').trim();
   if (!expected || !supplied || expected.length !== supplied.length) return false;
   var diff = 0;
   for (var i = 0; i < expected.length; i++) diff |= expected.charCodeAt(i) ^ supplied.charCodeAt(i);
@@ -645,7 +645,7 @@ function assertCapturedPayment_(paymentId, amountRupees) {
   }
   var response;
   try {
-    var secret = PropertiesService.getScriptProperties().getProperty('GOOGLE_APPS_SCRIPT_SECRET');
+    var secret = String(PropertiesService.getScriptProperties().getProperty('GOOGLE_APPS_SCRIPT_SECRET') || '').trim();
     if (!secret) throw new Error('GOOGLE_APPS_SCRIPT_SECRET is not configured in Apps Script properties.');
     response = UrlFetchApp.fetch(paymentVerificationUrl_(), {
       method: 'post',
