@@ -197,12 +197,12 @@ def page():
   <link rel="icon" href="/favicon.ico" sizes="any"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" as="image" href="/assets/r27/hero-wide.webp">
-  <link rel="stylesheet" href="/assets/r27/styles.css?v=6"><link rel="stylesheet" href="/assets/r27/sections.css?v=6"><link rel="stylesheet" href="/assets/r27/report.css?v=6">
+  <link rel="stylesheet" href="/assets/r27/styles.css?v=8"><link rel="stylesheet" href="/assets/r27/sections.css?v=8"><link rel="stylesheet" href="/assets/r27/report.css?v=8">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R20FKYJK7P"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-R20FKYJK7P');gtag('config','AW-18189866057');</script>
   <script type="application/ld+json">{json.dumps(graph, ensure_ascii=False, separators=(",", ":"))}</script>
   <script>window.R27={json.dumps(config, separators=(",", ":"))};</script>
-  <script src="/assets/r27/report.js?v=6" defer></script><script src="/assets/r27/book.js?v=6" defer></script>
+  <script src="/assets/r27/report.js?v=8" defer></script><script src="/assets/r27/book.js?v=8" defer></script>
 </head>
 <body>
   <div class="nebula" aria-hidden="true"></div><canvas class="sky" id="star-field" aria-hidden="true"></canvas>
@@ -241,7 +241,7 @@ def page():
               <select id="tob-min" name="tob_min" aria-label="Minute" required><option value="">Min</option></select>
               <select id="tob-ampm" name="tob_ampm" aria-label="AM or PM" required><option value="">AM/PM</option><option>AM</option><option>PM</option></select></div>
               <span class="field-hint">Not sure of your birth time? Choose Classic.</span><span class="field-error">Enter your time of birth, or switch to Classic.</span></div>
-            <div class="field field-wide"><label for="pob">Place of birth <i>*</i></label><input id="pob" name="pob" type="text" autocomplete="off" placeholder="City, country" required><span class="field-error">Enter your place of birth.</span></div>
+            <div class="field field-wide"><label for="pob">Place of birth <i>*</i></label><div class="place-box"><input id="pob" name="pob" type="text" autocomplete="off" placeholder="Start typing your birth city" required role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="pob-list"><ul id="pob-list" class="place-list" role="listbox" aria-label="Matching places" hidden></ul></div><span class="field-error">Enter your place of birth.</span></div>
             <div class="field field-wide"><label for="email">Email <i>*</i></label><input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required><span class="field-error">Enter a valid email.</span></div>
             <div class="field field-wide"><label for="mobile">WhatsApp number <i>*</i></label><div class="phone-row"><select id="country-code" name="country_code" aria-label="Country code" autocomplete="tel-country-code"><option value="India|+91">+91 India</option></select><input id="mobile" name="mobile" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="98765 43210" required></div><span class="field-error">Enter your number without the country code.</span></div>
           </div>

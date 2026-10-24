@@ -9,6 +9,12 @@
   var track = function (name, params) { if (typeof window.gtag === 'function') window.gtag('event', name, params || {}); };
   var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   var inr = function (n) { return '₹' + n.toLocaleString('en-IN'); };
+  function readDraft() {
+    try {
+      var d = JSON.parse(localStorage.getItem('r27-order-draft') || 'null');
+      return d && Date.now() - d.at < 14 * 24 * 3600 * 1000 ? d : null;
+    } catch (e) { return null; }
+  }
 
   /* ---------- hero video ---------- */
   (function () {
@@ -35,7 +41,10 @@
   fetch('/assets/countries.json').then(function (r) { return r.json(); }).then(function (list) {
     var cur = cc.value; cc.innerHTML = '';
     list.forEach(function (c) { opt(cc, c.value, c.label); });
-    cc.value = cur || 'India|+91';
+    var saved = readDraft();
+    cc.value = (saved && saved.cc) || cur || 'India|+91';
+    if (!cc.value) cc.value = 'India|+91';
+    if (typeof refresh === 'function') refresh();
   }).catch(function () {});
 
   /* ---------- report choice + price ---------- */
@@ -55,7 +64,7 @@
     $$('select', tob).forEach(function (s) { s.required = r.needs_time; });
     $('#sp-name').textContent = r.name; $('#sp-price').textContent = p.now + ', delivered within ' + C.delivery;
   }
-  function choose(key) { report = key; refresh(); track('select_item', { item_name: C.reports[key].name }); }
+  function choose(key) { report = key; refresh(); saveDraft(); track('select_item', { item_name: C.reports[key].name }); }
   $$('[data-report]').forEach(function (b) { b.addEventListener('click', function () { choose(b.getAttribute('data-report')); }); });
   $$('[data-pick]').forEach(function (a) { a.addEventListener('click', function () { choose(a.getAttribute('data-pick')); }); });
   cc.addEventListener('change', refresh);
@@ -63,8 +72,126 @@
 
   /* ---------- validation ---------- */
   var form = $('#registration');
-  form.addEventListener('input', function (e) { var f = e.target.closest('.field,.consent'); if (f) f.classList.remove('invalid'); });
-  form.addEventListener('change', function (e) { var f = e.target.closest('.field,.consent'); if (f) f.classList.remove('invalid'); });
+  form.addEventListener('input', function (e) { var f = e.target.closest('.field,.consent'); if (f) f.classList.remove('invalid'); saveDraftSoon(); });
+  form.addEventListener('change', function (e) { var f = e.target.closest('.field,.consent'); if (f) f.classList.remove('invalid'); saveDraftSoon(); });
+
+  /* ---------- the order form is kept on this device as it is typed ----------
+     Switching between Astro-Numero Blend and Classic keeps every detail (they share one form), and a reload,
+     a trip to WhatsApp or an app switch on a phone brings the details back. Cleared after a paid order. */
+  var DRAFT_KEY = 'r27-order-draft', DRAFT_FIELDS = ['name', 'dob-day', 'dob-month', 'dob-year', 'tob-hour', 'tob-min', 'tob-ampm', 'pob', 'email', 'mobile', 'referral'];
+  var draftTimer = null;
+  function saveDraft() {
+    try {
+      var d = { at: Date.now(), report: report, cc: cc.value };
+      DRAFT_FIELDS.forEach(function (id) { var el = document.getElementById(id); if (el) d[id] = el.value; });
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
+    } catch (e) { /* private mode or storage blocked: the form still works */ }
+  }
+  function saveDraftSoon() { clearTimeout(draftTimer); draftTimer = setTimeout(saveDraft, 200); }
+  function clearDraft() { clearTimeout(draftTimer); try { localStorage.removeItem(DRAFT_KEY); } catch (e) {} }
+  (function restoreDraft() {
+    var d = readDraft(); if (!d) return;
+    DRAFT_FIELDS.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el && d[id] != null && d[id] !== '') { el.value = d[id]; if (id === 'pob') el.dataset.picked = d[id]; }
+    });
+    if (d.cc && cc.querySelector('option[value="' + String(d.cc).replace(/"/g, '') + '"]')) cc.value = d.cc;
+    if (C.reports[d.report]) report = d.report;
+    refresh();
+  })();
+  addEventListener('pagehide', saveDraft);
+
+  /* ---------- place of birth: suggestions from Indian and world cities (assets/r27/cities.json) ----------
+     Typing "Rai" offers Raipur, Chhattisgarh first; old names work too (Bombay, Gurgaon, Calcutta). A place that is not
+     in the list can still be used exactly as written. */
+  (function () {
+    var input = $('#pob'), list = $('#pob-list');
+    if (!input || !list) return;
+    var places = null, loading = null, items = [], active = -1;
+    var fold = function (v) { return String(v || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z]/g, ''); };
+    function load() {
+      if (places) return Promise.resolve(places);
+      if (!loading) loading = fetch('/assets/r27/cities.json').then(function (r) { return r.json(); }).then(function (d) {
+        places = d.places.map(function (p) {
+          return { name: p[0], region: p[1], country: d.countries[p[2]], rank: p[3] + (p[2] === 0 ? 8 : 0), n: fold(p[0]),
+            words: p[0].split(/[\s-]+/).slice(1).map(fold), alias: String(p[4] || '').split('|').filter(Boolean) };
+        });
+        return places;
+      }).catch(function () { loading = null; return null; });
+      return loading;
+    }
+    var label = function (p) { return p.name + (p.region ? ', ' + p.region : '') + ', ' + p.country; };
+    function search(q) {
+      var n = fold(q.split(',')[0]);
+      if (n.length < 2) return [];
+      var out = [];
+      for (var i = 0; i < places.length; i++) {
+        var p = places[i], score = 0, via = '';
+        if (p.n === n) score = 4;
+        else if (p.n.indexOf(n) === 0) score = 3;
+        else {
+          for (var a = 0; a < p.alias.length && !score; a++) if (fold(p.alias[a]).indexOf(n) === 0) { score = 2.5; via = p.alias[a]; }
+          for (var w = 0; w < p.words.length && !score; w++) if (p.words[w].indexOf(n) === 0) score = 2;
+          if (!score && n.length >= 4 && p.n.indexOf(n) > 0) score = 1;
+        }
+        if (score) out.push({ p: p, score: score, via: via });
+      }
+      out.sort(function (x, y) { return (y.score - x.score) || (y.p.rank - x.p.rank); });
+      return out.slice(0, 7);
+    }
+    function close() { list.hidden = true; list.innerHTML = ''; input.setAttribute('aria-expanded', 'false'); input.removeAttribute('aria-activedescendant'); active = -1; }
+    function render() {
+      var q = input.value.trim();
+      if (!places || q.length < 2 || input.dataset.picked === input.value) return close();
+      items = search(q);
+      var html = items.map(function (it, i) {
+        return '<li role="option" id="pob-opt-' + i + '" data-i="' + i + '" aria-selected="false"><b>' + esc(it.p.name) + (it.via ? ' <em>(' + esc(it.via) + ')</em>' : '') +
+          '</b><span>' + esc((it.p.region ? it.p.region + ', ' : '') + it.p.country) + '</span></li>';
+      });
+      var exact = items.some(function (it) { return it.score === 4; });
+      if (q.length >= 3 && !exact) html.push('<li role="option" id="pob-opt-' + items.length + '" data-own="1" class="place-own" aria-selected="false">Use “' + esc(q) + '” as written</li>');
+      if (!html.length) return close();
+      list.innerHTML = html.join(''); list.hidden = false; input.setAttribute('aria-expanded', 'true'); active = -1;
+    }
+    function highlight(i) {
+      var opts = list.children; if (!opts.length) return;
+      active = (i + opts.length) % opts.length;
+      for (var k = 0; k < opts.length; k++) opts[k].setAttribute('aria-selected', String(k === active));
+      input.setAttribute('aria-activedescendant', opts[active].id);
+      opts[active].scrollIntoView({ block: 'nearest' });
+    }
+    function pick(li) {
+      if (!li) return;
+      input.value = li.getAttribute('data-own') ? input.value.trim() : label(items[+li.getAttribute('data-i')].p);
+      input.dataset.picked = input.value;
+      close();
+      input.dispatchEvent(new Event('input', { bubbles: true })); // clears the error and saves the draft
+    }
+    input.addEventListener('focus', load);
+    input.addEventListener('input', function () { if (input.dataset.picked !== input.value) delete input.dataset.picked; load().then(render); });
+    input.addEventListener('keydown', function (e) {
+      if (list.hidden) { if (e.key === 'ArrowDown') { load().then(render); } return; }
+      if (e.key === 'ArrowDown') { e.preventDefault(); highlight(active + 1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); highlight(active - 1); }
+      else if (e.key === 'Enter') { e.preventDefault(); pick(list.children[active >= 0 ? active : 0]); }
+      else if (e.key === 'Escape') { e.preventDefault(); close(); }
+      else if (e.key === 'Tab' && active >= 0) pick(list.children[active]);
+    });
+    list.addEventListener('pointerdown', function (e) { e.preventDefault(); }); // keep focus in the field while choosing
+    list.addEventListener('click', function (e) { pick(e.target.closest('li')); });
+    input.addEventListener('blur', function () { setTimeout(close, 120); });
+  })();
+
+  /* ---------- is online payment open right now? The server knows (Razorpay keys set, phase one open).
+     If not, the form goes straight to the WhatsApp order instead of a Pay button that cannot work. ---------- */
+  if (C.online && window.fetch) {
+    fetch('/api/r27/status', { headers: { Accept: 'application/json' } }).then(function (r) { return r.ok ? r.json() : null; }).then(function (st) {
+      if (!st || typeof st.online !== 'boolean') return;
+      C.online = st.online;
+      C.usdOnline = Boolean(C.usdOnline && st.usd);
+      refresh();
+    }).catch(function () {});
+  }
   function dobValid() {
     var dd = +day.value, mm = +mon.value, yy = +yr.value;
     if (!dd || !mm || !yy) return false;
@@ -137,7 +264,8 @@
     setError('');
     $('#review-edit').hidden = false; $('#review-done').hidden = true;
     goWa.href = 'https://wa.me/' + C.wa + '?text=' + encodeURIComponent(waText(o, p));
-    goWa.onclick = function () { track('generate_lead', { currency: p.cur, value: p.amount, item_name: o.reportName }); };
+    goWa.onclick = function () { sendLead(o, 'whatsapp'); track('generate_lead', { currency: p.cur, value: p.amount, item_name: o.reportName }); };
+    sendLead(o, 'form');
     if (C.online && (p.cur === 'INR' || C.usdOnline)) {
       payBtn.hidden = false; payBtn.disabled = false; $('#review-pay-label').textContent = 'Pay ' + p.now;
       goWa.hidden = true;
@@ -154,6 +282,20 @@
   function switchToWhatsApp(message) {
     payBtn.hidden = true; goWa.hidden = false;
     $('#review-note').textContent = message;
+  }
+
+  // The form goes to Kamala (through our server) once they continue to review it, having ticked the terms and
+  // privacy box, so she knows them by their WhatsApp number when they message. Sent once per change of details.
+  var leadSent = {};
+  function sendLead(o, stage) {
+    if (!window.fetch) return;
+    var data = payload(o); data.stage = stage;
+    var key = stage + '|' + JSON.stringify(payload(o));
+    if (leadSent[key]) return;
+    leadSent[key] = true;
+    try {
+      fetch('/api/r27/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data), keepalive: true }).catch(function () {});
+    } catch (e) {}
   }
 
   function payload(o) {
@@ -240,6 +382,7 @@
     setBusy(true, 'Confirming your payment');
     var finish = function (result) {
       paid = { o: o, p: p, result: result, receipt: orderRes.receipt, paymentId: r.razorpay_payment_id };
+      clearDraft();
       cached = null; busy = false;
       if (result && result.ok) {
         track('purchase', { transaction_id: r.razorpay_payment_id, currency: result.currency, value: result.amount, items: [{ item_name: o.reportName, price: result.amount }] });
@@ -278,7 +421,7 @@
       '<button type="button" class="outline-button" id="order-another">Order a report for someone else</button>';
     form.hidden = true; card.appendChild(box);
     card.scrollIntoView({ block: 'center', behavior: reduced ? 'auto' : 'smooth' });
-    $('#order-another').addEventListener('click', function () { box.remove(); form.hidden = false; form.reset(); cc.value = 'India|+91'; paid = null; refresh(); $('#name').focus(); });
+    $('#order-another').addEventListener('click', function () { box.remove(); form.hidden = false; form.reset(); clearDraft(); delete $('#pob').dataset.picked; cc.value = 'India|+91'; paid = null; refresh(); $('#name').focus(); });
   }
 
   form.addEventListener('submit', function (e) {
