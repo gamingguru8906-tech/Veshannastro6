@@ -25,7 +25,7 @@ PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d=
 
 
 def finder(suffix):
-    return f"""<div class="finder" data-finder data-order="{esc(wa())}">
+    return f"""<div class="finder" data-finder data-order="/2027-numerology-report/#register">
 <form class="finder-form" autocomplete="off" aria-label="2027 Personal Year calculator">
 <div class="field"><label for="f-day{suffix}">Birth day</label><input id="f-day{suffix}" name="day" type="number" inputmode="numeric" min="1" max="31" placeholder="14"></div>
 <div class="field"><label for="f-month{suffix}">Birth month</label><select id="f-month{suffix}" name="month"><option value="">Select</option></select></div>
@@ -47,8 +47,8 @@ def toc(items):
 
 def cta(question):
     return f"""<div class="cta-box"><h2>Want your whole 2027 mapped?</h2>
-<p>The 2027 Personal Year Report reads all twelve of your months, with muhurat and lucky dates, your Lo Shu grid and a voice note from Shashank. ₹1,999 in India, US${PRICE_USD} outside India. PDF on email and WhatsApp.</p>
-<div class="btn-row">{wa_btn("Order the 2027 report on WhatsApp")}{wa_btn("Ask a question", question, "btn btn-line")}</div></div>"""
+<p>The 2027 Personal Year Report reads all twelve of your months, with muhurat and lucky dates, your Lo Shu grid and a voice note from Shashank. Astro-Numeric Blend ₹1,263 or Classic ₹963 (Diwali offer, 30% off). Delivered on WhatsApp and email within 24 hours.</p>
+<div class="btn-row"><a class="btn btn-gold" href="/2027-numerology-report/#register">Get your 2027 report</a>{wa_btn("Ask a question", question, "btn btn-line")}</div></div>"""
 
 
 AUTHOR_BOX = f"""<aside class="author-box"><img src="/images/shashank-agrawal-160.jpg" width="72" height="72" alt="Shashank Agrawal" loading="lazy">
@@ -389,7 +389,7 @@ def card(p, tag="h3"):
 
 def post_page(p):
     path = f"{BLOG}{p['slug']}.html"
-    crumbs = [("/", "Home"), (BLOG, "Blog"), (path, p["h1"])]
+    crumbs = [("/2027-numerology-report/", "Home"), (BLOG, "Blog"), (path, p["h1"])]
     mins = read_mins(p)
     vhtml, vschema = video_block(p["slug"])
     faq_block = f'<h2 id="faq">Questions</h2><div class="faq">{faq_html(p["faqs"])}</div>'
@@ -424,7 +424,7 @@ def post_page(p):
 
 
 def index_page():
-    crumbs = [("/", "Home"), (BLOG, "Blog")]
+    crumbs = [("/2027-numerology-report/", "Home"), (BLOG, "Blog")]
     feat = BY_SLUG["2027-numerology-predictions"]
     groups = []
     for cat, intro in [("2027 Forecast", "What 2027 means in numerology, and how to find your own number."),

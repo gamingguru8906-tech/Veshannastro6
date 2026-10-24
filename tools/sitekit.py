@@ -20,7 +20,7 @@ UPDATED = "2026-10-24"
 OG_DEFAULT = "/images/og-image.png"
 
 NAV = [
-    ("/", "Home"),
+    ("/2027-numerology-report/", "2027 Report"),
     ("/blog/", "Blog"),
     ("/reports/", "Reports"),
     ("/about.html", "About"),
@@ -114,9 +114,9 @@ def header(active):
     links = "".join(f'<a href="{p}"{cur if p == active else ""}>{n}</a>' for p, n in NAV)
     mlinks = "".join(f'<li><a href="{p}">{n}</a></li>' for p, n in NAV)
     return f"""<header class="site-head"><div class="wrap">
-<a class="brand" href="/" aria-label="Veshannastro home"><b>VESHANNASTRO</b></a>
+<a class="brand" href="/2027-numerology-report/" aria-label="Veshannastro home"><b>VESHANNASTRO</b></a>
 <nav class="nav" aria-label="Main">{links}</nav>
-<a class="btn btn-gold head-cta" href="{esc(wa())}" target="_blank" rel="noopener">Order 2027 report</a>
+<a class="btn btn-gold head-cta" href="/2027-numerology-report/#register">Get your 2027 report</a>
 <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-menu"><i aria-hidden="true"></i>Menu</button>
 </div></header>
 <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile"><ul>{mlinks}</ul>
@@ -127,11 +127,12 @@ def footer():
     return f"""<footer class="site-foot"><div class="wrap">
 <div class="foot-grid">
 <div class="foot-about">
-<a class="brand" href="/" aria-label="Veshannastro home"><b>VESHANNASTRO</b></a>
+<a class="brand" href="/2027-numerology-report/" aria-label="Veshannastro home"><b>VESHANNASTRO</b></a>
 <p style="margin-top:14px">Numerology and Vedic astrology by Shashank Agrawal, author of <a href="{BOOK_URL}" rel="noopener" target="_blank"><em>{BOOK_TITLE}</em></a>.</p>
 <div class="foot-contact"><a href="{esc(wa("Hi Veshannastro, I have a question."))}" target="_blank" rel="noopener">WhatsApp {WA_DISPLAY}</a><a href="mailto:{EMAIL}">{EMAIL}</a></div>
 </div>
 <div><h2>2027 numerology</h2><ul>
+<li><a href="/2027-numerology-report/">2027 Numerology Report</a></li>
 <li><a href="/blog/2027-numerology-predictions.html">2027 Numerology Predictions</a></li>
 <li><a href="/blog/personal-year-number-2027-calculator.html">2027 Personal Year Calculator</a></li>
 <li><a href="/blog/mulank-predictions-2027.html">Mulank Predictions 2027</a></li>

@@ -45,6 +45,41 @@
   ],
   "redirects": [
     {
+      "source": "/",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/index.html",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/2027-report",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/2027-report/",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/2027-reports",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/2027-reports/",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/reports/2027-numerology-report.html",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
       "source": "/blog.html",
       "destination": "/blog/",
       "permanent": true
