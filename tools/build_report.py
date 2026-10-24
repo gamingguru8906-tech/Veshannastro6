@@ -24,7 +24,7 @@ ADDRESS = {"street": "Currency Tower, G.E. Road, VIP Road", "city": "Raipur", "r
 
 # Prices after the 30% Diwali offer, and the original price shown struck through.
 REPORTS = {
-    "blend": {"name": "Astro-Numeric Blend", "inr": 1263, "inr_mrp": 1804, "usd": 30, "usd_mrp": 43, "needs_time": True,
+    "blend": {"name": "Astro-Numero Blend", "inr": 1263, "inr_mrp": 1804, "usd": 30, "usd_mrp": 43, "needs_time": True,
               "line": "Numerology and astrology read together. Needs your time of birth."},
     "classic": {"name": "Classic", "inr": 963, "inr_mrp": 1376, "usd": 20, "usd_mrp": 29, "needs_time": False,
                 "line": "Numerology from your name and date of birth. No birth time needed."},
@@ -70,7 +70,7 @@ PLAN_ITEMS = {
 PLAN_COMMON = ["Your crystal, Name Number and Pinnacles", "Voice note from Shashank (QR code)", f"PDF on WhatsApp and email within {DELIVERY}"]
 
 STEPS = [
-    ("Choose your report", "Pick Astro-Numeric Blend or Classic and add your birth details. One report is made for one person."),
+    ("Choose your report", "Pick Astro-Numero Blend or Classic and add your birth details. One report is made for one person."),
     ("Pay the energy exchange", "Pay online by UPI, card or netbanking, or message us on WhatsApp if you would like to talk first."
      if ONLINE_PAY else "Send your details to us on WhatsApp. We confirm them and share the payment link in the same chat."),
     ("Receive your report", f"Your personalised PDF arrives on WhatsApp and email within {DELIVERY}, with the QR code to your voice note inside."),
@@ -83,17 +83,17 @@ def faqs():
            if ONLINE_PAY else "Send your details from this page to WhatsApp. We confirm them and send a secure payment link (UPI, card or netbanking) in the same chat.")
     return [
         ("How much does the 2027 numerology report cost in India?",
-         f"The Astro-Numeric Blend is {inr(b['inr'])} (was {inr(b['inr_mrp'])}) and the Classic is {inr(c['inr'])} (was {inr(c['inr_mrp'])}), with the {OFFER['pct']}% {OFFER['name']} until {OFFER['ends_text']}. Outside India they are US${b['usd']} and US${c['usd']}."),
-        ("What is the difference between Astro-Numeric Blend and Classic?",
-         "Classic is a numerology report built from your name and date of birth. Astro-Numeric Blend reads your numerology together with astrology from your birth chart, so it also needs your time of birth."),
+         f"The Astro-Numero Blend is {inr(b['inr'])} (was {inr(b['inr_mrp'])}) and the Classic is {inr(c['inr'])} (was {inr(c['inr_mrp'])}), with the {OFFER['pct']}% {OFFER['name']} until {OFFER['ends_text']}. Outside India they are US${b['usd']} and US${c['usd']}."),
+        ("What is the difference between Astro-Numero Blend and Classic?",
+         "Classic is a numerology report built from your name and date of birth. Astro-Numero Blend reads your numerology together with astrology from your birth chart, so it also needs your time of birth."),
         ("Is this a generic yearly horoscope?",
          "No. Your Personal Year, Mulank, Lo Shu grid and Name Number come from your own date of birth and name, and Chapter 1 is written for your exact Personal Year and sun sign combination. Two people rarely get the same report."),
         ("I don't know my time of birth. Can I still get it?",
-         "Yes. Choose Classic. It is built from your date of birth and your name, so your birth time is not needed. The Astro-Numeric Blend needs your time of birth."),
+         "Yes. Choose Classic. It is built from your date of birth and your name, so your birth time is not needed. The Astro-Numero Blend needs your time of birth."),
         ("Is the 2027 numerology report a PDF, and when will I receive it?",
          f"Yes. Your 2027 numerology report PDF arrives on your WhatsApp and email within {DELIVERY} of payment. Inside is a QR code that opens a 30 to 60 second voice note from Shashank about your year."),
         ("What is a 2027 astro numero report?",
-         "It is a report that reads numerology and astrology together. Our 2027 astro numero report is the Astro-Numeric Blend: your numbers read alongside your birth chart, which is why it needs your time of birth."),
+         "It is a report that reads numerology and astrology together. Our 2027 astro numero report is the Astro-Numero Blend: your numbers read alongside your birth chart, which is why it needs your time of birth."),
         ("Does it include a 2027 Lo Shu grid report?",
          "Yes. Every report has a 2027 Lo Shu grid report page: your date of birth plotted on the grid with your destiny number added and your 2027 Personal Year marked."),
         ("How do I pay?", pay),
@@ -217,7 +217,7 @@ def page():
           <p class="form-lead">What 2027 holds for your health, money, work and relationships, and the remedies for whatever needs care. Prepared for you alone.</p></div>
         <form id="registration" novalidate>
           <div class="subject-toggle report-toggle" role="radiogroup" aria-label="Choose your report">
-            <button type="button" role="radio" aria-checked="true" data-report="blend">Astro-Numeric Blend</button><button type="button" role="radio" aria-checked="false" data-report="classic">Classic</button></div>
+            <button type="button" role="radio" aria-checked="true" data-report="blend">Astro-Numero Blend</button><button type="button" role="radio" aria-checked="false" data-report="classic">Classic</button></div>
           <div class="price-box" aria-live="polite"><span class="pb-label">Energy exchange</span><b class="pb-now" id="pb-now">{inr(b['inr'])}</b>
             <span class="pb-was"><s id="pb-was">{inr(b['inr_mrp'])}</s> <span class="offer-tag">{OFFER['name']}, {OFFER['pct']}% off</span></span>
             <p class="pb-desc"><span id="pb-line">{b['line']}</span> <span class="phase-note">Phase one: {OFFER['limit']} reports, closes {OFFER['ends_text']}.</span></p></div>
@@ -331,7 +331,7 @@ def page():
   <dialog id="review-dialog" class="review-dialog" aria-labelledby="review-title"><div class="review-scroll"><header class="review-head"><div class="dialog-title-row"><h2 id="review-title">Check your details</h2><button class="close-dialog" type="button" data-close aria-label="Close">&times;</button></div><p>Edit anything before you continue.</p></header><div id="review-content"></div><p class="local-payment-note" id="review-note"></p></div>
     <footer class="dialog-foot"><button type="button" class="outline-button" data-close>Edit details</button><a id="review-go" class="wa-btn" href="#" target="_blank" rel="noopener">{ICON_WA}<span>Send order on WhatsApp</span></a></footer></dialog>
 
-  <div class="sticky-pay" id="sticky-pay"><div class="sp-text"><b id="sp-name">Astro-Numeric Blend</b><span id="sp-price">{inr(b['inr'])}, delivered within {DELIVERY}</span></div><a class="pill get-report" href="#register">Order</a></div>
+  <div class="sticky-pay" id="sticky-pay"><div class="sp-text"><b id="sp-name">Astro-Numero Blend</b><span id="sp-price">{inr(b['inr'])}, delivered within {DELIVERY}</span></div><a class="pill get-report" href="#register">Order</a></div>
   <a class="wa-float" href="{wa(ASK_MSG)}" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">{ICON_WA}<span>WhatsApp</span></a>
 </body>
 </html>
