@@ -18,7 +18,7 @@ To book a reading, a client provides date of birth, time of birth (as exact as p
 
 ## Core pages
 
-- [Homepage](https://www.veshannastro.co.in/): Services, numerology calculators, the bracelet shop, testimonials and booking.
+- [2027 Numerology Report](https://www.veshannastro.co.in/2027-numerology-report/): The main page. Personalised 2027 Personal Year report PDF in two versions, Astro-Numero Blend (numerology with astrology, needs time of birth) and Classic (numerology from name and date of birth). Delivered on WhatsApp and email within 24 hours. veshannastro.co.in redirects here.
 - [Book a Vedic kundli consultation](https://www.veshannastro.co.in/vedic-kundli-booking.html): The main 40-minute birth chart reading.
 - [Book a numerology consultation](https://www.veshannastro.co.in/numerology-booking.html): 20-minute session covering Life Path, Destiny and Soul Urge numbers.
 - [Written report booking](https://www.veshannastro.co.in/report-booking.html): All fixed-price PDF reports, selected by the `service` query parameter.

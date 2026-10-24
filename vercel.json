@@ -1,4 +1,12 @@
 {
+  "functions": {
+    "api/r27/order.js": {
+      "maxDuration": 20
+    },
+    "api/r27/verify.js": {
+      "maxDuration": 60
+    }
+  },
   "rewrites": [
     {
       "source": "/api/chat",
@@ -44,6 +52,41 @@
     }
   ],
   "redirects": [
+    {
+      "source": "/",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/index.html",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/2027-report",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/2027-report/",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/2027-reports",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/2027-reports/",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/reports/2027-numerology-report.html",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
     {
       "source": "/blog.html",
       "destination": "/blog/",

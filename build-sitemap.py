@@ -33,8 +33,11 @@ def indexable(path):
     return not re.search(r'<meta name="robots"[^>]*noindex', h)
 
 urls = []
+# The 2027 report page is the main page; "/" and index.html redirect to it.
+urls.append((BASE + "2027-numerology-report/", "1.0", "weekly"))
+
 for f in sorted(glob.glob("*.html")):
-    if f in SKIP or not indexable(f):
+    if f == "index.html" or f in SKIP or not indexable(f):
         continue
     loc = BASE if f == "index.html" else BASE + f
     pr, cf = PRIORITY.get(f, DEFAULT)

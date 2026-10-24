@@ -104,7 +104,7 @@
   /* ---------- 2027 Personal Year finder ---------- */
   $$('[data-finder]').forEach(function (box) {
     var form = $('form', box), out = $('.finder-result', box);
-    var orderHref = box.getAttribute('data-order') || '/#order';
+    var orderHref = box.getAttribute('data-order') || '/2027-numerology-report/#register';
     fillMonthSelect(form.elements.month);
     var run = function () {
       var d = +form.elements.day.value, m = +form.elements.month.value, y = +form.elements.year.value;
