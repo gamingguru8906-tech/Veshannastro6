@@ -134,6 +134,41 @@
     review(o, p);
   });
 
+  /* ---------- covers arrive from every side when "What's inside" comes into view ---------- */
+  (function () {
+    var fan = $('.covers-fan');
+    if (!fan || reduced || !fan.animate || !('IntersectionObserver' in window)) return;
+    var figs = $$('figure', fan), note = $('.covers-note');
+    var EASE = 'cubic-bezier(.16,1,.3,1)';
+    var FROM = { left: ['-62vw', '0px', -18], right: ['62vw', '0px', 18], top: ['0px', '-55vh', -10], bottom: ['0px', '48vh', 10] };
+    fan.classList.add('covers-pre');
+    new IntersectionObserver(function (en, obs) {
+      if (!en[0].isIntersecting) return;
+      obs.disconnect();
+      var grid = getComputedStyle(fan).display === 'grid', n = figs.length, last = 0;
+      figs.forEach(function (f, i) {
+        var dir, order;
+        if (grid) {          // phone: 3 by 2 grid, outer columns from the sides, middle from above and below
+          var c = i % 3, r = Math.floor(i / 3);
+          dir = c === 0 ? 'left' : c === 2 ? 'right' : (r === 0 ? 'top' : 'bottom');
+          order = i;
+        } else {             // desktop: the fan, ends from the sides, inner covers from above and below
+          dir = i === 0 ? 'left' : i === n - 1 ? 'right' : (i % 2 ? 'top' : 'bottom');
+          order = (n - 1) / 2 - Math.abs(i - (n - 1) / 2);
+        }
+        var d = FROM[dir], delay = 100 + order * 120;
+        last = Math.max(last, delay);
+        f.animate([
+          { translate: d[0] + ' ' + d[1], rotate: d[2] + 'deg', scale: '.84', opacity: 0 },
+          { opacity: 1, offset: .4 },
+          { translate: '0px 0px', rotate: '0deg', scale: '1', opacity: 1 }
+        ], { duration: 1250, delay: delay, easing: EASE, fill: 'backwards' });
+      });
+      if (note) note.animate([{ opacity: 0, translate: '0 12px' }, { opacity: 1, translate: '0 0' }], { duration: 700, delay: last + 650, easing: EASE, fill: 'backwards' });
+      fan.classList.remove('covers-pre');
+    }, { threshold: .3 }).observe(fan);
+  })();
+
   /* ---------- Personal Year calculator + cover reveal ---------- */
   var READ = { 1: ['Sun', 'New beginnings, leadership and discipline.'], 2: ['Moon', 'Patience, partnership and emotional balance.'], 3: ['Jupiter', 'Growth, expression and wisdom.'],
     4: ['Rahu', 'Hard work, structure and unexpected turns.'], 5: ['Mercury', 'Movement, change and fast growth.'], 6: ['Venus', 'Family, love, comfort and responsibility.'],

@@ -133,3 +133,4 @@
 @media(max-width:760px){.sticky-pay.show{display:flex}.sticky-pay.show~.wa-float{bottom:78px}}
 
 @media(max-width:760px){.form-in-view .wa-float{opacity:0;pointer-events:none}.wa-float span{display:none}.wa-float{padding:12px}}
+.covers-fan.covers-pre figure,.covers-fan.covers-pre+.covers-note{opacity:0}
