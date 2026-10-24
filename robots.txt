@@ -1,7 +1,7 @@
 # ─────────────────────────────────────────────────────────────
 #  Veshannastro — robots.txt
 #  https://www.veshannastro.co.in/
-#  Last updated: 2026-07-28
+#  Last updated: 2026-10-24
 #
 #  Machine-readable companions:
 #    /llms.txt       — curated index for language models
@@ -30,7 +30,7 @@ Disallow: /api/
 Disallow: /*?*utm_
 Disallow: /*?*fbclid
 Disallow: /*?*gclid
-Disallow: /*?v=
+# Versioned stylesheets and scripts (?v=) stay crawlable: Google needs them to render the pages.
 
 # ─────────────────────────────────────────────────────────────
 #  AI assistants & AI search crawlers — explicitly welcome.

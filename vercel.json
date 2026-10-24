@@ -88,6 +88,26 @@
       "permanent": true
     },
     {
+      "source": "/reports/personal-year-forecast.html",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/2027-numerology-report/index.html",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/index.html",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/reports/index.html",
+      "destination": "/reports/",
+      "permanent": true
+    },
+    {
       "source": "/blog.html",
       "destination": "/blog/",
       "permanent": true

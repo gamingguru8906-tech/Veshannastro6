@@ -18,7 +18,9 @@ URL = BASE + PATH
 
 WA = "917646952745"
 WA_SHOW = "+91 76469 52745"
-EMAIL = "veshannastro7@gmail.com"
+EMAIL = "assist@veshannastro.co.in"
+PHONE2 = "918827684725"
+PHONE2_SHOW = "+91 88276 84725"
 BOOK = "https://amzn.in/d/05h90t9v"
 ADDRESS = {"street": "Currency Tower, G.E. Road, VIP Road", "city": "Raipur", "region": "Chhattisgarh", "postal": "492001", "country": "IN"}
 
@@ -154,8 +156,12 @@ def page():
 
     import re
     strip = lambda s: re.sub(r"<[^>]+>", "", s)
-    org = {"@type": "Organization", "@id": BASE + "/#organization", "name": "Veshannastro", "url": URL,
+    org = {"@type": "Organization", "@id": BASE + "/#organization", "name": "Veshannastro", "url": BASE + "/",
            "logo": BASE + "/images/logo.png", "email": EMAIL, "telephone": WA_SHOW.replace(" ", ""),
+           "contactPoint": [{"@type": "ContactPoint", "contactType": "customer service", "telephone": WA_SHOW.replace(" ", ""), "email": EMAIL,
+                             "availableLanguage": ["English", "Hindi"]},
+                            {"@type": "ContactPoint", "contactType": "customer service", "telephone": PHONE2_SHOW.replace(" ", ""),
+                             "availableLanguage": ["English", "Hindi"]}],
            "address": {"@type": "PostalAddress", "streetAddress": ADDRESS["street"], "addressLocality": ADDRESS["city"],
                        "addressRegion": ADDRESS["region"], "postalCode": ADDRESS["postal"], "addressCountry": ADDRESS["country"]},
            "founder": {"@type": "Person", "@id": BASE + "/#shashank", "name": "Shashank Agrawal", "url": BASE + "/about.html"},
@@ -174,15 +180,19 @@ def page():
     graph = {"@context": "https://schema.org", "@graph": [
         org,
         {"@type": "WebSite", "@id": BASE + "/#website", "url": BASE + "/", "name": "Veshannastro", "publisher": {"@id": BASE + "/#organization"}},
-        {"@type": "WebPage", "@id": URL + "#webpage", "url": URL, "name": "2027 Numerology Report", "isPartOf": {"@id": BASE + "/#website"}, "inLanguage": "en-IN"},
+        {"@type": "WebPage", "@id": URL + "#webpage", "url": URL, "name": "2027 Numerology Report", "isPartOf": {"@id": BASE + "/#website"}, "inLanguage": "en-IN",
+         "breadcrumb": {"@id": URL + "#breadcrumb"}},
+        {"@type": "BreadcrumbList", "@id": URL + "#breadcrumb", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Veshannastro", "item": BASE + "/"},
+            {"@type": "ListItem", "position": 2, "name": "2027 Numerology Report", "item": URL}]},
         product("blend"), product("classic"),
         {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": strip(q), "acceptedAnswer": {"@type": "Answer", "text": strip(a)}} for q, a in F]},
     ]}
     config = {"wa": WA, "online": ONLINE_PAY, "ads": ("AW-18189866057/" + ADS_PURCHASE_LABEL) if ADS_PURCHASE_LABEL else "", "usdOnline": USD_ONLINE, "delivery": DELIVERY, "offerEnds": OFFER["ends"], "reports": REPORTS}
 
     title = "2027 Numerology Report: Personal Year Forecast | Veshannastro"
-    desc = (f"Personalised 2027 numerology report PDF: Personal Year, Mulank, Lo Shu grid and all 12 months with remedies. "
-            f"Blend or Classic from {inr(c['inr'])}, delivered in {DELIVERY}.")
+    desc = (f"Buy your 2027 numerology report online: Personal Year forecast, Lo Shu grid, all 12 months and muhurat dates. "
+            f"PDF in {DELIVERY}, from {inr(c['inr'])}.")
     return f"""<!doctype html>
 <html lang="en-IN">
 <head>
@@ -196,7 +206,7 @@ def page():
   <meta property="og:title" content="{title}"><meta property="og:description" content="{esc(desc)}"><meta property="og:url" content="{URL}">
   <meta property="og:image" content="{BASE}/assets/r27/og.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="{BASE}/assets/r27/og.jpg">
-  <link rel="icon" href="/favicon.ico" sizes="any"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest">
   <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" as="image" href="/assets/r27/hero-wide.webp">
   <link rel="stylesheet" href="/assets/r27/styles.css?v=9"><link rel="stylesheet" href="/assets/r27/sections.css?v=9"><link rel="stylesheet" href="/assets/r27/report.css?v=9">
@@ -222,7 +232,7 @@ def page():
   <main>
     <section class="hero" id="register" aria-labelledby="hero-title">
       <div class="hero-background" aria-hidden="true"><div class="hero-pin has-video"><video class="hero-video" id="hero-video" muted playsinline loop preload="none" poster="/assets/r27/hero-wide.webp" data-wide="/assets/r27/hero-wide.mp4" data-small="/assets/r27/hero-small.mp4" width="1280" height="720"></video><div class="moon-orbit"></div><div class="hero-shade"></div></div></div>
-      <h1 id="hero-title">2027 Personal Year <br>Numerology Report <small>curated by Shashank Agrawal</small></h1>
+      <h1 id="hero-title">2027 Numerology Report <br>Personal Year Forecast <small>by Shashank Agrawal</small></h1>
       <div class="form-card">
         <div class="form-card-head"><span class="report-mark">{ICON_STAR}Phase one, {OFFER['limit']} reports</span><h2>Get your 2027 Report</h2>
           <p class="form-lead">What 2027 holds for your health, money, work and relationships, and the remedies for whatever needs care. Prepared for you alone.</p></div>
@@ -298,7 +308,7 @@ def page():
 
     <section class="report-section" id="pricing" aria-labelledby="pricing-title"><div class="wrap">
       <header class="section-heading"><div class="kicker">{OFFER['name']}, {OFFER['pct']}% off</div><h2 id="pricing-title">2027 numerology report <em>price in India.</em></h2>
-        <p class="section-lead">Two reports. The amount is an energy exchange for a reading prepared for you alone.</p></header>
+        <p class="section-lead">Two reports. The Astro-Numero Blend is our 2027 astro numero report, numerology and astrology read together; Classic reads your numbers alone. The amount is an energy exchange for a reading prepared for you alone.</p></header>
       <div class="plans">{plan('blend', True)}{plan('classic', False)}</div>
       <p class="plans-note">Phase one is limited to {OFFER['limit']} reports and closes on {OFFER['ends_text']}. Ordering for more than one person? <a href="{wa(BULK_MSG)}" target="_blank" rel="noopener" style="color:var(--cy)">Message us on WhatsApp</a>.</p>
     </div></section>
@@ -308,6 +318,12 @@ def page():
         <p>Shashank Agrawal founded VESHANNASTRO and is the author of <a href="{BOOK}" target="_blank" rel="noopener" style="color:var(--cy)"><em>Numbers &amp; Navgraha: Untold Secret of Numerology</em></a>. He works with Mulank and Bhagyank, the Lo Shu grid, Chaldean name numbers and Vedic astrology.</p>
         <p>The 2027 Personal Year Report is his reading of your year: what it holds for your health, money, work and relationships, and where it needs care, with the remedies to meet it and step into 2027 as a stronger version of yourself. Each report is prepared by Shashank and his team for one person.</p>
       </div>
+    </div></section>
+
+    <section class="report-section" id="year-2027" aria-labelledby="uy-title"><div class="wrap">
+      <header class="section-heading"><div class="kicker">Universal Year 11/2</div><h2 id="uy-title">What 2027 means <em>in numerology.</em></h2>
+        <p class="section-lead">2027 adds up to 11 (2 + 0 + 2 + 7), and 11 reduces to 2, so it is a Universal Year 11/2. In Indian numerology the 2 is ruled by the Moon: a year of partnership, patience and intuition, with the master number 11 adding a sharper inner pull. After 2026, a year of fresh starts, 2027 asks you to work with others, finish what you began and let things ripen. What it means for you depends on your Personal Year, the number set by your birth day and month together with 2027. Your report reads that Personal Year month by month, so you know which parts of 2027 to push in and which to handle with care.</p></header>
+      <p class="read-more"><a href="/blog/2027-numerology-predictions.html">Read the full 2027 numerology predictions</a></p>
     </div></section>
 
     <section class="report-section" id="read" aria-labelledby="read-title"><div class="wrap">
@@ -331,7 +347,7 @@ def page():
     <div class="foot-cols">
       <div><a class="brand" href="{PATH}"><b>VESHANNASTRO</b></a>
         <address style="margin-top:14px">Veshannastro, Shashank Agrawal<br>{ADDRESS['street']}<br>{ADDRESS['city']}, {ADDRESS['region']} {ADDRESS['postal']}<br>
-        <a href="{wa(ASK_MSG)}" target="_blank" rel="noopener">WhatsApp {WA_SHOW}</a><br><a href="mailto:{EMAIL}">{EMAIL}</a></address></div>
+        <a href="{wa(ASK_MSG)}" target="_blank" rel="noopener">WhatsApp {WA_SHOW}</a><br><a href="tel:+{PHONE2}">Phone {PHONE2_SHOW}</a><br><a href="mailto:{EMAIL}">{EMAIL}</a></address></div>
       <div><h2>2027</h2><ul><li><a href="/blog/2027-numerology-predictions.html">2027 numerology predictions</a></li><li><a href="/blog/personal-year-number-2027-calculator.html">2027 personal year calculator</a></li><li><a href="/blog/mulank-predictions-2027.html">Mulank predictions 2027</a></li><li><a href="/blog/">Blog</a></li></ul></div>
       <div><h2>Free calculators</h2><ul><li><a href="/calculators/name-numerology.html">Name numerology</a></li><li><a href="/calculators/lo-shu-grid.html">Lo Shu grid</a></li><li><a href="/calculators/lucky-mobile-number.html">Mobile number</a></li><li><a href="/calculators/life-path-number.html">Life path number</a></li></ul></div>
       <div><h2>Veshannastro</h2><ul><li><a href="/about.html">About</a></li><li><a href="/contact.html">Contact</a></li><li><a href="/vedic-astrologer-raipur.html">Astrologer in Raipur</a></li><li><a href="/privacy-policy.html">Privacy policy</a></li><li><a href="/terms.html">Terms</a></li><li><a href="/refund-policy.html">Refund and delivery</a></li></ul></div>

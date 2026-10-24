@@ -1,0 +1,12 @@
+{
+  "name": "Veshannastro",
+  "short_name": "Veshannastro",
+  "start_url": "/2027-numerology-report/",
+  "display": "browser",
+  "background_color": "#c2125f",
+  "theme_color": "#c2125f",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
