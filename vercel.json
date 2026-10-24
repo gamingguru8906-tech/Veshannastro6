@@ -45,6 +45,11 @@
   ],
   "redirects": [
     {
+      "source": "/blog.html",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
       "source": "/shop-product.html",
       "has": [
         {

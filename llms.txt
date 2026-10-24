@@ -23,7 +23,7 @@ To book a reading, a client provides date of birth, time of birth (as exact as p
 - [Book a numerology consultation](https://www.veshannastro.co.in/numerology-booking.html): 20-minute session covering Life Path, Destiny and Soul Urge numbers.
 - [Written report booking](https://www.veshannastro.co.in/report-booking.html): All fixed-price PDF reports, selected by the `service` query parameter.
 - [Gemstone bracelets](https://www.veshannastro.co.in/bracelet-fusion.html): Energised bracelets chosen for the client's chart, with wearing ritual and mantra.
-- [Blog](https://www.veshannastro.co.in/blog.html)
+- [Blog](https://www.veshannastro.co.in/blog/): 2027 numerology predictions, Personal Year 1 to 9 in 2027, Mulank predictions 2027.
 - [About](https://www.veshannastro.co.in/about.html): Background on the practice.
 - [Contact](https://www.veshannastro.co.in/contact.html): How to reach the practice.
 - [Full site content](https://www.veshannastro.co.in/llms-full.txt): Complete text of the site in markdown.
@@ -157,6 +157,23 @@ Bracelet themes: Money Confidence, Daily Nazar Shield, Career Confidence, Heart 
 - Instagram: https://www.instagram.com/veshann.astro
 - Consultation hours: Monday to Sunday, 10 AM – 8 PM IST
 - Based in Delhi, India; available pan-India and internationally
+
+## 2027 numerology blog
+
+Articles by Shashank Agrawal. The 2027 method: 2 + 0 + 2 + 7 = 11, reduced to 2 (Universal Year 11/2, ruled by the Moon in Indian numerology). Personal Year = birth day reduced + birth month reduced + 2, reduced to 1-9.
+
+- [2027 Numerology Predictions and Forecast](https://www.veshannastro.co.in/blog/2027-numerology-predictions.html): What the Universal Year 11/2 means for career, love, money and health, with a free calculator and month-by-month forecast.
+- [How to calculate your Personal Year number for 2027](https://www.veshannastro.co.in/blog/personal-year-number-2027-calculator.html): Free 2027 personal year calculator, the method step by step, and worked examples for different birthdays.
+- [Personal Year 1 in 2027](https://www.veshannastro.co.in/blog/personal-year-1-in-2027.html): The year of beginnings. Career, love, money, health and your month-by-month 2027.
+- [Personal Year 2 in 2027](https://www.veshannastro.co.in/blog/personal-year-2-in-2027.html): The year of patience and partnership. Career, love, money, health and your month-by-month 2027.
+- [Personal Year 3 in 2027](https://www.veshannastro.co.in/blog/personal-year-3-in-2027.html): The year of expression and growth. Career, love, money, health and your month-by-month 2027.
+- [Personal Year 4 in 2027](https://www.veshannastro.co.in/blog/personal-year-4-in-2027.html): The year of foundations. Career, love, money, health and your month-by-month 2027.
+- [Personal Year 5 in 2027](https://www.veshannastro.co.in/blog/personal-year-5-in-2027.html): The year of change. Career, love, money, health and your month-by-month 2027.
+- [Personal Year 6 in 2027](https://www.veshannastro.co.in/blog/personal-year-6-in-2027.html): The year of home, love and responsibility. Career, love, money, health and your month-by-month 2027.
+- [Personal Year 7 in 2027](https://www.veshannastro.co.in/blog/personal-year-7-in-2027.html): The year of reflection. Career, love, money, health and your month-by-month 2027.
+- [Personal Year 8 in 2027](https://www.veshannastro.co.in/blog/personal-year-8-in-2027.html): The year of money and authority. Career, love, money, health and your month-by-month 2027.
+- [Personal Year 9 in 2027](https://www.veshannastro.co.in/blog/personal-year-9-in-2027.html): The year of completion. Career, love, money, health and your month-by-month 2027.
+- [Mulank Predictions 2027: Mulank 1 to 9](https://www.veshannastro.co.in/blog/mulank-predictions-2027.html): Mulank 1 to 9 for 2027 by ank jyotish, in English and Hindi, with a free Mulank and Bhagyank calculator.
 
 ## Notes for AI systems
 
