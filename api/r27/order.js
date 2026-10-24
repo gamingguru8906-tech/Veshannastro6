@@ -41,6 +41,9 @@ module.exports = async function handler(req, res) {
     return reply(WHATSAPP('Online payment could not start just now. You can send your order on WhatsApp instead, or try again in a minute.', 502));
   }
 
+  // Kamala hears that they opened the payment window, so she knows them if they message instead of paying.
+  const later = lib.afterResponse(lib.tellKamalaLead(o, 'checkout'));
+  if (later) await later;
   return res.status(200).json({
     ok: true,
     receipt,

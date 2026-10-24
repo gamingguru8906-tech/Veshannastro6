@@ -163,16 +163,28 @@ async function phaseOpen() {
 // Wakes Kamala (Render can be asleep for up to a minute) and hands her the paid order. She checks it with Razorpay
 // herself before doing anything, and Razorpay's own webhook reaches her too, so this is a fast path, not the only one.
 async function tellKamala(orderId, paymentId) {
+  return postKamala('/web-order', { order_id: orderId, payment_id: paymentId });
+}
+
+// The order form, handed to Kamala so she knows this person when they message (details she already has are kept).
+function tellKamalaLead(o, stage) {
+  return postKamala('/web-lead', {
+    phone: o.phone, name: o.name, email: o.email, dob: o.dob, tob: o.tob, pob: o.pob, referral: o.referral,
+    report: o.key, report_name: o.report.name, price: money(o.amount, o.currency), stage
+  });
+}
+
+async function postKamala(path, body) {
   const url = env('KAMALA_URL').replace(/\/+$/, '');
   const secret = env('WEB_ORDER_SECRET');
   if (!url || !secret) return 'skipped';
-  const payload = JSON.stringify({ order_id: orderId, payment_id: paymentId });
+  const payload = JSON.stringify(body);
   const signature = crypto.createHmac('sha256', secret).update(payload).digest('hex');
   // Both tries fit inside the function's 60 seconds: the first waits out a Render cold start, the second is quick.
   const waits = [40000, 15000];
   for (let attempt = 1; attempt <= waits.length; attempt++) {
     try {
-      const res = await fetch(url + '/web-order', {
+      const res = await fetch(url + path, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-veshannastro-signature': signature },
         body: payload,
@@ -198,5 +210,5 @@ function afterResponse(promise) {
 
 module.exports = {
   CATALOG, RECEIPT_PREFIX, configured, keyId: () => KEY_ID, keySecret: () => KEY_SECRET,
-  clean, timingSafeEqualHex, money, guard, body, normalisePhone, readOrder, razorpay, phaseOpen, tellKamala, afterResponse
+  clean, timingSafeEqualHex, money, guard, body, normalisePhone, readOrder, razorpay, phaseOpen, tellKamala, tellKamalaLead, afterResponse
 };

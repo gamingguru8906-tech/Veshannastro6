@@ -197,12 +197,12 @@ def page():
   <link rel="icon" href="/favicon.ico" sizes="any"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" as="image" href="/assets/r27/hero-wide.webp">
-  <link rel="stylesheet" href="/assets/r27/styles.css?v=7"><link rel="stylesheet" href="/assets/r27/sections.css?v=7"><link rel="stylesheet" href="/assets/r27/report.css?v=7">
+  <link rel="stylesheet" href="/assets/r27/styles.css?v=8"><link rel="stylesheet" href="/assets/r27/sections.css?v=8"><link rel="stylesheet" href="/assets/r27/report.css?v=8">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R20FKYJK7P"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-R20FKYJK7P');gtag('config','AW-18189866057');</script>
   <script type="application/ld+json">{json.dumps(graph, ensure_ascii=False, separators=(",", ":"))}</script>
   <script>window.R27={json.dumps(config, separators=(",", ":"))};</script>
-  <script src="/assets/r27/report.js?v=7" defer></script><script src="/assets/r27/book.js?v=7" defer></script>
+  <script src="/assets/r27/report.js?v=8" defer></script><script src="/assets/r27/book.js?v=8" defer></script>
 </head>
 <body>
   <div class="nebula" aria-hidden="true"></div><canvas class="sky" id="star-field" aria-hidden="true"></canvas>

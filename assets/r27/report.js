@@ -264,7 +264,8 @@
     setError('');
     $('#review-edit').hidden = false; $('#review-done').hidden = true;
     goWa.href = 'https://wa.me/' + C.wa + '?text=' + encodeURIComponent(waText(o, p));
-    goWa.onclick = function () { track('generate_lead', { currency: p.cur, value: p.amount, item_name: o.reportName }); };
+    goWa.onclick = function () { sendLead(o, 'whatsapp'); track('generate_lead', { currency: p.cur, value: p.amount, item_name: o.reportName }); };
+    sendLead(o, 'form');
     if (C.online && (p.cur === 'INR' || C.usdOnline)) {
       payBtn.hidden = false; payBtn.disabled = false; $('#review-pay-label').textContent = 'Pay ' + p.now;
       goWa.hidden = true;
@@ -281,6 +282,20 @@
   function switchToWhatsApp(message) {
     payBtn.hidden = true; goWa.hidden = false;
     $('#review-note').textContent = message;
+  }
+
+  // The form goes to Kamala (through our server) once they continue to review it, having ticked the terms and
+  // privacy box, so she knows them by their WhatsApp number when they message. Sent once per change of details.
+  var leadSent = {};
+  function sendLead(o, stage) {
+    if (!window.fetch) return;
+    var data = payload(o); data.stage = stage;
+    var key = stage + '|' + JSON.stringify(payload(o));
+    if (leadSent[key]) return;
+    leadSent[key] = true;
+    try {
+      fetch('/api/r27/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data), keepalive: true }).catch(function () {});
+    } catch (e) {}
   }
 
   function payload(o) {
