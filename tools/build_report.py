@@ -88,10 +88,10 @@ STEPS = [
 
 def faqs():
     b, c = REPORTS["blend"], REPORTS["classic"]
-    pay = ("Online on this page by UPI, card or netbanking. If you would like to talk first, message us on WhatsApp and pay from there."
+    pay = ("Buy your 2027 numerology report online on this page by UPI, card or netbanking. If you would like to talk first, message us on WhatsApp and pay from there."
            if ONLINE_PAY else "Send your details from this page to WhatsApp. We confirm them and send a secure payment link (UPI, card or netbanking) in the same chat.")
     return [
-        ("How much does the 2027 numerology report cost in India?",
+        ("What is the 2027 numerology report price in India?",
          f"The Astro-Numero Blend is {inr(b['inr'])} (was {inr(b['inr_mrp'])}) and the Classic is {inr(c['inr'])} (was {inr(c['inr_mrp'])}), with the {OFFER['pct']}% {OFFER['name']} until {OFFER['ends_text']}. Outside India they are US${b['usd']} and US${c['usd']}."),
         ("What is the difference between Astro-Numero Blend and Classic?",
          "Classic is a numerology report built from your name and date of birth. Astro-Numero Blend reads your numerology together with astrology from your birth chart, so it also needs your time of birth."),
@@ -106,6 +106,8 @@ def faqs():
         ("Does it include a 2027 Lo Shu grid report?",
          "Yes. Every report has a 2027 Lo Shu grid report page: your date of birth plotted on the grid with your destiny number added and your 2027 Personal Year marked."),
         ("How do I pay?", pay),
+        ("What if my report does not arrive?",
+         f"If your report has not reached you within {DELIVERY} of payment, message us on WhatsApp with your payment reference. We send it straight away, or refund you in full if we cannot deliver it. The <a href=\"/refund-policy.html\">refund and delivery policy</a> has the details."),
         ("Can I order for my family or more than one person?",
          "Each order on this page is for one person, because each personalized 2027 numerology report is built from one date of birth. For two or more people, message us on WhatsApp and we will arrange it."),
         ("How do I choose the best 2027 numerology report?",
@@ -197,12 +199,12 @@ def page():
   <link rel="icon" href="/favicon.ico" sizes="any"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" as="image" href="/assets/r27/hero-wide.webp">
-  <link rel="stylesheet" href="/assets/r27/styles.css?v=8"><link rel="stylesheet" href="/assets/r27/sections.css?v=8"><link rel="stylesheet" href="/assets/r27/report.css?v=8">
+  <link rel="stylesheet" href="/assets/r27/styles.css?v=9"><link rel="stylesheet" href="/assets/r27/sections.css?v=9"><link rel="stylesheet" href="/assets/r27/report.css?v=9">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R20FKYJK7P"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-R20FKYJK7P');gtag('config','AW-18189866057');</script>
   <script type="application/ld+json">{json.dumps(graph, ensure_ascii=False, separators=(",", ":"))}</script>
   <script>window.R27={json.dumps(config, separators=(",", ":"))};</script>
-  <script src="/assets/r27/report.js?v=8" defer></script><script src="/assets/r27/book.js?v=8" defer></script>
+  <script src="/assets/r27/report.js?v=9" defer></script><script src="/assets/r27/book.js?v=9" defer></script>
 </head>
 <body>
   <div class="nebula" aria-hidden="true"></div><canvas class="sky" id="star-field" aria-hidden="true"></canvas>
@@ -347,6 +349,63 @@ def page():
 """
 
 
+# Services from the old homepage (index.html, var DATA) that Kamala still sells. The old Personal Year Forecast is
+# left out: the 2027 report replaces it, and two personal-year products at two prices would confuse buyers.
+LEGACY_LEFT_OUT = {"Personal Year Forecast"}
+
+
+def legacy_services():
+    import subprocess
+    js = ("const fs=require('fs'),vm=require('vm');const h=fs.readFileSync(process.argv[1],'utf8');"
+          "const m=h.match(/var DATA\\s*=\\s*(\\[\\s*\\{[\\s\\S]*?\\}\\s*\\])\\s*;/);if(!m){console.log('[]');process.exit(0)}"
+          "const sb={};vm.createContext(sb);vm.runInContext('var parsed='+m[1],sb,{timeout:500});"
+          "console.log(JSON.stringify(sb.parsed))")
+    try:
+        p = subprocess.run(["node", "-e", js, os.path.join(REPO, "index.html")], capture_output=True, text=True, timeout=30)
+        cats = json.loads(p.stdout or "[]")
+    except Exception as e:  # noqa: BLE001
+        print("could not read the old services list:", e)
+        return []
+    keep = ("t", "d", "p", "was", "off", "unit", "give", "link", "features")
+    out = []
+    for c in cats:
+        items = [{k: s[k] for k in keep if k in s} for s in c.get("services", []) if s.get("t") not in LEGACY_LEFT_OUT]
+        if items:
+            out.append({"id": c["id"], "name": c["name"], "services": items})
+    return out
+
+
+def services_for_kamala():
+    import html
+    import re
+
+    def text(s):
+        return html.unescape(re.sub(r"<[^>]+>", "", s))
+
+    r27 = []
+    for key in ("blend", "classic"):
+        rep = REPORTS[key]
+        r27.append({
+            "t": f"2027 Report: {rep['name']}",
+            "d": f"{rep['line']} A personalised 2027 Personal Year report PDF for one person.",
+            "p": inr(rep["inr"]), "was": inr(rep["inr_mrp"]), "off": f"{OFFER['pct']}% off",
+            "usd": f"US${rep['usd']}", "give": ["pdf"], "link": URL + "#register",
+            "needs": ["dob", "tob", "pob"] if rep["needs_time"] else ["dob", "pob"],
+            "features": PLAN_ITEMS[key] + [x for x in PLAN_COMMON if not x.startswith("PDF on")] + [f"Delivered on WhatsApp and email within {DELIVERY}"],
+        })
+    return {
+        "updated": __import__("sitekit").UPDATED,
+        "categories": [{"id": "r27", "name": "2027 Personal Year Report", "services": r27}] + legacy_services(),
+        "offer": (f"2027 reports: {OFFER['pct']}% {OFFER['name']} until {OFFER['ends_text']}. Phase one is limited to "
+                  f"{OFFER['limit']} reports and closes on {OFFER['ends_text']}. One report per person; for two or more people "
+                  f"the order is taken on WhatsApp. Outside India: Astro-Numero Blend US${REPORTS['blend']['usd']}, Classic "
+                  f"US${REPORTS['classic']['usd']}. Order page: {URL}"),
+        "inside": [f"{t}: {d}" for t, d in INSIDE],
+        "faq": [{"q": text(q), "a": text(a)} for q, a in faqs()],
+        "blog": [{"title": p["h1"], "about": p["card"], "url": f"{BASE}/blog/{p['slug']}.html"} for p in POSTS],
+    }
+
+
 if __name__ == "__main__":
     out = os.path.join(REPO, PATH.strip("/"), "index.html")
     os.makedirs(os.path.dirname(out), exist_ok=True)
@@ -360,3 +419,8 @@ if __name__ == "__main__":
     os.makedirs(os.path.dirname(cat), exist_ok=True)
     open(cat, "w", encoding="utf-8").write(json.dumps(catalog, indent=2, ensure_ascii=False) + "\n")
     print(os.path.relpath(cat, REPO))
+    # What Kamala knows about the website (services.json): every service with its price, the 2027 page's facts and
+    # the blog. She reads it every hour, so a price changed here reaches her chats without touching her code.
+    svc = os.path.join(REPO, "services.json")
+    open(svc, "w", encoding="utf-8").write(json.dumps(services_for_kamala(), indent=1, ensure_ascii=False) + "\n")
+    print(os.path.relpath(svc, REPO))

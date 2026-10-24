@@ -6,7 +6,38 @@
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var esc = function (v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
-  var track = function (name, params) { if (typeof window.gtag === 'function') window.gtag('event', name, params || {}); };
+  /* ---------- what this visitor does on the site, kept in our own database (api/r27/event) ----------
+     A random id stays in this browser; once they submit the order form it is joined to their WhatsApp number,
+     so Kamala knows what they looked at. Same steps as Google Analytics, nothing typed in the form. */
+  var VISITOR = (function () {
+    var make = function () { var a = new Uint8Array(12); (window.crypto || {}).getRandomValues ? crypto.getRandomValues(a) : a.forEach(function (_, i) { a[i] = Math.random() * 256; }); return Array.prototype.map.call(a, function (b) { return ('0' + b.toString(16)).slice(-2); }).join(''); };
+    try { var v = localStorage.getItem('vs-visitor'); if (!/^[a-z0-9]{16,40}$/.test(v || '')) { v = make(); localStorage.setItem('vs-visitor', v); } return v; } catch (e) { return make(); }
+  })();
+  var logQueue = [], logTimer = null;
+  function flushLog() {
+    if (!logQueue.length) return;
+    var body = JSON.stringify({ visitor: VISITOR, events: logQueue.splice(0, 20) });
+    try { if (navigator.sendBeacon && navigator.sendBeacon('/api/r27/event', new Blob([body], { type: 'application/json' }))) return; } catch (e) {}
+    try { fetch('/api/r27/event', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: body, keepalive: true }).catch(function () {}); } catch (e) {}
+  }
+  function logEvent(kind, detail) {
+    logQueue.push({ kind: kind, detail: detail || {}, path: location.pathname, at: Date.now() });
+    clearTimeout(logTimer); logTimer = setTimeout(flushLog, 1500);
+  }
+  addEventListener('pagehide', flushLog);
+  (function () {
+    var q = new URLSearchParams(location.search), d = {};
+    try { if (document.referrer) d.from = new URL(document.referrer).hostname; } catch (e) {}
+    ['utm_source', 'utm_medium', 'utm_campaign', 'ref'].forEach(function (k) { if (q.get(k)) d[k] = q.get(k).slice(0, 60); });
+    logEvent('visit', d);
+  })();
+  var track = function (name, params) {
+    if (typeof window.gtag === 'function') window.gtag('event', name, params || {});
+    var p = params || {}, d = {};
+    ['item_name', 'currency', 'value', 'personal_year', 'mulank', 'reason', 'link_text', 'transaction_id'].forEach(function (k) { if (p[k] != null) d[k] = p[k]; });
+    if (!d.item_name && p.items && p.items[0]) d.item_name = p.items[0].item_name;
+    logEvent(name, d);
+  };
   var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   var inr = function (n) { return '₹' + n.toLocaleString('en-IN'); };
   function readDraft() {
@@ -289,6 +320,7 @@
   var leadSent = {};
   function sendLead(o, stage) {
     if (!window.fetch) return;
+    flushLog();
     var data = payload(o); data.stage = stage;
     var key = stage + '|' + JSON.stringify(payload(o));
     if (leadSent[key]) return;
@@ -300,7 +332,7 @@
 
   function payload(o) {
     return { report: o.report, name: o.name, dob: o.dobIso, tob: o.tob, pob: o.pob, email: o.email, code: o.code, mobile: o.mobile,
-      referral: o.referral, terms: $('input[name="terms"]', form).checked, updates: $('input[name="wa_ok"]', form).checked };
+      referral: o.referral, terms: $('input[name="terms"]', form).checked, updates: $('input[name="wa_ok"]', form).checked, visitor: VISITOR };
   }
   var FIELD = { name: '#name', dob: '#dob-day', tob: '#tob-hour', pob: '#pob', email: '#email', mobile: '#mobile', referral: '#referral', terms: 'input[name="terms"]' };
   function markServerErrors(errors) {

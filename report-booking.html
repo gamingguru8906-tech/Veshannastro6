@@ -681,7 +681,7 @@ function sendEmailAndShowSuccess(params){
       document.getElementById('rb-success-msg').textContent='Payment successful! Final step: tap below and send the photos of both palms on WhatsApp so your reading can begin.';
       document.getElementById('rb-wa-btn').textContent='Send Palm Photos on WhatsApp →';
     }
-    document.getElementById('rb-wa-btn').href='https://wa.me/918827684725?text='+buildWhatsAppMessage(params);
+    document.getElementById('rb-wa-btn').href='https://wa.me/917646952745?text='+buildWhatsAppMessage(params);
     window.scrollTo({top:0,behavior:'smooth'});
   }
   emailjs.send('service_3oqwdr2','template_ruq37kg',params)
@@ -748,7 +748,7 @@ document.getElementById('rb-submit').addEventListener('click',function(){
     return;
   }
   if(typeof Razorpay==='undefined'){
-    const waUrl='https://wa.me/918827684725?text='+buildWhatsAppMessage(params);
+    const waUrl='https://wa.me/917646952745?text='+buildWhatsAppMessage(params);
     if(confirm('Payment gateway could not be reached (possibly blocked by an ad-blocker).\n\nClick OK to complete your booking via WhatsApp instead.')){window.open(waUrl,'_blank');}
     return;
   }

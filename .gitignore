@@ -8,8 +8,7 @@ __pycache__/
 
 # Local audit / verification tooling (not part of the site)
 node_modules/
-package.json
-package-lock.json
+# package.json and package-lock.json are tracked: they give the Vercel functions (api/) their Postgres driver.
 render-check.cjs
 calc-check.cjs
 .commit-msg.txt

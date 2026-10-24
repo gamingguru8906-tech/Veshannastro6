@@ -1,0 +1,419 @@
+{
+ "updated": "2026-10-24",
+ "categories": [
+  {
+   "id": "r27",
+   "name": "2027 Personal Year Report",
+   "services": [
+    {
+     "t": "2027 Report: Astro-Numero Blend",
+     "d": "Numerology and astrology read together. Needs your time of birth. A personalised 2027 Personal Year report PDF for one person.",
+     "p": "₹1,263",
+     "was": "₹1,804",
+     "off": "30% off",
+     "usd": "US$30",
+     "give": [
+      "pdf"
+     ],
+     "link": "https://www.veshannastro.co.in/2027-numerology-report/#register",
+     "needs": [
+      "dob",
+      "tob",
+      "pob"
+     ],
+     "features": [
+      "Everything in Classic",
+      "Read together with astrology from your birth chart",
+      "Needs your date, time and place of birth",
+      "Your crystal, Name Number and Pinnacles",
+      "Voice note from Shashank (QR code)",
+      "Delivered on WhatsApp and email within 24 hours"
+     ]
+    },
+    {
+     "t": "2027 Report: Classic",
+     "d": "Numerology from your name and date of birth. No birth time needed. A personalised 2027 Personal Year report PDF for one person.",
+     "p": "₹963",
+     "was": "₹1,376",
+     "off": "30% off",
+     "usd": "US$20",
+     "give": [
+      "pdf"
+     ],
+     "link": "https://www.veshannastro.co.in/2027-numerology-report/#register",
+     "needs": [
+      "dob",
+      "pob"
+     ],
+     "features": [
+      "Your Personal Year, Mulank, Bhagyank and Lo Shu grid",
+      "All 12 months of 2027 with muhurat dates and remedies",
+      "Needs your name, date and place of birth",
+      "Your crystal, Name Number and Pinnacles",
+      "Voice note from Shashank (QR code)",
+      "Delivered on WhatsApp and email within 24 hours"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "kundli",
+   "name": "Vedic Kundli",
+   "services": [
+    {
+     "t": "Vedic Kundli Consultation",
+     "d": "A deep 1-to-1 reading of your full birth chart — career, wealth and timing.",
+     "p": "₹2,249",
+     "was": "₹2,999",
+     "off": "25% off",
+     "give": [
+      "video",
+      "rec"
+     ],
+     "link": "vedic-kundli-booking.html",
+     "features": [
+      "45-min live video session",
+      "Career, wealth & marriage timing",
+      "Personalised remedies & gemstones"
+     ]
+    },
+    {
+     "t": "Premium Vedic Life Path Report",
+     "d": "Your chart computed precisely, then written up as a complete life-path map.",
+     "p": "₹699",
+     "was": "₹932",
+     "off": "25% off",
+     "give": [
+      "pdf"
+     ],
+     "link": "report-booking.html?service=astrology-life-path-report",
+     "features": [
+      "Built on the Swiss Ephemeris engine",
+      "Dasha timeline & key life phases",
+      "Strengths, cautions & remedies"
+     ]
+    },
+    {
+     "t": "Divorce & Separation Report",
+     "d": "A focused read on marriage strain, timing and the road ahead.",
+     "p": "₹599",
+     "was": "₹799",
+     "off": "25% off",
+     "give": [
+      "pdf"
+     ],
+     "link": "report-booking.html?service=divorce-separation-report",
+     "features": [
+      "Marriage stress & timing analysis",
+      "Reconciliation vs separation outlook",
+      "Practical remedial guidance"
+     ]
+    },
+    {
+     "t": "One Question Voice Consultation",
+     "d": "Ask one clear question, get a recorded voice answer from your chart.",
+     "p": "₹399",
+     "unit": "/question",
+     "give": [
+      "rec"
+     ],
+     "link": "vedic-kundli-booking.html?service=General",
+     "features": [
+      "One focused question",
+      "Chart-based voice answer",
+      "Delivered within 24–48 hrs"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "numerology",
+   "name": "Numerology",
+   "services": [
+    {
+     "t": "Numerology Consultation",
+     "d": "A live reading of your core numbers and where they steer your life.",
+     "p": "₹824",
+     "was": "₹1,099",
+     "off": "25% off",
+     "give": [
+      "video",
+      "rec"
+     ],
+     "link": "numerology-booking.html",
+     "features": [
+      "Live reading of your core numbers",
+      "Name, DOB & lucky-number review",
+      "Session recording shared after"
+     ]
+    },
+    {
+     "t": "Name Numerology Report",
+     "d": "How your name's vibration shapes luck, image and the doors that open.",
+     "p": "₹299",
+     "was": "₹999",
+     "off": "70% off",
+     "give": [
+      "pdf"
+     ],
+     "link": "https://rzp.io/rzp/kZFn4FTO",
+     "features": [
+      "Full name-vibration analysis",
+      "Lucky-spelling suggestions",
+      "Quick PDF delivery"
+     ]
+    },
+    {
+     "t": "Mobile Number Analysis",
+     "d": "Whether your phone number works for or against your energy.",
+     "p": "₹299",
+     "was": "₹999",
+     "off": "70% off",
+     "give": [
+      "pdf"
+     ],
+     "link": "https://rzp.io/rzp/kZFn4FTO",
+     "features": [
+      "Number-energy compatibility check",
+      "Favourable-number suggestions",
+      "PDF report"
+     ]
+    },
+    {
+     "t": "Complete Numerology Report",
+     "d": "Your full numeric blueprint — life path, destiny, cycles and remedies.",
+     "p": "₹999",
+     "was": "₹3,996",
+     "off": "75% off",
+     "give": [
+      "pdf",
+      "gift"
+     ],
+     "link": "https://rzp.io/rzp/W8VAKwW5",
+     "features": [
+      "Life-path, destiny & soul numbers",
+      "Personal year & cycles",
+      "Free bonus gift included"
+     ]
+    },
+    {
+     "t": "Baby Name Report",
+     "d": "A shortlist of names tuned to a strong, harmonious birth chart.",
+     "p": "₹299",
+     "was": "₹999",
+     "off": "70% off",
+     "give": [
+      "pdf"
+     ],
+     "link": "https://rzp.io/rzp/kZFn4FTO",
+     "features": [
+      "Numerology-tuned name shortlist",
+      "Aligned to birth details",
+      "PDF report"
+     ]
+    },
+    {
+     "t": "Business Name Report",
+     "d": "Test a brand name's numbers for growth, trust and momentum.",
+     "p": "₹499",
+     "was": "₹1,996",
+     "off": "75% off",
+     "give": [
+      "pdf"
+     ],
+     "link": "https://rzp.io/rzp/eAuvYdJD",
+     "features": [
+      "Brand-name number testing",
+      "Growth & trust alignment",
+      "PDF report"
+     ]
+    },
+    {
+     "t": "Numerology Compatibility",
+     "d": "How two people's numbers blend in love, work or partnership.",
+     "p": "₹299",
+     "was": "₹999",
+     "off": "70% off",
+     "give": [
+      "pdf"
+     ],
+     "link": "https://rzp.io/rzp/GehUWdel",
+     "features": [
+      "Two-person number match",
+      "Love, work or partnership",
+      "PDF report"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "palm",
+   "name": "Palm reading",
+   "services": [
+    {
+     "t": "Palmistry Report",
+     "d": "A written read of your dominant hand's major lines and mounts.",
+     "p": "₹149",
+     "was": "₹199",
+     "off": "25% off",
+     "give": [
+      "pdf"
+     ],
+     "link": "report-booking.html?service=palmistry-report",
+     "features": [
+      "Major lines & mounts read",
+      "Dominant-hand analysis",
+      "PDF report"
+     ]
+    },
+    {
+     "t": "Palmistry Voice Consultation",
+     "d": "Send a clear palm photo, get a recorded voice reading back.",
+     "p": "₹374",
+     "was": "₹499",
+     "off": "25% off",
+     "give": [
+      "rec"
+     ],
+     "link": "report-booking.html?service=palmistry-voice",
+     "features": [
+      "Send a clear palm photo",
+      "Recorded voice reading",
+      "Delivered within 24–48 hrs"
+     ]
+    }
+   ]
+  }
+ ],
+ "offer": "2027 reports: 30% Diwali offer until 6 November. Phase one is limited to 200 reports and closes on 6 November. One report per person; for two or more people the order is taken on WhatsApp. Outside India: Astro-Numero Blend US$30, Classic US$20. Order page: https://www.veshannastro.co.in/2027-numerology-report/",
+ "inside": [
+  "Your Personal Year and zodiac reading: A chapter written for your exact Personal Year and sun sign: your home, work, money, relationships and health in 2027, with a personal note from Shashank.",
+  "Your numbers, worked out: Your Personal Year, Mulank and Bhagyank, with every step of the calculation shown so you can see where each number comes from.",
+  "All 12 months, one page each: Which months are favourable and which ask for care, what each one means for you, the full-moon date and a simple remedy to follow.",
+  "Muhurat, lucky and power dates: Auspicious dates for every month from the Hindu Panchang, plus the dates that line up with your birth weekday and Personal Month.",
+  "Your 2027 Lo Shu grid: Your date of birth plotted on the Lo Shu grid with your destiny number added and your 2027 Personal Year marked, so you can see where this year's energy sits in your chart.",
+  "Your crystal for 2027: The bracelet crystal suited to your Mulank this year, and why it was chosen for you.",
+  "Name Number and Pinnacles: How the world experiences your name, whether it is aligned with your date of birth, and the life chapter you are living through right now.",
+  "A voice note from Shashank: Scan the QR code in your report to hear 30 to 60 seconds from Shashank on your year: its strengths, its cautions, what to do and what to avoid."
+ ],
+ "faq": [
+  {
+   "q": "What is the 2027 numerology report price in India?",
+   "a": "The Astro-Numero Blend is ₹1,263 (was ₹1,804) and the Classic is ₹963 (was ₹1,376), with the 30% Diwali offer until 6 November. Outside India they are US$30 and US$20."
+  },
+  {
+   "q": "What is the difference between Astro-Numero Blend and Classic?",
+   "a": "Classic is a numerology report built from your name and date of birth. Astro-Numero Blend reads your numerology together with astrology from your birth chart, so it also needs your time of birth."
+  },
+  {
+   "q": "Is this a generic yearly horoscope?",
+   "a": "No. Your Personal Year, Mulank, Lo Shu grid and Name Number come from your own date of birth and name, and Chapter 1 is written for your exact Personal Year and sun sign combination. Two people rarely get the same report."
+  },
+  {
+   "q": "I don't know my time of birth. Can I still get it?",
+   "a": "Yes. Choose Classic. It is built from your date of birth and your name, so your birth time is not needed. The Astro-Numero Blend needs your time of birth."
+  },
+  {
+   "q": "Is the 2027 numerology report a PDF, and when will I receive it?",
+   "a": "Yes. Your 2027 numerology report PDF arrives on your WhatsApp and email within 24 hours of payment. Inside is a QR code that opens a 30 to 60 second voice note from Shashank about your year."
+  },
+  {
+   "q": "What is a 2027 astro numero report?",
+   "a": "It is a report that reads numerology and astrology together. Our 2027 astro numero report is the Astro-Numero Blend: your numbers read alongside your birth chart, which is why it needs your time of birth."
+  },
+  {
+   "q": "Does it include a 2027 Lo Shu grid report?",
+   "a": "Yes. Every report has a 2027 Lo Shu grid report page: your date of birth plotted on the grid with your destiny number added and your 2027 Personal Year marked."
+  },
+  {
+   "q": "How do I pay?",
+   "a": "Buy your 2027 numerology report online on this page by UPI, card or netbanking. If you would like to talk first, message us on WhatsApp and pay from there."
+  },
+  {
+   "q": "What if my report does not arrive?",
+   "a": "If your report has not reached you within 24 hours of payment, message us on WhatsApp with your payment reference. We send it straight away, or refund you in full if we cannot deliver it. The refund and delivery policy has the details."
+  },
+  {
+   "q": "Can I order for my family or more than one person?",
+   "a": "Each order on this page is for one person, because each personalized 2027 numerology report is built from one date of birth. For two or more people, message us on WhatsApp and we will arrange it."
+  },
+  {
+   "q": "How do I choose the best 2027 numerology report?",
+   "a": "Look for one built from your own date of birth and name rather than your sun sign alone, that shows how each number is worked out, reads every month of 2027 and tells you who prepared it. A detailed numerology report for 2027 should also give remedies you can act on."
+  },
+  {
+   "q": "Is there a free 2027 numerology report?",
+   "a": "The Personal Year calculator on this page is free and tells you the number your year is read through. The full report, with every month, your dates, Lo Shu grid and voice note, is paid. You can also read free 2027 numerology predictions on our blog."
+  },
+  {
+   "q": "Does it replace a full birth chart consultation?",
+   "a": "No. Your Mahadasha, Antardasha and Saturn cycles are read live in a separate consultation with Shashank. Ask on WhatsApp if you would like one."
+  },
+  {
+   "q": "Why is phase one limited to 200 reports?",
+   "a": "Every report is prepared for one person by Shashank and his team. Phase one takes 200 reports and closes on 6 November."
+  }
+ ],
+ "blog": [
+  {
+   "title": "2027 Numerology Predictions and Forecast",
+   "about": "What the Universal Year 11/2 means for career, love, money and health, with a free calculator and month-by-month forecast.",
+   "url": "https://www.veshannastro.co.in/blog/2027-numerology-predictions.html"
+  },
+  {
+   "title": "How to calculate your Personal Year number for 2027",
+   "about": "Free 2027 personal year calculator, the method step by step, and worked examples for different birthdays.",
+   "url": "https://www.veshannastro.co.in/blog/personal-year-number-2027-calculator.html"
+  },
+  {
+   "title": "Personal Year 1 in 2027",
+   "about": "The year of beginnings. Career, love, money, health and your month-by-month 2027.",
+   "url": "https://www.veshannastro.co.in/blog/personal-year-1-in-2027.html"
+  },
+  {
+   "title": "Personal Year 2 in 2027",
+   "about": "The year of patience and partnership. Career, love, money, health and your month-by-month 2027.",
+   "url": "https://www.veshannastro.co.in/blog/personal-year-2-in-2027.html"
+  },
+  {
+   "title": "Personal Year 3 in 2027",
+   "about": "The year of expression and growth. Career, love, money, health and your month-by-month 2027.",
+   "url": "https://www.veshannastro.co.in/blog/personal-year-3-in-2027.html"
+  },
+  {
+   "title": "Personal Year 4 in 2027",
+   "about": "The year of foundations. Career, love, money, health and your month-by-month 2027.",
+   "url": "https://www.veshannastro.co.in/blog/personal-year-4-in-2027.html"
+  },
+  {
+   "title": "Personal Year 5 in 2027",
+   "about": "The year of change. Career, love, money, health and your month-by-month 2027.",
+   "url": "https://www.veshannastro.co.in/blog/personal-year-5-in-2027.html"
+  },
+  {
+   "title": "Personal Year 6 in 2027",
+   "about": "The year of home, love and responsibility. Career, love, money, health and your month-by-month 2027.",
+   "url": "https://www.veshannastro.co.in/blog/personal-year-6-in-2027.html"
+  },
+  {
+   "title": "Personal Year 7 in 2027",
+   "about": "The year of reflection. Career, love, money, health and your month-by-month 2027.",
+   "url": "https://www.veshannastro.co.in/blog/personal-year-7-in-2027.html"
+  },
+  {
+   "title": "Personal Year 8 in 2027",
+   "about": "The year of money and authority. Career, love, money, health and your month-by-month 2027.",
+   "url": "https://www.veshannastro.co.in/blog/personal-year-8-in-2027.html"
+  },
+  {
+   "title": "Personal Year 9 in 2027",
+   "about": "The year of completion. Career, love, money, health and your month-by-month 2027.",
+   "url": "https://www.veshannastro.co.in/blog/personal-year-9-in-2027.html"
+  },
+  {
+   "title": "Mulank Predictions 2027: Mulank 1 to 9",
+   "about": "Mulank 1 to 9 for 2027 by ank jyotish, in English and Hindi, with a free Mulank and Bhagyank calculator.",
+   "url": "https://www.veshannastro.co.in/blog/mulank-predictions-2027.html"
+  }
+ ]
+}

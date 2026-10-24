@@ -40,7 +40,10 @@ module.exports = async function handler(req, res) {
   }
   if (payment.status !== 'captured') return res.status(202).json({ ok: false, pending: true, payment_id: paymentId });
 
-  const later = lib.afterResponse(lib.tellKamala(orderId, paymentId).then(r => console.log(`Kamala hand-off for ${orderId}: ${r}`)));
+  const later = lib.afterResponse(Promise.all([
+    lib.tellKamala(orderId, paymentId).then(r => console.log(`Kamala hand-off for ${orderId}: ${r}`)),
+    lib.store.markPaid(String((order.notes || {}).phone || '')).catch(e => console.error('Marking the lead paid failed:', e.message))
+  ]));
   const n = order.notes || {};
   const out = {
     ok: true,

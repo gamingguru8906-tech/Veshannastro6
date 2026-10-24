@@ -960,7 +960,7 @@ window.openWhatsAppBooking=function(){
     document.getElementById('cf-email').focus();
     return;
   }
-  const waUrl='https://wa.me/918827684725?text='+encodeURIComponent(buildWhatsAppMessage());
+  const waUrl='https://wa.me/917646952745?text='+encodeURIComponent(buildWhatsAppMessage());
   window.open(waUrl,'_blank');
 };
 
@@ -1231,7 +1231,7 @@ document.getElementById('cf-submit').addEventListener('click',function(){
   // Check if Razorpay loaded (may be blocked by ad-blocker or network)
   if(typeof Razorpay==='undefined'){
     resetBtn();
-    const waUrl='https://wa.me/918827684725?text='+encodeURIComponent(buildWhatsAppMessage());
+    const waUrl='https://wa.me/917646952745?text='+encodeURIComponent(buildWhatsAppMessage());
     if(confirm('Payment gateway could not be reached (it may be blocked by an ad-blocker or your network).\n\nClick OK to complete your booking via WhatsApp instead.')){
       window.open(waUrl,'_blank');
     }

@@ -4,6 +4,7 @@
 // server always charge the same amount. The browser never decides the price.
 const crypto = require('crypto');
 const CATALOG = require('./_catalog.json');
+const store = require('./_db');
 
 const env = name => String(process.env[name] || '').trim();
 const KEY_ID = env('RAZORPAY_KEY_ID');
@@ -174,6 +175,18 @@ function tellKamalaLead(o, stage) {
   });
 }
 
+// The form goes straight into the shared database when it is connected (Vercel DATABASE_URL), else to Kamala.
+async function recordLead(o, stage, visitor) {
+  if (store.enabled()) {
+    try {
+      if (await store.saveLead(o, stage, visitor, money(o.amount, o.currency)) === 'saved') return 'database';
+    } catch (e) {
+      console.error('Saving the order form to the database failed, handing it to Kamala:', e.message);
+    }
+  }
+  return tellKamalaLead(o, stage);
+}
+
 async function postKamala(path, body) {
   const url = env('KAMALA_URL').replace(/\/+$/, '');
   const secret = env('WEB_ORDER_SECRET');
@@ -210,5 +223,5 @@ function afterResponse(promise) {
 
 module.exports = {
   CATALOG, RECEIPT_PREFIX, configured, keyId: () => KEY_ID, keySecret: () => KEY_SECRET,
-  clean, timingSafeEqualHex, money, guard, body, normalisePhone, readOrder, razorpay, phaseOpen, tellKamala, tellKamalaLead, afterResponse
+  clean, timingSafeEqualHex, money, guard, body, normalisePhone, readOrder, razorpay, phaseOpen, tellKamala, tellKamalaLead, recordLead, afterResponse, store
 };

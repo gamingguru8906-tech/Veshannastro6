@@ -291,6 +291,7 @@ MULANK_FAQ = [
     ("How is Bhagyank calculated?", "Add every digit of your full date of birth and reduce to one digit. Born 27/09/1994: 2 + 7 + 0 + 9 + 1 + 9 + 9 + 4 = 41, and 4 + 1 = 5. Bhagyank 5."),
     ("Which Mulank is luckiest in 2027?", "In a Moon year, Mulank 1, 3 and 9 have the most natural support, and Mulank 2 has the year's energy doubled. Mulank 4 and 8 need more patience. Every Mulank has good months; they show up in your Personal Year."),
     ("2027 kaisa rahega mulank ke anusar?", "2027 ka ank 2 hai, jiska swami Chandrama hai. Mulank 1, 3 aur 9 ke liye saal sahayak hai, Mulank 2 ke liye Chandra ki urja dugni hai, Mulank 5, 6 aur 7 ke liye mila-jula hai, aur Mulank 4 aur 8 ke liye dhairya ka saal hai."),
+    ("Moolank 2027 bhavishya kaise padhein?", "Apni janm tareekh ke ank jodiye jab tak ek ank na bache, wahi aapka moolank hai (27 tareekh: 2 + 7 = 9). Ank jyotish 2027 mein har moolank ka bhavishya uske grah aur Chandrama ke rishte se dekha jata hai. Upar apne moolank ka career, paisa, rishte, sehat, shubh rang aur upay padhiye, aur mahine ke hisaab se samay ke liye apna Personal Year bhi dekhiye."),
     ("What is the difference between Mulank and Personal Year?", "Mulank describes your nature and never changes. Your Personal Year uses your birth day and birth month with the current year, so it changes every year. Read both: Mulank for how the year sits with you, Personal Year for the year's theme."),
 ]
 
@@ -317,7 +318,7 @@ def body_mulank():
 </section>"""
     bh_rows = "".join(f"<tr><th>Bhagyank {n}</th><td>{PLANET[n]}</td><td>{t}</td></tr>" for n, t in BHAGYANK.items())
     return f"""
-<p class="lede hindi" lang="hi" style="margin-top:-8px">मूलांक के अनुसार 2027 कैसा रहेगा</p>
+<p class="lede hindi" lang="hi" style="margin-top:-8px">मूलांक के अनुसार 2027 कैसा रहेगा: मूलांक 1 से 9 का 2027 भविष्यफल</p>
 {toc([("calculator", "Mulank and Bhagyank calculator"), ("how", "How these predictions are read")] + [(f"mulank-{n}", f"Mulank {n}") for n in range(1, 10)] + [("bhagyank", "Bhagyank predictions 2027"), ("birth-number", "Birth number and life path"), ("faq", "Questions")])}
 
 <h2 id="calculator">Mulank and Bhagyank calculator</h2>
