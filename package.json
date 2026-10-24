@@ -1,0 +1,9 @@
+{
+  "name": "veshannastro-site",
+  "private": true,
+  "description": "Static site; api/ holds the Vercel functions for the 2027 report (payment, order form, shared database).",
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "pg": "^8.13.1"
+  }
+}

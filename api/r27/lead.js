@@ -19,7 +19,12 @@ module.exports = async function handler(req, res) {
   const read = lib.readOrder(b);
   if (!read.ok) return res.status(400).json({ ok: false, errors: read.errors });
   const stage = ['form', 'whatsapp'].includes(b.stage) ? b.stage : 'form';
+  // Straight into the shared database (quick), or handed to Kamala after the reply when it is not connected.
+  if (lib.store.enabled()) {
+    const r = await lib.recordLead(read.order, stage, String(b.visitor || ''));
+    return res.status(202).json({ ok: true, saved: r });
+  }
   const later = lib.afterResponse(lib.tellKamalaLead(read.order, stage));
   if (later) await later;
-  return res.status(202).json({ ok: true });
+  return res.status(202).json({ ok: true, saved: 'kamala' });
 };

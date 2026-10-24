@@ -42,7 +42,7 @@ module.exports = async function handler(req, res) {
   }
 
   // Kamala hears that they opened the payment window, so she knows them if they message instead of paying.
-  const later = lib.afterResponse(lib.tellKamalaLead(o, 'checkout'));
+  const later = lib.afterResponse(lib.recordLead(o, 'checkout', String(lib.body(req).visitor || '')));
   if (later) await later;
   return res.status(200).json({
     ok: true,

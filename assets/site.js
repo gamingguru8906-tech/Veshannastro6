@@ -29,9 +29,9 @@
   /* ---------- WhatsApp click tracking ---------- */
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href*="wa.me/"]');
-    if (a && typeof window.gtag === 'function') {
-      window.gtag('event', 'whatsapp_click', { link_text: (a.textContent || '').trim().slice(0, 60), page_path: location.pathname });
-    }
+    if (!a) return;
+    if (typeof window.gtag === 'function') window.gtag('event', 'whatsapp_click', { link_text: (a.textContent || '').trim().slice(0, 60), page_path: location.pathname });
+    if (window.vsLog) window.vsLog('whatsapp_click', { link_text: (a.textContent || '').trim().slice(0, 60) });
   });
 
   /* ---------- night sky ---------- */
@@ -123,6 +123,7 @@
         '<a class="btn btn-gold" href="' + orderHref.replace(/"/g, '&quot;') + '"' + (/^https?:/.test(orderHref) ? ' target="_blank" rel="noopener"' : '') + '>Get my full 2027 report</a>' +
         '</div></div>';
       if (typeof window.gtag === 'function') window.gtag('event', 'personal_year_calculated', { personal_year: py });
+      if (window.vsLog && run.lastPy !== py) { run.lastPy = py; window.vsLog('personal_year_calculated', { personal_year: py }); }
     };
     form.addEventListener('input', run);
     form.addEventListener('change', run);
@@ -155,4 +156,24 @@
     form.addEventListener('change', run);
     form.addEventListener('submit', function (e) { e.preventDefault(); run(); });
   });
+})();
+
+/* What a visitor reads on the blog, kept in our own database with a random id from this browser (the same id as the
+   2027 report page). Joined to a WhatsApp number only if they later submit the order form. */
+(function () {
+  var make = function () { var a = new Uint8Array(12); if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(a); else for (var i = 0; i < 12; i++) a[i] = Math.random() * 256; return Array.prototype.map.call(a, function (b) { return ('0' + b.toString(16)).slice(-2); }).join(''); };
+  var visitor;
+  try { visitor = localStorage.getItem('vs-visitor'); if (!/^[a-z0-9]{16,40}$/.test(visitor || '')) { visitor = make(); localStorage.setItem('vs-visitor', visitor); } } catch (e) { visitor = make(); }
+  var queue = [], timer = null;
+  function flush() {
+    if (!queue.length) return;
+    var body = JSON.stringify({ visitor: visitor, events: queue.splice(0, 20) });
+    try { if (navigator.sendBeacon && navigator.sendBeacon('/api/r27/event', new Blob([body], { type: 'application/json' }))) return; } catch (e) {}
+    try { fetch('/api/r27/event', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: body, keepalive: true }).catch(function () {}); } catch (e) {}
+  }
+  window.vsLog = function (kind, detail) { queue.push({ kind: kind, detail: detail || {}, path: location.pathname, at: Date.now() }); clearTimeout(timer); timer = setTimeout(flush, 1500); };
+  addEventListener('pagehide', flush);
+  var d = {}; try { if (document.referrer) d.from = new URL(document.referrer).hostname; } catch (e) {}
+  var title = (document.querySelector('h1') || {}).textContent; if (title) d.title = title.trim().slice(0, 120);
+  window.vsLog('visit', d);
 })();
