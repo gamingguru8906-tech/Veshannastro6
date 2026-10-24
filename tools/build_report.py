@@ -31,7 +31,16 @@ REPORTS = {
 }
 OFFER = {"pct": 30, "name": "Diwali offer", "ends": "2026-11-06", "ends_text": "6 November", "limit": 200}
 DELIVERY = "24 hours"
-ONLINE_PAY = False  # switch to True once the Razorpay keys are set in Vercel (Phase 2)
+# Pay on the page through Razorpay (api/r27). If the server is not set up or the order cannot be made online,
+# the page falls back to the WhatsApp order on its own, so nothing breaks.
+ONLINE_PAY = True
+# Google Ads purchase conversion label (the part after the slash in AW-18189866057/LABEL). Empty: not sent.
+ADS_PURCHASE_LABEL = ""
+# Pay in US dollars on the page. Needs international payments on in Razorpay and R27_USD=on in Vercel.
+# Off: buyers outside India send their order on WhatsApp.
+USD_ONLINE = False
+# Phase one closes at the end of this day, India time.
+CLOSES_AT = OFFER["ends"] + "T23:59:59+05:30"
 
 ORDER_MSG = "Hi Veshannastro, I would like to order the 2027 Personal Year Report."
 BULK_MSG = "Hi Veshannastro, I would like 2027 reports for more than one person."
@@ -167,7 +176,7 @@ def page():
         product("blend"), product("classic"),
         {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": strip(q), "acceptedAnswer": {"@type": "Answer", "text": strip(a)}} for q, a in F]},
     ]}
-    config = {"wa": WA, "online": ONLINE_PAY, "delivery": DELIVERY, "offerEnds": OFFER["ends"], "reports": REPORTS}
+    config = {"wa": WA, "online": ONLINE_PAY, "ads": ("AW-18189866057/" + ADS_PURCHASE_LABEL) if ADS_PURCHASE_LABEL else "", "usdOnline": USD_ONLINE, "delivery": DELIVERY, "offerEnds": OFFER["ends"], "reports": REPORTS}
 
     title = "2027 Numerology Report: Personal Year Forecast | Veshannastro"
     desc = (f"Personalised 2027 numerology report PDF: Personal Year, Mulank, Lo Shu grid and all 12 months with remedies. "
@@ -188,12 +197,12 @@ def page():
   <link rel="icon" href="/favicon.ico" sizes="any"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" as="image" href="/assets/r27/hero-wide.webp">
-  <link rel="stylesheet" href="/assets/r27/styles.css?v=5"><link rel="stylesheet" href="/assets/r27/sections.css?v=5"><link rel="stylesheet" href="/assets/r27/report.css?v=5">
+  <link rel="stylesheet" href="/assets/r27/styles.css?v=6"><link rel="stylesheet" href="/assets/r27/sections.css?v=6"><link rel="stylesheet" href="/assets/r27/report.css?v=6">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R20FKYJK7P"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-R20FKYJK7P');gtag('config','AW-18189866057');</script>
   <script type="application/ld+json">{json.dumps(graph, ensure_ascii=False, separators=(",", ":"))}</script>
   <script>window.R27={json.dumps(config, separators=(",", ":"))};</script>
-  <script src="/assets/r27/report.js?v=5" defer></script><script src="/assets/r27/book.js?v=5" defer></script>
+  <script src="/assets/r27/report.js?v=6" defer></script><script src="/assets/r27/book.js?v=6" defer></script>
 </head>
 <body>
   <div class="nebula" aria-hidden="true"></div><canvas class="sky" id="star-field" aria-hidden="true"></canvas>
@@ -328,8 +337,8 @@ def page():
     <div class="foot-base"><span>// SHASHANK AGRAWAL &nbsp; // VESHANNASTRO</span><span>Numerology and astrology are guidance, not guarantees. &copy; 2026 Veshannastro</span></div>
   </div></footer>
 
-  <dialog id="review-dialog" class="review-dialog" aria-labelledby="review-title"><div class="review-scroll"><header class="review-head"><div class="dialog-title-row"><h2 id="review-title">Check your details</h2><button class="close-dialog" type="button" data-close aria-label="Close">&times;</button></div><p>Edit anything before you continue.</p></header><div id="review-content"></div><p class="local-payment-note" id="review-note"></p></div>
-    <footer class="dialog-foot"><button type="button" class="outline-button" data-close>Edit details</button><a id="review-go" class="wa-btn" href="#" target="_blank" rel="noopener">{ICON_WA}<span>Send order on WhatsApp</span></a></footer></dialog>
+  <dialog id="review-dialog" class="review-dialog" aria-labelledby="review-title"><div class="review-scroll"><header class="review-head"><div class="dialog-title-row"><h2 id="review-title">Check your details</h2><button class="close-dialog" type="button" data-close aria-label="Close">&times;</button></div><p id="review-sub">Edit anything before you continue.</p></header><div id="review-content"></div><p class="local-payment-note" id="review-note"></p><p class="form-error" id="pay-error" role="alert" hidden></p></div>
+    <footer class="dialog-foot"><button type="button" class="outline-button" data-close id="review-edit">Edit details</button><a id="review-go" class="wa-btn" href="#" target="_blank" rel="noopener">{ICON_WA}<span>Send order on WhatsApp</span></a><button type="button" class="pill pay-btn" id="review-pay" hidden><span id="review-pay-label">Pay</span></button><button type="button" class="pill" id="review-done" data-close hidden>Close</button></footer></dialog>
 
   <div class="sticky-pay" id="sticky-pay"><div class="sp-text"><b id="sp-name">Astro-Numero Blend</b><span id="sp-price">{inr(b['inr'])}, delivered within {DELIVERY}</span></div><a class="pill get-report" href="#register">Order</a></div>
   <a class="wa-float" href="{wa(ASK_MSG)}" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">{ICON_WA}<span>WhatsApp</span></a>
@@ -343,3 +352,11 @@ if __name__ == "__main__":
     os.makedirs(os.path.dirname(out), exist_ok=True)
     open(out, "w", encoding="utf-8").write(page())
     print(os.path.relpath(out, REPO))
+    # The payment server charges from this same table (api/r27/_catalog.json), never from the browser.
+    catalog = {"reports": {k: {f: v[f] for f in ("name", "inr", "inr_mrp", "usd", "usd_mrp", "needs_time")} for k, v in REPORTS.items()},
+               "offer": {"pct": OFFER["pct"], "name": OFFER["name"], "closes_at": CLOSES_AT, "limit": OFFER["limit"]},
+               "delivery": DELIVERY, "whatsapp": WA}
+    cat = os.path.join(REPO, "api", "r27", "_catalog.json")
+    os.makedirs(os.path.dirname(cat), exist_ok=True)
+    open(cat, "w", encoding="utf-8").write(json.dumps(catalog, indent=2, ensure_ascii=False) + "\n")
+    print(os.path.relpath(cat, REPO))

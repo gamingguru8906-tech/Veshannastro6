@@ -134,3 +134,14 @@
 
 @media(max-width:760px){.form-in-view .wa-float{opacity:0;pointer-events:none}.wa-float span{display:none}.wa-float{padding:12px}}
 .covers-fan.covers-pre figure,.covers-fan.covers-pre+.covers-note{opacity:0}
+
+/* ---------- on-page payment ---------- */
+.dialog-foot .pill{padding:13px 22px;font-size:14.5px}
+.pay-btn[disabled]{opacity:.72;cursor:progress}
+.wa-btn.wa-secondary{background:none;border:1px solid #25d36673;color:#bff5d4!important}
+.wa-btn.wa-secondary:hover{background:#25d3661a}
+.local-payment-note a{color:var(--cy);text-decoration:underline;text-underline-offset:2px}
+.order-done{display:flex;flex-direction:column;gap:10px}
+.order-done h2{margin:0;font-size:clamp(24px,2.4vw,30px);font-weight:400;letter-spacing:-.024em;color:#f4f7ff}
+.order-done p{margin:0;color:#c0c9dc;font-size:13.5px;line-height:1.6}
+.order-done .outline-button{align-self:flex-start;margin-top:6px}

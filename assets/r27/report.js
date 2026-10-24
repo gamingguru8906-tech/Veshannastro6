@@ -50,7 +50,7 @@
     var r = C.reports[report], p = price();
     $$('[data-report]').forEach(function (b) { b.setAttribute('aria-checked', String(b.getAttribute('data-report') === report)); });
     $('#pb-now').textContent = p.now; $('#pb-was').textContent = p.was; $('#pb-line').textContent = r.line;
-    $('#pay-label').textContent = (C.online ? 'Pay ' : 'Review and order ') + p.now;
+    $('#pay-label').textContent = (C.online && (p.cur === 'INR' || C.usdOnline) ? 'Review and pay ' : 'Review and order ') + p.now;
     tob.hidden = !r.needs_time;
     $$('select', tob).forEach(function (s) { s.required = r.needs_time; });
     $('#sp-name').textContent = r.name; $('#sp-price').textContent = p.now + ', delivered within ' + C.delivery;
@@ -106,23 +106,179 @@
     return lines.join('\n');
   }
 
-  /* ---------- review dialog (WhatsApp order) ---------- */
-  var dlg = $('#review-dialog');
+  /* ---------- review dialog: pay on the page (Razorpay), or send the order on WhatsApp ---------- */
+  var dlg = $('#review-dialog'), payBtn = $('#review-pay'), goWa = $('#review-go'), payErr = $('#pay-error');
   $$('[data-close]', dlg).forEach(function (b) { b.addEventListener('click', function () { dlg.close(); }); });
-  dlg.addEventListener('close', function () { document.body.classList.remove('dialog-open'); });
+  dlg.addEventListener('close', function () { document.body.classList.remove('dialog-open'); if (paid) showDone(paid); });
+  dlg.addEventListener('cancel', function (e) { if (busy) e.preventDefault(); }); // no closing while the payment starts
+  var busy = false, paid = null, cached = null, current = null;
+
+  function openDialog() { if (!dlg.open) { if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', ''); } document.body.classList.add('dialog-open'); }
+  function rowsHtml(rows, head) {
+    return '<section class="review-card"><header><span>' + head + '</span></header><dl>' +
+      rows.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + esc(r[1]) + '</dd></div>'; }).join('') + '</dl></section>';
+  }
+  function setError(msg) { payErr.textContent = msg || ''; payErr.hidden = !msg; }
+  // WhatsApp hand-off: the order typed out, ready to send.
+  function useWhatsApp(primary) {
+    goWa.hidden = false;
+    if (primary) payBtn.hidden = true;
+    goWa.classList.toggle('wa-secondary', !primary);
+  }
   function review(o, p) {
+    current = { o: o, p: p };
     var rows = [['Report', o.reportName + ', ' + p.now], ['Name', o.name], ['Date of birth', o.dob]];
     if (o.tob) rows.push(['Time of birth', o.tob]);
     rows.push(['Place of birth', o.pob], ['Email', o.email], ['WhatsApp', o.code + ' ' + o.mobile]);
     if (o.referral) rows.push(['Referral code', o.referral]);
-    $('#review-content').innerHTML = '<section class="review-card"><header><span>Your order</span></header><dl>' +
-      rows.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + esc(r[1]) + '</dd></div>'; }).join('') + '</dl></section>';
-    $('#review-note').textContent = 'This opens WhatsApp with your order typed out. Send it and we reply with your payment link. Your report arrives within ' + C.delivery + ' of payment.';
-    var go = $('#review-go');
-    go.href = 'https://wa.me/' + C.wa + '?text=' + encodeURIComponent(waText(o, p));
-    go.onclick = function () { track('generate_lead', { currency: p.cur, value: p.amount, item_name: o.reportName }); };
-    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
-    document.body.classList.add('dialog-open');
+    $('#review-title').textContent = 'Check your details';
+    $('#review-sub').textContent = 'Edit anything before you continue.';
+    $('#review-content').innerHTML = rowsHtml(rows, 'Your order');
+    setError('');
+    $('#review-edit').hidden = false; $('#review-done').hidden = true;
+    goWa.href = 'https://wa.me/' + C.wa + '?text=' + encodeURIComponent(waText(o, p));
+    goWa.onclick = function () { track('generate_lead', { currency: p.cur, value: p.amount, item_name: o.reportName }); };
+    if (C.online && (p.cur === 'INR' || C.usdOnline)) {
+      payBtn.hidden = false; payBtn.disabled = false; $('#review-pay-label').textContent = 'Pay ' + p.now;
+      goWa.hidden = true;
+      $('#review-note').innerHTML = 'Pay by UPI, card or netbanking in Razorpay’s secure window. Your report arrives within ' + esc(C.delivery) +
+        ' of payment. Prefer to talk first? <a href="' + esc(goWa.href) + '" target="_blank" rel="noopener" class="wa-inline">Order on WhatsApp</a>.';
+      var inl = $('.wa-inline', dlg); if (inl) inl.addEventListener('click', goWa.onclick);
+    } else {
+      payBtn.hidden = true; goWa.hidden = false;
+      $('#review-note').textContent = (C.online ? 'Payment from outside India is taken on WhatsApp for now. ' : '') + 'This opens WhatsApp with your order typed out. Send it and we reply with your payment link. Your report arrives within ' + C.delivery + ' of payment.';
+    }
+    openDialog();
+  }
+  // The server says this order should go through WhatsApp (not open yet, dollars, phase closed, Razorpay down).
+  function switchToWhatsApp(message) {
+    payBtn.hidden = true; goWa.hidden = false;
+    $('#review-note').textContent = message;
+  }
+
+  function payload(o) {
+    return { report: o.report, name: o.name, dob: o.dobIso, tob: o.tob, pob: o.pob, email: o.email, code: o.code, mobile: o.mobile,
+      referral: o.referral, terms: $('input[name="terms"]', form).checked, updates: $('input[name="wa_ok"]', form).checked };
+  }
+  var FIELD = { name: '#name', dob: '#dob-day', tob: '#tob-hour', pob: '#pob', email: '#email', mobile: '#mobile', referral: '#referral', terms: 'input[name="terms"]' };
+  function markServerErrors(errors) {
+    dlg.close();
+    var first = null;
+    Object.keys(errors).forEach(function (k) {
+      var el = $(FIELD[k] || '#name'); var w = el && el.closest('.field,.consent');
+      if (w) { w.classList.add('invalid'); var fe = $('.field-error', w); if (fe) fe.textContent = errors[k]; }
+      if (!first && el) first = el;
+    });
+    $('#form-error').hidden = false;
+    if (first) first.focus();
+  }
+  var rzpLoad = null;
+  function loadCheckout() {
+    if (window.Razorpay) return Promise.resolve();
+    if (rzpLoad) return rzpLoad;
+    rzpLoad = new Promise(function (ok, fail) {
+      var sc = document.createElement('script'); sc.src = 'https://checkout.razorpay.com/v1/checkout.js'; sc.async = true;
+      var t = setTimeout(function () { fail(new Error('timeout')); }, 15000);
+      sc.onload = function () { clearTimeout(t); window.Razorpay ? ok() : fail(new Error('missing')); };
+      sc.onerror = function () { clearTimeout(t); fail(new Error('blocked')); };
+      document.head.appendChild(sc);
+    });
+    rzpLoad.catch(function () { rzpLoad = null; });
+    return rzpLoad;
+  }
+  function post(url, data) {
+    return fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { j._status = r.status; return j; }); });
+  }
+  function setBusy(on, label) {
+    busy = on; payBtn.disabled = on;
+    $('#review-pay-label').textContent = on ? (label || 'Opening secure payment') : 'Pay ' + current.p.now;
+  }
+
+  payBtn.addEventListener('click', function () {
+    if (busy || !current) return;
+    var o = current.o, p = current.p, data = payload(o), key = JSON.stringify(data);
+    setError(''); setBusy(true);
+    track('add_payment_info', { currency: p.cur, value: p.amount, items: [{ item_name: o.reportName, price: p.amount }] });
+    // The same details reuse the same Razorpay order (a retry never makes a second one).
+    var orderReady = cached && cached.key === key && Date.now() - cached.at < 25 * 60 * 1000
+      ? Promise.resolve(cached.res)
+      : post('/api/r27/order', data).then(function (res) { if (res.ok) cached = { key: key, at: Date.now(), res: res }; return res; });
+    Promise.all([orderReady, loadCheckout().catch(function (e) { return e; })]).then(function (both) {
+      var res = both[0], loadErr = both[1];
+      if (!res.ok) {
+        setBusy(false);
+        if (res.errors) return markServerErrors(res.errors);
+        return switchToWhatsApp(res.message || 'Online payment could not start just now. Send your order on WhatsApp instead.');
+      }
+      if (loadErr instanceof Error || !window.Razorpay) {
+        setBusy(false);
+        setError('The payment window could not load. An ad blocker or a weak connection can stop it. Try again, or order on WhatsApp.');
+        return useWhatsApp(false);
+      }
+      var opts = Object.assign({}, res.checkout, {
+        handler: function (r) { confirm(r, o, p, res); },
+        modal: { ondismiss: function () { if (!paid) { setBusy(false); openDialog(); } }, confirm_close: true }
+      });
+      var rzp = new window.Razorpay(opts);
+      rzp.on('payment.failed', function (r) {
+        var why = r && r.error && r.error.description ? r.error.description : 'The payment did not go through.';
+        setError(why + ' You can try again. If any amount was deducted for this attempt, your bank returns it automatically.');
+        track('payment_failed', { reason: (r && r.error && r.error.reason) || '' });
+      });
+      // Razorpay's window must sit on top and take taps; this dialog comes back when it closes.
+      dlg.close();
+      rzp.open();
+    }).catch(function () {
+      setBusy(false);
+      switchToWhatsApp('We could not reach the payment server. Check your connection and try again, or send your order on WhatsApp.');
+      payBtn.hidden = false;
+    });
+  });
+
+  function confirm(r, o, p, orderRes) {
+    setBusy(true, 'Confirming your payment');
+    var finish = function (result) {
+      paid = { o: o, p: p, result: result, receipt: orderRes.receipt, paymentId: r.razorpay_payment_id };
+      cached = null; busy = false;
+      if (result && result.ok) {
+        track('purchase', { transaction_id: r.razorpay_payment_id, currency: result.currency, value: result.amount, items: [{ item_name: o.reportName, price: result.amount }] });
+        if (C.ads && typeof window.gtag === 'function') window.gtag('event', 'conversion', { send_to: C.ads, value: result.amount, currency: result.currency, transaction_id: r.razorpay_payment_id });
+      }
+      showThanks(paid);
+    };
+    post('/api/r27/verify', r).then(finish).catch(function () { finish({ ok: false, pending: true }); });
+  }
+
+  function thanksHtml(d) {
+    var o = d.o, ok = d.result && d.result.ok;
+    var rows = [['Report', o.reportName], ['Paid', ok ? d.result.price : d.p.now], ['WhatsApp', o.code + ' ' + o.mobile], ['Email', o.email], ['Order reference', d.receipt]];
+    return rowsHtml(rows, ok ? 'Payment received' : 'Payment being confirmed');
+  }
+  function showThanks(d) {
+    var ok = d.result && d.result.ok;
+    $('#review-title').textContent = ok ? 'Thank you, ' + d.o.name.split(' ')[0] : 'We are confirming your payment';
+    $('#review-sub').textContent = ok ? 'Your 2027 report is now being prepared for you.' : 'Razorpay has your payment. This can take a minute to confirm.';
+    $('#review-content').innerHTML = thanksHtml(d);
+    $('#review-note').innerHTML = ok
+      ? 'A confirmation with your invoice is on its way to your WhatsApp now. Your report reaches you on WhatsApp and email within ' + esc(C.delivery) + '.'
+      : 'You will get a confirmation on WhatsApp once it clears. If nothing arrives in 15 minutes, <a href="https://wa.me/' + C.wa + '?text=' +
+        encodeURIComponent('Hi Veshannastro, I paid for the 2027 report. Payment ID: ' + d.paymentId) + '" target="_blank" rel="noopener">message us with your payment ID</a> (' + esc(d.paymentId) + ').';
+    setError('');
+    payBtn.hidden = true; goWa.hidden = true; $('#review-edit').hidden = true; $('#review-done').hidden = false;
+    openDialog();
+  }
+  // After paying, the form makes way for a short note so nobody pays twice by accident.
+  function showDone(d) {
+    var card = $('.form-card'); if (!card || $('.order-done', card)) return;
+    var ok = d.result && d.result.ok;
+    var box = document.createElement('div'); box.className = 'order-done';
+    box.innerHTML = '<p class="report-mark">' + (ok ? 'Payment received' : 'Payment being confirmed') + '</p><h2>Thank you, ' + esc(d.o.name.split(' ')[0]) + '.</h2>' +
+      '<p>Your ' + esc(d.o.reportName) + ' reaches you on WhatsApp and email within ' + esc(C.delivery) + '. Order reference ' + esc(d.receipt) + '.</p>' +
+      '<button type="button" class="outline-button" id="order-another">Order a report for someone else</button>';
+    form.hidden = true; card.appendChild(box);
+    card.scrollIntoView({ block: 'center', behavior: reduced ? 'auto' : 'smooth' });
+    $('#order-another').addEventListener('click', function () { box.remove(); form.hidden = false; form.reset(); cc.value = 'India|+91'; paid = null; refresh(); $('#name').focus(); });
   }
 
   form.addEventListener('submit', function (e) {
@@ -130,7 +286,6 @@
     var o = collect(), p = price();
     if (!validate(o)) return;
     track('begin_checkout', { currency: p.cur, value: p.amount, items: [{ item_name: o.reportName, price: p.amount }] });
-    if (C.online && typeof window.R27Pay === 'function') return window.R27Pay(o, p, function () { review(o, p); });
     review(o, p);
   });
 

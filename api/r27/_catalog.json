@@ -1,0 +1,28 @@
+{
+  "reports": {
+    "blend": {
+      "name": "Astro-Numero Blend",
+      "inr": 1263,
+      "inr_mrp": 1804,
+      "usd": 30,
+      "usd_mrp": 43,
+      "needs_time": true
+    },
+    "classic": {
+      "name": "Classic",
+      "inr": 963,
+      "inr_mrp": 1376,
+      "usd": 20,
+      "usd_mrp": 29,
+      "needs_time": false
+    }
+  },
+  "offer": {
+    "pct": 30,
+    "name": "Diwali offer",
+    "closes_at": "2026-11-06T23:59:59+05:30",
+    "limit": 200
+  },
+  "delivery": "24 hours",
+  "whatsapp": "917646952745"
+}
