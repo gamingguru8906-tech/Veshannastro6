@@ -120,7 +120,10 @@ PAGES = [
    cannot tell you when a particular period of your life will open or close. For that you
    need a full birth chart with dasha periods, which is a different calculation entirely.</p>
    <p>Treat the grid as a personality sketch rather than a forecast. It is genuinely useful
-   for understanding your default settings. It is not a prediction engine.</p>"""),
+   for understanding your default settings. It is not a prediction engine.</p>
+   <p>For the year ahead, your <a href="/2027-numerology-report/">2027 numerology report</a> plots this
+   same grid with your destiny number added and your 2027 Personal Year marked, then reads every month
+   of 2027 against it. <a href="/2027-numerology-report/">Get your full 2027 report &rarr;</a></p>"""),
  ],
  "faqs":[
   ("Do I need my birth time for the Lo Shu grid?",
@@ -197,7 +200,10 @@ PAGES = [
    old name accomplishes very little.</p>
    <p>It is also worth saying plainly that a name change is not a substitute for the underlying
    work. A well-chosen spelling can reduce friction. It does not replace competence, timing or
-   effort, and anyone promising that it will is selling something.</p>"""),
+   effort, and anyone promising that it will is selling something.</p>
+   <p>Your name number is also part of your <a href="/2027-numerology-report/">2027 numerology report</a>:
+   whether your name is aligned with your date of birth, and how it sits with your 2027 Personal Year
+   month by month. <a href="/2027-numerology-report/">Get your full 2027 report &rarr;</a></p>"""),
  ],
  "faqs":[
   ("Should I include my surname?",
@@ -685,8 +691,10 @@ FOOT = """<footer class="site-foot">
   <div class="wrap">
     <ul>
       <li><a href="/">Home</a></li>
+      <li><a href="/2027-numerology-report/">2027 Report</a></li>
       <li><a href="/about.html">About</a></li>
       <li><a href="/contact.html">Contact</a></li>
+      <li><a href="https://wa.me/917646952745?text=Hi%%20Veshannastro%%2C%%20I%%20have%%20a%%20question." target="_blank" rel="noopener">WhatsApp</a></li>
       <li><a href="/terms.html">Terms</a></li>
       <li><a href="/privacy-policy.html">Privacy</a></li>
       <li><a href="/refund-policy.html">Refunds</a></li>
@@ -695,6 +703,7 @@ FOOT = """<footer class="site-foot">
     Numerology is interpretive and advisory. It is not a guarantee of any outcome, and it is
     not a substitute for medical, legal or financial advice.</p>
     <p>&copy; %s Veshannastro &middot; Raipur, Chhattisgarh</p>
+    <p class="contact-line" style="margin:.9rem auto 0;font-size:13px;line-height:1.8;opacity:.85">WhatsApp <a style="color:inherit" href="https://wa.me/917646952745" target="_blank" rel="noopener">+91 76469 52745</a> &middot; Phone <a style="color:inherit" href="tel:+918827684725">+91 88276 84725</a> &middot; <a style="color:inherit" href="mailto:assist@veshannastro.co.in">assist@veshannastro.co.in</a></p>
   </div>
 </footer>""" % datetime.date.today().year
 
@@ -844,12 +853,14 @@ PAGE = """<!DOCTYPE html>
 CTA_DEFAULT = ("/reports/complete-numerology-report.html",
                "Complete Numerology Report &mdash; &#8377;999")
 CTA = {
+    "lo-shu-grid":          ("/2027-numerology-report/",
+                             "2027 Personal Year Report &mdash; from &#8377;963"),
     "lucky-business-name":  ("/reports/business-name-report.html",
                              "Business Name Report &mdash; &#8377;499"),
     "lucky-mobile-number":  ("/reports/mobile-number-analysis.html",
                              "Mobile Number Analysis &mdash; &#8377;299"),
-    "lucky-number":         ("/reports/personal-year-forecast.html",
-                             "Personal Year Forecast &mdash; &#8377;499"),
+    "lucky-number":         ("/2027-numerology-report/",
+                             "2027 Personal Year Report &mdash; from &#8377;963"),
     "main-planet-number":   ("/reports/premium-vedic-life-path-report.html",
                              "Premium Vedic Life Path Report &mdash; &#8377;699"),
     "name-numerology":      ("/reports/name-numerology-report.html",

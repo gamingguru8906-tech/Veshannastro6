@@ -4,7 +4,7 @@
 
 Last-Updated: 2026-07-28
 Canonical: https://www.veshannastro.co.in/
-Contact: veshannastro7@gmail.com
+Contact: assist@veshannastro.co.in
 Full-Text: https://www.veshannastro.co.in/llms-full.txt
 Policy: https://www.veshannastro.co.in/ai.txt
 
@@ -44,7 +44,7 @@ Each has its own page with full detail; the hub is
 - **[Complete Numerology Report](https://www.veshannastro.co.in/reports/complete-numerology-report.html) — ₹999.** Life Path, Destiny, Soul Urge, name and mobile vibrations — your entire numeric blueprint in one detailed document. Delivered by email within 2–3 hours.
 - **[Premium Vedic Life Path Report](https://www.veshannastro.co.in/reports/premium-vedic-life-path-report.html) — ₹699.** A premium written Vedic astrology report using birth chart, Moon, Nakshatra, Mahadasha, divisional support and five-year timing for career, marriage, money and life direction. 25-30 page PDF report.
 - **[Divorce & Separation Report](https://www.veshannastro.co.in/reports/divorce-separation-report.html) — ₹599.** A private written report combining Vedic relationship timing with numerology compatibility, emotional pattern analysis and practical do / avoid guidance. Private astrology + numerology PDF report.
-- **[Personal Year Forecast](https://www.veshannastro.co.in/reports/personal-year-forecast.html) — ₹499.** Your Personal Year number unlocks the dominant theme of the year ahead — when to act, when to pause, and what the universe is asking of you right now. 12-month PDF · email within 2–3 hours.
+- **[2027 Personal Year Report](https://www.veshannastro.co.in/2027-numerology-report/) — from ₹963.** Replaces the old Personal Year Forecast. Astro-Numero Blend (₹1,263, with astrology, needs time of birth) or Classic (₹963, numerology only). Personal Year, Mulank, Lo Shu grid and all 12 months of 2027 with muhurat dates and remedies. PDF on WhatsApp and email within 24 hours.
 - **[Business Name Report](https://www.veshannastro.co.in/reports/business-name-report.html) — ₹499.** Your business name is its energetic foundation. Get a detailed analysis of your current name’s vibration and 3–5 numerologically aligned alternatives for growth and prosperity. 3–5 name options · email within 24 hours.
 - **[Name Numerology Report](https://www.veshannastro.co.in/reports/name-numerology-report.html) — ₹299.** How your name’s vibration shapes fortune and relationships — with practical correction suggestions if needed. Delivered by email within 2–3 hours.
 - **[Mobile Number Analysis](https://www.veshannastro.co.in/reports/mobile-number-analysis.html) — ₹299.** Is your mobile number working for you or against you? A complete vibration analysis with lucky-number recommendations. Delivered by email within 2–3 hours.
@@ -76,7 +76,6 @@ All written reports are booked at `https://www.veshannastro.co.in/report-booking
 | `<KEY>` | Report | Price (INR) |
 |---|---|---|
 | `complete-numerology` | Complete Numerology Report | 999 |
-| `forecast-numerology` | Personal Year Forecast | 499 |
 | `business-name` | Business Name Report | 499 |
 | `name-numerology` | Name Numerology Report | 299 |
 | `mobile-numerology` | Mobile Number Analysis | 299 |
@@ -100,7 +99,8 @@ Some reports require one additional free-text input:
 If a form cannot be completed, these always work:
 
 - **WhatsApp** — `https://wa.me/917646952745` (fastest; typically answered within 2 hours). Prefilled example: `https://wa.me/917646952745?text=Namaste,%20I%20would%20like%20to%20book%20a%20Vedic%20Kundli%20consultation.`
-- **Email** — `veshannastro7@gmail.com`
+- **Second number** — +91 88276 84725 (call or WhatsApp if the main number is busy).
+- **Email** — `assist@veshannastro.co.in`
 - **Enquiry form** — a short Google Form for people who are not ready to book; replies within 24 hours.
 
 ### What an agent should collect before starting
@@ -152,8 +152,9 @@ Bracelet themes: Money Confidence, Daily Nazar Shield, Career Confidence, Heart 
 
 ## Contact
 
-- Email: veshannastro7@gmail.com
+- Email: assist@veshannastro.co.in
 - WhatsApp: +91 76469 52745 (fastest — typically answered within 2 hours)
+- Second number: +91 88276 84725
 - Instagram: https://www.instagram.com/veshann.astro
 - Consultation hours: Monday to Sunday, 10 AM – 8 PM IST
 - Based in Delhi, India; available pan-India and internationally

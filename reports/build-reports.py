@@ -349,9 +349,11 @@ FOOT = """<footer class="site-foot">
   <div class="wrap">
     <ul>
       <li><a href="/">Home</a></li>
+      <li><a href="/2027-numerology-report/">2027 Report</a></li>
       <li><a href="/reports/">Reports</a></li>
       <li><a href="/about.html">About</a></li>
       <li><a href="/contact.html">Contact</a></li>
+      <li><a href="https://wa.me/917646952745?text=Hi%%20Veshannastro%%2C%%20I%%20have%%20a%%20question." target="_blank" rel="noopener">WhatsApp</a></li>
       <li><a href="/terms.html">Terms</a></li>
       <li><a href="/privacy-policy.html">Privacy</a></li>
       <li><a href="/refund-policy.html">Refunds</a></li>
@@ -359,7 +361,8 @@ FOOT = """<footer class="site-foot">
     <p class="disclaimer">Reports are interpretive and advisory. They are not guarantees of any
     outcome, and are not a substitute for medical, legal or financial advice. Every report is
     prepared personally by a human practitioner — none are software-generated.</p>
-    <p>&copy; %s Veshannastro &middot; Delhi, India</p>
+    <p>&copy; %s Veshannastro &middot; Raipur, Chhattisgarh</p>
+    <p class="contact-line" style="margin:.9rem auto 0;font-size:13px;line-height:1.8;opacity:.85">WhatsApp <a style="color:inherit" href="https://wa.me/917646952745" target="_blank" rel="noopener">+91 76469 52745</a> &middot; Phone <a style="color:inherit" href="tel:+918827684725">+91 88276 84725</a> &middot; <a style="color:inherit" href="mailto:assist@veshannastro.co.in">assist@veshannastro.co.in</a></p>
   </div>
 </footer>""" % YEAR
 
@@ -565,8 +568,10 @@ def jsonld(k):
               price=p["price"], key=k, faq=faqs)
 
 
+# The old Personal Year Forecast is replaced by the 2027 report (/2027-numerology-report/); its old URL
+# redirects there (vercel.json), so it is no longer built.
 ORDER = ["complete-numerology", "astrology-life-path-report", "divorce-separation-report",
-         "forecast-numerology", "business-name", "name-numerology", "mobile-numerology",
+         "business-name", "name-numerology", "mobile-numerology",
          "love-numerology", "baby-name", "palmistry-report", "palmistry-voice"]
 
 built = []
@@ -603,6 +608,12 @@ cards = "".join(
     % (CONTENT[k]["slug"], esc(P[k]["name"]), P[k]["price"],
        esc(P[k]["delivery"]), esc(P[k]["desc"]))
     for k in ORDER if k in CONTENT)
+# The 2027 report leads the list.
+cards = ('<li><a href="/2027-numerology-report/"><span class="rg-name">2027 Personal Year Report</span>'
+         '<span class="rg-price">from &#8377;963 &middot; PDF on WhatsApp and email within 24 hours</span>'
+         '<span class="rg-desc">Your 2027 numerology report: Personal Year, Mulank, Lo Shu grid and all twelve months of 2027 '
+         'with muhurat dates and remedies. Astro-Numero Blend reads your birth chart too; Classic needs only your date of '
+         'birth and name.</span></a></li>') + cards
 
 hub_ld = """{
  "@context":"https://schema.org",

@@ -13,6 +13,7 @@
 
 <script src="https://veshann-admin.onrender.com/track.js" defer></script>
 <meta charset="UTF-8">
+<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Book Your Report · Veshannastro</title>
 <meta name="robots" content="noindex">
@@ -444,6 +445,8 @@ const SERVICE_ALIASES={
 };
 const rawKey=qs.get('service')||qs.get('product');
 const key=SERVICE_ALIASES[rawKey]||rawKey;
+// The old Personal Year Forecast is replaced by the 2027 Personal Year Report.
+if(key==='forecast-numerology'){location.replace('/2027-numerology-report/#register');}
 const SVC=SERVICES[key]||SERVICES['complete-numerology'];
 SVC.final=SVC.noCoupon?SVC.price:Math.round(SVC.price*0.9); // 10% new-user coupon (skipped where price is already final)
 
@@ -1036,5 +1039,6 @@ h2{color:var(--ink)!important;}
 })();
 </script>
 
+<p class="contact-line" style="margin:2rem auto 1.5rem;padding:0 16px;max-width:900px;text-align:center;font-size:13px;line-height:1.8;opacity:.85">WhatsApp <a style="color:inherit" href="https://wa.me/917646952745" target="_blank" rel="noopener">+91 76469 52745</a> &middot; Phone <a style="color:inherit" href="tel:+918827684725">+91 88276 84725</a> &middot; <a style="color:inherit" href="mailto:assist@veshannastro.co.in">assist@veshannastro.co.in</a></p>
 </body>
 </html>

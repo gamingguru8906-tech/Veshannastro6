@@ -10,7 +10,9 @@ from urllib.parse import quote
 BASE = "https://www.veshannastro.co.in"
 WA_NUMBER = "917646952745"
 WA_DISPLAY = "+91 76469 52745"
-EMAIL = "veshannastro7@gmail.com"
+EMAIL = "assist@veshannastro.co.in"
+PHONE2 = "918827684725"
+PHONE2_DISPLAY = "+91 88276 84725"
 BOOK_URL = "https://amzn.in/d/05h90t9v"
 BOOK_TITLE = "Numbers &amp; Navgraha: Untold Secret of Numerology"
 SHOP = "https://shop.veshannastro.co.in"
@@ -73,8 +75,10 @@ def org_graph():
         {"@type": "Organization", "@id": ORG_ID, "name": "Veshannastro", "url": BASE + "/",
          "logo": BASE + "/images/logo.png", "email": EMAIL, "telephone": WA_DISPLAY.replace(" ", ""),
          "founder": {"@id": PERSON_ID}, "areaServed": "IN", "sameAs": ["https://www.instagram.com/veshann.astro"],
-         "contactPoint": {"@type": "ContactPoint", "contactType": "customer service", "telephone": WA_DISPLAY.replace(" ", ""),
-                          "email": EMAIL, "availableLanguage": ["English", "Hindi"]}},
+         "contactPoint": [{"@type": "ContactPoint", "contactType": "customer service", "telephone": WA_DISPLAY.replace(" ", ""),
+                           "email": EMAIL, "availableLanguage": ["English", "Hindi"]},
+                          {"@type": "ContactPoint", "contactType": "customer service", "telephone": PHONE2_DISPLAY.replace(" ", ""),
+                           "availableLanguage": ["English", "Hindi"]}]},
         {"@type": "Person", "@id": PERSON_ID, "name": "Shashank Agrawal", "jobTitle": "Numerologist",
          "worksFor": {"@id": ORG_ID}, "url": BASE + "/about.html", "image": BASE + "/images/shashank-agrawal-portrait.jpg",
          "birthPlace": "Raipur, Chhattisgarh", "sameAs": ["https://www.instagram.com/veshann.astro"], "knowsAbout": ["Numerology", "Chaldean numerology", "Lo Shu grid", "Vedic astrology", "Palmistry"]},
@@ -129,7 +133,7 @@ def footer():
 <div class="foot-about">
 <a class="brand" href="/2027-numerology-report/" aria-label="Veshannastro home"><b>VESHANNASTRO</b></a>
 <p style="margin-top:14px">Numerology and Vedic astrology by Shashank Agrawal, author of <a href="{BOOK_URL}" rel="noopener" target="_blank"><em>{BOOK_TITLE}</em></a>.</p>
-<div class="foot-contact"><a href="{esc(wa("Hi Veshannastro, I have a question."))}" target="_blank" rel="noopener">WhatsApp {WA_DISPLAY}</a><a href="mailto:{EMAIL}">{EMAIL}</a></div>
+<div class="foot-contact"><a href="{esc(wa("Hi Veshannastro, I have a question."))}" target="_blank" rel="noopener">WhatsApp {WA_DISPLAY}</a><a href="tel:+{PHONE2}">Phone {PHONE2_DISPLAY}</a><a href="mailto:{EMAIL}">{EMAIL}</a></div>
 </div>
 <div><h2>2027 numerology</h2><ul>
 <li><a href="/2027-numerology-report/">2027 Numerology Report</a></li>
@@ -196,7 +200,9 @@ def page(path, title, description, body, *, crumbs=None, schema=None, robots="in
 <meta name="twitter:description" content="{esc(description)}">
 <meta name="twitter:image" content="{url(og_image)}">
 <link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
 <link rel="alternate" type="text/plain" href="{BASE}/llms.txt" title="llms.txt">
 <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
 {pre}<link rel="stylesheet" href="/assets/site.css?v={UPDATED}">
