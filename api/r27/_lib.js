@@ -91,8 +91,9 @@ function readOrder(input) {
   const pob = clean(input.pob, 100);
   if (pob.length < 2 || !/\p{L}/u.test(pob)) errors.pob = 'Please enter your place of birth.';
 
+  // Email is optional (reports go on WhatsApp); when given it must look like an email.
   const email = clean(input.email, 120).toLowerCase();
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) errors.email = 'Please enter a valid email.';
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) errors.email = 'Check the email, or leave it empty.';
 
   const phone = normalisePhone(input.code, input.mobile);
   if (!phone) errors.mobile = 'Please enter a valid WhatsApp number.';
@@ -223,5 +224,5 @@ function afterResponse(promise) {
 
 module.exports = {
   CATALOG, RECEIPT_PREFIX, configured, keyId: () => KEY_ID, keySecret: () => KEY_SECRET,
-  clean, timingSafeEqualHex, money, guard, body, normalisePhone, readOrder, razorpay, phaseOpen, tellKamala, tellKamalaLead, recordLead, afterResponse, store
+  clean, timingSafeEqualHex, money, guard, body, normalisePhone, readOrder, razorpay, phaseOpen, tellKamala, tellKamalaLead, recordLead, postKamala, afterResponse, store
 };

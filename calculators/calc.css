@@ -200,3 +200,5 @@ p{margin:0 0 1.1rem;}
   font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;
 }
 .guide-me-btn:hover{background:var(--gold-light);}
+.guide-me-btn.guide-me-secondary{background:transparent;border:1px solid var(--gold);margin-top:.5rem;}
+.guide-me-btn.guide-me-secondary:hover{background:var(--beige);}

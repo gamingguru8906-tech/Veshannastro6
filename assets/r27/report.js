@@ -7,8 +7,8 @@
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var esc = function (v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
   /* ---------- what this visitor does on the site, kept in our own database (api/r27/event) ----------
-     A random id stays in this browser; once they submit the order form it is joined to their WhatsApp number,
-     so Kamala knows what they looked at. Same steps as Google Analytics, nothing typed in the form. */
+     A random id stays in this browser; once a WhatsApp number is typed into the order form it is joined to that
+     number, so Kamala knows what they looked at. (The form itself is saved separately as it is typed, below.) */
   var VISITOR = (function () {
     var make = function () { var a = new Uint8Array(12); (window.crypto || {}).getRandomValues ? crypto.getRandomValues(a) : a.forEach(function (_, i) { a[i] = Math.random() * 256; }); return Array.prototype.map.call(a, function (b) { return ('0' + b.toString(16)).slice(-2); }).join(''); };
     try { var v = localStorage.getItem('vs-visitor'); if (!/^[a-z0-9]{16,40}$/.test(v || '')) { v = make(); localStorage.setItem('vs-visitor', v); } return v; } catch (e) { return make(); }
@@ -118,7 +118,47 @@
       localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
     } catch (e) { /* private mode or storage blocked: the form still works */ }
   }
-  function saveDraftSoon() { clearTimeout(draftTimer); draftTimer = setTimeout(saveDraft, 200); }
+  function saveDraftSoon() { clearTimeout(draftTimer); draftTimer = setTimeout(saveDraft, 200); remoteSoon(); }
+
+  /* ---------- the form is also saved to us as it is typed (api/r27/draft → Kamala → the Google Sheet) ----------
+     Whatever has been typed so far, a few seconds after the last key, so the team and Kamala can help someone who
+     stops halfway. A WhatsApp number typed here gets one message from Kamala if they do not finish. The notice at the
+     top of the form says so. Nothing is sent while the form is empty. */
+  var remoteTimer = null, remoteLast = '', remoteAt = 0;
+  function draftPayload() {
+    var r = C.reports[report] || {};
+    var dd = +day.value, mm = +mon.value, yy = +yr.value;
+    var dob = dd && mm && yy && dobValid() ? yy + '-' + ('0' + mm).slice(-2) + '-' + ('0' + dd).slice(-2) : '';
+    var amp = ($('#tob-ampm') || {}).value;
+    return {
+      visitor: VISITOR, report: report, name: $('#name').value.trim().slice(0, 80), dob: dob,
+      tob: r.needs_time && th.value && tm.value && amp ? th.value + ':' + ('0' + tm.value).slice(-2) + ' ' + amp : '',
+      pob: $('#pob').value.trim().slice(0, 100), email: $('#email').value.trim().slice(0, 120),
+      code: (cc.value.split('|')[1] || '+91').replace(/\D/g, ''), mobile: $('#mobile').value.replace(/\D/g, '').slice(0, 15),
+      referral: $('#referral').value.trim().slice(0, 40), page: location.pathname
+    };
+  }
+  function sendRemote(beacon) {
+    clearTimeout(remoteTimer); remoteTimer = null;
+    var d = draftPayload();
+    if (!d.name && !d.mobile && !d.email && !d.pob && !d.dob) return;
+    var body = JSON.stringify(d);
+    if (body === remoteLast) return;
+    remoteLast = body; remoteAt = Date.now();
+    try {
+      if (beacon && navigator.sendBeacon && navigator.sendBeacon('/api/r27/draft', new Blob([body], { type: 'application/json' }))) return;
+      fetch('/api/r27/draft', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: body, keepalive: true }).catch(function () {});
+    } catch (e) {}
+  }
+  function remoteSoon() {
+    if (!window.fetch) return;
+    clearTimeout(remoteTimer);
+    // 1.5 s after the last change, and at least every 5 s while they keep typing.
+    var wait = Math.min(1500, Math.max(0, 5000 - (Date.now() - remoteAt)));
+    remoteTimer = setTimeout(sendRemote, remoteAt ? wait : 1500);
+  }
+  addEventListener('pagehide', function () { sendRemote(true); });
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') sendRemote(true); });
   function clearDraft() { clearTimeout(draftTimer); try { localStorage.removeItem(DRAFT_KEY); } catch (e) {} }
   (function restoreDraft() {
     var d = readDraft(); if (!d) return;
@@ -248,7 +288,7 @@
     mark(day, dobValid());
     if (C.reports[report].needs_time) mark(th, !!o.tob);
     mark($('#pob'), o.pob.length > 1);
-    mark($('#email'), /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(o.email));
+    mark($('#email'), !o.email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(o.email)); // optional, but checked when given
     mark($('#mobile'), /^\d{6,15}$/.test(o.mobile));
     $$('.consent input', form).forEach(function (c) { mark(c, c.checked); });
     $('#form-error').hidden = !bad.length;
@@ -259,7 +299,9 @@
     var lines = ['Hi Veshannastro, I would like to order the 2027 Personal Year Report.', '',
       'Report: ' + o.reportName + ' (' + p.now + ')', 'Name: ' + o.name, 'Date of birth: ' + o.dob];
     if (o.tob) lines.push('Time of birth: ' + o.tob);
-    lines.push('Place of birth: ' + o.pob, 'Email: ' + o.email, 'WhatsApp: ' + o.code + ' ' + o.mobile);
+    lines.push('Place of birth: ' + o.pob);
+    if (o.email) lines.push('Email: ' + o.email);
+    lines.push('WhatsApp: ' + o.code + ' ' + o.mobile);
     if (o.referral) lines.push('Referral code: ' + o.referral);
     return lines.join('\n');
   }
@@ -287,7 +329,9 @@
     current = { o: o, p: p };
     var rows = [['Report', o.reportName + ', ' + p.now], ['Name', o.name], ['Date of birth', o.dob]];
     if (o.tob) rows.push(['Time of birth', o.tob]);
-    rows.push(['Place of birth', o.pob], ['Email', o.email], ['WhatsApp', o.code + ' ' + o.mobile]);
+    rows.push(['Place of birth', o.pob]);
+    if (o.email) rows.push(['Email', o.email]);
+    rows.push(['WhatsApp', o.code + ' ' + o.mobile]);
     if (o.referral) rows.push(['Referral code', o.referral]);
     $('#review-title').textContent = 'Check your details';
     $('#review-sub').textContent = 'Edit anything before you continue.';
@@ -427,7 +471,9 @@
 
   function thanksHtml(d) {
     var o = d.o, ok = d.result && d.result.ok;
-    var rows = [['Report', o.reportName], ['Paid', ok ? d.result.price : d.p.now], ['WhatsApp', o.code + ' ' + o.mobile], ['Email', o.email], ['Order reference', d.receipt]];
+    var rows = [['Report', o.reportName], ['Paid', ok ? d.result.price : d.p.now], ['WhatsApp', o.code + ' ' + o.mobile]];
+    if (o.email) rows.push(['Email', o.email]);
+    rows.push(['Order reference', d.receipt]);
     return rowsHtml(rows, ok ? 'Payment received' : 'Payment being confirmed');
   }
   function showThanks(d) {
@@ -436,7 +482,7 @@
     $('#review-sub').textContent = ok ? 'Your 2027 report is now being prepared for you.' : 'Razorpay has your payment. This can take a minute to confirm.';
     $('#review-content').innerHTML = thanksHtml(d);
     $('#review-note').innerHTML = ok
-      ? 'A confirmation with your invoice is on its way to your WhatsApp now. Your report reaches you on WhatsApp and email within ' + esc(C.delivery) + '.'
+      ? 'A confirmation with your invoice is on its way to your WhatsApp now. Your report reaches you on WhatsApp within ' + esc(C.delivery) + '.'
       : 'You will get a confirmation on WhatsApp once it clears. If nothing arrives in 15 minutes, <a href="https://wa.me/' + C.wa + '?text=' +
         encodeURIComponent('Hi Veshannastro, I paid for the 2027 report. Payment ID: ' + d.paymentId) + '" target="_blank" rel="noopener">message us with your payment ID</a> (' + esc(d.paymentId) + ').';
     setError('');
@@ -449,7 +495,7 @@
     var ok = d.result && d.result.ok;
     var box = document.createElement('div'); box.className = 'order-done';
     box.innerHTML = '<p class="report-mark">' + (ok ? 'Payment received' : 'Payment being confirmed') + '</p><h2>Thank you, ' + esc(d.o.name.split(' ')[0]) + '.</h2>' +
-      '<p>Your ' + esc(d.o.reportName) + ' reaches you on WhatsApp and email within ' + esc(C.delivery) + '. Order reference ' + esc(d.receipt) + '.</p>' +
+      '<p>Your ' + esc(d.o.reportName) + ' reaches you on WhatsApp within ' + esc(C.delivery) + '. Order reference ' + esc(d.receipt) + '.</p>' +
       '<button type="button" class="outline-button" id="order-another">Order a report for someone else</button>';
     form.hidden = true; card.appendChild(box);
     card.scrollIntoView({ block: 'center', behavior: reduced ? 'auto' : 'smooth' });

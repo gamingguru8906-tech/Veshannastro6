@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────────────────────
-   Veshannastro — calculator engine for the standalone pages.
+   Veshannastro: calculator engine for the standalone pages.
    The core below is lifted verbatim from index.html so a page returns
    exactly the same result as the on-site modal. This prelude supplies the
    two globals the modal got from its surrounding scope.
@@ -8,41 +8,67 @@
 /* Used by buildCalcDOBRow() to populate the year dropdown. */
 const curYear = new Date().getFullYear();
 
-/* On index.html this opens a booking modal. Standalone pages have no modal,
-   so it renders a real anchor instead — crawlable, and it works without JS
-   having to wire anything up. */
+/* After a result: one next step that matches the calculator (the 2027 report for date-of-birth numbers, the matching
+   report through Kamala on WhatsApp for names and phone numbers), and "Send my result on WhatsApp" with the result
+   typed in, so the conversation starts from it. Real anchors: crawlable, and they work without more script. */
+var WA_NUMBER = '917646952745';
+var CALC_NAMES = { loshu: 'Lo Shu grid', lifepath: 'Life Path number', lucky: 'lucky number', colour: 'lucky colour',
+  planet: 'ruling planet', name: 'name number', destiny: 'Destiny number', compound: 'compound number',
+  business: 'business name number', mobile: 'mobile number', house: 'house number', vehicle: 'vehicle number', bank: 'account number' };
+function waLink(text){ return 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(text); }
+function nextStep(calcType){
+  if(['loshu','lifepath','lucky','colour','planet'].indexOf(calcType) !== -1){
+    return { msg: 'This is one number. The 2027 Personal Year Report reads it with your Mulank, Lo Shu grid and all twelve months of 2027, with remedies. From ₹963.',
+      label: 'See the 2027 report', href: '/2027-numerology-report/#register' };
+  }
+  if(['name','destiny','compound'].indexOf(calcType) !== -1){
+    return { msg: 'Want your name read against your date of birth? The Name Numerology Report is ₹299, ordered on WhatsApp.',
+      label: 'Order the Name Report', href: waLink('Hi, I would like the Name Numerology Report (₹299).'), ext: true };
+  }
+  if(calcType === 'business'){
+    return { msg: 'Testing a business name? The Business Name Report checks it against your date of birth, with 3 to 5 options. ₹499 on WhatsApp.',
+      label: 'Order the Business Name Report', href: waLink('Hi, I would like the Business Name Report (₹499).'), ext: true };
+  }
+  if(calcType === 'mobile'){
+    return { msg: 'Want this number read against your own date of birth? The Mobile Number Analysis is ₹299 on WhatsApp.',
+      label: 'Order the Mobile Number Analysis', href: waLink('Hi, I would like the Mobile Number Analysis (₹299).'), ext: true };
+  }
+  return { msg: 'Whether this number matters depends on your own birth number. Ask on WhatsApp and we will tell you honestly.',
+    label: 'Ask on WhatsApp', href: waLink('Hi, I checked my ' + (CALC_NAMES[calcType] || 'number') + ' on your website and have a question.'), ext: true };
+}
+function resultSummary(resEl, calcType){
+  var num = resEl.querySelector('.calc-result-num'), label = resEl.querySelector('.calc-result-label');
+  if(num) return (label ? label.textContent.trim() + ': ' : '') + num.textContent.trim();
+  if(calcType === 'loshu'){
+    var missing = [];
+    resEl.querySelectorAll('.loshu-cell.missing').forEach(function(c){ missing.push(c.textContent.replace(/\D/g,'').slice(0,1)); });
+    return missing.length ? 'Lo Shu grid with ' + missing.sort().join(', ') + ' missing' : 'Lo Shu grid with every number present';
+  }
+  return resEl.textContent.replace(/\s+/g,' ').trim().slice(0,120);
+}
 function appendGuideMe(resEl, calcType){
   var existing = resEl.parentElement.querySelector('.calc-upsell');
   if(existing) existing.remove();
-
-  var msg   = 'Your number holds a story. A full reading places it in the context of the rest of your chart.';
-  var label = 'Book a numerology session';
-  var href  = '/numerology-booking.html';
-
-  if(calcType === 'name'){
-    msg   = 'Considering a name correction? A session covers whether it is worth doing and what spelling actually helps.';
-    label = 'Ask about name correction';
-  } else if(calcType === 'mobile'){
-    msg   = 'Want your mobile number checked against your full chart before you change it?';
-    label = 'Get a mobile number analysis';
-    href  = '/report-booking.html?service=mobile-numerology';
-  } else if(calcType === 'business'){
-    msg   = 'Testing a business name? A written report checks it against your own chart, not just its total.';
-    label = 'Get a business name report';
-    href  = '/report-booking.html?service=business-name';
-  }
-
+  var step = nextStep(calcType);
   var div = document.createElement('div');
   div.className = 'calc-upsell';
   var p = document.createElement('p');
   p.className = 'calc-upsell-msg';
-  p.textContent = msg;
+  p.textContent = step.msg;
   var a = document.createElement('a');
   a.className = 'guide-me-btn';
-  a.href = href;
-  a.textContent = label;
+  a.href = step.href;
+  a.textContent = step.label;
+  if(step.ext){ a.target = '_blank'; a.rel = 'noopener'; }
+  var send = document.createElement('a');
+  send.className = 'guide-me-btn guide-me-secondary';
+  send.href = waLink('Hi, I used the ' + (CALC_NAMES[calcType] || 'numerology') + ' calculator on your website. My result: ' + resultSummary(resEl, calcType) + '. I would like to know what it means for me.');
+  send.target = '_blank'; send.rel = 'noopener';
+  send.textContent = 'Send my result on WhatsApp';
   div.appendChild(p);
   div.appendChild(a);
+  div.appendChild(document.createTextNode(' '));
+  div.appendChild(send);
   resEl.after(div);
 }
 
@@ -51,6 +77,8 @@ const CHEIRO={A:1,I:1,J:1,Q:1,Y:1,B:2,K:2,R:2,C:3,G:3,L:3,S:3,D:4,M:4,T:4,E:5,H:
 function charVal(c){return CHEIRO[c.toUpperCase()]||0;}
 function reduceNum(n){while(n>9&&n!==11&&n!==22&&n!==33){let s=0,t=n;while(t>0){s+=t%10;t=Math.floor(t/10);}n=s;}return n;}
 function nameToNum(name){return name.split('').reduce((a,c)=>a+charVal(c),0);}
+/* Plates and addresses: digits as they stand, letters by their Chaldean value. */
+function charsTotal(s){return [...String(s)].reduce((a,c)=>a+(/[0-9]/.test(c)?parseInt(c,10):charVal(c)),0);}
 function dobToLP(dd,mm,yyyy){
   let s=0;
   [dd,mm,yyyy].forEach(x=>{let n=parseInt(x,10);while(n>0){s+=n%10;n=Math.floor(n/10);}});
@@ -58,21 +86,25 @@ function dobToLP(dd,mm,yyyy){
 }
 
 const NUM_MEANINGS={
-  1:"The Leader — independent, ambitious, pioneering. A number of new beginnings and bold self-reliance.",
-  2:"The Diplomat — cooperative, sensitive, intuitive. Harmony and deep partnerships define your path.",
-  3:"The Creator — expressive, joyful, artistic. Communication and creative self-expression are your greatest gifts.",
-  4:"The Builder — disciplined, practical, reliable. Structure and devoted hard work lead to lasting success.",
-  5:"The Explorer — freedom-loving, adventurous, versatile. Change and curiosity are the fuel of your journey.",
-  6:"The Nurturer — compassionate, responsible, harmonious. Family, love, and heartfelt service are your calling.",
-  7:"The Seeker — analytical, introspective, spiritual. Inner wisdom and sacred truth are your greatest treasures.",
-  8:"The Achiever — powerful, authoritative, materially blessed. Business acumen and leadership are your strengths.",
-  9:"The Humanitarian — compassionate, idealistic, universal. Service to humanity is your highest and truest purpose.",
-  11:"Master Number 11 — The Intuitive. Heightened spiritual awareness and inspirational leadership beyond the ordinary.",
-  22:"Master Number 22 — The Master Builder. Rare ability to transform grand visions into tangible, lasting reality.",
-  33:"Master Number 33 — The Master Teacher. Nurturing all of humanity through boundless wisdom and compassion."
+  1:"The Leader: independent, ambitious, pioneering. A number of new beginnings and bold self-reliance.",
+  2:"The Diplomat: cooperative, sensitive, intuitive. Harmony and deep partnerships define your path.",
+  3:"The Creator: expressive, joyful, artistic. Communication and creative self-expression are your greatest gifts.",
+  4:"The Builder: disciplined, practical, reliable. Structure and devoted hard work lead to lasting success.",
+  5:"The Explorer: freedom-loving, adventurous, versatile. Change and curiosity are the fuel of your journey.",
+  6:"The Nurturer: compassionate, responsible, harmonious. Family, love, and heartfelt service are your calling.",
+  7:"The Seeker: analytical, introspective, spiritual. Inner wisdom and sacred truth are your greatest treasures.",
+  8:"The Achiever: powerful, authoritative, materially blessed. Business acumen and leadership are your strengths.",
+  9:"The Humanitarian: compassionate, idealistic, universal. Service to humanity is your highest and truest purpose.",
+  11:"Master Number 11: The Intuitive. Heightened spiritual awareness and inspirational leadership beyond the ordinary.",
+  22:"Master Number 22: The Master Builder. Rare ability to transform grand visions into tangible, lasting reality.",
+  33:"Master Number 33: The Master Teacher. Nurturing all of humanity through boundless wisdom and compassion."
 };
-const PLANET_RULERS={1:"Sun ☉ — Vitality, authority, and radiant self-expression",2:"Moon ☽ — Emotion, intuition, and the rhythm of cycles",3:"Jupiter ♃ — Expansion, wisdom, and abundant blessings",4:"Uranus ♅ — Innovation, rebellion, and sudden awakening",5:"Mercury ☿ — Communication, intellect, and swift movement",6:"Venus ♀ — Love, beauty, harmony, and aesthetic grace",7:"Neptune ♆ — Dreams, illusion, mysticism, and the unseen",8:"Saturn ♄ — Discipline, karma, structure, and time",9:"Mars ♂ — Energy, courage, drive, and fierce determination"};
-const LUCKY_COLOURS={1:"Gold & Orange — radiate solar confidence",2:"White & Silver — reflect lunar serenity",3:"Yellow & Violet — channel Jupiterian abundance",4:"Blue & Green — ground Uranian innovation",5:"Grey & Silver — flow with Mercurial adaptability",6:"Pink & Rose — emanate Venusian warmth",7:"Indigo & Violet — deepen Neptunian intuition",8:"Midnight Blue & Black — honour Saturnine strength",9:"Crimson & Red — ignite Martian fire"};
+const PLANET_RULERS={1:"Sun ☉: vitality, authority and self-expression",2:"Moon ☽: emotion, intuition and cycles",3:"Jupiter ♃: expansion, wisdom and teaching",4:"Rahu ☊: disruption, ambition and the unconventional",5:"Mercury ☿: intellect, speech and commerce",6:"Venus ♀: love, beauty and comfort",7:"Ketu ☋: detachment, spirituality and inner wisdom",8:"Saturn ♄: discipline, delay and endurance",9:"Mars ♂: courage, energy and drive"};
+const LUCKY_COLOURS={1:"Gold, orange and deep yellow",2:"White, silver and pale cream",3:"Yellow, saffron and violet",4:"Grey, electric blue and khaki",5:"Green and light grey",6:"Pink, pastel blue and white",7:"Smoky grey, purple and sea green",8:"Dark blue, black and deep brown",9:"Red, coral and crimson"};
+const PLANET_NAMES={1:"the Sun",2:"the Moon",3:"Jupiter",4:"Rahu",5:"Mercury",6:"Venus",7:"Ketu",8:"Saturn",9:"Mars"};
+/* 11, 22 and 33 keep their own meaning, but their planet, colour and vibration are those of their root (2, 4, 6). */
+function rootNum(n){return n>9?reduceRoot(n):n;}
+function reduceRoot(n){while(n>9){let s=0,t=n;while(t>0){s+=t%10;t=Math.floor(t/10);}n=s;}return n;}
 const HOUSE_VIBES={1:"Independence & Bold New Beginnings",2:"Harmony, Partnership & Gentle Growth",3:"Creativity, Communication & Joyful Expression",4:"Stability, Security & Ancestral Roots",5:"Change, Adventure & Constant Evolution",6:"Family, Healing & Devoted Service",7:"Reflection, Solitude & Deep Inner Wisdom",8:"Wealth, Power & Profound Transformation",9:"Spirituality, Completion & Universal Love"};
 const BANK_VIBES={1:"Wealth through bold independence and initiative",2:"Steady, patient accumulation through partnerships",3:"Lucky windfalls and expansive financial growth",4:"Disciplined savings leading to unshakeable security",5:"Variable yet dynamic fortune through adaptability",6:"Comfortable domestic wealth and lasting comfort",7:"Unexpected gains through deep intuition and faith",8:"Magnetic financial attraction and authority",9:"Abundance that multiplies through generosity"};
 const LOSHU_LAYOUT=[[4,9,2],[3,5,7],[8,1,6]];
@@ -85,7 +117,7 @@ function buildLoShu(dd,mm,yyyy){
   for(const d of str)if(d!=='0')c[d]=(c[d]||0)+1;
   return c;
 }
-const colourHex={1:'#ff8c00',2:'#c0c0c0',3:'#ffd700',4:'#4a90d9',5:'#a0a0a0',6:'#ff9eb5',7:'#9b59b6',8:'#1a1a2e',9:'#c0392b'};
+const colourHex={1:'#ff8c00',2:'#c0c0c0',3:'#ffd700',4:'#4a90d9',5:'#3a9d5d',6:'#ff9eb5',7:'#9b59b6',8:'#1a1a2e',9:'#c0392b'};
 
 /* Calc DOB fields (three-part in calculator) */
 function buildCalcDOBRow(){
@@ -125,18 +157,18 @@ function getDOBParts(){
 
 const calcConfigs={
   loshu:{title:'Lo Shu Grid',sub:'Ancient Chinese 3×3 magic square of destiny',html:()=>`<div class="calc-field"><label class="calc-label">Date of Birth</label>${buildCalcDOBRow()}</div><button type="button" class="calc-btn" onclick="runCalc('loshu')" aria-label="Calculate Lo Shu Grid">Reveal Grid</button><div class="calc-result" id="c-result"></div>`},
-  name:{title:'Name Calculator',sub:'Cheiro numerology — letters as living vibrations',html:()=>`<div class="calc-field"><label class="calc-label">Full Name</label><input class="calc-input" type="text" id="c-name" placeholder="Enter your full name"></div><button type="button" class="calc-btn" onclick="runCalc('name')" aria-label="Calculate name vibration">Calculate Vibration</button><div class="calc-result" id="c-result"></div>`},
+  name:{title:'Name Calculator',sub:'Cheiro numerology: letters as living vibrations',html:()=>`<div class="calc-field"><label class="calc-label">Full Name</label><input class="calc-input" type="text" id="c-name" placeholder="Enter your full name"></div><button type="button" class="calc-btn" onclick="runCalc('name')" aria-label="Calculate name vibration">Calculate Vibration</button><div class="calc-result" id="c-result"></div>`},
   mobile:{title:'Lucky Mobile Number',sub:'Digital frequency alignment with your birth energy',html:()=>`<div class="calc-field"><label class="calc-label">Mobile Number</label><input class="calc-input" type="tel" id="c-mobile" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric" pattern="[0-9]*" oninput="this.value=this.value.replace(/[^0-9]/g,'')" onkeydown="if(!/^[0-9]$/.test(event.key)&&!['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.key))event.preventDefault()"><small style="display:block;margin-top:.4rem;font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.2em;color:var(--gold-dim);text-transform:uppercase;">10 digits · Numbers only</small></div><button type="button" class="calc-btn" onclick="runCalc('mobile')" aria-label="Calculate lucky mobile number">Calculate</button><div class="calc-result" id="c-result"></div>`},
   vehicle:{title:'Vehicle Number',sub:'Transit energy of your registration plate',html:()=>`<div class="calc-field"><label class="calc-label">Vehicle Registration</label><input class="calc-input" type="text" id="c-vehicle" placeholder="e.g. MH12AB1234"></div><button type="button" class="calc-btn" onclick="runCalc('vehicle')" aria-label="Calculate vehicle number">Calculate</button><div class="calc-result" id="c-result"></div>`},
   lucky:{title:'Lucky Number',sub:'Personal fortune number derived from your birth date',html:()=>`<div class="calc-field"><label class="calc-label">Date of Birth</label>${buildCalcDOBRow()}</div><button type="button" class="calc-btn" onclick="runCalc('lucky')" aria-label="Calculate lucky number">Find My Lucky Number</button><div class="calc-result" id="c-result"></div>`},
-  house:{title:'Lucky House Number',sub:'Sacred space numerology — the soul of your home',html:()=>`<div class="calc-field"><label class="calc-label">House / Flat Number</label><input class="calc-input" type="text" id="c-house" placeholder="e.g. 42 or B-14"></div><button type="button" class="calc-btn" onclick="runCalc('house')" aria-label="Calculate lucky house number">Calculate</button><div class="calc-result" id="c-result"></div>`},
+  house:{title:'Lucky House Number',sub:'Sacred space numerology: the soul of your home',html:()=>`<div class="calc-field"><label class="calc-label">House / Flat Number</label><input class="calc-input" type="text" id="c-house" placeholder="e.g. 42 or B-14"></div><button type="button" class="calc-btn" onclick="runCalc('house')" aria-label="Calculate lucky house number">Calculate</button><div class="calc-result" id="c-result"></div>`},
   bank:{title:'Lucky Bank Account',sub:'Align your finances with prosperity vibrations',html:()=>`<div class="calc-field"><label class="calc-label">Bank Account Number</label><input class="calc-input" type="tel" id="c-bank" placeholder="14-digit account number" maxlength="14" inputmode="numeric" pattern="[0-9]*" oninput="this.value=this.value.replace(/[^0-9]/g,'')" onkeydown="if(!/^[0-9]$/.test(event.key)&&!['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.key))event.preventDefault()"><small style="display:block;margin-top:.4rem;font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.2em;color:var(--gold-dim);text-transform:uppercase;">14 digits · Numbers only</small></div><button type="button" class="calc-btn" onclick="runCalc('bank')" aria-label="Calculate lucky bank account">Calculate</button><div class="calc-result" id="c-result"></div>`},
   colour:{title:'Lucky Colour Finder',sub:'Chromatic destiny encoded in your birth date',html:()=>`<div class="calc-field"><label class="calc-label">Date of Birth</label>${buildCalcDOBRow()}</div><button type="button" class="calc-btn" onclick="runCalc('colour')" aria-label="Calculate lucky colour">Find My Colour</button><div class="calc-result" id="c-result"></div>`},
   lifepath:{title:'Life Path Number',sub:"The master number of your soul's journey this lifetime",html:()=>`<div class="calc-field"><label class="calc-label">Date of Birth</label>${buildCalcDOBRow()}</div><button type="button" class="calc-btn" onclick="runCalc('lifepath')" aria-label="Calculate Life Path number">Calculate</button><div class="calc-result" id="c-result"></div>`},
   planet:{title:'Main Planet Number',sub:'Discover the celestial body that governs your frequency',html:()=>`<div class="calc-field"><label class="calc-label">Date of Birth</label>${buildCalcDOBRow()}</div><button type="button" class="calc-btn" onclick="runCalc('planet')" aria-label="Calculate main planet number">Find My Ruling Planet</button><div class="calc-result" id="c-result"></div>`},
-  destiny:{title:'Destiny Number',sub:'Your expression number — who you are destined to become',html:()=>`<div class="calc-field"><label class="calc-label">Full Name (as on birth certificate)</label><input class="calc-input" type="text" id="c-name" placeholder="Enter your full name"></div><button type="button" class="calc-btn" onclick="runCalc('destiny')" aria-label="Calculate Destiny number">Calculate</button><div class="calc-result" id="c-result"></div>`},
+  destiny:{title:'Destiny Number',sub:'Your expression number: who you are destined to become',html:()=>`<div class="calc-field"><label class="calc-label">Full Name (as on birth certificate)</label><input class="calc-input" type="text" id="c-name" placeholder="Enter your full name"></div><button type="button" class="calc-btn" onclick="runCalc('destiny')" aria-label="Calculate Destiny number">Calculate</button><div class="calc-result" id="c-result"></div>`},
   compound:{title:'Compound Destiny Number',sub:'Dual vibration carrying karmic echoes from past lives',html:()=>`<div class="calc-field"><label class="calc-label">Full Name</label><input class="calc-input" type="text" id="c-name" placeholder="Enter your full name"></div><button type="button" class="calc-btn" onclick="runCalc('compound')" aria-label="Calculate compound destiny">Calculate</button><div class="calc-result" id="c-result"></div>`},
-  business:{title:'Lucky Business Name',sub:'Enterprise vibration — the energy your brand projects',html:()=>`<div class="calc-field"><label class="calc-label">Business Name</label><input class="calc-input" type="text" id="c-name" placeholder="Enter business name"></div><button type="button" class="calc-btn" onclick="runCalc('business')" aria-label="Calculate lucky business name">Calculate</button><div class="calc-result" id="c-result"></div>`},
+  business:{title:'Lucky Business Name',sub:'Enterprise vibration: the energy your brand projects',html:()=>`<div class="calc-field"><label class="calc-label">Business Name</label><input class="calc-input" type="text" id="c-name" placeholder="Enter business name"></div><button type="button" class="calc-btn" onclick="runCalc('business')" aria-label="Calculate lucky business name">Calculate</button><div class="calc-result" id="c-result"></div>`},
 };
 
 
@@ -166,11 +198,11 @@ window.runCalc=function(type){
     let summaryHtml='';
     if(mis.length){
       summaryHtml='<div style="margin-top:.8rem;font-size:.78rem;color:var(--text-muted);text-align:left;line-height:1.9;">';
-      summaryHtml+='<div style="color:var(--gold);font-family:Cinzel,serif;font-size:8px;letter-spacing:.25em;margin-bottom:.5rem;">⚠ MISSING NUMBERS — KARMIC GAPS</div>';
-      mis.forEach(m=>{summaryHtml+=`<div>✦ <span style="color:var(--gold-pale)">Number ${m}</span> — ${missingMeaning[m]}</div>`;});
+      summaryHtml+='<div style="color:var(--gold);font-family:Cinzel,serif;font-size:8px;letter-spacing:.25em;margin-bottom:.5rem;">⚠ MISSING NUMBERS: KARMIC GAPS</div>';
+      mis.forEach(m=>{summaryHtml+=`<div>✦ <span style="color:var(--gold-pale)">Number ${m}</span>: ${missingMeaning[m]}</div>`;});
       summaryHtml+='</div>';
     } else {
-      summaryHtml='<div style="margin-top:.8rem;font-size:.78rem;color:var(--gold-pale);text-align:center;">✦ All numbers present — a complete and powerfully balanced grid.</div>';
+      summaryHtml='<div style="margin-top:.8rem;font-size:.78rem;color:var(--gold-pale);text-align:center;">✦ All numbers present: a complete and powerfully balanced grid.</div>';
     }
     h+=summaryHtml;
     res.innerHTML=h;
@@ -182,15 +214,15 @@ window.runCalc=function(type){
     const dob=getDOBParts();
     if(!dob.dd||!dob.mm||!dob.yyyy){alert('Please select full date of birth');return;}
     num=dobToLP(dob.dd,dob.mm,dob.yyyy);
-    const c=LUCKY_COLOURS[num]||LUCKY_COLOURS[1];
-    res.innerHTML=`<div class="colour-swatch" style="background:${colourHex[num]||'#C9A84C'};box-shadow:0 0 40px ${colourHex[num]||'#C9A84C'}55;"></div><div class="calc-result-num">${num}</div><div class="calc-result-label">Your Lucky Colour</div><div class="calc-result-desc" style="font-size:1rem;color:var(--gold-pale);margin-bottom:.6rem;">${c.split('—')[0].trim()}</div><div class="calc-result-desc">${c} — wearing these tones aligns your auric field with your personal vibration, amplifying your magnetism.</div>`;
+    const r=rootNum(num), c=LUCKY_COLOURS[r];
+    res.innerHTML=`<div class="colour-swatch" style="background:${colourHex[r]};box-shadow:0 0 40px ${colourHex[r]}55;"></div><div class="calc-result-num">${num}</div><div class="calc-result-label">Your Lucky Colour</div><div class="calc-result-desc" style="font-size:1rem;color:var(--gold-pale);margin-bottom:.6rem;">${c}</div><div class="calc-result-desc">The colours of ${PLANET_NAMES[r]}, the planet of your birth number ${num}.</div>`;
     res.classList.add('show');appendGuideMe(res,'colour');return;
   }
   if(type==='planet'){
     const dob=getDOBParts();
     if(!dob.dd||!dob.mm||!dob.yyyy){alert('Please select full date of birth');return;}
     num=dobToLP(dob.dd,dob.mm,dob.yyyy);
-    res.innerHTML=`<div class="calc-result-num">${num}</div><div class="calc-result-label">Your Ruling Planet</div><div class="calc-result-desc" style="font-size:1rem;color:var(--gold-pale);margin-bottom:.7rem;">${PLANET_RULERS[num]||PLANET_RULERS[1]}</div><div class="calc-result-desc">${NUM_MEANINGS[num]||''}</div>`;
+    res.innerHTML=`<div class="calc-result-num">${num}</div><div class="calc-result-label">Your Ruling Planet</div><div class="calc-result-desc" style="font-size:1rem;color:var(--gold-pale);margin-bottom:.7rem;">${PLANET_RULERS[rootNum(num)]}</div><div class="calc-result-desc">${NUM_MEANINGS[num]||''}</div>`;
     res.classList.add('show');appendGuideMe(res,'planet');return;
   }
   if(type==='compound'){
@@ -203,9 +235,9 @@ window.runCalc=function(type){
   if(type==='house'){
     const h=(document.getElementById('c-house')||{}).value||'';
     if(!h.trim()){alert('Please enter house number');return;}
-    num=reduceNum([...h.replace(/[^0-9]/g,'')].reduce((a,d)=>a+parseInt(d),0));
+    num=reduceNum(charsTotal(h));
     label='House Energy Number';
-    desc=`Your home resonates with the energy of ${num}: ${HOUSE_VIBES[num]||'Balanced energy'}. ${NUM_MEANINGS[num]||''}`;
+    desc=`Your home carries the energy of ${num}: ${HOUSE_VIBES[rootNum(num)]}. ${NUM_MEANINGS[num]||''}`;
   } else if(type==='bank'){
     const b=(document.getElementById('c-bank')||{}).value||'';
     const bDigits=b.replace(/[^0-9]/g,'');
@@ -213,7 +245,7 @@ window.runCalc=function(type){
     if(bDigits.length!==14){alert('Bank account number must be exactly 14 digits');return;}
     num=reduceNum([...bDigits].reduce((a,d)=>a+parseInt(d),0));
     label='Financial Vibration';
-    desc=`Number ${num} resonates with: ${BANK_VIBES[num]||'Steady financial energy'}. ${NUM_MEANINGS[num]||''}`;
+    desc=`Number ${num} tends to support: ${BANK_VIBES[rootNum(num)]}. ${NUM_MEANINGS[num]||''}`;
   } else if(type==='mobile'){
     const m=(document.getElementById('c-mobile')||{}).value||'';
     const mDigits=m.replace(/[^0-9]/g,'');
@@ -225,7 +257,7 @@ window.runCalc=function(type){
   } else if(type==='vehicle'){
     const v=(document.getElementById('c-vehicle')||{}).value||'';
     if(!v.trim()){alert('Please enter vehicle number');return;}
-    num=reduceNum([...v.replace(/[^0-9]/g,'')].reduce((a,d)=>a+parseInt(d),0));
+    num=reduceNum(charsTotal(v));
     label='Vehicle Transit Energy';
     desc=`Your vehicle carries the cosmic energy of number ${num}. ${NUM_MEANINGS[num]||''}`;
   } else if(type==='name'||type==='business'||type==='destiny'){

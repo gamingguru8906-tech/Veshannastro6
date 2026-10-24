@@ -47,7 +47,7 @@ def toc(items):
 
 def cta(question):
     return f"""<div class="cta-box"><h2>Want your whole 2027 mapped?</h2>
-<p>The 2027 Personal Year Report reads all twelve of your months, with muhurat and lucky dates, your Lo Shu grid and a voice note from Shashank. Astro-Numero Blend ₹1,263 or Classic ₹963 (Diwali offer, 30% off). Delivered on WhatsApp and email within 24 hours.</p>
+<p>The 2027 Personal Year Report reads all twelve of your months, with muhurat and lucky dates, your Lo Shu grid and a voice note from Shashank. Astro-Numero Blend ₹1,263 or Classic ₹963 (Diwali offer, 30% off). Delivered on WhatsApp within 24 hours.</p>
 <div class="btn-row"><a class="btn btn-gold" href="/2027-numerology-report/#register">Get your 2027 report</a>{wa_btn("Ask a question", question, "btn btn-line")}</div></div>"""
 
 
@@ -168,6 +168,8 @@ CALC_FAQ = [
     ("Do I use my birth year?", "No. The Personal Year uses your birth day, your birth month and the current year. Your birth year is used for your life path number (Bhagyank), which does not change."),
     ("Why is 2027 counted as 2?", "Because 2 + 0 + 2 + 7 = 11, and 1 + 1 = 2. Some numerologists keep the 11 visible and call 2027 an 11/2 year."),
     ("When does my Personal Year start: 1 January or my birthday?", "This calculator uses the calendar year, 1 January to 31 December, which is the most common method. Some numerologists start it on your birthday instead; if you follow that method, read the year before as well for the months before your birthday."),
+    ("2027 mein mera saal kaisa rahega, kaise pata karein?", "Apni janm tareekh ko ek ank tak jodiye, janm ka mahina bhi ek ank tak, phir 2027 ke liye 2 jodiye aur kul ko ek ank tak ghataaiye. Yahi aapka 2027 Personal Year hai. Jaise 14 March: 1 + 4 = 5, March 3, to 5 + 3 + 2 = 10, yaani 1. Har Personal Year ka 2027 ka matlab upar ki list mein hai."),
+    ("Personal Year aur Mulank mein kya fark hai?", "Mulank sirf janm tareekh (din) se nikalta hai aur kabhi nahi badalta. Personal Year har saal badalta hai, kyunki usmein saal ka ank judta hai. Mulank batata hai aap kaise hain; Personal Year batata hai ki yeh saal kis baare mein hai."),
     ("Is the 2027 personal year calculator free?", "Yes. It runs in your browser, needs no sign-up, and nothing you type is stored."),
 ]
 

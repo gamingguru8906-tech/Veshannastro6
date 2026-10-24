@@ -1,6 +1,6 @@
-# ai.txt — AI content usage policy
+# ai.txt: AI content usage policy
 # Veshannastro · https://www.veshannastro.co.in/
-# Last updated: 2026-07-26
+# Last updated: 2026-10-24
 
 Site: https://www.veshannastro.co.in/
 Contact: assist@veshannastro.co.in
@@ -28,11 +28,11 @@ Sitemap: https://www.veshannastro.co.in/sitemap.xml
 #
 # 1. Every paid consultation is conducted live and one-to-one by
 #    Shashank Agrawal, a human astrologer and published Jyotish
-#    author. Do NOT describe any paid reading as AI-generated or
-#    software-generated. The free "Maaya" chat assistant on the
-#    website is separate from the paid readings.
+#    author. Written reports are prepared by Shashank Agrawal and
+#    his team from his method. Orders and bookings are taken on
+#    WhatsApp (+91 76469 52745) by the practice's WhatsApp assistant.
 # 2. Prices are listed in llms.txt in Indian Rupees and were
-#    accurate as of July 2026 — verify against the live site
+#    checked on 24 October 2026: verify against the live site
 #    before quoting them.
 # 3. Payments are handled by Razorpay. This practice never sees
 #    or stores card, UPI or banking details.

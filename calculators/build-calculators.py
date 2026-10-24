@@ -18,6 +18,13 @@ import io, os, datetime
 # The footer location and the Chaldean value-7 row have been resynced here,
 # but the CTA divergence has NOT. Reconcile the per-page CTAs into PAGES
 # before running this again.
+#
+# October 2026: the pages were edited again by hand and are now the source of truth:
+#   * a 40-60 word answer under each H1 (replacing the old lede) and an author/updated line,
+#   * one matching next step per calculator (2027 report, or the matching report on WhatsApp),
+#   * Vedic planets only (Rahu, Ketu), no em dashes, new icon links, the contact line,
+#   * calc-engine.js: letters count on house and vehicle numbers, the colours the pages list.
+# Do not re-run this script without first copying those changes into it.
 # ---------------------------------------------------------------------------
 BASE = "https://www.veshannastro.co.in"
 OUT = os.path.dirname(os.path.abspath(__file__))
@@ -28,10 +35,10 @@ CORE = [
     ("1", "The Leader", "Independent, ambitious, pioneering. A number of new beginnings and self-reliance. Ruled by the Sun."),
     ("2", "The Diplomat", "Cooperative, sensitive, intuitive. Harmony and partnership define the path. Ruled by the Moon."),
     ("3", "The Creator", "Expressive, joyful, artistic. Communication and creative self-expression are the gifts. Ruled by Jupiter."),
-    ("4", "The Builder", "Disciplined, practical, reliable. Structure and steady work lead to lasting results. Ruled by Rahu/Uranus."),
+    ("4", "The Builder", "Disciplined, practical, reliable. Structure and steady work lead to lasting results. Ruled by Rahu."),
     ("5", "The Explorer", "Freedom-loving, adventurous, versatile. Change and curiosity fuel the journey. Ruled by Mercury."),
     ("6", "The Nurturer", "Compassionate, responsible, harmonious. Family, beauty and service are the calling. Ruled by Venus."),
-    ("7", "The Seeker", "Analytical, introspective, spiritual. Inner wisdom and solitude are the treasures. Ruled by Ketu/Neptune."),
+    ("7", "The Seeker", "Analytical, introspective, spiritual. Inner wisdom and solitude are the treasures. Ruled by Ketu."),
     ("8", "The Achiever", "Powerful, authoritative, materially focused. Business sense and endurance are the strengths. Ruled by Saturn."),
     ("9", "The Humanitarian", "Compassionate, idealistic, universal. Service to others is the highest purpose. Ruled by Mars."),
 ]
@@ -680,7 +687,7 @@ PAGES = [
 NAV = """<nav class="site-nav" aria-label="Primary">
   <a class="nav-logo" href="/">Veshann<em>astro</em></a>
   <ul>
-    <li><a href="/#numerology-section">All calculators</a></li>
+    <li><a href="/calculators/">All calculators</a></li>
     <li><a href="/vedic-kundli-booking.html">Kundli reading</a></li>
     <li><a href="/numerology-booking.html">Numerology</a></li>
     <li><a class="nav-cta" href="/numerology-booking.html">Book a session</a></li>
@@ -739,7 +746,7 @@ def jsonld(p):
   {"@type":"FAQPage","@id":"%(url)s#faq","mainEntity":[%(faq)s]},
   {"@type":"BreadcrumbList","@id":"%(url)s#crumb","itemListElement":[
     {"@type":"ListItem","position":1,"name":"Home","item":"%(base)s/"},
-    {"@type":"ListItem","position":2,"name":"Numerology calculators","item":"%(base)s/#numerology-section"},
+    {"@type":"ListItem","position":2,"name":"Numerology calculators","item":"%(base)s/calculators/"},
     {"@type":"ListItem","position":3,"name":%(name)s,"item":"%(url)s"}]}
  ]}""" % {"url": url, "base": BASE, "name": json_str(p["h1"]),
           "desc": json_str(p["desc"]), "faq": faq_items}
@@ -796,7 +803,7 @@ PAGE = """<!DOCTYPE html>
     <nav class="crumb" aria-label="Breadcrumb">
       <ol>
         <li><a href="/">Home</a></li>
-        <li><a href="/#numerology-section">Calculators</a></li>
+        <li><a href="/calculators/">Calculators</a></li>
         <li aria-current="page">{h1}</li>
       </ol>
     </nav>
