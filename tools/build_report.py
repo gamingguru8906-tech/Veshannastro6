@@ -78,13 +78,13 @@ PLAN_ITEMS = {
     "blend": ["Everything in Classic", "Read together with astrology from your birth chart", "Needs your date, time and place of birth"],
     "classic": ["Your Personal Year, Mulank, Bhagyank and Lo Shu grid", "All 12 months of 2027 with muhurat dates and remedies", "Needs your name, date and place of birth"],
 }
-PLAN_COMMON = ["Your crystal, Name Number and Pinnacles", "Voice note from Shashank (QR code)", f"PDF on WhatsApp and email within {DELIVERY}"]
+PLAN_COMMON = ["Your crystal, Name Number and Pinnacles", "Voice note from Shashank (QR code)", f"PDF on WhatsApp within {DELIVERY}"]
 
 STEPS = [
     ("Choose your report", "Pick Astro-Numero Blend or Classic and add your birth details. One report is made for one person."),
     ("Pay the energy exchange", "Pay online by UPI, card or netbanking, or message us on WhatsApp if you would like to talk first."
      if ONLINE_PAY else "Send your details to us on WhatsApp. We confirm them and share the payment link in the same chat."),
-    ("Receive your report", f"Your personalised PDF arrives on WhatsApp and email within {DELIVERY}, with the QR code to your voice note inside."),
+    ("Receive your report", f"Your personalised PDF arrives on WhatsApp within {DELIVERY}, with the QR code to your voice note inside."),
 ]
 
 
@@ -102,7 +102,7 @@ def faqs():
         ("I don't know my time of birth. Can I still get it?",
          "Yes. Choose Classic. It is built from your date of birth and your name, so your birth time is not needed. The Astro-Numero Blend needs your time of birth."),
         ("Is the 2027 numerology report a PDF, and when will I receive it?",
-         f"Yes. Your 2027 numerology report PDF arrives on your WhatsApp and email within {DELIVERY} of payment. Inside is a QR code that opens a 30 to 60 second voice note from Shashank about your year."),
+         f"Yes. Your 2027 numerology report PDF arrives on your WhatsApp within {DELIVERY} of payment. Inside is a QR code that opens a 30 to 60 second voice note from Shashank about your year."),
         ("What is a 2027 astro numero report?",
          "It is a report that reads numerology and astrology together. Our 2027 astro numero report is the Astro-Numero Blend: your numbers read alongside your birth chart, which is why it needs your time of birth."),
         ("Does it include a 2027 Lo Shu grid report?",
@@ -235,7 +235,8 @@ def page():
       <h1 id="hero-title">2027 Numerology Report <br>Personal Year Forecast <small>by Shashank Agrawal</small></h1>
       <div class="form-card">
         <div class="form-card-head"><span class="report-mark">{ICON_STAR}Phase one, {OFFER['limit']} reports</span><h2>Get your 2027 Report</h2>
-          <p class="form-lead">What 2027 holds for your health, money, work and relationships, and the remedies for whatever needs care. Prepared for you alone.</p></div>
+          <p class="form-lead">What 2027 holds for your health, money, work and relationships, and the remedies for whatever needs care. Prepared for you alone.</p>
+          <p class="form-note">Your details are saved as you type, so we can help you finish your order on WhatsApp. <a href="/privacy-policy.html" target="_blank">Privacy</a></p></div>
         <form id="registration" novalidate>
           <div class="subject-toggle report-toggle" role="radiogroup" aria-label="Choose your report">
             <button type="button" role="radio" aria-checked="true" data-report="blend">Astro-Numero Blend</button><button type="button" role="radio" aria-checked="false" data-report="classic">Classic</button></div>
@@ -254,16 +255,16 @@ def page():
               <select id="tob-ampm" name="tob_ampm" aria-label="AM or PM" required><option value="">AM/PM</option><option>AM</option><option>PM</option></select></div>
               <span class="field-hint">Not sure of your birth time? Choose Classic.</span><span class="field-error">Enter your time of birth, or switch to Classic.</span></div>
             <div class="field field-wide"><label for="pob">Place of birth <i>*</i></label><div class="place-box"><input id="pob" name="pob" type="text" autocomplete="off" placeholder="Start typing your birth city" required role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="pob-list"><ul id="pob-list" class="place-list" role="listbox" aria-label="Matching places" hidden></ul></div><span class="field-error">Enter your place of birth.</span></div>
-            <div class="field field-wide"><label for="email">Email <i>*</i></label><input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required><span class="field-error">Enter a valid email.</span></div>
+            <div class="field field-wide"><label for="email">Email <span class="optional">(optional)</span></label><input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com"><span class="field-error">Check the email, or leave it empty.</span></div>
             <div class="field field-wide"><label for="mobile">WhatsApp number <i>*</i></label><div class="phone-row"><select id="country-code" name="country_code" aria-label="Country code" autocomplete="tel-country-code"><option value="India|+91">+91 India</option></select><input id="mobile" name="mobile" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="98765 43210" required></div><span class="field-error">Enter your number without the country code.</span></div>
           </div>
           <div class="form-submit">
             <div class="field"><label for="referral">Referral code (optional)</label><input id="referral" name="referral" placeholder="If someone referred you" autocomplete="off"></div>
             <label class="consent"><input type="checkbox" name="terms" required><span>I have read the <a href="/terms.html" target="_blank">terms</a>, <a href="/privacy-policy.html" target="_blank">privacy policy</a> and <a href="/refund-policy.html" target="_blank">refund and delivery policy</a>.</span></label>
-            <label class="consent"><input type="checkbox" name="wa_ok" required><span>Send my report and order updates to my WhatsApp and email.</span></label>
+            <label class="consent"><input type="checkbox" name="wa_ok" required><span>Send my report and order updates to my WhatsApp.</span></label>
             <p id="form-error" class="form-error" role="alert" hidden>Please complete the highlighted fields.</p>
             <button class="pill" type="submit"><span id="pay-label">Review and order {inr(b['inr'])}</span></button>
-            <p class="delivery-line">{ICON_CLOCK}<span>Delivered on WhatsApp and email within {DELIVERY} of payment.</span></p>
+            <p class="delivery-line">{ICON_CLOCK}<span>Delivered on WhatsApp within {DELIVERY} of payment.</span></p>
             <p class="form-links"><a href="{wa(BULK_MSG)}" target="_blank" rel="noopener">Ordering for more than one person? Message us on WhatsApp</a></p>
           </div>
         </form>
@@ -407,7 +408,7 @@ def services_for_kamala():
             "p": inr(rep["inr"]), "was": inr(rep["inr_mrp"]), "off": f"{OFFER['pct']}% off",
             "usd": f"US${rep['usd']}", "give": ["pdf"], "link": URL + "#register",
             "needs": ["dob", "tob", "pob"] if rep["needs_time"] else ["dob", "pob"],
-            "features": PLAN_ITEMS[key] + [x for x in PLAN_COMMON if not x.startswith("PDF on")] + [f"Delivered on WhatsApp and email within {DELIVERY}"],
+            "features": PLAN_ITEMS[key] + [x for x in PLAN_COMMON if not x.startswith("PDF on")] + [f"Delivered on WhatsApp within {DELIVERY}"],
         })
     return {
         "updated": __import__("sitekit").UPDATED,
