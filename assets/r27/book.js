@@ -1,62 +1,86 @@
-/* Book animation: covers sweep in from both sides, the 2027 book pops forward,
-   opens, flips its pages across the screen, closes and settles back into the row. */
+/* Book animation: the six cover designs sweep in from both sides into a row, the 2027 book is
+   drawn out to the centre while the others step aside, opens, turns a page, closes and slides
+   back into its place. Mulank 3, 5, 6 and 9 share one cover, so Mulank 6 stands in for all four. */
 (function () {
   'use strict';
   var stage = document.getElementById('book-stage');
   if (!stage || !stage.animate) return;
   var replay = document.getElementById('book-replay');
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var SIDE = [1, 4, 7, 8, 9, 3];           // Mulank covers that sweep in (3 left, 3 right)
-  var CENTER = 3;                          // slot index of the 2027 book in the final row
-  var EASE = 'cubic-bezier(.16,1,.3,1)';
+  var ROW = [8, 1, 4, 'hero', 6, 7];       // one book per cover design, never repeated
+  var HI = ROW.indexOf('hero');
+  var MID = (ROW.length - 1) / 2;
+  var OUT = 'cubic-bezier(.22,1,.36,1)';
+  var INOUT = 'cubic-bezier(.65,0,.35,1)';
+  var TURN = 'cubic-bezier(.42,0,.28,1)';
 
   function img(src, w, h) { var i = new Image(); i.src = src; i.alt = ''; i.width = w; i.height = h; i.decoding = 'async'; return i; }
   function el(cls, kids) { var d = document.createElement('div'); d.className = cls; (kids || []).forEach(function (k) { d.appendChild(k); }); return d; }
 
-  // Build: 6 side books, 1 hero book, 1 open book
-  var order = SIDE.slice(0, 3).concat(['hero']).concat(SIDE.slice(3));
-  var books = order.map(function (k) {
-    var src = k === 'hero' ? '/assets/r27/book/cover.webp' : '/assets/r27/covers/mulank-' + k + '.webp';
-    var b = el('bk', [img(src, 360, 640)]); stage.appendChild(b); return b;
+  var books = ROW.map(function (k) {
+    var hero = k === 'hero';
+    var b = el(hero ? 'bk bk-hero' : 'bk', [img(hero ? '/assets/r27/book/cover.webp' : '/assets/r27/covers/mulank-' + k + '.webp', 360, 640)]);
+    stage.appendChild(b); return b;
   });
-  var hero = books[CENTER];
-  var face = function (cls, src) { return el('face ' + cls, [img(src, 720, 1280)]); };
+  var hero = books[HI];
+  function face(cls, src) { var s = el('shade'); return el('face ' + cls, [img(src, 720, 1280), s]); }
   var leaf0 = el('leaf', [face('front', '/assets/r27/book/cover.webp'), face('back', '/assets/r27/book/page-1.webp')]);
   var leaf1 = el('leaf', [face('front', '/assets/r27/book/page-2.webp'), face('back', '/assets/r27/book/page-3.webp')]);
   var base = el('ob-base', [img('/assets/r27/book/page-4.webp', 720, 1280)]);
   var ob = el('ob', [base, leaf1, leaf0, el('ob-spine')]);
-  ob.style.transformStyle = 'flat'; ob.style.perspective = '2400px';
-  base.style.zIndex = 1; leaf1.style.zIndex = 2; leaf0.style.zIndex = 3;
   stage.appendChild(ob);
 
-  var geo = {};
+  /* geometry */
+  var g = {};
   function measure() {
-    var bw = books[0].getBoundingClientRect().width || 120;
-    var W = stage.clientWidth, H = stage.clientHeight;
-    var gap = Math.min(bw * .62, (W - bw) / 6.2);
-    var pw = Math.min(W * .46, Math.min(innerHeight * .8, H * 1.1) * 9 / 16);
+    var bw = books[0].offsetWidth || 120, W = stage.clientWidth, H = stage.clientHeight;
+    var gap = Math.min(bw * 1.08, (W - bw * 1.1) / (ROW.length - 1));
+    var pw = Math.min(W * .46, Math.min(innerHeight * .8, H * 1.04) * 9 / 16);
     ob.style.setProperty('--pw', pw + 'px');
-    geo = { bw: bw, W: W, H: H, gap: gap, pw: pw };
+    g = { bw: bw, W: W, H: H, gap: gap, pw: pw, lift: bw < 100 ? 1.45 : 1.2, up: bw * .1 };
   }
   function slot(i) {
-    var k = i - CENTER;
-    return { x: k * geo.gap, z: i === CENTER ? 40 : -Math.abs(k) * 45, ry: -k * 9, rz: k * 1.2 };
+    var k = i - MID, a = Math.abs(k);
+    return { x: k * g.gap, y: a * a * 3, r: k * 2, s: i === HI ? 1.04 : 1 };
   }
-  var T = function (x, y, z, ry, rz, s, sx) {
-    return 'translate3d(' + x + 'px,' + (y || 0) + 'px,' + (z || 0) + 'px) rotateY(' + (ry || 0) + 'deg) rotateZ(' + (rz || 0) + 'deg) scale(' + (s == null ? 1 : s) + ')' + (sx ? ' scaleX(' + sx + ')' : '');
-  };
-  var atSlot = function (i, extra) { var s = slot(i); extra = extra || {}; return T(s.x, extra.y || 0, (extra.z != null ? extra.z : s.z), s.ry, s.rz, extra.s); };
-  var run = function (node, frames, opts) { return node.animate(frames, Object.assign({ fill: 'forwards', easing: EASE }, opts)).finished; };
-  var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
-  var closedScale = function (pop) { return (geo.bw * (pop || 1)) / geo.pw; };
-  var obClosed = function (pop, z) { var s = closedScale(pop); return 'translate3d(' + (-geo.pw * s / 2) + 'px,0,' + (z || 0) + 'px) scale(' + s + ')'; };
+  function parted(i, far) {
+    var side = i < HI ? -1 : 1, n = side < 0 ? HI - 1 - i : i - HI - 1;
+    var clear = g.bw * g.lift / 2 + g.bw * .46 + Math.max(12, g.bw * .14);
+    // only ever move outward, never toward the 2027 book on its way to the centre
+    var x = side * Math.max(Math.abs(slot(i).x) + g.bw * .2, clear + n * g.gap * .78);
+    return { x: far ? x * 1.22 : x, y: 14 + n * 6, r: side * (3 + n * 1.5), s: .9 - n * .03 };
+  }
+  function lifted() { return { x: 0, y: -g.up, r: 0, s: g.lift }; }
+  function T(p) { return 'translate(' + p.x + 'px,' + p.y + 'px) rotate(' + p.r + 'deg) scale(' + p.s + ')'; }
+  function obClosed() { var s = g.bw * g.lift / g.pw; return 'translate(' + (-g.pw * s / 2) + 'px,' + (-g.up) + 'px) scale(' + s + ')'; }
+  var OB_OPEN = 'translate(0px,0px) scale(1)';
 
+  /* animation helpers: every new move starts from where the element is now, so nothing jumps */
+  function settle(node) { node.getAnimations().forEach(function (a) { try { a.commitStyles(); } catch (e) {} a.cancel(); }); }
+  function run(node, frames, opts) {
+    settle(node);
+    var a = node.animate(frames, Object.assign({ fill: 'forwards', easing: OUT }, opts));
+    a.finished.catch(function () {});
+    return a.finished;
+  }
+  function turn(leaf, from, to, ms, delay) {
+    leaf.querySelectorAll('.shade').forEach(function (s) {
+      run(s, [{ opacity: 0 }, { opacity: .34, offset: .5 }, { opacity: 0 }], { duration: ms, delay: delay || 0, easing: TURN });
+    });
+    return run(leaf, [{ transform: 'rotateY(' + from + 'deg)' }, { transform: 'rotateY(' + to + 'deg)' }], { duration: ms, delay: delay || 0, easing: TURN });
+  }
+  var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+
+  function place(node, transform, opacity) { settle(node); node.style.transform = transform; node.style.opacity = opacity; }
+  function resetBook() {
+    settle(ob); ob.style.visibility = 'hidden';
+    [leaf0, leaf1].forEach(function (l) { settle(l); l.style.transform = 'rotateY(0deg)'; });
+    stage.querySelectorAll('.shade').forEach(function (s) { settle(s); s.style.opacity = 0; });
+    leaf0.style.zIndex = 3; leaf1.style.zIndex = 2;
+  }
   function finalState() {
-    measure();
-    books.forEach(function (b, i) { b.getAnimations().forEach(function (a) { a.cancel(); }); b.style.opacity = 1; b.style.filter = ''; b.style.transform = atSlot(i); });
-    ob.getAnimations().forEach(function (a) { a.cancel(); });
-    [leaf0, leaf1].forEach(function (l) { l.getAnimations().forEach(function (a) { a.cancel(); }); l.style.transform = 'rotateY(0deg)'; });
-    ob.style.visibility = 'hidden';
+    measure(); resetBook();
+    books.forEach(function (b, i) { place(b, T(slot(i)), 1); b.style.zIndex = i === HI ? 20 : 10 - Math.abs(i - HI); });
     if (replay) replay.classList.add('show');
   }
 
@@ -64,51 +88,51 @@
   async function play() {
     if (playing) return; playing = true;
     if (replay) replay.classList.remove('show');
-    measure();
-    books.forEach(function (b) { b.getAnimations().forEach(function (a) { a.cancel(); }); b.style.opacity = 0; b.style.transform = ''; });
-    ob.style.visibility = 'hidden';
-    [leaf0, leaf1].forEach(function (l) { l.getAnimations().forEach(function (a) { a.cancel(); }); l.style.transform = 'rotateY(0deg)'; });
+    measure(); resetBook();
+    books.forEach(function (b, i) { place(b, T(slot(i)), 0); b.style.zIndex = i === HI ? 20 : 10 - Math.abs(i - HI); });
     try {
-      // 1. sweep in from both sides
-      var sweeps = books.map(function (b, i) {
-        if (i === CENTER) return null;
-        var left = i < CENTER, from = left ? -1 : 1, s = slot(i);
-        var far = Math.abs(i - CENTER);
+      // 1. the covers sweep in from both sides into the row
+      await Promise.all(books.map(function (b, i) {
+        if (i === HI) return null;
+        var side = i < MID ? -1 : 1, far = Math.abs(i - MID);
         return run(b, [
-          { transform: T(from * geo.W * .75, -20, -380, from * -72, from * 8, .7, 1.9), opacity: 0, filter: 'blur(10px)' },
-          { transform: T(from * geo.W * .2, 0, -120, from * -30, s.rz, .95, 1.25), opacity: 1, filter: 'blur(3px)', offset: .55 },
-          { transform: atSlot(i), opacity: 1, filter: 'blur(0px)' }
-        ], { duration: 1300, delay: (3 - far) * 110 });
-      });
-      await Promise.all(sweeps);
-      // 2. the 2027 book rises from the middle and pops forward
-      await run(hero, [{ transform: T(0, 40, -520, 0, 0, .55), opacity: 0 }, { transform: T(0, 0, 230, 0, 0, 1.12), opacity: 1 }], { duration: 900 });
-      books.forEach(function (b, i) { if (i !== CENTER) run(b, [{ transform: atSlot(i, { z: -170 }), opacity: .3 }], { duration: 700 }); });
-      await wait(250);
-      // 3. swap to the open-able book at the same size and place
-      ob.style.transform = obClosed(1.12, 230); ob.style.visibility = 'visible'; hero.style.opacity = 0;
-      // 4. open and grow to fill the stage
-      var grow = run(ob, [{ transform: obClosed(1.12, 230) }, { transform: 'translate3d(0,0,0) scale(1)' }], { duration: 1300 });
-      books.forEach(function (b, i) { if (i !== CENTER) run(b, [{ opacity: .1 }], { duration: 600 }); });
+          { transform: T({ x: side * g.W * .6, y: 26, r: side * 9, s: .86 }), opacity: 0 },
+          { transform: T(slot(i)), opacity: 1 }
+        ], { duration: 1150, delay: (2.5 - far) * 90 });
+      }));
+      // 2. the 2027 book rises into its place
+      var hs = slot(HI);
+      await run(hero, [{ transform: T({ x: hs.x, y: hs.y + 46, r: hs.r, s: .94 }), opacity: 0 }, { transform: T(hs), opacity: 1 }], { duration: 800 });
+      await wait(500);
+      // 3. it is drawn out to the centre while the others step aside
+      books.forEach(function (b, i) { if (i !== HI) run(b, [{ transform: T(parted(i)), opacity: .36 }], { duration: 900 }); });
+      await run(hero, [{ transform: T(lifted()) }], { duration: 950, delay: 220, easing: INOUT });
+      await wait(160);
+      // 4. swap to the book that opens, at exactly the same size and place, and open it
+      ob.style.transform = obClosed(); ob.style.visibility = 'visible';
+      place(hero, T(lifted()), 0);
+      books.forEach(function (b, i) { if (i !== HI) run(b, [{ transform: T(parted(i, true)), opacity: 0 }], { duration: 700, easing: INOUT }); });
       leaf0.style.zIndex = 5;
-      await run(leaf0, [{ transform: 'rotateY(0deg)' }, { transform: 'rotateY(-180deg)' }], { duration: 1150, delay: 200, easing: 'cubic-bezier(.45,.05,.25,1)' });
+      var grow = run(ob, [{ transform: obClosed() }, { transform: OB_OPEN }], { duration: 1400, easing: INOUT });
+      await turn(leaf0, 0, -180, 1250, 140);
       leaf0.style.zIndex = 3;
-      await grow; await wait(1300);
-      // 5. flip a page
+      await grow; await wait(1400);
+      // 5. turn a page
       leaf1.style.zIndex = 6;
-      await run(leaf1, [{ transform: 'rotateY(0deg)' }, { transform: 'rotateY(-180deg)' }], { duration: 950, easing: 'cubic-bezier(.45,.05,.25,1)' });
-      await wait(1500);
-      // 6. close and shrink back
-      run(leaf1, [{ transform: 'rotateY(-180deg)' }, { transform: 'rotateY(0deg)' }], { duration: 620, easing: 'cubic-bezier(.5,0,.5,1)' });
-      await wait(260); leaf0.style.zIndex = 7;
-      var shut = run(leaf0, [{ transform: 'rotateY(-180deg)' }, { transform: 'rotateY(0deg)' }], { duration: 700, easing: 'cubic-bezier(.5,0,.5,1)' });
-      await run(ob, [{ transform: 'translate3d(0,0,0) scale(1)' }, { transform: obClosed(1.12, 230) }], { duration: 950, easing: 'cubic-bezier(.65,0,.35,1)' });
-      await shut; leaf0.style.zIndex = 3; leaf1.style.zIndex = 2;
-      // 7. settle back into the row
-      hero.getAnimations().forEach(function (a) { a.cancel(); });
-      hero.style.transform = T(0, 0, 230, 0, 0, 1.12); hero.style.opacity = 1; ob.style.visibility = 'hidden';
-      await Promise.all(books.map(function (b, i) { return run(b, [{ transform: atSlot(i), opacity: 1 }], { duration: 900, delay: i === CENTER ? 0 : 80 }); }));
-    } catch (e) { /* animation cancelled by a resize or replay */ }
+      await turn(leaf1, 0, -180, 1050);
+      await wait(1700);
+      // 6. close the book and bring it back to its closed size
+      turn(leaf1, -180, 0, 700);
+      await wait(420); leaf0.style.zIndex = 7;
+      var shut = turn(leaf0, -180, 0, 780);
+      await run(ob, [{ transform: OB_OPEN }, { transform: obClosed() }], { duration: 1150, easing: INOUT });
+      await shut;
+      // 7. back into the row, the others return beside it
+      place(hero, T(lifted()), 1); resetBook();
+      books.forEach(function (b, i) { if (i !== HI) run(b, [{ transform: T(slot(i)), opacity: 1 }], { duration: 1000, delay: 80 + Math.abs(i - HI) * 50, easing: INOUT }); });
+      await run(hero, [{ transform: T(slot(HI)) }], { duration: 1000, easing: INOUT });
+      await wait(300);
+    } catch (e) { /* cancelled by a replay or resize */ }
     playing = false;
     finalState();
   }
@@ -121,7 +145,7 @@
       var imgs = Array.prototype.slice.call(stage.querySelectorAll('img'));
       Promise.all(imgs.map(function (i) { return i.decode ? i.decode().catch(function () {}) : null; })).then(play);
     }
-  }, { threshold: .6 }).observe(stage);
+  }, { threshold: .55 }).observe(stage);
   if (replay) replay.addEventListener('click', function () { play(); });
   var rz; addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(function () { if (!playing && started) finalState(); }, 200); });
 })();

@@ -119,9 +119,11 @@ def page():
     b, c = REPORTS["blend"], REPORTS["classic"]
     F = faqs()
     inside = "".join(f'<li><span class="chapter-number">{i + 1:02d}</span><div><h3>{t}</h3><p>{d}</p></div></li>' for i, (t, d) in enumerate(INSIDE))
+    # One figure per cover design. Mulank 3, 5, 6 and 9 share a cover, so it is shown once.
+    designs = [(1, "Mulank 1"), (2, "Mulank 2"), (4, "Mulank 4"), (6, "Mulank 3, 5, 6 and 9"), (7, "Mulank 7"), (8, "Mulank 8")]
     covers = "".join(
-        f'<figure style="--r:{(n - 5) * 5}deg;--y:{abs(n - 5) * 8}px;--z:{10 - abs(n - 5)}"><img src="/assets/r27/covers/mulank-{n}.webp" width="360" height="640" alt="2027 Personal Year Forecast cover for Mulank {n}" loading="lazy"><figcaption>Mulank {n}</figcaption></figure>'
-        for n in range(1, 10))
+        f'<figure style="--r:{(i - 2.5) * 5:g}deg;--y:{abs(i - 2.5) * 10:g}px;--z:{10 - int(abs(i - 2.5) * 2)}"><img src="/assets/r27/covers/mulank-{n}.webp" width="360" height="640" alt="2027 Personal Year Forecast cover for {label}" loading="lazy"><figcaption>{label}</figcaption></figure>'
+        for i, (n, label) in enumerate(designs))
     steps = "".join(f'<li><span class="step-number">{i + 1}</span><h3>{t}</h3><p>{d}</p></li>' for i, (t, d) in enumerate(STEPS))
 
     def plan(key, featured):
@@ -186,12 +188,12 @@ def page():
   <link rel="icon" href="/favicon.ico" sizes="any"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" as="image" href="/assets/r27/hero-wide.webp">
-  <link rel="stylesheet" href="/assets/r27/styles.css?v=3"><link rel="stylesheet" href="/assets/r27/sections.css?v=3"><link rel="stylesheet" href="/assets/r27/report.css?v=3">
+  <link rel="stylesheet" href="/assets/r27/styles.css?v=4"><link rel="stylesheet" href="/assets/r27/sections.css?v=4"><link rel="stylesheet" href="/assets/r27/report.css?v=4">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R20FKYJK7P"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-R20FKYJK7P');gtag('config','AW-18189866057');</script>
   <script type="application/ld+json">{json.dumps(graph, ensure_ascii=False, separators=(",", ":"))}</script>
   <script>window.R27={json.dumps(config, separators=(",", ":"))};</script>
-  <script src="/assets/r27/report.js?v=3" defer></script><script src="/assets/r27/book.js?v=3" defer></script>
+  <script src="/assets/r27/report.js?v=4" defer></script><script src="/assets/r27/book.js?v=4" defer></script>
 </head>
 <body>
   <div class="nebula" aria-hidden="true"></div><canvas class="sky" id="star-field" aria-hidden="true"></canvas>
@@ -249,7 +251,7 @@ def page():
 
     <section class="report-section book-section" id="preview" aria-labelledby="preview-title"><div class="wrap">
       <header class="section-heading"><div class="kicker">Inside a report</div><h2 id="preview-title">Prepared for one person.</h2>
-        <p class="section-lead">Every report is written around a single name and date of birth, with its own cover for each Mulank.</p></header>
+        <p class="section-lead">Every report is written around a single name and date of birth, on a cover chosen by your Mulank.</p></header>
       <div class="book-stage" id="book-stage" aria-hidden="true"></div>
       <noscript><div class="book-noscript"><img src="/assets/r27/book/cover.webp" alt="" width="150"><img src="/assets/r27/book/page-2.webp" alt="" width="150"><img src="/assets/r27/book/page-3.webp" alt="" width="150"></div></noscript>
       <p class="book-caption">Sample report. Names and numbers change with yours.</p>
@@ -259,8 +261,8 @@ def page():
     <section class="report-section" id="inside" aria-labelledby="inside-title"><div class="wrap">
       <header class="section-heading"><div class="kicker">What's inside</div><h2 id="inside-title">Your whole year, <em>mapped month by month.</em></h2>
         <p class="section-lead">A personalised 2027 numerology report, complete and detailed. Not a horoscope written for millions: it is built from your own date of birth and name, from VESHANNASTRO, owned by Shashank Agrawal.</p></header>
-      <div class="covers-fan" aria-label="2027 report covers for Mulank 1 to 9">{covers}</div>
-      <p class="covers-note">Every Mulank has its own cover. Yours is chosen by your birth number.</p>
+      <div class="covers-fan" aria-label="2027 report covers by Mulank">{covers}</div>
+      <p class="covers-note">Your cover is chosen by your Mulank, the number of your birth day. Mulank 3, 5, 6 and 9 receive the same cover.</p>
       <ol class="inside-list" style="margin-top:48px">{inside}</ol>
     </div></section>
 
