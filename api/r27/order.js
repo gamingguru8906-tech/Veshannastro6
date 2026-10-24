@@ -32,6 +32,7 @@ module.exports = async function handler(req, res) {
     customer_name: o.name, dob: o.dob, tob: o.tob, pob: o.pob, email: o.email, phone: o.phone,
     referral: o.referral, updates: o.updates ? 'yes' : 'no', price: String(o.amount), mrp: String(o.mrp)
   };
+  for (const k of Object.keys(notes)) if (notes[k] === '') delete notes[k]; // no empty notes (Classic has no birth time)
   let order;
   try {
     order = await lib.razorpay('POST', '/orders', { amount: Math.round(o.amount * 100), currency: o.currency, receipt, notes });

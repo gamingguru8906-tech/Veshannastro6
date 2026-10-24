@@ -168,20 +168,22 @@ async function tellKamala(orderId, paymentId) {
   if (!url || !secret) return 'skipped';
   const payload = JSON.stringify({ order_id: orderId, payment_id: paymentId });
   const signature = crypto.createHmac('sha256', secret).update(payload).digest('hex');
-  for (let attempt = 1; attempt <= 2; attempt++) {
+  // Both tries fit inside the function's 60 seconds: the first waits out a Render cold start, the second is quick.
+  const waits = [40000, 15000];
+  for (let attempt = 1; attempt <= waits.length; attempt++) {
     try {
       const res = await fetch(url + '/web-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-veshannastro-signature': signature },
         body: payload,
-        signal: AbortSignal.timeout(50000)
+        signal: AbortSignal.timeout(waits[attempt - 1])
       });
       if (res.ok) return 'sent';
       if (res.status < 500) return 'refused ' + res.status;
     } catch (e) {
       console.error(`Kamala hand-off attempt ${attempt} failed:`, e.message);
     }
-    if (attempt === 1) await new Promise(r => setTimeout(r, 4000));
+    if (attempt < waits.length) await new Promise(r => setTimeout(r, 2000));
   }
   return 'failed';
 }
