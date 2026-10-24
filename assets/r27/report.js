@@ -10,14 +10,12 @@
   var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   var inr = function (n) { return '₹' + n.toLocaleString('en-IN'); };
 
-  /* ---------- hero video: tall cut on portrait screens, wide cut elsewhere ---------- */
+  /* ---------- hero video ---------- */
   (function () {
     var v = document.getElementById('hero-video'); if (!v) return;
-    var tall = matchMedia('(max-aspect-ratio: 1/1)').matches;
-    v.poster = v.getAttribute(tall ? 'data-tall-poster' : 'data-wide-poster');
     var save = navigator.connection && navigator.connection.saveData;
     if (reduced || save) return;
-    v.src = v.getAttribute(tall ? 'data-tall' : 'data-wide');
+    v.src = v.getAttribute(innerWidth <= 760 ? 'data-small' : 'data-wide');
     v.muted = true; v.setAttribute('autoplay', '');
     var p = v.play(); if (p && p.catch) p.catch(function () {});
   })();
