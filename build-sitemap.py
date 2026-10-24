@@ -24,7 +24,6 @@ PRIORITY = {
     "shop-product.html": ("0.8", "weekly"),
     "about.html": ("0.6", "monthly"),
     "contact.html": ("0.6", "monthly"),
-    "blog.html": ("0.7", "weekly"),
 }
 DEFAULT = ("0.4", "yearly")
 CALC_PRIORITY = ("0.7", "monthly")
@@ -55,6 +54,15 @@ for f in sorted(glob.glob("reports/*.html")):
         urls.append((BASE + "reports/", "0.9", "weekly"))
     else:
         urls.append((BASE + f.replace(os.sep, "/"), "0.8", "monthly"))
+
+# Blog index and posts live in /blog/
+for f in sorted(glob.glob("blog/*.html")):
+    if not indexable(f):
+        continue
+    if f.endswith("index.html"):
+        urls.append((BASE + "blog/", "0.8", "weekly"))
+    else:
+        urls.append((BASE + f.replace(os.sep, "/"), "0.7", "monthly"))
 
 urls.sort(key=lambda u: (-float(u[1]), u[0]))
 
