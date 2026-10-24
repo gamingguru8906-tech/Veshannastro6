@@ -587,7 +587,7 @@
       "Items: " + order.item_summary
     ].join("\n");
     setTimeout(function () {
-      window.open("https://wa.me/918827684725?text=" + encodeURIComponent(msg), "_blank");
+      window.open("https://wa.me/917646952745?text=" + encodeURIComponent(msg), "_blank");
     }, 650);
   }
 
