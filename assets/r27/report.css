@@ -1,5 +1,11 @@
 /* Additions to the 2027 report page: sky, order form, book, covers, pricing, blog list. */
 
+/* ---------- hero video (moon over the lake) ---------- */
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 45%}
+.hero-pin.has-video{background:#04050b}
+.hero-pin.has-video .moon-orbit,.hero-pin.has-video::after{display:none}
+.hero-pin.has-video .hero-shade{background:linear-gradient(to bottom,#04060d99 0%,#04060d00 16%,#04060d00 74%,#04060da6 90%,var(--bg) 100%)}
+
 /* ---------- order form ---------- */
 .form-card-head p.form-lead{font-size:13.5px}
 .offer-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:2px 0 0}
