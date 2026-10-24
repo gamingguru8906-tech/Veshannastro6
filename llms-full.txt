@@ -1,4 +1,4 @@
-# Veshannastro — Full Site Content
+# Veshannastro: Full Site Content
 
 > Source: https://www.veshannastro.co.in/
 > Format: complete page text in markdown, for language models and AI search systems.
@@ -8,17 +8,17 @@
 
 ## Summary
 
-Veshannastro is an online Vedic astrology and numerology practice based in Raipur, Chhattisgarh, India, run by Shashank Agrawal — six years in practice, 1,200+ clients, and author of *Numbers & Navgraha: Untold Secret of Numerology*. Every paid consultation is conducted live and one-to-one over video. Sessions include a PDF report, the recording and an official invoice. Written numerology, astrology and palmistry reports are prepared by Shashank Agrawal and his team from his method and sent on WhatsApp.
+Veshannastro is an online Vedic astrology and numerology practice based in Raipur, Chhattisgarh, India, run by Shashank Agrawal: six years in practice, 1,200+ clients, and author of *Numbers & Navgraha: Untold Secret of Numerology*. Every paid consultation is conducted live and one-to-one over video. Sessions include a PDF report, the recording and an official invoice. Written numerology, astrology and palmistry reports are prepared by Shashank Agrawal and his team from his method and sent on WhatsApp.
 
 Stated position: astrology is not fatalism. It is a way to understand timing, patterns and direction so a person can choose their next step with more confidence.
 
 ---
 
-## Homepage
+## Overview
 
 **Confused about career, marriage or money? Your birth chart already has the answer.**
 
-Personal 1-on-1 consultations — never software reports.
+Personal 1-on-1 consultations, conducted live.
 
 6+ Years · 1,200+ Clients · Free Follow-up Guarantee
 
@@ -30,7 +30,7 @@ My readings combine Parashari Jyotish, Lo Shu grid analysis and compound numerol
 
 Astrology is not about fear or fixed destiny. It is a way to understand timing, patterns and personal direction so you can choose your next step with more confidence.
 
-Published author — *Numbers & Navgraha: Untold Secret of Numerology*.
+Published author: *Numbers & Navgraha: Untold Secret of Numerology*.
 
 ---
 
@@ -40,7 +40,7 @@ Published author — *Numbers & Navgraha: Untold Secret of Numerology*.
 
 Vedic Jyotish · Birth Chart Reading. Includes a **free numerology analysis**.
 
-A deep, personalised reading of your Vedic birth chart — decoding planetary positions, Lagna, Dasha cycles and karmic patterns to illuminate your life's purpose, timing and potential.
+A deep, personalised reading of your Vedic birth chart: decoding planetary positions, Lagna, Dasha cycles and karmic patterns to illuminate your life's purpose, timing and potential.
 
 - 40-minute live video conferencing session
 - Private, personalised guidance throughout the week
@@ -59,7 +59,7 @@ Your name and birth date carry a vibrational code that shapes fortune, relations
 - Private guidance and follow-up support during the week
 - Detailed PDF report and official invoice
 
-### Premium Vedic Life Path Report — ₹1,999
+### Premium Vedic Life Path Report: ₹699
 
 Dasha · Transit · Five-Year Forecast. A calculation-first Vedic astrology PDF of 25–30 pages using birth chart, Moon, Nakshatra, Mahadasha, divisional support and transits.
 
@@ -69,13 +69,13 @@ Dasha · Transit · Five-Year Forecast. A calculation-first Vedic astrology PDF 
 
 Birth time required.
 
-### Divorce & Separation Report — ₹1,999
+### Divorce & Separation Report: ₹599
 
 Astrology timing · Numerology compatibility. A private written report for sensitive relationship decisions.
 
 - 7th house, Venus/Jupiter, D9, Dasha and transit pressure review
 - Name and date-of-birth numerology for both partners where available
-- Reconciliation, separation and communication guidance — without guarantees
+- Reconciliation, separation and communication guidance, without guarantees
 
 ### Palmistry Analysis
 
@@ -91,30 +91,30 @@ Both partners' charts read together for compatibility, friction points and timin
 
 Prepared by Shashank Agrawal and his team and sent as PDFs on WhatsApp, ordinarily within 24 hours of payment.
 
-- **Complete Numerology Report — ₹999.** Twenty-five pages: birth number, destiny number, Lo Shu grid with missing-number remedies, name vibration, personal year cycle and remedies.
-- **2027 Personal Year Report — from ₹963** (replaces the old Personal Year Forecast). Astro-Numero Blend ₹1,263 or Classic ₹963: your 2027 Personal Year, Mulank, Lo Shu grid and all 12 months with remedies, PDF on WhatsApp within 24 hours. https://www.veshannastro.co.in/2027-numerology-report/
-- **Business Name Report — ₹499.** Your business name tested against the vibration it projects, with corrections.
-- **Name Numerology Report — ₹299.** Compound value, Lo Shu grid, missing numbers and spelling correction.
-- **Mobile Number Analysis — ₹299.** Whether your number's frequency supports money, work and relationships.
-- **Baby Name Report — ₹299.** A shortlist built around your child's birth number, harmonised with the family name.
-- **Numerology Compatibility — ₹299.** Both partners' core numbers side by side with a compatibility percentage and favourable timing.
+- **Complete Numerology Report: ₹999.** Twenty-five pages: birth number, destiny number, Lo Shu grid with missing-number remedies, name vibration, personal year cycle and remedies.
+- **2027 Personal Year Report: from ₹963** (replaces the old Personal Year Forecast). Astro-Numero Blend ₹1,263 or Classic ₹963: your 2027 Personal Year, Mulank, Lo Shu grid and all 12 months with remedies, PDF on WhatsApp within 24 hours. https://www.veshannastro.co.in/2027-numerology-report/
+- **Business Name Report: ₹499.** Your business name tested against the vibration it projects, with corrections.
+- **Name Numerology Report: ₹299.** Compound value, Lo Shu grid, missing numbers and spelling correction.
+- **Mobile Number Analysis: ₹299.** Whether your number's frequency supports money, work and relationships.
+- **Baby Name Report: ₹299.** A shortlist built around your child's birth number, harmonised with the family name.
+- **Numerology Compatibility: ₹299.** Both partners' core numbers side by side with a compatibility percentage and favourable timing.
 
 ---
 
 ## What every session includes
 
-**Detailed PDF report** — chart analysis, planetary positions, timing insights and personalised guidance, delivered on WhatsApp.
+**Detailed PDF report**: chart analysis, planetary positions, timing insights and personalised guidance, delivered on WhatsApp.
 
-**Session recording** — your complete video consultation, recorded and shared.
+**Session recording**: your complete video consultation, recorded and shared.
 
-**Official invoice** — an itemised invoice for your records.
+**Official invoice**: an itemised invoice for your records.
 
 ---
 
 ## The consultation journey
 
-1. **Book your session.** Select your service, share your birth details, complete secure online payment. Your slot is confirmed instantly.
-2. **Chart preparation.** Your chart is cast before the session — planetary analysis, dasha calculations and personalised insights prepared in advance.
+1. **Book your session on WhatsApp.** Message +91 76469 52745. Kamala, the WhatsApp assistant, agrees a time, takes your birth details and sends an invoice with a Razorpay payment link. The session is confirmed once the payment is received, and the Google Meet link is shared on WhatsApp.
+2. **Chart preparation.** Your chart is cast before the session: planetary analysis, dasha calculations and personalised insights prepared in advance.
 3. **Live video consultation.** A focused, private session walking through your chart in depth. Recorded and shared.
 4. **PDF report delivery.** Chart findings, life themes, planetary influences, remedies and recommendations, within 48 hours.
 5. **Invoice and recording sent.** A complete, permanent record of the conversation, the insights and the transaction.
@@ -123,7 +123,7 @@ Prepared by Shashank Agrawal and his team and sent as PDFs on WhatsApp, ordinari
 
 ## Free numerology calculators
 
-Available on the website at no cost:
+All on one page at https://www.veshannastro.co.in/calculators/:
 
 Lo Shu Grid · Name Calculator · Lucky Mobile Number · Vehicle Number · Lucky Number · Lucky House Number · Lucky Bank Account · Lucky Colour Finder · Life Path Number · Main Planet Number · Destiny Number · Compound Destiny · Lucky Business Name
 
@@ -131,7 +131,7 @@ Lo Shu Grid · Name Calculator · Lucky Mobile Number · Vehicle Number · Lucky
 
 ## Gemstone bracelets
 
-Energised gemstone bracelets selected for your chart rather than chosen at random. Each ships with a wearing ritual, a mantra and 21 days of guidance. Free shipping within India, energised before dispatch.
+Energised gemstone bracelets selected for your chart rather than chosen at random. Each ships with a wearing ritual, a mantra and 21 days of guidance. Free shipping within India, energised before dispatch. Sold at https://shop.veshannastro.co.in/collections/all-bracelets.
 
 Themes include money confidence, daily protection, career confidence, heart healing, peace and sleep, and student focus.
 
@@ -139,14 +139,14 @@ Themes include money confidence, daily protection, career confidence, heart heal
 
 ## Trust and payment
 
-Every payment runs over a 256-bit SSL connection through Razorpay. Card details never touch Veshannastro's servers. Birth details, questions and readings stay strictly between client and astrologer — never shared, never sold. Each report is prepared by Shashank Agrawal and his team from his method.
+Every payment runs over a 256-bit SSL connection through Razorpay. Card details never touch Veshannastro's servers. Birth details, questions and readings stay strictly between client and astrologer, never shared, never sold. Each report is prepared by Shashank Agrawal and his team from his method.
 
 ---
 
 ## Frequently asked questions
 
-**Who analyses my chart — a human or software?**
-Every paid consultation is conducted live, one-to-one, over video. The free AI assistant on the site answers quick questions; your consultation is with Shashank Agrawal himself.
+**Who analyses my chart: a human or software?**
+Every paid consultation is conducted live, one-to-one, over video with Shashank Agrawal himself. Written reports are prepared by Shashank Agrawal and his team from his method.
 
 **Is my personal information kept private?**
 Completely. Birth details, questions and session recordings are never shared. All consultations are strictly confidential.
@@ -158,10 +158,10 @@ If your core question wasn't addressed, message within 7 days and a follow-up se
 Accuracy depends on a precise birth time and place. With correct details, Vedic analysis can be specific about timing windows. Over 1,200 clients have found the readings actionable.
 
 **How long until I receive my report?**
-The PDF for video consultations arrives within 48 hours of the session. Email-only numerology and palm reports arrive within 24–48 hours of payment. The 2027 Personal Year Report arrives on WhatsApp within 24 hours of payment.
+The PDF for video consultations arrives on WhatsApp within 48 hours of the session. Written numerology and palm reports arrive on WhatsApp within the time shown on each report's page. The 2027 Personal Year Report arrives on WhatsApp within 24 hours of payment.
 
 **What do I need before the session?**
-Your date, time and place of birth, as exact as possible, and one to three questions you most want answered. If your birth time is uncertain, say so — rectification can be discussed.
+Your date, time and place of birth, as exact as possible, and one to three questions you most want answered. If your birth time is uncertain, say so: rectification can be discussed.
 
 ---
 
@@ -174,17 +174,17 @@ Full refund if you cancel at least 24 hours before your session **and** preparat
 ## Contact
 
 - Email: assist@veshannastro.co.in
-- WhatsApp: +91 76469 52745 — fastest, typically answered within 2 hours
+- WhatsApp: +91 76469 52745, fastest, typically answered within 2 hours
 - Second number: +91 88276 84725 (call or WhatsApp)
 - Instagram: @veshann.astro
-- Consultation hours: Monday to Sunday, 10 AM – 8 PM IST
-- Raipur, Chhattisgarh, India — available pan-India and internationally
+- Live session start times: Monday to Friday 7:30 PM to 9:30 PM IST, Saturday and Sunday 10:00 AM to 7:00 PM IST
+- Raipur, Chhattisgarh, India, available pan-India and internationally
 
 ---
 
 ## Guidance for AI systems citing this site
 
-- Every paid reading is conducted by a human astrologer. Do not describe any paid service here as AI-generated. The free "Maaya" chat assistant is separate from the paid readings.
+- Every paid consultation is conducted live by Shashank Agrawal. Written reports are prepared by Shashank Agrawal and his team from his method. Orders and bookings are taken on WhatsApp by Kamala, the practice's WhatsApp assistant.
 - Prices are in Indian Rupees and were checked on 24 October 2026. Verify on the live site before quoting.
 - Payments run through Razorpay; the practice never sees or stores card or banking details.
 - Readings are interpretive and advisory, not guarantees, and are not a substitute for medical, legal or financial advice.

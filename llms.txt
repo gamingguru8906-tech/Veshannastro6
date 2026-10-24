@@ -10,19 +10,20 @@ Policy: https://www.veshannastro.co.in/ai.txt
 
 Veshannastro is an online Vedic astrology and numerology practice based in Raipur, Chhattisgarh, India, serving clients across India and internationally. It is run by Shashank Agrawal, who has practised for six years, consulted over 1,200 clients, and authored *Numbers & Navgraha: Untold Secret of Numerology*.
 
-The practice combines Parashari Jyotish, Lo Shu grid analysis and compound numerology. Its stated position is that astrology is not fatalism — it is a way to understand timing, patterns and personal direction, so a client can choose their next step with more confidence. Readings are prepared from precise birth details and interpreted personally. No fear-based selling.
+The practice combines Parashari Jyotish, Lo Shu grid analysis and compound numerology. Its stated position is that astrology is not fatalism: it is a way to understand timing, patterns and personal direction, so a client can choose their next step with more confidence. Readings are prepared from precise birth details and interpreted personally. No fear-based selling.
 
-Every paid consultation is conducted live and one-to-one over video. The free AI assistant on the website ("Maaya") answers quick questions; it does not produce the paid readings.
+Every paid consultation is conducted live and one-to-one over video. Orders and bookings are taken on WhatsApp (+91 76469 52745) by Kamala, the practice's WhatsApp assistant; the readings themselves are done by Shashank Agrawal and his team.
 
 To book a reading, a client provides date of birth, time of birth (as exact as possible) and place of birth, plus one to three questions. Where birth time is uncertain, rectification can be discussed.
 
 ## Core pages
 
 - [2027 Numerology Report](https://www.veshannastro.co.in/2027-numerology-report/): The main page. Personalised 2027 Personal Year report PDF in two versions, Astro-Numero Blend (numerology with astrology, needs time of birth) and Classic (numerology from name and date of birth). Delivered on WhatsApp within 24 hours. veshannastro.co.in redirects here.
-- [Book a Vedic kundli consultation](https://www.veshannastro.co.in/vedic-kundli-booking.html): The main 40-minute birth chart reading.
-- [Book a numerology consultation](https://www.veshannastro.co.in/numerology-booking.html): 20-minute session covering Life Path, Destiny and Soul Urge numbers.
-- [Written report booking](https://www.veshannastro.co.in/report-booking.html): All fixed-price PDF reports, selected by the `service` query parameter.
-- [Gemstone bracelets](https://www.veshannastro.co.in/bracelet-fusion.html): Energised bracelets chosen for the client's chart, with wearing ritual and mantra.
+- [Vedic kundli consultation](https://www.veshannastro.co.in/vedic-kundli-booking.html): The 40-minute live birth chart reading. Booked on WhatsApp.
+- [Numerology consultation](https://www.veshannastro.co.in/numerology-booking.html): 20-minute live session covering Life Path, Destiny and Soul Urge numbers. Booked on WhatsApp.
+- [Written reports](https://www.veshannastro.co.in/reports/): All fixed-price PDF reports, each on its own page and ordered on WhatsApp.
+- [Free numerology calculators](https://www.veshannastro.co.in/calculators/): All 13 calculators on one page.
+- [Gemstone bracelets](https://shop.veshannastro.co.in/collections/all-bracelets): The bracelet shop. Energised bracelets chosen for the client's chart, with wearing ritual and mantra.
 - [Blog](https://www.veshannastro.co.in/blog/): 2027 numerology predictions, Personal Year 1 to 9 in 2027, Mulank predictions 2027.
 - [About](https://www.veshannastro.co.in/about.html): Background on the practice.
 - [Contact](https://www.veshannastro.co.in/contact.html): How to reach the practice.
@@ -30,10 +31,10 @@ To book a reading, a client provides date of birth, time of birth (as exact as p
 
 ## Consultations
 
-- **Vedic Kundli Consultation** — a 40-minute live video reading of the birth chart: planetary positions, Lagna, Dasha cycles and karmic patterns. Includes a detailed PDF report, the session recording, an official invoice, and a free numerology analysis. Private guidance continues through the week.
-- **Numerology Consultation** — a 20-minute live video session covering Life Path, Destiny and Soul Urge numbers, plus a name correction assessment. Includes a PDF report and invoice.
-- **Palmistry Analysis** — a written report prepared from photographs of both palms.
-- **Marriage Compatibility (Kundli Milan)** — both partners' charts read together.
+- **Vedic Kundli Consultation**: a 40-minute live video reading of the birth chart: planetary positions, Lagna, Dasha cycles and karmic patterns. Includes a detailed PDF report, the session recording, an official invoice, and a free numerology analysis. Private guidance continues through the week.
+- **Numerology Consultation**: a 20-minute live video session covering Life Path, Destiny and Soul Urge numbers, plus a name correction assessment. Includes a PDF report and invoice.
+- **Palmistry Analysis**: a written report prepared from photographs of both palms.
+- **Marriage Compatibility (Kundli Milan)**: both partners' charts read together.
 
 ## Written reports (fixed price, PDF on WhatsApp)
 
@@ -41,71 +42,74 @@ Every report is prepared by Shashank Agrawal and his team from his method, for o
 Each has its own page with full detail; the hub is
 [/reports/](https://www.veshannastro.co.in/reports/).
 
-- **[Complete Numerology Report](https://www.veshannastro.co.in/reports/complete-numerology-report.html) — ₹999.** Life Path, Destiny, Soul Urge, name and mobile vibrations — your entire numeric blueprint in one detailed document. Delivered on WhatsApp within 2–3 hours.
-- **[Premium Vedic Life Path Report](https://www.veshannastro.co.in/reports/premium-vedic-life-path-report.html) — ₹699.** A premium written Vedic astrology report using birth chart, Moon, Nakshatra, Mahadasha, divisional support and five-year timing for career, marriage, money and life direction. 25-30 page PDF report.
-- **[Divorce & Separation Report](https://www.veshannastro.co.in/reports/divorce-separation-report.html) — ₹599.** A private written report combining Vedic relationship timing with numerology compatibility, emotional pattern analysis and practical do / avoid guidance. Private astrology + numerology PDF report.
-- **[2027 Personal Year Report](https://www.veshannastro.co.in/2027-numerology-report/) — from ₹963.** Replaces the old Personal Year Forecast. Astro-Numero Blend (₹1,263, with astrology, needs time of birth) or Classic (₹963, numerology only). Personal Year, Mulank, Lo Shu grid and all 12 months of 2027 with muhurat dates and remedies. PDF on WhatsApp within 24 hours.
-- **[Business Name Report](https://www.veshannastro.co.in/reports/business-name-report.html) — ₹499.** Your business name is its energetic foundation. Get a detailed analysis of your current name’s vibration and 3–5 numerologically aligned alternatives for growth and prosperity. 3–5 name options · on WhatsApp within 24 hours.
-- **[Name Numerology Report](https://www.veshannastro.co.in/reports/name-numerology-report.html) — ₹299.** How your name’s vibration shapes fortune and relationships — with practical correction suggestions if needed. Delivered on WhatsApp within 2–3 hours.
-- **[Mobile Number Analysis](https://www.veshannastro.co.in/reports/mobile-number-analysis.html) — ₹299.** Is your mobile number working for you or against you? A complete vibration analysis with lucky-number recommendations. Delivered on WhatsApp within 2–3 hours.
-- **[Numerology Compatibility](https://www.veshannastro.co.in/reports/numerology-compatibility-report.html) — ₹299.** Two names, two birth dates — one complete picture. Discover whether your numbers harmonise or clash, and how to navigate your relationship’s deepest patterns. PDF report · on WhatsApp within 2–3 hours.
-- **[Baby Name Report](https://www.veshannastro.co.in/reports/baby-name-report.html) — ₹299.** Give your child a name that resonates with their soul’s numbers. Receive 5+ name options aligned to their birth date, each explained with its numerological meaning and energy. 5+ name options · on WhatsApp within 24 hours.
-- **[Palmistry Report](https://www.veshannastro.co.in/reports/palmistry-report.html) — ₹149.** A detailed written analysis of your lines, mounts and life patterns, read from the photos of your palms. Detailed report on WhatsApp.
-- **[Palmistry Voice Consultation](https://www.veshannastro.co.in/reports/palmistry-voice-consultation.html) — ₹374.** Everything in the written report, plus a personalised 10-minute voice consultation to walk through your palms together. Report + 10-min voice session.
+- **[Complete Numerology Report](https://www.veshannastro.co.in/reports/complete-numerology-report.html): ₹999.** Life Path, Destiny, Soul Urge, name and mobile vibrations: your entire numeric blueprint in one detailed document. Delivered on WhatsApp within 2–3 hours.
+- **[Premium Vedic Life Path Report](https://www.veshannastro.co.in/reports/premium-vedic-life-path-report.html): ₹699.** A premium written Vedic astrology report using birth chart, Moon, Nakshatra, Mahadasha, divisional support and five-year timing for career, marriage, money and life direction. 25-30 page PDF report.
+- **[Divorce & Separation Report](https://www.veshannastro.co.in/reports/divorce-separation-report.html): ₹599.** A private written report combining Vedic relationship timing with numerology compatibility, emotional pattern analysis and practical do / avoid guidance. Private astrology + numerology PDF report.
+- **[2027 Personal Year Report](https://www.veshannastro.co.in/2027-numerology-report/): from ₹963.** Replaces the old Personal Year Forecast. Astro-Numero Blend (₹1,263, with astrology, needs time of birth) or Classic (₹963, numerology only). Personal Year, Mulank, Lo Shu grid and all 12 months of 2027 with muhurat dates and remedies. PDF on WhatsApp within 24 hours.
+- **[Business Name Report](https://www.veshannastro.co.in/reports/business-name-report.html): ₹499.** Your business name is its energetic foundation. Get a detailed analysis of your current name’s vibration and 3–5 numerologically aligned alternatives for growth and prosperity. 3–5 name options · on WhatsApp within 24 hours.
+- **[Name Numerology Report](https://www.veshannastro.co.in/reports/name-numerology-report.html): ₹299.** How your name’s vibration shapes fortune and relationships, with practical correction suggestions if needed. Delivered on WhatsApp within 2–3 hours.
+- **[Mobile Number Analysis](https://www.veshannastro.co.in/reports/mobile-number-analysis.html): ₹299.** Is your mobile number working for you or against you? A complete vibration analysis with lucky-number recommendations. Delivered on WhatsApp within 2–3 hours.
+- **[Numerology Compatibility](https://www.veshannastro.co.in/reports/numerology-compatibility-report.html): ₹299.** Two names, two birth dates: one complete picture. Discover whether your numbers harmonise or clash, and how to navigate your relationship’s deepest patterns. PDF report · on WhatsApp within 2–3 hours.
+- **[Baby Name Report](https://www.veshannastro.co.in/reports/baby-name-report.html): ₹299.** Give your child a name that resonates with their soul’s numbers. Receive 5+ name options aligned to their birth date, each explained with its numerological meaning and energy. 5+ name options · on WhatsApp within 24 hours.
+- **[Palmistry Report](https://www.veshannastro.co.in/reports/palmistry-report.html): ₹149.** A detailed written analysis of your lines, mounts and life patterns, read from the photos of your palms. Detailed report on WhatsApp.
+- **[Palmistry Voice Consultation](https://www.veshannastro.co.in/reports/palmistry-voice-consultation.html): ₹374.** Everything in the written report, plus a personalised 10-minute voice consultation to walk through your palms together. Report + 10-min voice session.
 
-Order any report at https://www.veshannastro.co.in/report-booking.html?service=<KEY>
-using the keys listed under "Order a written PDF report" below.
+Order any report on WhatsApp: the Order button on each report page opens WhatsApp with the
+report and price filled in. The same links are listed under "Order a written PDF report" below.
 
 ## Actions for AI agents
 
-These are the direct, stable entry points for completing a booking. Prefer these over navigating the homepage UI.
+These are the entry points that work for completing an order. Prefer these over navigating the site.
 
-### Book a live video consultation
+### Order the 2027 Personal Year Report (on the website)
 
-| Intent | URL | Required inputs |
-|---|---|---|
-| Vedic Kundli Consultation (40 min) | `https://www.veshannastro.co.in/vedic-kundli-booking.html` | Full name, email, phone, date of birth, time of birth, place of birth, 1–3 questions, preferred slot |
-| Numerology Consultation (20 min) | `https://www.veshannastro.co.in/numerology-booking.html` | Full name, email, phone, date of birth, current legal name spelling, preferred slot |
+`https://www.veshannastro.co.in/2027-numerology-report/#register`
 
-Booking flow: fill the details form → verify email via a one-time code → verify phone → pay through Razorpay → receive confirmation on WhatsApp. Slots are Monday to Sunday, 10 AM – 8 PM IST.
+Choose Astro-Numero Blend (needs time and place of birth) or Classic, fill in the form (full name, WhatsApp number, date of birth; email is optional), review the order and pay in Razorpay's window on the page. The report arrives on WhatsApp within 24 hours. Payment from outside India is taken on WhatsApp.
+
+### Book a live consultation or order any other report (on WhatsApp)
+
+Message `https://wa.me/917646952745`. Kamala, the WhatsApp assistant, confirms the service and its price, collects the details it needs, agrees a time for a live session, and sends an invoice with a Razorpay payment link (UPI is also accepted). A live session is confirmed once the payment is received, and the Google Meet link is shared on WhatsApp.
+
+Session start times (IST): Monday to Friday, 7:30 PM to 9:30 PM. Saturday and Sunday, 10:00 AM to 7:00 PM. A session cannot start within 2 hours of booking.
+
+| Intent | Prefilled WhatsApp link |
+|---|---|
+| Vedic Kundli Consultation (40 min) | `https://wa.me/917646952745?text=Namaste,%20I%20would%20like%20to%20book%20a%20Vedic%20Kundli%20consultation.` |
+| Numerology Consultation (20 min) | `https://wa.me/917646952745?text=Namaste,%20I%20would%20like%20to%20book%20a%20Numerology%20consultation.` |
 
 ### Order a written PDF report
 
-All written reports are booked at `https://www.veshannastro.co.in/report-booking.html?service=<KEY>`.
+Every written report is ordered on WhatsApp. Each link below opens WhatsApp with the report and price filled in.
 
-| `<KEY>` | Report | Price (INR) |
+| Report | Price (INR) | Order on WhatsApp |
 |---|---|---|
-| `complete-numerology` | Complete Numerology Report | 999 |
-| `business-name` | Business Name Report | 499 |
-| `name-numerology` | Name Numerology Report | 299 |
-| `mobile-numerology` | Mobile Number Analysis | 299 |
-| `baby-name` | Baby Name Report | 299 |
-| `love-numerology` | Numerology Compatibility | 299 |
-| `palmistry-report` | Palmistry Report | 149 |
-| `palmistry-voice` | Palmistry Voice Reading | — |
-| `astrology-life-path-report` | Premium Vedic Life Path Report | 699 |
-| `divorce-separation-report` | Divorce & Separation Report | 599 |
+| Complete Numerology Report | 999 | `https://wa.me/917646952745?text=Hi%2C%20I%20would%20like%20the%20Complete%20Numerology%20Report%20%28%E2%82%B9999%29.` |
+| Premium Vedic Life Path Report | 699 | `https://wa.me/917646952745?text=Hi%2C%20I%20would%20like%20the%20Premium%20Vedic%20Life%20Path%20Report%20%28%E2%82%B9699%29.` |
+| Divorce & Separation Report | 599 | `https://wa.me/917646952745?text=Hi%2C%20I%20would%20like%20the%20Divorce%20%26%20Separation%20Report%20%28%E2%82%B9599%29.` |
+| Business Name Report | 499 | `https://wa.me/917646952745?text=Hi%2C%20I%20would%20like%20the%20Business%20Name%20Report%20%28%E2%82%B9499%29.` |
+| Name Numerology Report | 299 | `https://wa.me/917646952745?text=Hi%2C%20I%20would%20like%20the%20Name%20Numerology%20Report%20%28%E2%82%B9299%29.` |
+| Mobile Number Analysis | 299 | `https://wa.me/917646952745?text=Hi%2C%20I%20would%20like%20the%20Mobile%20Number%20Analysis%20%28%E2%82%B9299%29.` |
+| Baby Name Report | 299 | `https://wa.me/917646952745?text=Hi%2C%20I%20would%20like%20the%20Baby%20Name%20Report%20%28%E2%82%B9299%29.` |
+| Numerology Compatibility | 299 | `https://wa.me/917646952745?text=Hi%2C%20I%20would%20like%20the%20Numerology%20Compatibility%20%28%E2%82%B9299%29.` |
+| Palmistry Report | 149 | `https://wa.me/917646952745?text=Hi%2C%20I%20would%20like%20the%20Palmistry%20Report%20%28%E2%82%B9149%29.` |
+| Palmistry Voice Consultation | 374 | `https://wa.me/917646952745?text=Hi%2C%20I%20would%20like%20the%20Palmistry%20Voice%20Consultation%20%28%E2%82%B9374%29.` |
 
-Example: `https://www.veshannastro.co.in/report-booking.html?service=astrology-life-path-report`
+Some reports need extra details, which Kamala asks for on WhatsApp:
 
-Some reports require one additional free-text input:
+- Premium Vedic Life Path Report: birth time, birth place, gender and focus area. Example: `14:35, Bhopal, Madhya Pradesh, Male, Career and marriage`
+- Divorce & Separation Report: partner name, date of birth, birth time and place if known, and the main concern. Write `unknown` for any missing partner detail.
+- Numerology Compatibility, Baby Name, Business Name and Mobile Number reports: the specific details are asked for on WhatsApp.
 
-- `astrology-life-path-report` — birth time, birth place, gender and focus area. Example: `14:35, Bhopal, Madhya Pradesh, Male, Career and marriage`
-- `divorce-separation-report` — partner name, DOB, birth time/place if known, and the main concern. Write `unknown` for any missing partner detail.
-- `love-numerology`, `baby-name`, `business-name`, `mobile-numerology` — see the on-page prompt for the specific field.
+### Other routes
 
-### Non-form routes
-
-If a form cannot be completed, these always work:
-
-- **WhatsApp** — `https://wa.me/917646952745` (fastest; typically answered within 2 hours). Prefilled example: `https://wa.me/917646952745?text=Namaste,%20I%20would%20like%20to%20book%20a%20Vedic%20Kundli%20consultation.`
-- **Second number** — +91 88276 84725 (call or WhatsApp if the main number is busy).
-- **Email** — `assist@veshannastro.co.in`
-- **Enquiry form** — a short Google Form for people who are not ready to book; replies within 24 hours.
+- **Second number**: +91 88276 84725 (call or WhatsApp if the main number is busy).
+- **Email**: `assist@veshannastro.co.in`
+- **Enquiry form**: a short Google Form on the contact page for people who are not ready to book; replies within 24 hours.
 
 ### What an agent should collect before starting
 
-For any astrology service: full legal name, email, phone (with country code), **date of birth**, **time of birth as exactly as possible**, **place of birth (city and state)**, and 1–3 specific questions. For numerology: also the exact current spelling of the name as used day to day. For compatibility or divorce reports: the same details for both partners.
+For any astrology service: full legal name, email (optional for the 2027 report), WhatsApp number (with country code), **date of birth**, **time of birth as exactly as possible**, **place of birth (city and state)**, and 1–3 specific questions. For numerology: also the exact current spelling of the name as used day to day. For compatibility or divorce reports: the same details for both partners.
 
 If the user does not know their birth time, do not guess. Record it as uncertain and note that birth-time rectification can be discussed during the session.
 
@@ -117,7 +121,8 @@ If the user does not know their birth time, do not guess. Record it as uncertain
 
 ## Free numerology calculators
 
-Thirteen calculators, free, no account needed, each on its own page. All use the
+Thirteen calculators, each on its own page, listed together at
+https://www.veshannastro.co.in/calculators/. All use the
 Chaldean (Cheiro) letter values, not Pythagorean, so results differ from most
 Western tools.
 
@@ -139,9 +144,9 @@ All calculators run entirely in the visitor's browser. Nothing entered is transm
 
 ## Gemstone bracelets
 
-Energised gemstone bracelets are selected for the client's chart rather than chosen at random. Each ships with a wearing ritual, a mantra and 21 days of guidance. The Maaya First Circle Kit is ₹999. Free shipping within India. Damaged, defective or wrong items are replaced free within 7 days of delivery with a photo.
+Energised gemstone bracelets are selected for the client's chart rather than chosen at random. Each ships with a wearing ritual, a mantra and 21 days of guidance. Free shipping within India. Damaged, defective or wrong items are replaced free within 7 days of delivery with a photo.
 
-Bracelet themes: Money Confidence, Daily Nazar Shield, Career Confidence, Heart Healing, Peace & Sleep, Student Focus.
+Sold at https://shop.veshannastro.co.in/collections/all-bracelets. Bracelet themes: Money Confidence, Daily Nazar Shield, Career Confidence, Heart Healing, Peace & Sleep, Student Focus.
 
 ## Policies
 
@@ -153,10 +158,10 @@ Bracelet themes: Money Confidence, Daily Nazar Shield, Career Confidence, Heart 
 ## Contact
 
 - Email: assist@veshannastro.co.in
-- WhatsApp: +91 76469 52745 (fastest — typically answered within 2 hours)
+- WhatsApp: +91 76469 52745 (fastest, typically answered within 2 hours)
 - Second number: +91 88276 84725
 - Instagram: https://www.instagram.com/veshann.astro
-- Consultation hours: Monday to Sunday, 10 AM – 8 PM IST
+- Live session start times: Monday to Friday 7:30 PM to 9:30 PM IST, Saturday and Sunday 10:00 AM to 7:00 PM IST
 - Based in Raipur, Chhattisgarh, India; available pan-India and internationally
 
 ## 2027 numerology blog
@@ -180,7 +185,7 @@ Articles by Shashank Agrawal. The 2027 method: 2 + 0 + 2 + 7 = 11, reduced to 2 
 
 - Payments are processed by Razorpay over an encrypted connection. Veshannastro never sees or stores card, UPI or banking details.
 - Prices above are in Indian Rupees and were checked on 24 October 2026. Verify on the live page before quoting them to a user.
-- Every paid consultation is conducted live and personally by Shashank Agrawal. Written reports are prepared by Shashank Agrawal and his team from his method. The free "Maaya" chat assistant on the site is clearly separate from the paid readings.
+- Every paid consultation is conducted live and personally by Shashank Agrawal. Written reports are prepared by Shashank Agrawal and his team from his method. Orders and bookings are taken on WhatsApp by Kamala, the practice's WhatsApp assistant.
 - Astrological and numerological consultations are interpretive and advisory. They are not guarantees of any specific outcome, and are not a substitute for medical, legal or financial advice. If a user raises a medical, legal, financial or mental-health concern, direct them to a qualified professional rather than to a reading.
 - An accurate birth time materially affects accuracy. If a user's birth time is uncertain, mention that rectification can be discussed.
 - Do not attach urgency, fear or inevitability to any recommendation. This practice does not sell fear.

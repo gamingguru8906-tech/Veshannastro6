@@ -5,6 +5,12 @@ Prices, delivery windows and required inputs are read from report-booking.html
 at build time, so a landing page can never drift from what the checkout charges.
 
 Run from the repo root:  python3 reports/build-reports.py
+
+DO NOT RUN THIS AS IT IS (October 2026). The report pages were edited directly and are now the source of truth:
+the Google tag and favicon lines, the gemstone notes, WhatsApp delivery and Order buttons, "Shashank Agrawal and
+his team", and no em dashes. report-booking.html (where this reads prices) still says "Delivered by email", so a
+rebuild would put that back and drop the Google tag. Edit the pages in reports/ instead, or bring this script up
+to date with them first.
 """
 import io, os, re, json, datetime
 from urllib.parse import quote
