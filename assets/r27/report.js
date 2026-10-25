@@ -47,16 +47,6 @@
     } catch (e) { return null; }
   }
 
-  /* ---------- hero video ---------- */
-  (function () {
-    var v = document.getElementById('hero-video'); if (!v) return;
-    var save = navigator.connection && navigator.connection.saveData;
-    if (reduced || save) return;
-    v.src = v.getAttribute(innerWidth <= 760 ? 'data-small' : 'data-wide');
-    v.muted = true; v.setAttribute('autoplay', '');
-    var p = v.play(); if (p && p.catch) p.catch(function () {});
-  })();
-
   /* ---------- selects ---------- */
   var opt = function (sel, v, t) { var o = document.createElement('option'); o.value = v; o.textContent = t; sel.appendChild(o); };
   var day = $('#dob-day'), mon = $('#dob-month'), yr = $('#dob-year');

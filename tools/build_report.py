@@ -290,15 +290,17 @@ def page():
   <meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="{BASE}/assets/r27/og.jpg">
   <link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest">
   <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" as="image" href="/assets/r27/hero-wide.webp">
-  <link rel="stylesheet" href="/assets/r27/styles.css?v=9"><link rel="stylesheet" href="/assets/r27/sections.css?v=9"><link rel="stylesheet" href="/assets/r27/report.css?v=10">
+  <link rel="preload" as="image" href="/assets/r27/hero-moon.webp" fetchpriority="high">
+  <link rel="stylesheet" href="/assets/r27/styles.css?v=9"><link rel="stylesheet" href="/assets/r27/sections.css?v=9"><link rel="stylesheet" href="/assets/r27/report.css?v=11"><link rel="stylesheet" href="/assets/r27/motion.css?v=1">
+  <script>(function(d){{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;d.documentElement.classList.add("motion");setTimeout(function(){{if(!window.__motionReady)d.documentElement.classList.remove("motion")}},3500)}})(document)</script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R20FKYJK7P"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-R20FKYJK7P');gtag('config','AW-18189866057');</script>
   <script type="application/ld+json">{json.dumps(graph, ensure_ascii=False, separators=(",", ":"))}</script>
   <script>window.R27={json.dumps(config, separators=(",", ":"))};</script>
-  <script src="/assets/r27/report.js?v=10" defer></script><script src="/assets/r27/book.js?v=9" defer></script>
+  <script src="/assets/r27/report.js?v=11" defer></script><script src="/assets/r27/motion.js?v=1" defer></script><script src="/assets/r27/book.js?v=9" defer></script>
 </head>
 <body>
+  <svg class="fx-defs" width="0" height="0" aria-hidden="true" focusable="false"><filter id="morph-threshold"><feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 255 -140"/></filter></svg>
   <div class="nebula" aria-hidden="true"></div><canvas class="sky" id="star-field" aria-hidden="true"></canvas>
   <div class="grain" aria-hidden="true"></div><div class="vignette" aria-hidden="true"></div><div class="progress" aria-hidden="true"></div>
   <header class="topbar">
@@ -313,8 +315,8 @@ def page():
   </nav>
   <main>
     <section class="hero" id="register" aria-labelledby="hero-title">
-      <div class="hero-background" aria-hidden="true"><div class="hero-pin has-video"><video class="hero-video" id="hero-video" muted playsinline loop preload="none" poster="/assets/r27/hero-wide.webp" data-wide="/assets/r27/hero-wide.mp4" data-small="/assets/r27/hero-small.mp4" width="1280" height="720"></video><div class="moon-orbit"></div><div class="hero-shade"></div></div></div>
-      <h1 id="hero-title">2027 Numerology Report <br>Personal Year Forecast <small>by Shashank Agrawal</small></h1>
+      <div class="hero-background" aria-hidden="true"><div class="hero-pin has-photo"><img class="hero-photo" src="/assets/r27/hero-moon.webp" width="1280" height="558" alt="" fetchpriority="high" decoding="async"><div class="moon-orbit"></div><div class="hero-shade"></div></div></div>
+      <h1 id="hero-title" class="stagger"><span class="sw" style="--i:0">2027</span> <span class="sw" style="--i:1">Numerology</span> <span class="sw" style="--i:2">Report</span> <br><span class="sw" style="--i:3">Personal</span> <span class="sw" style="--i:4">Year</span> <span class="sw" style="--i:5">Forecast</span> <small class="sw" style="--i:6">by Shashank Agrawal</small></h1>
       <div class="form-card">
         <div class="form-card-head"><span class="report-mark">{ICON_STAR}Phase one, {OFFER['limit']} reports</span><h2>Get your 2027 Report</h2>
           <p class="form-lead">What 2027 holds for your health, money, work and relationships, and the remedies for whatever needs care. Prepared for you alone.</p>
@@ -364,11 +366,13 @@ def page():
 
     <section class="report-section" id="inside" aria-labelledby="inside-title"><div class="wrap">
       <header class="section-heading"><div class="kicker">What's inside</div><h2 id="inside-title">Your whole year, <em>mapped month by month.</em></h2>
-        <p class="section-lead">A personalised 2027 numerology report, complete and detailed. Not a horoscope written for millions: it is built from your own date of birth and name, from VESHANNASTRO, owned by Shashank Agrawal.</p></header>
+        <p class="section-lead">A personalised 2027 numerology report, complete and detailed. Not a horoscope written for millions: it is <mark class="hl">built from your own date of birth and name</mark>, from VESHANNASTRO, owned by Shashank Agrawal.</p></header>
       <div class="covers-fan" aria-label="2027 report covers by Mulank">{covers}</div>
       <p class="covers-note">Your cover is chosen by your Mulank, the number of your birth day. Mulank 3, 5, 6 and 9 receive the same cover.</p>
       <ol class="inside-list" style="margin-top:48px">{inside}</ol>
     </div></section>
+
+    <div class="marquee" aria-hidden="true"><div class="marquee-track"><div class="marquee-row"><span class="mq-item">Personal Year</span><i class="mq-dot"></i><span class="mq-item mq-outline">Mulank</span><i class="mq-dot"></i><span class="mq-item">Bhagyank</span><i class="mq-dot"></i><span class="mq-item mq-outline">Lo Shu Grid</span><i class="mq-dot"></i><span class="mq-item">Muhurat Dates</span><i class="mq-dot"></i><span class="mq-item mq-outline">Name Number</span><i class="mq-dot"></i><span class="mq-item">Pinnacles</span><i class="mq-dot"></i><span class="mq-item mq-outline">12 Months of 2027</span><i class="mq-dot"></i><span class="mq-item">Remedies</span><i class="mq-dot"></i></div><div class="marquee-row"><span class="mq-item">Personal Year</span><i class="mq-dot"></i><span class="mq-item mq-outline">Mulank</span><i class="mq-dot"></i><span class="mq-item">Bhagyank</span><i class="mq-dot"></i><span class="mq-item mq-outline">Lo Shu Grid</span><i class="mq-dot"></i><span class="mq-item">Muhurat Dates</span><i class="mq-dot"></i><span class="mq-item mq-outline">Name Number</span><i class="mq-dot"></i><span class="mq-item">Pinnacles</span><i class="mq-dot"></i><span class="mq-item mq-outline">12 Months of 2027</span><i class="mq-dot"></i><span class="mq-item">Remedies</span><i class="mq-dot"></i></div></div></div>
 
     <section class="report-section" id="finder" aria-labelledby="finder-title"><div class="wrap">
       <header class="section-heading"><div class="kicker">Try it</div><h2 id="finder-title">Find your <em>Personal Year</em> for 2027.</h2>
@@ -391,14 +395,15 @@ def page():
 
     <section class="report-section" id="pricing" aria-labelledby="pricing-title"><div class="wrap">
       <header class="section-heading"><div class="kicker">{OFFER['name']}, {OFFER['pct']}% off</div><h2 id="pricing-title">2027 numerology report <em>price in India.</em></h2>
-        <p class="section-lead">Two reports. The Astro-Numero Blend is our 2027 astro numero report, numerology and astrology read together; Classic reads your numbers alone. The amount is an energy exchange for a reading prepared for you alone.</p></header>
+        <p class="section-lead">Two reports. The Astro-Numero Blend is our 2027 astro numero report, <mark class="hl">numerology and astrology read together</mark>; Classic reads your numbers alone. The amount is an energy exchange for a reading prepared for you alone.</p></header>
       <div class="plans">{plan('blend', True)}{plan('classic', False)}</div>
       <p class="plans-note">Phase one is limited to {OFFER['limit']} reports and closes on {OFFER['ends_text']}. Ordering for more than one person? <a href="{wa(BULK_MSG)}" target="_blank" rel="noopener" style="color:var(--cy)">Message us on WhatsApp</a>.</p>
     </div></section>
 
     <section class="report-section" id="services" aria-labelledby="services-title"><div class="wrap">
       <header class="section-heading"><div class="kicker">Consultations</div><h2 id="services-title">Live consultations <em>with Shashank.</em></h2>
-        <p class="section-lead">Besides the 2027 report, Shashank reads Vedic kundli and numerology one-to-one in live sessions on Google Meet. Every consultation is booked on WhatsApp: message us with the session you want, and we confirm your slot and send the payment link there.</p></header>
+        <p class="section-lead">Besides the 2027 report, Shashank reads Vedic kundli and numerology one-to-one in live sessions on Google Meet. Every consultation is <mark class="hl">booked on WhatsApp</mark>: message us with the session you want, and we confirm your slot and send the payment link there.</p></header>
+      <div class="morph" aria-hidden="true"><span class="morph-word">Vedic Kundli</span><span class="morph-word">Numerology</span></div>
       <div class="plans">{consults}</div>
       <p class="plans-note">{SLOTS} {OFFICE}</p>
     </div></section>
@@ -406,13 +411,14 @@ def page():
     <section class="report-section" id="about" aria-labelledby="about-title"><div class="wrap about-grid">
       <div class="about-copy"><div class="kicker">Owner, VESHANNASTRO</div><h2 class="section-title" id="about-title">Shashank <em>Agrawal</em></h2>
         <p>Shashank Agrawal founded VESHANNASTRO and is the author of <a href="{BOOK}" target="_blank" rel="noopener" style="color:var(--cy)"><em>Numbers &amp; Navgraha: Untold Secret of Numerology</em></a>. He works with Mulank and Bhagyank, the Lo Shu grid, Chaldean name numbers and Vedic astrology.</p>
-        <p>The 2027 Personal Year Report is his reading of your year: what it holds for your health, money, work and relationships, and where it needs care, with the remedies to meet it and step into 2027 as a stronger version of yourself. Each report is prepared by Shashank and his team for one person.</p>
+        <p>The 2027 Personal Year Report is his reading of your year: what it holds for your health, money, work and relationships, and where it needs care, with the remedies to meet it and step into 2027 as a stronger version of yourself. Each report is <mark class="hl">prepared by Shashank and his team</mark> for one person.</p>
       </div>
     </div></section>
 
     <section class="report-section" id="year-2027" aria-labelledby="uy-title"><div class="wrap">
-      <header class="section-heading"><div class="kicker">Universal Year 11/2</div><h2 id="uy-title">What 2027 means <em>in numerology.</em></h2>
-        <p class="section-lead">2027 adds up to 11 (2 + 0 + 2 + 7), and 11 reduces to 2, so it is a Universal Year 11/2. In Indian numerology the 2 is ruled by the Moon: a year of partnership, patience and intuition, with the master number 11 adding a sharper inner pull. After 2026, a year of fresh starts, 2027 asks you to work with others, finish what you began and let things ripen. What it means for you depends on your Personal Year, the number set by your birth day and month together with 2027. Your report reads that Personal Year month by month, so you know which parts of 2027 to push in and which to handle with care.</p></header>
+      <svg class="draw-num" viewBox="0 0 280 200" aria-hidden="true" focusable="false"><defs><linearGradient id="dn-fill" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#fff6e3"/><stop offset=".55" stop-color="#f3cd93"/><stop offset="1" stop-color="#8fd8ff"/></linearGradient></defs><text x="4" y="166">11/2</text></svg>
+      <header class="section-heading"><div class="kicker"><span class="glitch" data-text="Universal Year 11/2">Universal Year 11/2</span></div><h2 id="uy-title">What 2027 means <em>in numerology.</em></h2>
+        <p class="section-lead">2027 adds up to 11 (2 + 0 + 2 + 7), and 11 reduces to 2, so it is a <mark class="hl">Universal Year 11/2</mark>. In Indian numerology the 2 is ruled by the Moon: a year of partnership, patience and intuition, with the master number 11 adding a sharper inner pull. After 2026, a year of fresh starts, 2027 asks you to work with others, finish what you began and let things ripen. What it means for you depends on your Personal Year, the number set by your birth day and month together with 2027. Your report reads that Personal Year month by month, so you know which parts of 2027 to push in and which to handle with care.</p></header>
       <p class="read-more"><a href="/blog/2027-numerology-predictions.html">Read the full 2027 numerology predictions</a></p>
     </div></section>
 
@@ -435,7 +441,7 @@ def page():
     </div></section>
 
     <section class="report-section report-closing"><div class="wrap">
-      <h2 class="closing-title">Read <b>2027</b> before it happens.</h2><p class="section-lead">Phase one, {OFFER['limit']} reports, until {OFFER['ends_text']}.</p><div class="report-actions"><a class="pill get-report" href="#register"><span>Get your 2027 report</span></a></div>
+      <h2 class="closing-title">Read <b>2027</b> before it happens.</h2><p class="closing-flip"><span class="sr-only">Your money, career, love, health and family in 2027, month by month.</span><span aria-hidden="true">Your <span class="flip" data-words="money|career|love|health|family">money</span> in 2027, month by month.</span></p><p class="section-lead">Phase one, {OFFER['limit']} reports, until {OFFER['ends_text']}.</p><div class="report-actions"><a class="pill get-report" href="#register"><span>Get your 2027 report</span></a></div>
     </div></section>
   </main>
 
