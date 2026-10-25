@@ -102,7 +102,7 @@ def main():
     w("Payments run through Razorpay (UPI, card or netbanking). Card details never touch Veshannastro's servers. Birth details, "
       "questions and recordings stay between client and astrologer, never shared and never sold. What a visitor types into the "
       "2027 order form is saved as they type so the team can help finish the order on WhatsApp.\n")
-    w("2027 reports are refunded in full if they cannot be delivered, if phase one has closed when the payment arrives, or after a "
+    w("The Terms treat payments as non-refundable, with these exceptions, which the Refund Policy lists too: 2027 reports are refunded in full if they cannot be delivered, if phase one has closed when the payment arrives, or after a "
       "double charge; once preparation has begun they are non-refundable. Consultations are refunded in full if cancelled at least "
       "24 hours before the session and before preparation has begun; rescheduling is free with 12 hours' notice; no-shows are "
       "treated as fulfilled. Approved refunds are processed within 5–7 business days.\n")

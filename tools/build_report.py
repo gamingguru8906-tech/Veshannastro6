@@ -92,7 +92,7 @@ STEPS = [
 CONSULTS = [
     {"id": "kundli-consultation", "label": "Vedic astrology", "name": "Vedic Kundli Consultation", "page": "/vedic-kundli-booking.html",
      "for": "Your birth chart read live: graha, bhava and dasha for one life area, with practical upaya.",
-     "price": 2249, "was": 2999, "off": 25, "note": "40 minutes on Google Meet. A focused 20-minute session is ₹1,874.",
+     "price": 2249, "was": 2999, "off": 25, "note": "40 to 45 minutes on Google Meet. A focused 20-minute session is ₹1,874.",
      "sessions": [("The Dhan Matrix", "wealth and money flow"), ("Prana Vitality Blueprint", "health and energy"),
                   ("The Worklife Blueprint", "career and timing"), ("The Union Code", "love and marriage"),
                   ("Jeevan 360 Reading", "the whole life path")],
@@ -165,7 +165,7 @@ def faqs():
         ("Does it replace a full birth chart consultation?",
          "No. Your Mahadasha, Antardasha and Saturn cycles are read live in a separate <a href=\"/vedic-kundli-booking.html\">Vedic kundli consultation</a> with Shashank, booked on WhatsApp."),
         ("Do you offer live astrology and numerology consultations?",
-         "Yes. Shashank reads Vedic kundli live in 40 minutes for ₹2,249 and numerology in 20 minutes from ₹824, both on Google Meet. Every consultation is booked on WhatsApp. See the <a href=\"/vedic-kundli-booking.html\">Vedic kundli consultation</a> and the <a href=\"/numerology-booking.html\">numerology consultation</a>."),
+         "Yes. Shashank reads Vedic kundli live in 40 to 45 minutes for ₹2,249 and numerology in 20 minutes from ₹824, both on Google Meet. Every consultation is booked on WhatsApp. See the <a href=\"/vedic-kundli-booking.html\">Vedic kundli consultation</a> and the <a href=\"/numerology-booking.html\">numerology consultation</a>."),
         ("Are there free numerology calculators?",
          "Yes. Thirteen free calculators, from Life Path and the Lo Shu grid to mobile, house and vehicle numbers, are on the <a href=\"/calculators/\">numerology calculators page</a>. They use Chaldean (Cheiro) letter values and run in your browser."),
         ("Who is Shashank Agrawal?",
