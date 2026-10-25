@@ -13,12 +13,22 @@
   var raf = window.requestAnimationFrame.bind(window);
 
   /* Run fn once the element is within about a screen of view, so start-up stays light. */
+  var pendingBuilds = [];
   function near(sel, fn) {
     var el = document.querySelector(sel); if (!el) return;
-    if (!('IntersectionObserver' in window)) return fn();
-    var io = new IntersectionObserver(function (en) { if (en[0].isIntersecting) { io.disconnect(); fn(); } }, { rootMargin: '900px 0px' });
+    var done = false, io = null;
+    function run() { if (done) return; done = true; if (io) io.disconnect(); fn(); }
+    pendingBuilds.push(run);
+    if (!('IntersectionObserver' in window)) return run();
+    io = new IntersectionObserver(function (en) { if (en[0].isIntersecting) run(); }, { rootMargin: '900px 0px' });
     io.observe(el);
   }
+  function buildAll() { pendingBuilds.forEach(function (f) { f(); }); }
+  /* A jump to a section (menu link) builds everything first, so the page does not change height mid-scroll;
+     and everything is built a few seconds after load anyway. */
+  document.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('a[href^="#"]')) buildAll(); }, true);
+  addEventListener('load', function () { setTimeout(function () { (window.requestIdleCallback || setTimeout)(buildAll); }, 4000); });
+  if (location.hash) buildAll();
 
   /* ---------- reveal on scroll: headings (clip-path), leads (blur), marks, the 11/2 drawing ---------- */
   function reveal(sel, margin, onIn) {

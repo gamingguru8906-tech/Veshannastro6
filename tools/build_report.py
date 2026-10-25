@@ -312,7 +312,7 @@ def page():
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-R20FKYJK7P');gtag('config','AW-18189866057');</script>
   <script type="application/ld+json">{json.dumps(graph, ensure_ascii=False, separators=(",", ":"))}</script>
   <script>window.R27={json.dumps(config, separators=(",", ":"))};</script>
-  <script src="/assets/r27/report.js?v=13" defer></script><script src="/assets/r27/motion.js?v=3" defer></script><script src="/assets/r27/book.js?v=11" defer></script>
+  <script src="/assets/r27/report.js?v=14" defer></script><script src="/assets/r27/motion.js?v=4" defer></script><script src="/assets/r27/book.js?v=11" defer></script>
 </head>
 <body>
   <svg class="fx-defs" width="0" height="0" aria-hidden="true" focusable="false"><filter id="morph-threshold"><feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 255 -140"/></filter></svg>
