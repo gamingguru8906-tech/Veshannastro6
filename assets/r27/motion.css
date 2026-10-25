@@ -200,7 +200,93 @@ html:not(.motion) .morph{display:none}
 .motion .kicker.in{opacity:1;transform:none}
 .motion .kicker.in::before{transform:none}
 
+/* ===== Third set (ideas from Ragverse, adapted) ===== */
+
+/* 24. Signature line between the hero and the report preview */
+.signature{position:relative;z-index:2;padding:clamp(48px,10vh,110px) var(--pad);text-align:center}
+.sig-line{margin:0;color:#dbe3f3;font-size:clamp(20px,2.4vw,30px);font-weight:300;letter-spacing:-.015em}
+.sig-line b{font-weight:500;color:transparent;background:linear-gradient(100deg,var(--m-gold),var(--m-cream) 50%,var(--m-gold));background-size:200% 100%;-webkit-background-clip:text;background-clip:text}
+.sig-line>span{display:inline-block}
+.motion .sig-line>span{opacity:0;filter:blur(6px);transform:translate3d(0,.35em,0);transition:opacity .9s var(--m-ease),filter .9s var(--m-ease),transform .9s var(--m-ease)}
+.motion .sig-line.in>span{opacity:1;filter:none;transform:none}
+.motion .sig-line.in>span+span{transition-delay:.22s}
+.motion .sig-line.in b{animation:m-flow 7s linear 1.2s infinite}
+
+/* 25. Calculator dock: icon tiles, one opens into a card (hover or focus; turns on its own while in view) */
+.calc-docks{display:grid;gap:22px}
+.dock-title{margin:0 0 10px;color:#c6d1e6;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+.dock{display:flex;gap:10px;contain:layout}
+.dock-card{position:relative;display:flex;align-items:center;gap:16px;flex:0 0 78px;height:98px;padding:0 19px;overflow:hidden;
+  border:1px solid #ffffff1f;border-radius:16px;background:linear-gradient(160deg,#ffffff0f,#ffffff03 60%),#070b18cc;
+  transition:flex-basis .6s var(--m-ease),border-color .4s,background-color .4s}
+.dock-card.is-open{flex-basis:min(420px,46%);border-color:#f3cd9359;background:radial-gradient(120% 140% at 0% 0%,#f3cd931f,transparent 55%),#070b18e6}
+.dock-card:focus-visible{outline:2px solid var(--cy);outline-offset:3px}
+.dock-ico{flex:none;width:38px;height:38px;color:var(--m-gold)}
+.dock-body{flex:none;width:300px;opacity:0;transform:translate3d(-8px,0,0);transition:opacity .3s,transform .45s var(--m-ease)}
+.dock-card.is-open .dock-body{opacity:1;transform:none;transition-delay:.16s}
+.dock-body strong{display:block;color:#f4f7ff;font-size:16px;font-weight:600;letter-spacing:-.01em;white-space:nowrap}
+.dock-body>span{display:block;margin-top:3px;color:#aab4c9;font-size:13px;line-height:1.45}
+.dock-body em{display:inline-block;margin-top:6px;color:var(--m-gold);font-size:12.5px;font-style:normal;font-weight:700}
+.dock-all{margin:2px 0 0;font-size:14px}
+.dock-all a{color:var(--cy)}
+@media(max-width:1000px){
+  .dock{flex-direction:column;gap:8px}
+  .dock-card,.dock-card.is-open{flex:none;height:auto;padding:14px 16px;background:linear-gradient(160deg,#ffffff0f,#ffffff03 60%),#070b18cc;border-color:#ffffff1f}
+  .dock-body,.dock-card.is-open .dock-body{flex:1;width:auto;opacity:1;transform:none}
+  .dock-ico{width:30px;height:30px}
+}
+
+/* 26. The five Vedic sessions: a plain list, pinned on wide screens with motion (one lights at a time) */
+.sessions{margin-top:clamp(56px,8vw,96px)}
+.sessions-title{margin:10px 0 26px;color:#f4f7ff;font-size:clamp(24px,3vw,36px);font-weight:300;letter-spacing:-.025em}
+.sessions-list{display:none}
+.sessions-detail{display:grid;gap:14px}
+.sessions-detail article{padding:22px 24px;border:1px solid #ffffff1a;border-radius:14px;background:#070b18b3}
+.sessions-detail h3{margin:0;color:#f4f7ff;font-size:19px;font-weight:600;letter-spacing:-.01em}
+.sessions-detail .ss-num{color:var(--m-gold);font-size:13px;font-weight:700;letter-spacing:.14em;margin-right:6px}
+.sessions-detail .ss-tag{margin:6px 0 10px;color:var(--m-gold);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.sessions-detail p{margin:0;color:#c6d1e6;font-size:15px;line-height:1.65}
+.sessions-detail .ss-meta{margin-top:10px;color:#aab4c9;font-size:13.5px}
+.ss-book{display:inline-block;margin-top:12px;color:var(--cy);font-size:14px;font-weight:600}
+.sessions-steps{display:none}
+.sessions.pinned .sessions-track{position:relative;height:calc(5 * 46vh + var(--ss-h,62vh))}
+.sessions.pinned .sessions-sticky{position:sticky;top:16vh;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(32px,5vw,72px);align-items:center;min-height:62vh}
+.sessions.pinned .sessions-steps{position:absolute;left:0;right:0;top:34vh;height:calc(5 * 46vh);display:grid;grid-template-rows:repeat(5,1fr);pointer-events:none;visibility:hidden}
+.sessions.pinned .sessions-steps i:first-child{margin-top:-100vh}
+.sessions.pinned .sessions-steps i:last-child{margin-bottom:-150vh}
+.sessions.pinned .sessions-list{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+.sessions.pinned .sessions-list li{position:relative;display:grid;grid-template-columns:44px 1fr;padding:14px 0 14px 18px;border-left:1px solid #ffffff1f;transition:border-color .5s}
+.sessions.pinned .sessions-list li::before{content:'';position:absolute;left:-1px;top:0;bottom:0;width:2px;background:var(--m-gold);transform:scaleY(0);transform-origin:50% 0;transition:transform .6s var(--m-ease)}
+.sessions.pinned .sessions-list li.on::before{transform:none}
+.sessions.pinned .sessions-list .ss-num{grid-row:span 2;padding-top:4px;color:#7d879c;font-size:12px;font-weight:700;letter-spacing:.16em;transition:color .5s}
+.sessions.pinned .sessions-list .ss-name{color:#8f99ae;font-size:clamp(19px,1.9vw,24px);font-weight:400;letter-spacing:-.015em;transition:color .5s}
+.sessions.pinned .sessions-list .ss-tag{margin-top:3px;color:#7d879c;font-size:11.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;transition:color .5s}
+.sessions.pinned .sessions-list li.on .ss-num,.sessions.pinned .sessions-list li.on .ss-tag{color:var(--m-gold)}
+.sessions.pinned .sessions-list li.on .ss-name{color:#f4f7ff}
+.sessions.pinned .sessions-detail{display:grid;gap:0}
+.sessions.pinned .sessions-detail article{grid-area:1/1;padding:clamp(26px,3vw,38px);border-color:#f3cd9340;background:radial-gradient(120% 120% at 100% 0%,#f3cd9314,transparent 60%),#070b18e0;
+  position:relative;opacity:0;transform:translate3d(0,16px,0);pointer-events:none;transition:opacity .45s var(--m-ease),transform .55s var(--m-ease)}
+.sessions.pinned .sessions-detail article.on{opacity:1;transform:none;pointer-events:auto;transition-delay:.08s}
+/* the name and tag show in the list on the left; they stay in each card for screen readers */
+.sessions.pinned .sessions-detail h3,.sessions.pinned .sessions-detail .ss-tag{position:absolute;width:1px;height:1px;margin:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.sessions.pinned .sessions-detail p:first-of-type{font-size:clamp(17px,1.6vw,20px);line-height:1.6;color:#e6ecf8}
+
+/* 27. Giant footer wordmark: gold that fades into the dark, a soft glow behind it and a few drifting specks */
+.foot-mark{position:relative;margin:clamp(36px,6vw,72px) 0 clamp(16px,2.4vw,28px);text-align:center;overflow:hidden;user-select:none;-webkit-user-select:none;pointer-events:none}
+.fm-star{display:block;width:26px;height:26px;margin:0 auto 12px;filter:drop-shadow(0 0 12px #f3cd93a6)}
+.fm-word,.fm-glow{display:block;font-size:clamp(30px,9.6vw,134px);font-weight:800;line-height:.92;letter-spacing:-.045em;white-space:nowrap}
+.fm-word{color:transparent;background:linear-gradient(180deg,#f3cd93 0%,#f3cd93a8 34%,#f3cd931c 80%,#f3cd9300 100%);-webkit-background-clip:text;background-clip:text}
+.fm-glow{position:absolute;left:0;right:0;bottom:0;color:transparent;background:linear-gradient(180deg,#f3cd9370,#f3cd9300 72%);-webkit-background-clip:text;background-clip:text;filter:blur(24px);opacity:.75}
+.fm-dust i{position:absolute;left:var(--x);top:var(--y);width:3px;height:3px;border-radius:50%;background:var(--m-gold);opacity:.35}
+.motion .foot-mark .fm-word,.motion .foot-mark .fm-glow{opacity:0;transform:translate3d(0,.14em,0);transition:opacity 1.3s var(--m-ease),transform 1.3s var(--m-ease)}
+.motion .foot-mark.in .fm-word{opacity:1;transform:none}
+.motion .foot-mark.in .fm-glow{opacity:.75;transform:none;transition-delay:.2s}
+.motion .foot-mark .fm-dust i{opacity:0}
+.motion .foot-mark.in .fm-dust i{animation:fm-drift var(--d) ease-in-out var(--t) infinite alternate}
+@keyframes fm-drift{0%{opacity:0;transform:translate3d(0,0,0)}45%{opacity:.85}100%{opacity:.12;transform:translate3d(0,-28px,0)}}
+
 @media(prefers-reduced-motion:reduce){
-  .marquee-track,.closing-title b,.hero-photo,.cd-tile::before,.cd-tile::after,.plan::before,.hero-tags span{animation:none!important}
+  .marquee-track,.closing-title b,.hero-photo,.cd-tile::before,.cd-tile::after,.plan::before,.hero-tags span,.fm-dust i,.sig-line b{animation:none!important}
+  .dock-card,.dock-body{transition:none!important}
   .morph{display:none}
 }

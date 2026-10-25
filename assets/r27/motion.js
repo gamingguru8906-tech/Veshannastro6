@@ -5,6 +5,7 @@
   'use strict';
   var root = document.documentElement;
   countdown();                                               /* information, not motion: runs for everyone */
+  docks(root.classList.contains('motion'));                /* the calculator dock works for everyone; it turns on its own only with motion */
   if (!root.classList.contains('motion')) return;
   window.__motionReady = true;
 
@@ -48,7 +49,7 @@
   /* Near the bottom of the page some items can never reach their trigger line: show whatever is on screen. */
   function revealOnScreen() {
     if (innerHeight + scrollY < document.documentElement.scrollHeight - 80) return;
-    $$('.section-heading h2:not(.in), .about-copy h2:not(.in), .closing-title:not(.in), .section-lead:not(.in), mark.hl:not(.in), .draw-num:not(.in), .kicker:not(.in), .plan:not(.in)').forEach(function (e) {
+    $$('.section-heading h2:not(.in), .about-copy h2:not(.in), .closing-title:not(.in), .section-lead:not(.in), mark.hl:not(.in), .draw-num:not(.in), .kicker:not(.in), .plan:not(.in), .sig-line:not(.in), .foot-mark:not(.in)').forEach(function (e) {
       var r = e.getBoundingClientRect(); if (r.top < innerHeight && r.bottom > 0) e.classList.add('in');
     });
   }
@@ -59,6 +60,8 @@
     if (g) setTimeout(function () { glitch(g); }, 2500);   /* once the outline has drawn */
   });
   reveal('.kicker', '0px 0px -10% 0px');                   /* the small label slides in with its line */
+  reveal('.sig-line', '0px 0px -15% 0px');                 /* "Curated by Shashank Agrawal" */
+  reveal('.foot-mark', '0px 0px -4% 0px');                 /* the footer wordmark */
 
   /* ---------- card sheen: a light streak crosses each price card once as it arrives, and again on hover ---------- */
   function sheen(card) { card.classList.remove('sheen'); void card.offsetWidth; card.classList.add('sheen'); }
@@ -153,6 +156,49 @@
     var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(build, 150); });
     build(); loop();
   });
+
+  /* ---------- the five Vedic sessions: pinned on wide screens; the one at the middle of the screen lights up ----------
+     Native sticky positioning does the pinning, and five invisible steps tell which session is current, so scrolling
+     itself never runs any script. */
+  (function () {
+    var box = document.querySelector('[data-sessions]'); if (!box || !('IntersectionObserver' in window)) return;
+    var mq = matchMedia('(min-width: 1001px) and (min-height: 600px)'), io = null, ro = null;
+    var items = $$('.sessions-list li', box), arts = $$('.sessions-detail article', box), steps = $$('.sessions-steps i', box);
+    var sticky = box.querySelector('.sessions-sticky');
+    if (!sticky || !steps.length) return;
+    var cur = 0, held = -1;                   /* cur: the step at the middle line; held: a card whose link has keyboard focus */
+    function show(i) {
+      items.forEach(function (li, n) { li.classList.toggle('on', n === i); });
+      arts.forEach(function (a, n) { a.classList.toggle('on', n === i); });
+    }
+    function set(i) { if (i < 0) return; cur = i; if (held < 0) show(i); }
+    /* tabbing to a card's Book link brings that card forward and keeps it there until focus leaves the cards */
+    box.addEventListener('focusin', function (e) {
+      var a = e.target.closest && e.target.closest('.sessions-detail article');
+      if (a && box.classList.contains('pinned')) { held = arts.indexOf(a); show(held); }
+    });
+    box.addEventListener('focusout', function (e) {
+      var to = e.relatedTarget, a = to && to.closest && to.closest('.sessions-detail article');
+      if (!a || !box.contains(a)) { held = -1; show(cur); }
+    });
+    /* the track is five steps of scroll plus the pinned block's own height, so each session gets an equal share of the pin */
+    function fit() { box.style.setProperty('--ss-h', sticky.offsetHeight + 'px'); }
+    function apply() {
+      box.classList.toggle('pinned', mq.matches);
+      if (io) { io.disconnect(); io = null; }
+      if (ro) { ro.disconnect(); ro = null; }
+      if (!mq.matches) { box.style.removeProperty('--ss-h'); return; }
+      fit();
+      if ('ResizeObserver' in window) { ro = new ResizeObserver(fit); ro.observe(sticky); }
+      /* the middle line of the screen picks the step. The first step reaches a screen above the block and the last one a
+         screen below it, so wherever a scroll or a jump from a link lands, the line sits in exactly one step */
+      io = new IntersectionObserver(function (en) { en.forEach(function (e) { if (e.isIntersecting) set(steps.indexOf(e.target)); }); },
+        { rootMargin: '-50% 0px -50% 0px' });
+      steps.forEach(function (st) { io.observe(st); });
+    }
+    if (mq.addEventListener) mq.addEventListener('change', apply); else if (mq.addListener) mq.addListener(apply);
+    apply();
+  })();
 
   /* ---------- 3D ring of the report chapters: turn with the arrows, a swipe or a click; turns on its own while in view ---------- */
   near('#inside', function () {
@@ -358,6 +404,32 @@
       });
     });
   });
+
+  /* ---------- calculator dock (hoisted, called at the top): a tile opens into its card on hover or focus; with
+     motion, the first row also turns on its own while it is in view and the pointer is elsewhere ---------- */
+  function docks(autoTurn) {
+    [].forEach.call(document.querySelectorAll('.dock'), function (dock, di) {
+      var cards = [].slice.call(dock.querySelectorAll('.dock-card')); if (!cards.length) return;
+      var hovering = false, visible = false;
+      function open(c) { cards.forEach(function (x) { x.classList.toggle('is-open', x === c); }); }
+      cards.forEach(function (c) {
+        c.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') { hovering = true; open(c); } });
+        c.addEventListener('focus', function () { open(c); });
+      });
+      dock.addEventListener('pointerleave', function () { hovering = false; });
+      if (!autoTurn || di !== 0 || !('IntersectionObserver' in window)) return;
+      new IntersectionObserver(function (en) { visible = en[0].isIntersecting; }, { threshold: .6 }).observe(dock);
+      (function tick() {
+        setTimeout(function () {
+          if (visible && !hovering && !dock.contains(document.activeElement) && innerWidth > 1000 && !document.hidden) {
+            var i = cards.findIndex(function (x) { return x.classList.contains('is-open'); });
+            open(cards[(i + 1) % cards.length]);
+          }
+          tick();
+        }, 3800);
+      })();
+    });
+  }
 
   /* ---------- countdown to the end of phase one (hoisted, called at the top) ---------- */
   function countdown() {
