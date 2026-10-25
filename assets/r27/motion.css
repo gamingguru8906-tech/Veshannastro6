@@ -40,7 +40,12 @@ mark.hl{color:#fff;padding:0 .12em;margin:0 -.04em;border-radius:3px;-webkit-box
 .marquee-row{display:flex;align-items:center;flex:none}
 .mq-item{padding:0 .42em;color:#e9eefb;font-size:clamp(34px,6.4vw,92px);font-weight:calc(300 + var(--k) * 400);line-height:1.05;letter-spacing:-.035em;white-space:nowrap;
   transform:skewX(calc(var(--k) * -12deg));display:inline-block}
-.mq-item.mq-outline{color:transparent;-webkit-text-stroke:1px #f3cd938c}
+.mq-item.mq-outline{position:relative;color:transparent;-webkit-text-stroke:1.5px #f7d57e;filter:drop-shadow(0 0 14px #f3cd9338)}
+/* Two more outlines behind it, stepped down and right, in amber and bronze: a layered gold stroke */
+.mq-item.mq-outline::before,.mq-item.mq-outline::after{content:attr(data-text);position:absolute;inset:0;padding:inherit;z-index:-1;color:transparent;pointer-events:none}
+.mq-item.mq-outline::before{-webkit-text-stroke:1.25px #e2a33c;transform:translate3d(.045em,.05em,0)}
+.mq-item.mq-outline::after{-webkit-text-stroke:1px #9b6a2a;transform:translate3d(.09em,.1em,0)}
+@media(max-width:700px){.mq-item.mq-outline{-webkit-text-stroke-width:1.1px}.mq-item.mq-outline::before{-webkit-text-stroke-width:.9px}.mq-item.mq-outline::after{-webkit-text-stroke-width:.75px}}
 .mq-dot{flex:none;width:.42rem;height:.42rem;border:1px solid #8fd8ff99;transform:rotate(45deg)}
 .motion .marquee-track{animation:m-marquee 46s linear infinite}
 @keyframes m-marquee{to{transform:translate3d(-50%,0,0)}}
