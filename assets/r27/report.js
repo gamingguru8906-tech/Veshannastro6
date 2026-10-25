@@ -60,7 +60,10 @@
 
   var cc = $('#country-code');
   /* The full country list is filled in once the page is idle (India is there from the start). */
+  /* A visitor who saved a number from another country gets the list straight away, so their country shows at once. */
   var whenIdle = window.requestIdleCallback || function (f) { return setTimeout(f, 1500); };
+  var savedCc = ''; try { savedCc = ((readDraft() || {}).cc) || ''; } catch (e) {}
+  if (savedCc && savedCc !== 'India|+91') whenIdle = function (f) { f(); };
   whenIdle(function () {
     fetch('/assets/countries.json').then(function (r) { return r.json(); }).then(function (list) {
       var cur = cc.value; cc.innerHTML = '';
