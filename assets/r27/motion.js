@@ -4,6 +4,7 @@
 (function () {
   'use strict';
   var root = document.documentElement;
+  countdown();                                               /* information, not motion: runs for everyone */
   if (!root.classList.contains('motion')) return;
   window.__motionReady = true;
 
@@ -29,7 +30,7 @@
   /* Near the bottom of the page some items can never reach their trigger line: show whatever is on screen. */
   function revealOnScreen() {
     if (innerHeight + scrollY < document.documentElement.scrollHeight - 80) return;
-    $$('.section-heading h2:not(.in), .about-copy h2:not(.in), .closing-title:not(.in), .section-lead:not(.in), mark.hl:not(.in), .draw-num:not(.in)').forEach(function (e) {
+    $$('.section-heading h2:not(.in), .about-copy h2:not(.in), .closing-title:not(.in), .section-lead:not(.in), mark.hl:not(.in), .draw-num:not(.in), .kicker:not(.in), .plan:not(.in)').forEach(function (e) {
       var r = e.getBoundingClientRect(); if (r.top < innerHeight && r.bottom > 0) e.classList.add('in');
     });
   }
@@ -39,6 +40,151 @@
     var g = document.querySelector('#year-2027 .glitch');
     if (g) setTimeout(function () { glitch(g); }, 2500);   /* once the outline has drawn */
   });
+  reveal('.kicker', '0px 0px -10% 0px');                   /* the small label slides in with its line */
+
+  /* ---------- card sheen: a light streak crosses each price card once as it arrives, and again on hover ---------- */
+  function sheen(card) { card.classList.remove('sheen'); void card.offsetWidth; card.classList.add('sheen'); }
+  reveal('.plan', '0px 0px -25% 0px', function (card) { setTimeout(function () { sheen(card); }, 250); });
+  $$('.plan').forEach(function (card) {
+    card.addEventListener('animationend', function (e) { if (e.pseudoElement === '::after') card.classList.remove('sheen'); });
+    card.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse' && !card.classList.contains('sheen')) sheen(card); });
+  });
+
+  /* ---------- constellation path: a line draws through the order steps as you scroll; each step lights as it is reached ---------- */
+  (function () {
+    var ol = document.querySelector('#how .report-steps'); if (!ol) return;
+    var lis = $$('li', ol); if (lis.length < 2) return;
+    var NS = 'http://www.w3.org/2000/svg';
+    var wrap = document.createElement('div'); wrap.className = 'cst-wrap';
+    ol.parentNode.insertBefore(wrap, ol); wrap.appendChild(ol); ol.classList.add('constellation');
+    var svg = document.createElementNS(NS, 'svg'); svg.setAttribute('class', 'cst'); svg.setAttribute('aria-hidden', 'true');
+    svg.innerHTML = '<defs><linearGradient id="cst-g" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#8fd8ff"/><stop offset="1" stop-color="#f3cd93"/></linearGradient></defs>' +
+      '<path class="cst-base"/><g class="cst-lines"></g><g class="cst-nodes"></g><circle class="cst-tip-glow" r="9"/><circle class="cst-tip" r="3.2"/>';
+    wrap.appendChild(svg);
+    var base = svg.querySelector('.cst-base'), linesG = svg.querySelector('.cst-lines'), nodes = svg.querySelector('.cst-nodes'), grad = svg.querySelector('#cst-g');
+    var tip = svg.querySelector('.cst-tip'), glow = svg.querySelector('.cst-tip-glow');
+    /* one path per segment: Chrome restarts a dash pattern at every gap in a path, so each segment draws on its own */
+    var total = 0, marks = [], pts = [], segs = [], vertical = false, cur = 0, target = 0, running = false;
+    var STAR = function (s) { var q = s * .26; return 'M0 ' + -s + 'L' + q + ' ' + -q + 'L' + s + ' 0L' + q + ' ' + q + 'L0 ' + s + 'L' + -q + ' ' + q + 'L' + -s + ' 0L' + -q + ' ' + -q + 'Z'; };
+
+    function build() {
+      vertical = getComputedStyle(ol).gridTemplateColumns.split(' ').length < 2;
+      wrap.classList.toggle('v', vertical);
+      var wr = wrap.getBoundingClientRect();
+      pts = lis.map(function (li) {
+        var r = li.querySelector('.step-number').getBoundingClientRect();
+        return { x: vertical ? 13 : r.left + r.width / 2 - wr.left, y: r.top + r.height / 2 - wr.top };
+      });
+      svg.setAttribute('viewBox', '0 0 ' + wr.width + ' ' + wr.height);
+      var trim = vertical ? 7 : 26, amp = vertical ? 7 : 13, d = '', lens = [];
+      linesG.innerHTML = ''; segs = [];
+      for (var i = 0; i < pts.length - 1; i++) {
+        var a = pts[i], b = pts[i + 1], vx = b.x - a.x, vy = b.y - a.y, L = Math.hypot(vx, vy), ux = vx / L, uy = vy / L, nx = -uy, ny = ux;
+        var s = { x: a.x + ux * trim, y: a.y + uy * trim }, e = { x: b.x - ux * trim, y: b.y - uy * trim }, k = (i % 2 ? -1 : 1) * amp;
+        var seg = 'M' + s.x.toFixed(1) + ' ' + s.y.toFixed(1) + 'C' + (s.x + vx * .3 + nx * k).toFixed(1) + ' ' + (s.y + vy * .3 + ny * k).toFixed(1) + ' ' +
+          (e.x - vx * .3 - nx * k).toFixed(1) + ' ' + (e.y - vy * .3 - ny * k).toFixed(1) + ' ' + e.x.toFixed(1) + ' ' + e.y.toFixed(1);
+        var sp = document.createElementNS(NS, 'path'); sp.setAttribute('class', 'cst-line'); sp.setAttribute('d', seg); linesG.appendChild(sp);
+        var len = sp.getTotalLength(); sp.style.strokeDasharray = len + ' ' + len; sp.style.strokeDashoffset = len;
+        segs.push({ el: sp, len: len }); lens.push(len); d += seg;
+      }
+      base.setAttribute('d', d);
+      var first = pts[0], last = pts[pts.length - 1];
+      grad.setAttribute('x1', first.x); grad.setAttribute('y1', first.y); grad.setAttribute('x2', last.x); grad.setAttribute('y2', last.y + (vertical ? 0 : 1));
+      total = 0; segs.forEach(function (s) { s.start = total; total += s.len; });
+      var acc = 0; marks = [0];                               /* where along the line each step is reached */
+      lens.forEach(function (l) { acc += l; marks.push(acc / total); });
+      nodes.innerHTML = pts.map(function (p, i) {
+        var sx = p.x + (vertical ? 15 : 24), sy = p.y - (vertical ? 13 : 22);
+        return (vertical ? '<circle class="cst-node" data-i="' + i + '" cx="' + p.x + '" cy="' + p.y + '" r="5"/>' : '') +
+          '<g transform="translate(' + sx.toFixed(1) + ' ' + sy.toFixed(1) + ')"><path class="cst-spark" data-i="' + i + '" d="' + STAR(vertical ? 5 : 6.5) + '"/></g>';
+      }).join('');
+      measure(); paint();
+    }
+    function measure() {
+      var r = wrap.getBoundingClientRect(), vh = innerHeight, p;
+      if (vertical) p = (vh * .62 - r.top - pts[0].y) / (pts[pts.length - 1].y - pts[0].y);
+      else p = (vh * .84 - r.top) / (vh * .42);
+      target = Math.max(0, Math.min(1, p));
+    }
+    function paint() {
+      var at = total * cur, head = null;
+      segs.forEach(function (s) {
+        var shown = Math.max(0, Math.min(s.len, at - s.start));
+        s.el.style.strokeDashoffset = (s.len - shown).toFixed(1);
+        if (shown > 0 && shown < s.len) head = s.el.getPointAtLength(shown);
+      });
+      var on = !!head && cur < .998;
+      if (on) { tip.setAttribute('cx', head.x); tip.setAttribute('cy', head.y); glow.setAttribute('cx', head.x); glow.setAttribute('cy', head.y); }
+      svg.classList.toggle('tip-on', on);
+      marks.forEach(function (m, i) {
+        var lit = cur > 0 && cur >= m - .004;
+        lis[i].classList.toggle('lit', lit);
+        $$('[data-i="' + i + '"]', nodes).forEach(function (n) { n.classList.toggle('lit', lit); });
+      });
+    }
+    function loop() {
+      if (running) return; running = true;
+      raf(function step() {
+        cur += (target - cur) * .12;
+        if (Math.abs(target - cur) < .0008) cur = target;
+        paint();
+        if (cur !== target) raf(step); else running = false;
+      });
+    }
+    addEventListener('scroll', function () { measure(); loop(); }, { passive: true });
+    var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(build, 150); });
+    build(); loop();
+  })();
+
+  /* ---------- 3D ring of the report chapters: turn with the arrows, a swipe or a click; turns on its own while in view ---------- */
+  (function () {
+    var ol = document.querySelector('#inside .inside-list'), ctr = document.querySelector('#inside .ring-controls');
+    if (!ol || !ctr) return;
+    var items = $$('li', ol), n = items.length; if (n < 3) return;
+    var stage = document.createElement('div'); stage.className = 'ring-stage';
+    ol.parentNode.insertBefore(stage, ol); stage.appendChild(ol); ol.classList.add('ring'); ctr.hidden = false;
+    var count = ctr.querySelector('.ring-count'), turn = 0, stepDeg = 360 / n, visible = false, hold = 0, timer = null;
+    var pad = function (x) { return (x < 10 ? '0' : '') + x; };
+    function layout() {
+      var w = items[0].offsetWidth, r = Math.round(w / 2 / Math.tan(Math.PI / n) * 1.12), h = 0;
+      ol.style.setProperty('--r', r + 'px');
+      items.forEach(function (li, i) { li.style.setProperty('--a', (i * stepDeg) + 'deg'); h = Math.max(h, li.offsetHeight); });
+      ol.style.setProperty('--h', h + 'px');
+    }
+    function show() {
+      var idx = ((turn % n) + n) % n;
+      ol.style.setProperty('--rot', (-turn * stepDeg) + 'deg');
+      items.forEach(function (li, i) {
+        var dd = ((i - idx) % n + n) % n, dist = Math.min(dd, n - dd);
+        li.classList.toggle('front', dist === 0);
+        li.style.setProperty('--o', dist === 0 ? 1 : dist === 1 ? .5 : 0);
+      });
+      count.textContent = pad(idx + 1) + ' / ' + pad(n);
+    }
+    function go(delta, byUser) { turn += delta; show(); if (byUser) hold = Date.now() + 9000; }
+    ctr.querySelector('.ring-prev').addEventListener('click', function () { go(-1, true); });
+    ctr.querySelector('.ring-next').addEventListener('click', function () { go(1, true); });
+    items.forEach(function (li, i) {                         /* a click on a side card brings it to the front */
+      li.addEventListener('click', function () {
+        var idx = ((turn % n) + n) % n, dd = ((i - idx) % n + n) % n;
+        if (dd) go(dd <= n / 2 ? dd : dd - n, true);
+      });
+    });
+    var x0 = null;
+    stage.addEventListener('pointerdown', function (e) { x0 = e.clientX; });
+    stage.addEventListener('pointerup', function (e) { if (x0 === null) return; var dx = e.clientX - x0; x0 = null; if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1, true); });
+    stage.addEventListener('pointercancel', function () { x0 = null; });
+    stage.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') hold = Infinity; });
+    stage.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') hold = Date.now() + 2500; });
+    ctr.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { go(1, true); e.preventDefault(); }
+      if (e.key === 'ArrowLeft') { go(-1, true); e.preventDefault(); }
+    });
+    function tick() { timer = setTimeout(function () { if (visible && Date.now() > hold && !ctr.contains(document.activeElement)) go(1); tick(); }, 5200); }
+    new IntersectionObserver(function (en) { visible = en[0].isIntersecting; }, { threshold: .35 }).observe(stage);
+    var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { layout(); show(); }, 150); });
+    layout(); show(); tick();
+  })();
 
   /* ---------- subtle glitch (one brief slice, also on hover) ---------- */
   function glitch(el) {
@@ -194,4 +340,25 @@
       });
     });
   });
+
+  /* ---------- countdown to the end of phase one (hoisted, called at the top) ---------- */
+  function countdown() {
+    var cd = document.querySelector('.countdown[data-ends]'); if (!cd) return;
+    var end = Date.parse(cd.getAttribute('data-ends')); if (!end) return;
+    var u = {}; ['d', 'h', 'm', 's'].forEach(function (k) { u[k] = cd.querySelector('[data-u="' + k + '"]'); });
+    var two = function (x) { return (x < 10 ? '0' : '') + x; };
+    function set(el, v) {
+      if (el.textContent === v) return;
+      el.textContent = v; el.classList.remove('tk'); void el.offsetWidth; el.classList.add('tk');
+    }
+    (function tick() {
+      var left = end - Date.now();
+      if (left <= 0) { cd.hidden = true; return; }        /* the offer has ended: nothing to count */
+      cd.hidden = false;
+      var s = Math.floor(left / 1000);
+      set(u.d, two(Math.floor(s / 86400))); set(u.h, two(Math.floor(s % 86400 / 3600)));
+      set(u.m, two(Math.floor(s % 3600 / 60))); set(u.s, two(s % 60));
+      setTimeout(tick, 1000 - (Date.now() % 1000) + 8);
+    })();
+  }
 })();
