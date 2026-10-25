@@ -19,7 +19,7 @@
 .motion .section-heading h2.in,.motion .about-copy h2.in,.motion .closing-title.in{clip-path:inset(-.3em -.3em -.35em -.3em);transform:none}
 
 /* 3. Scroll-triggered blur: intro paragraphs come into focus near the middle of the screen */
-.motion .section-lead{opacity:.25;filter:blur(9px);transform:translate3d(0,10px,0);transition:opacity .9s var(--m-ease),filter .9s var(--m-ease),transform .9s var(--m-ease)}
+.motion .section-lead{opacity:.85;filter:blur(9px);transform:translate3d(0,10px,0);transition:opacity .9s var(--m-ease),filter .9s var(--m-ease),transform .9s var(--m-ease)}
 .motion .section-lead.in{opacity:1;filter:none;transform:none}
 
 /* 4. Highlight sweep: a marker paints behind the key phrase */
@@ -110,7 +110,7 @@ html:not(.motion) .morph{display:none}
 @keyframes m-pulse{50%{transform:scale(1.8);opacity:.06}}
 .cst-wrap.v .report-steps{padding-left:34px}
 .constellation li{transition:opacity .7s var(--m-ease),border-color .7s,background .7s}
-.constellation li:not(.lit){opacity:.5}
+.constellation li:not(.lit){opacity:.82}
 .constellation li.lit{border-color:#f3cd934d;background:linear-gradient(160deg,#f3cd9312,transparent 60%),#0a0e1c80}
 .constellation .step-number{transition:color .5s,background .5s,border-color .5s,box-shadow .7s}
 .constellation li.lit .step-number{color:#05060d;background:var(--m-gold);border-color:var(--m-gold);box-shadow:0 0 0 6px #f3cd931f,0 0 26px #f3cd9366}

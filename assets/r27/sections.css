@@ -335,3 +335,7 @@
   .video-sound { animation: none; }
   .report-cover img, .faq-icon::before, .faq-icon::after { transition: none; }
 }
+
+/* Links inside running text are underlined, so they are not told apart by colour alone. */
+main p a:not([class]){text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:color-mix(in srgb,currentColor 55%,transparent)}
+main p a:not([class]):hover{text-decoration-color:currentColor}

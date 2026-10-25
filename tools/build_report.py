@@ -312,7 +312,7 @@ def page():
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-R20FKYJK7P');gtag('config','AW-18189866057');</script>
   <script type="application/ld+json">{json.dumps(graph, ensure_ascii=False, separators=(",", ":"))}</script>
   <script>window.R27={json.dumps(config, separators=(",", ":"))};</script>
-  <script src="/assets/r27/report.js?v=14" defer></script><script src="/assets/r27/motion.js?v=4" defer></script><script src="/assets/r27/book.js?v=11" defer></script>
+  <script src="/assets/r27/report.js?v=15" defer></script><script src="/assets/r27/motion.js?v=4" defer></script><script src="/assets/r27/book.js?v=11" defer></script>
 </head>
 <body>
   <svg class="fx-defs" width="0" height="0" aria-hidden="true" focusable="false"><filter id="morph-threshold"><feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 255 -140"/></filter></svg>
@@ -479,6 +479,14 @@ def page():
 
   <dialog id="review-dialog" class="review-dialog" aria-labelledby="review-title"><div class="review-scroll"><header class="review-head"><div class="dialog-title-row"><h2 id="review-title">Check your details</h2><button class="close-dialog" type="button" data-close aria-label="Close">&times;</button></div><p id="review-sub">Edit anything before you continue.</p></header><div id="review-content"></div><p class="local-payment-note" id="review-note"></p><p class="form-error" id="pay-error" role="alert" hidden></p></div>
     <footer class="dialog-foot"><button type="button" class="outline-button" data-close id="review-edit">Edit details</button><a id="review-go" class="wa-btn" href="#" target="_blank" rel="noopener">{ICON_WA}<span>Send order on WhatsApp</span></a><button type="button" class="pill pay-btn" id="review-pay" hidden><span id="review-pay-label">Pay</span></button><button type="button" class="pill" id="review-done" data-close hidden>Close</button></footer></dialog>
+
+  <dialog id="paid-dialog" class="review-dialog paid-dialog" aria-labelledby="paid-title" data-state="checking"><div class="review-scroll">
+    <div class="paid-mark" aria-hidden="true"><svg viewBox="0 0 64 64"><circle class="pr-track" cx="32" cy="32" r="28"/><circle class="pr-spin" cx="32" cy="32" r="28"/><path class="pr-check" d="M20 33l8 8 16-17"/></svg></div>
+    <h2 id="paid-title" tabindex="-1">Confirming your payment</h2>
+    <p id="paid-sub" class="paid-sub" role="status">This takes a few seconds. Please keep this page open.</p>
+    <ol class="paid-steps"><li class="done">Payment received by Razorpay</li><li class="now">Confirming your payment</li><li>Invoice on its way to your WhatsApp</li></ol>
+    <div id="paid-details"></div><p class="local-payment-note" id="paid-note"></p></div>
+    <footer class="dialog-foot"><a id="paid-wa" class="outline-button" href="#" target="_blank" rel="noopener" hidden>Message us on WhatsApp</a><button type="button" class="pill" id="paid-close" hidden>Done</button></footer></dialog>
 
   <div class="sticky-pay" id="sticky-pay"><div class="sp-text"><b id="sp-name">Astro-Numero Blend</b><span id="sp-price">{inr(b['inr'])}, delivered within {DELIVERY}</span></div><a class="pill get-report" href="#register">Order</a></div>
   <a class="wa-float" href="{wa(ASK_MSG)}" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">{ICON_WA}<span>WhatsApp</span></a>
