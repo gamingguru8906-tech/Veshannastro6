@@ -32,7 +32,7 @@ REPORTS = {
     "classic": {"name": "Classic", "inr": 963, "inr_mrp": 1376, "usd": 20, "usd_mrp": 29, "needs_time": False,
                 "line": "Numerology from your name and date of birth. No birth time needed."},
 }
-OFFER = {"pct": 30, "name": "Diwali offer", "ends": "2026-11-06", "ends_text": "6 November", "limit": 200}
+OFFER = {"pct": 30, "name": "Diwali offer", "ends": "2026-11-10", "ends_text": "10 November", "limit": 200}
 DELIVERY = "24 hours"
 # Pay on the page through Razorpay (api/r27). If the server is not set up or the order cannot be made online,
 # the page falls back to the WhatsApp order on its own, so nothing breaks.
