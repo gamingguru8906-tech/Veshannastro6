@@ -451,41 +451,63 @@
     });
   });
 
+  /* ---------- after payment: a popup that stays up while the payment is confirmed, then shows it verified ----------
+     The server checks the payment with Razorpay itself (api/r27/verify). Asking again is safe, so the popup keeps
+     asking until it is confirmed; if that takes long it says so and offers WhatsApp, and still turns to "verified". */
+  var paidDlg = $('#paid-dialog'), tracked = false;
   function confirm(r, o, p, orderRes) {
-    setBusy(true, 'Confirming your payment');
-    var finish = function (result) {
-      paid = { o: o, p: p, result: result, receipt: orderRes.receipt, paymentId: r.razorpay_payment_id };
-      clearDraft();
-      cached = null; busy = false;
-      if (result && result.ok) {
-        track('purchase', { transaction_id: r.razorpay_payment_id, currency: result.currency, value: result.amount, items: [{ item_name: o.reportName, price: result.amount }] });
-        if (C.ads && typeof window.gtag === 'function') window.gtag('event', 'conversion', { send_to: C.ads, value: result.amount, currency: result.currency, transaction_id: r.razorpay_payment_id });
-      }
-      showThanks(paid);
-    };
-    post('/api/r27/verify', r).then(finish).catch(function () { finish({ ok: false, pending: true }); });
+    busy = false; setBusy(false);
+    paid = { o: o, p: p, result: null, receipt: orderRes.receipt, paymentId: r.razorpay_payment_id };
+    clearDraft(); cached = null;
+    paidState('checking');
+    var waits = [2500, 3500, 5000, 7000, 10000, 15000, 15000, 20000, 30000, 30000, 60000, 60000], tries = 0;
+    (function check() {
+      post('/api/r27/verify', r).catch(function () { return { ok: false, pending: true }; }).then(function (res) {
+        if (res && res.ok) { paid.result = res; return paidState('ok'); }
+        if (res && res.error && !res.pending) { paid.result = res; return paidState('problem'); }
+        if (tries === 3) paidState('slow');                 /* about 11 seconds in */
+        if (tries < waits.length) setTimeout(check, waits[tries++]); else paidState('slow');
+      });
+    })();
   }
+  function paidState(state) {
+    var d = paid, o = d.o, ok = state === 'ok', first = o.name.split(' ')[0];
+    paidDlg.dataset.state = state; paidDlg.classList.toggle('is-ok', ok);
+    var steps = $$('.paid-steps li', paidDlg);
+    steps[0].className = 'done';
+    steps[1].className = ok ? 'done' : 'now'; steps[1].textContent = ok ? 'Payment verified' : 'Confirming your payment';
+    steps[2].className = ok ? 'done' : '';
+    var title = { checking: 'Confirming your payment', ok: 'Payment verified', slow: 'Still confirming your payment', problem: 'We need to check this payment' }[state];
+    var sub = {
+      checking: 'This takes a few seconds. Please keep this page open.',
+      ok: 'Thank you, ' + first + '. Your 2027 report is now being prepared for you.',
+      slow: 'Razorpay has your payment. Confirmation can take a few minutes. You can keep this open or close it.',
+      problem: 'Razorpay has your payment, but we could not match it to your order automatically.'
+    }[state];
+    $('#paid-title').textContent = title; $('#paid-sub').textContent = sub;
+    var rows = [['Report', o.reportName], ['Amount', ok ? d.result.price : d.p.now], ['Order reference', d.receipt], ['WhatsApp', o.code + ' ' + o.mobile]];
+    if (!ok) rows.push(['Payment ID', d.paymentId]);
+    $('#paid-details').innerHTML = state === 'checking' ? '' : rowsHtml(rows, ok ? 'Your order' : 'Keep these details');
+    $('#paid-note').textContent = ok
+      ? 'A confirmation with your invoice is on its way to your WhatsApp now. Your report reaches you on WhatsApp within ' + C.delivery + '.'
+      : state === 'checking' ? '' : 'Nothing will be charged twice. If no confirmation reaches your WhatsApp in 15 minutes, message us with your payment ID.';
+    var wa = $('#paid-wa');
+    wa.hidden = ok || state === 'checking';
+    wa.href = 'https://wa.me/' + C.wa + '?text=' + encodeURIComponent('Hi, I paid for the 2027 report. Payment ID: ' + d.paymentId + ', order ' + d.receipt + '.');
+    $('#paid-close').hidden = state === 'checking';
+    if (ok && !tracked) {
+      tracked = true;
+      track('purchase', { transaction_id: d.paymentId, currency: d.result.currency, value: d.result.amount, items: [{ item_name: o.reportName, price: d.result.amount }] });
+      if (C.ads && typeof window.gtag === 'function') window.gtag('event', 'conversion', { send_to: C.ads, value: d.result.amount, currency: d.result.currency, transaction_id: d.paymentId });
+      var note = $('.order-done'); if (note) note.remove();     /* the note under the form is rebuilt as "received" on close */
+    }
+    if (!paidDlg.open) { paidDlg.showModal(); document.body.classList.add('dialog-open'); }
+    if (state !== 'slow' || document.activeElement === document.body) $('#paid-title').focus({ preventScroll: true });
+  }
+  paidDlg.addEventListener('cancel', function (e) { if (paidDlg.dataset.state === 'checking') e.preventDefault(); });
+  paidDlg.addEventListener('close', function () { document.body.classList.remove('dialog-open'); if (paid) showDone(paid); });
+  $('#paid-close').addEventListener('click', function () { paidDlg.close(); });
 
-  function thanksHtml(d) {
-    var o = d.o, ok = d.result && d.result.ok;
-    var rows = [['Report', o.reportName], ['Paid', ok ? d.result.price : d.p.now], ['WhatsApp', o.code + ' ' + o.mobile]];
-    if (o.email) rows.push(['Email', o.email]);
-    rows.push(['Order reference', d.receipt]);
-    return rowsHtml(rows, ok ? 'Payment received' : 'Payment being confirmed');
-  }
-  function showThanks(d) {
-    var ok = d.result && d.result.ok;
-    $('#review-title').textContent = ok ? 'Thank you, ' + d.o.name.split(' ')[0] : 'We are confirming your payment';
-    $('#review-sub').textContent = ok ? 'Your 2027 report is now being prepared for you.' : 'Razorpay has your payment. This can take a minute to confirm.';
-    $('#review-content').innerHTML = thanksHtml(d);
-    $('#review-note').innerHTML = ok
-      ? 'A confirmation with your invoice is on its way to your WhatsApp now. Your report reaches you on WhatsApp within ' + esc(C.delivery) + '.'
-      : 'You will get a confirmation on WhatsApp once it clears. If nothing arrives in 15 minutes, <a href="https://wa.me/' + C.wa + '?text=' +
-        encodeURIComponent('Hi Veshannastro, I paid for the 2027 report. Payment ID: ' + d.paymentId) + '" target="_blank" rel="noopener">message us with your payment ID</a> (' + esc(d.paymentId) + ').';
-    setError('');
-    payBtn.hidden = true; goWa.hidden = true; $('#review-edit').hidden = true; $('#review-done').hidden = false;
-    openDialog();
-  }
   // After paying, the form makes way for a short note so nobody pays twice by accident.
   function showDone(d) {
     var card = $('.form-card'); if (!card || $('.order-done', card)) return;
