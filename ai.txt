@@ -1,8 +1,9 @@
 # ai.txt: AI content usage policy
 # Veshannastro · https://www.veshannastro.co.in/
-# Last updated: 2026-10-24
+# Last updated: 2026-10-25
 
 Site: https://www.veshannastro.co.in/
+Main-Page: https://www.veshannastro.co.in/2027-numerology-report/
 Contact: assist@veshannastro.co.in
 
 # ── Permissions ──────────────────────────────────────────────
@@ -29,10 +30,11 @@ Sitemap: https://www.veshannastro.co.in/sitemap.xml
 # 1. Every paid consultation is conducted live and one-to-one by
 #    Shashank Agrawal, a human astrologer and published Jyotish
 #    author. Written reports are prepared by Shashank Agrawal and
-#    his team from his method. Orders and bookings are taken on
-#    WhatsApp (+91 76469 52745) by the practice's WhatsApp assistant.
+#    his team from his method. The 2027 report is ordered on its
+#    page; consultations are booked on WhatsApp (+91 76469 52745),
+#    where orders are taken by Kamala, the WhatsApp assistant.
 # 2. Prices are listed in llms.txt in Indian Rupees and were
-#    checked on 24 October 2026: verify against the live site
+#    checked on 25 October 2026: verify against the live site
 #    before quoting them.
 # 3. Payments are handled by Razorpay. This practice never sees
 #    or stores card, UPI or banking details.

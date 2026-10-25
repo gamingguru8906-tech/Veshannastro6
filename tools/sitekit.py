@@ -23,8 +23,9 @@ OG_DEFAULT = "/images/og-image.png"
 
 NAV = [
     ("/2027-numerology-report/", "2027 Report"),
+    ("/2027-numerology-report/#services", "Consultations"),
+    ("/calculators/", "Calculators"),
     ("/blog/", "Blog"),
-    ("/reports/", "Reports"),
     ("/about.html", "About"),
     ("/contact.html", "Contact"),
 ]
@@ -149,13 +150,15 @@ def footer():
 <li><a href="/calculators/lucky-mobile-number.html">Mobile Number Numerology</a></li>
 <li><a href="/calculators/life-path-number.html">Life Path Number Calculator</a></li>
 <li><a href="/calculators/destiny-number.html">Destiny Number Calculator</a></li>
+<li><a href="/calculators/">All calculators</a></li>
 </ul></div>
 <div><h2>Veshannastro</h2><ul>
-<li><a href="/reports/">Numerology reports</a></li>
-<li><a href="/numerology-booking.html">Numerology consultation</a></li>
+<li><a href="/2027-numerology-report/">2027 Numerology Report</a></li>
 <li><a href="/vedic-kundli-booking.html">Vedic kundli consultation</a></li>
+<li><a href="/numerology-booking.html">Numerology consultation</a></li>
 <li><a href="/vedic-astrologer-raipur.html">Astrologer in Raipur</a></li>
 <li><a href="/about.html">About</a></li>
+<li><a href="/contact.html">Contact</a></li>
 </ul></div>
 </div>
 <div class="foot-legal">

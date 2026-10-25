@@ -70,9 +70,9 @@
       "video",
       "rec"
      ],
-     "link": "vedic-kundli-booking.html",
+     "link": "https://www.veshannastro.co.in/vedic-kundli-booking.html",
      "features": [
-      "45-min live video session",
+      "40 to 45 minute live video session",
       "Career, wealth & marriage timing",
       "Personalised remedies & gemstones"
      ]
@@ -86,7 +86,7 @@
      "give": [
       "pdf"
      ],
-     "link": "report-booking.html?service=astrology-life-path-report",
+     "link": "",
      "features": [
       "Built on the Swiss Ephemeris engine",
       "Dasha timeline & key life phases",
@@ -102,7 +102,7 @@
      "give": [
       "pdf"
      ],
-     "link": "report-booking.html?service=divorce-separation-report",
+     "link": "",
      "features": [
       "Marriage stress & timing analysis",
       "Reconciliation vs separation outlook",
@@ -117,7 +117,7 @@
      "give": [
       "rec"
      ],
-     "link": "vedic-kundli-booking.html?service=General",
+     "link": "",
      "features": [
       "One focused question",
       "Chart-based voice answer",
@@ -140,7 +140,7 @@
       "video",
       "rec"
      ],
-     "link": "numerology-booking.html",
+     "link": "https://www.veshannastro.co.in/numerology-booking.html",
      "features": [
       "Live reading of your core numbers",
       "Name, DOB & lucky-number review",
@@ -259,7 +259,7 @@
      "give": [
       "pdf"
      ],
-     "link": "report-booking.html?service=palmistry-report",
+     "link": "",
      "features": [
       "Major lines & mounts read",
       "Dominant-hand analysis",
@@ -275,7 +275,7 @@
      "give": [
       "rec"
      ],
-     "link": "report-booking.html?service=palmistry-voice",
+     "link": "",
      "features": [
       "Send a clear palm photo",
       "Recorded voice reading",
@@ -347,7 +347,19 @@
   },
   {
    "q": "Does it replace a full birth chart consultation?",
-   "a": "No. Your Mahadasha, Antardasha and Saturn cycles are read live in a separate consultation with Shashank. Ask on WhatsApp if you would like one."
+   "a": "No. Your Mahadasha, Antardasha and Saturn cycles are read live in a separate Vedic kundli consultation with Shashank, booked on WhatsApp."
+  },
+  {
+   "q": "Do you offer live astrology and numerology consultations?",
+   "a": "Yes. Shashank reads Vedic kundli live in 40 to 45 minutes for ₹2,249 and numerology in 20 minutes from ₹824, both on Google Meet. Every consultation is booked on WhatsApp. See the Vedic kundli consultation and the numerology consultation."
+  },
+  {
+   "q": "Are there free numerology calculators?",
+   "a": "Yes. Thirteen free calculators, from Life Path and the Lo Shu grid to mobile, house and vehicle numbers, are on the numerology calculators page. They use Chaldean (Cheiro) letter values and run in your browser."
+  },
+  {
+   "q": "Who is Shashank Agrawal?",
+   "a": "Shashank Agrawal is a Raipur-based Vedic astrologer and numerologist with more than six years of practice and the author of Numbers & Navgraha: Untold Secret of Numerology. Read about Shashank or about his work as a Vedic astrologer in Raipur."
   },
   {
    "q": "Why is phase one limited to 200 reports?",

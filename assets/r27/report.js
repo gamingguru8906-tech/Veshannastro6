@@ -606,6 +606,23 @@
     new IntersectionObserver(function (en) { var v = en[0].isIntersecting; document.body.classList.toggle('form-in-view', v); sticky.classList.toggle('show', !v && scrollY > 200); }, { threshold: 0 }).observe($('.form-card'));
   }
 
+  /* ---------- Explore tabs: every page one click away. Without script all panels simply show. ---------- */
+  [].forEach.call(document.querySelectorAll('[data-tabs]'), function (box) {
+    var tabs = [].slice.call(box.querySelectorAll('[role="tab"]'));
+    var panels = tabs.map(function (t) { return document.getElementById(t.getAttribute('aria-controls')); });
+    function show(i) {
+      tabs.forEach(function (t, j) { t.setAttribute('aria-selected', i === j ? 'true' : 'false'); t.tabIndex = i === j ? 0 : -1; if (panels[j]) panels[j].hidden = i !== j; });
+    }
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { show(i); track('explore_tab', { tab: t.textContent }); });
+      t.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault(); var n = (i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length; show(n); tabs[n].focus();
+      });
+    });
+    show(0);
+  });
+
   /* ---------- star field (from the original site) ---------- */
   var sky = $('#star-field'), ctx = sky.getContext('2d'), stars = [], W = 0, H = 0;
   function size() {

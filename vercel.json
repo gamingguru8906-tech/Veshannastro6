@@ -7,51 +7,29 @@
       "maxDuration": 60
     }
   },
-  "rewrites": [
-    {
-      "source": "/api/chat",
-      "destination": "https://veshannastro6.onrender.com/api/chat"
-    }
-  ],
   "headers": [
     {
-      "source": "/astrology_websites_dashboard_v2.html",
+      "source": "/services.json",
       "headers": [
         {
           "key": "X-Robots-Tag",
-          "value": "noindex, nofollow"
-        }
-      ]
-    },
-    {
-      "source": "/index-manuscript-preview.html",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow"
-        }
-      ]
-    },
-    {
-      "source": "/shop%20product.html",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow"
-        }
-      ]
-    },
-    {
-      "source": "/(checkout|booking|vedic-checkout|numerology-checkout|union-checkout|thank-you|numerology-thank-you).html",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, follow"
+          "value": "noindex"
         }
       ]
     }
   ],
   "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "veshannastro6.vercel.app"
+        }
+      ],
+      "destination": "https://www.veshannastro.co.in/:path*",
+      "permanent": true
+    },
     {
       "source": "/",
       "destination": "/2027-numerology-report/",
@@ -103,13 +81,103 @@
       "permanent": true
     },
     {
-      "source": "/reports/index.html",
-      "destination": "/reports/",
+      "source": "/blog.html",
+      "destination": "/blog/",
       "permanent": true
     },
     {
-      "source": "/blog.html",
-      "destination": "/blog/",
+      "source": "/calculators/index.html",
+      "destination": "/calculators/",
+      "permanent": true
+    },
+    {
+      "source": "/reports",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/reports/:path*",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/booking.html",
+      "destination": "/vedic-kundli-booking.html",
+      "permanent": true
+    },
+    {
+      "source": "/report-booking.html",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/numerology-checkout.html",
+      "destination": "/numerology-booking.html",
+      "permanent": true
+    },
+    {
+      "source": "/vedic-checkout.html",
+      "destination": "/vedic-kundli-booking.html",
+      "permanent": true
+    },
+    {
+      "source": "/union-checkout.html",
+      "destination": "/vedic-kundli-booking.html",
+      "permanent": true
+    },
+    {
+      "source": "/premium-consultation.html",
+      "destination": "/vedic-kundli-booking.html",
+      "permanent": true
+    },
+    {
+      "source": "/thank-you.html",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/numerology-thank-you.html",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/chart-collection.html",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/entity-schema-unified.html",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/astrology_websites_dashboard_v2.html",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/AIquery",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/AIquery/:path*",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/checkout.html",
+      "destination": "https://shop.veshannastro.co.in/collections/all-bracelets",
+      "permanent": true
+    },
+    {
+      "source": "/bracelet-fusion.html",
+      "destination": "https://shop.veshannastro.co.in/collections/all-bracelets",
+      "permanent": true
+    },
+    {
+      "source": "/images/bracelet-fusion.html",
+      "destination": "https://shop.veshannastro.co.in/collections/all-bracelets",
       "permanent": true
     },
     {

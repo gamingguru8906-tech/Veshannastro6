@@ -21,17 +21,20 @@ jobs:
           import json, subprocess, urllib.request
           KEY = "84a2adb432ab19f383d30400c26c916e"
           HOST = "www.veshannastro.co.in"
-          changed = subprocess.run(["git", "diff", "--name-only", "HEAD~1", "HEAD"], capture_output=True, text=True).stdout.split()
+          status = subprocess.run(["git", "diff", "--name-status", "HEAD~1", "HEAD"], capture_output=True, text=True).stdout.splitlines()
           sitemap = open("sitemap.xml", encoding="utf-8").read()
           urls = []
-          for f in changed:
+          for line in status:
+              parts = line.split("\t")
+              kind, f = parts[0][:1], parts[-1]
               if not f.endswith(".html"):
                   continue
               u = "https://" + HOST + "/" + (f[:-10] if f.endswith("index.html") else f)
-              if "<loc>" + u + "</loc>" in sitemap:  # only real, indexable pages
+              # Changed pages that are in the sitemap, and deleted pages (they now redirect, so the engine re-crawls and drops them).
+              if kind == "D" or "<loc>" + u + "</loc>" in sitemap:
                   urls.append(u)
           if not urls:
-              print("No sitemap pages changed.")
+              print("No sitemap pages changed or deleted.")
               raise SystemExit(0)
           body = json.dumps({"host": HOST, "key": KEY, "keyLocation": "https://" + HOST + "/" + KEY + ".txt", "urlList": urls[:10000]}).encode()
           req = urllib.request.Request("https://api.indexnow.org/indexnow", data=body, headers={"Content-Type": "application/json; charset=utf-8"})
