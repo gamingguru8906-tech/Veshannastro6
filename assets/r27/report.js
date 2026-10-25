@@ -586,13 +586,18 @@
   });
   var bar = $('.topbar'), root = document.documentElement, prog = $('.progress');
   var clamp = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
+  /* The page height is read only after the browser has laid the page out (ResizeObserver), never during start-up:
+     reading it early forced a full layout of the page while it was still loading. */
+  var max = 0;
+  function measure() { max = root.scrollHeight - (innerHeight || 800); }
   function onScroll() {
     bar.classList.toggle('solid', scrollY > 28);
-    var vh = innerHeight || 800;
-    var max = root.scrollHeight - vh; if (prog) prog.style.transform = 'scaleX(' + (max > 0 ? scrollY / max : 0) + ')';
+    if (prog) prog.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, scrollY / max) : 0) + ')';
   }
-  addEventListener('resize', onScroll);
-  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  var remeasure = function () { measure(); onScroll(); };
+  if ('ResizeObserver' in window) new ResizeObserver(remeasure).observe(document.body); else addEventListener('load', remeasure);
+  addEventListener('resize', remeasure);
+  addEventListener('scroll', onScroll, { passive: true }); requestAnimationFrame(onScroll);
 
   /* sticky mobile bar: shows once the form is out of view */
   var sticky = $('#sticky-pay');
