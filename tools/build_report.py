@@ -190,6 +190,9 @@ def page():
         f'<figure style="--r:{(i - 2.5) * 5:g}deg;--y:{abs(i - 2.5) * 10:g}px;--z:{10 - int(abs(i - 2.5) * 2)}"><img src="/assets/r27/covers/mulank-{n}.webp" width="360" height="640" alt="2027 Personal Year Forecast cover for {label}" loading="lazy"><figcaption>{label}</figcaption></figure>'
         for i, (n, label) in enumerate(designs))
     steps = "".join(f'<li><span class="step-number">{i + 1}</span><h3>{t}</h3><p>{d}</p></li>' for i, (t, d) in enumerate(STEPS))
+    # Countdown to the end of phase one (motion.js fills the numbers and hides it once the offer has ended).
+    cd_tiles = "".join(f'<div class="cd-tile"><b data-u="{u}">00</b><span>{n}</span></div>'
+                       for u, n in (("d", "days"), ("h", "hours"), ("m", "minutes"), ("s", "seconds")))
 
     def plan(key, featured):
         r = REPORTS[key]
@@ -291,13 +294,13 @@ def page():
   <link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest">
   <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" as="image" href="/assets/r27/hero-moon.webp" fetchpriority="high">
-  <link rel="stylesheet" href="/assets/r27/styles.css?v=9"><link rel="stylesheet" href="/assets/r27/sections.css?v=9"><link rel="stylesheet" href="/assets/r27/report.css?v=11"><link rel="stylesheet" href="/assets/r27/motion.css?v=1">
+  <link rel="stylesheet" href="/assets/r27/styles.css?v=9"><link rel="stylesheet" href="/assets/r27/sections.css?v=9"><link rel="stylesheet" href="/assets/r27/report.css?v=11"><link rel="stylesheet" href="/assets/r27/motion.css?v=2">
   <script>(function(d){{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;d.documentElement.classList.add("motion");setTimeout(function(){{if(!window.__motionReady)d.documentElement.classList.remove("motion")}},3500)}})(document)</script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R20FKYJK7P"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-R20FKYJK7P');gtag('config','AW-18189866057');</script>
   <script type="application/ld+json">{json.dumps(graph, ensure_ascii=False, separators=(",", ":"))}</script>
   <script>window.R27={json.dumps(config, separators=(",", ":"))};</script>
-  <script src="/assets/r27/report.js?v=11" defer></script><script src="/assets/r27/motion.js?v=1" defer></script><script src="/assets/r27/book.js?v=9" defer></script>
+  <script src="/assets/r27/report.js?v=11" defer></script><script src="/assets/r27/motion.js?v=2" defer></script><script src="/assets/r27/book.js?v=9" defer></script>
 </head>
 <body>
   <svg class="fx-defs" width="0" height="0" aria-hidden="true" focusable="false"><filter id="morph-threshold"><feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 255 -140"/></filter></svg>
@@ -316,6 +319,7 @@ def page():
   <main>
     <section class="hero" id="register" aria-labelledby="hero-title">
       <div class="hero-background" aria-hidden="true"><div class="hero-pin has-photo"><img class="hero-photo" src="/assets/r27/hero-moon.webp" width="1280" height="558" alt="" fetchpriority="high" decoding="async"><div class="moon-orbit"></div><div class="hero-shade"></div></div></div>
+      <div class="hero-tags" aria-hidden="true"><span style="--x:8%;--y:34vh;--r:-7deg;--t:0s">Mulank</span><span style="--x:83%;--y:27vh;--r:6deg;--t:-2.6s">Bhagyank</span><span style="--x:10%;--y:70vh;--r:5deg;--t:-4.2s">Lo Shu Grid</span><span style="--x:81%;--y:64vh;--r:-5deg;--t:-1.3s">Personal Year</span></div>
       <h1 id="hero-title" class="stagger"><span class="sw" style="--i:0">2027</span> <span class="sw" style="--i:1">Numerology</span> <span class="sw" style="--i:2">Report</span> <br><span class="sw" style="--i:3">Personal</span> <span class="sw" style="--i:4">Year</span> <span class="sw" style="--i:5">Forecast</span> <small class="sw" style="--i:6">by Shashank Agrawal</small></h1>
       <div class="form-card">
         <div class="form-card-head"><span class="report-mark">{ICON_STAR}Phase one, {OFFER['limit']} reports</span><h2>Get your 2027 Report</h2>
@@ -370,6 +374,7 @@ def page():
       <div class="covers-fan" aria-label="2027 report covers by Mulank">{covers}</div>
       <p class="covers-note">Your cover is chosen by your Mulank, the number of your birth day. Mulank 3, 5, 6 and 9 receive the same cover.</p>
       <ol class="inside-list" style="margin-top:48px">{inside}</ol>
+      <div class="ring-controls" hidden><button type="button" class="ring-prev" aria-label="Previous chapter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg></button><span class="ring-count" aria-live="polite">01 / {len(INSIDE):02d}</span><button type="button" class="ring-next" aria-label="Next chapter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button></div>
     </div></section>
 
     <div class="marquee" aria-hidden="true"><div class="marquee-track"><div class="marquee-row"><span class="mq-item">Personal Year</span><i class="mq-dot"></i><span class="mq-item mq-outline">Mulank</span><i class="mq-dot"></i><span class="mq-item">Bhagyank</span><i class="mq-dot"></i><span class="mq-item mq-outline">Lo Shu Grid</span><i class="mq-dot"></i><span class="mq-item">Muhurat Dates</span><i class="mq-dot"></i><span class="mq-item mq-outline">Name Number</span><i class="mq-dot"></i><span class="mq-item">Pinnacles</span><i class="mq-dot"></i><span class="mq-item mq-outline">12 Months of 2027</span><i class="mq-dot"></i><span class="mq-item">Remedies</span><i class="mq-dot"></i></div><div class="marquee-row"><span class="mq-item">Personal Year</span><i class="mq-dot"></i><span class="mq-item mq-outline">Mulank</span><i class="mq-dot"></i><span class="mq-item">Bhagyank</span><i class="mq-dot"></i><span class="mq-item mq-outline">Lo Shu Grid</span><i class="mq-dot"></i><span class="mq-item">Muhurat Dates</span><i class="mq-dot"></i><span class="mq-item mq-outline">Name Number</span><i class="mq-dot"></i><span class="mq-item">Pinnacles</span><i class="mq-dot"></i><span class="mq-item mq-outline">12 Months of 2027</span><i class="mq-dot"></i><span class="mq-item">Remedies</span><i class="mq-dot"></i></div></div></div>
@@ -396,6 +401,9 @@ def page():
     <section class="report-section" id="pricing" aria-labelledby="pricing-title"><div class="wrap">
       <header class="section-heading"><div class="kicker">{OFFER['name']}, {OFFER['pct']}% off</div><h2 id="pricing-title">2027 numerology report <em>price in India.</em></h2>
         <p class="section-lead">Two reports. The Astro-Numero Blend is our 2027 astro numero report, <mark class="hl">numerology and astrology read together</mark>; Classic reads your numbers alone. The amount is an energy exchange for a reading prepared for you alone.</p></header>
+      <div class="countdown" data-ends="{CLOSES_AT}" hidden><p class="cd-title">The {OFFER['name']} ends in</p>
+        <div class="cd-tiles" role="timer" aria-label="Time left in the {OFFER['name']}">{cd_tiles}</div>
+        <p class="cd-note">Phase one closes on {OFFER['ends_text']} at 11:59 PM IST, or sooner if all {OFFER['limit']} reports are taken.</p></div>
       <div class="plans">{plan('blend', True)}{plan('classic', False)}</div>
       <p class="plans-note">Phase one is limited to {OFFER['limit']} reports and closes on {OFFER['ends_text']}. Ordering for more than one person? <a href="{wa(BULK_MSG)}" target="_blank" rel="noopener" style="color:var(--cy)">Message us on WhatsApp</a>.</p>
     </div></section>
