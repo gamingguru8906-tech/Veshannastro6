@@ -20,7 +20,7 @@
   "offer": {
     "pct": 30,
     "name": "Diwali offer",
-    "closes_at": "2026-11-06T23:59:59+05:30",
+    "closes_at": "2026-11-10T23:59:59+05:30",
     "limit": 200
   },
   "delivery": "24 hours",
