@@ -59,14 +59,18 @@
   $$('.finder-form select[name="month"]').forEach(function (s) { MONTHS.forEach(function (m, i) { opt(s, i + 1, m); }); });
 
   var cc = $('#country-code');
-  fetch('/assets/countries.json').then(function (r) { return r.json(); }).then(function (list) {
-    var cur = cc.value; cc.innerHTML = '';
-    list.forEach(function (c) { opt(cc, c.value, c.label); });
-    var saved = readDraft();
-    cc.value = (saved && saved.cc) || cur || 'India|+91';
-    if (!cc.value) cc.value = 'India|+91';
-    if (typeof refresh === 'function') refresh();
-  }).catch(function () {});
+  /* The full country list is filled in once the page is idle (India is there from the start). */
+  var whenIdle = window.requestIdleCallback || function (f) { return setTimeout(f, 1500); };
+  whenIdle(function () {
+    fetch('/assets/countries.json').then(function (r) { return r.json(); }).then(function (list) {
+      var cur = cc.value; cc.innerHTML = '';
+      list.forEach(function (c) { opt(cc, c.value, c.label); });
+      var saved = readDraft();
+      cc.value = (saved && saved.cc) || cur || 'India|+91';
+      if (!cc.value) cc.value = 'India|+91';
+      if (typeof refresh === 'function') refresh();
+    }).catch(function () {});
+  }, { timeout: 3000 });
 
   /* ---------- report choice + price ---------- */
   var report = 'blend';
@@ -614,17 +618,22 @@
   });
 
   /* ---------- star field (from the original site) ---------- */
-  var sky = $('#star-field'), ctx = sky.getContext('2d'), stars = [], W = 0, H = 0;
+  var sky = $('#star-field'), ctx = sky.getContext('2d'), stars = [], W = 0, H = 0, last = -1e9;
   function size() {
-    W = innerWidth; H = innerHeight; var r = Math.min(devicePixelRatio || 1, 2);
+    /* phones fire resize while the address bar slides; only rebuild when the size really changes */
+    if (W && innerWidth === W && Math.abs(innerHeight - H) < 140) return;
+    W = innerWidth; H = innerHeight; var r = Math.min(devicePixelRatio || 1, W < 760 ? 1.5 : 2);
     sky.width = W * r; sky.height = H * r; ctx.setTransform(r, 0, 0, r, 0, 0);
     var seed = 2719, rnd = function () { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
     stars = Array.from({ length: Math.round(W * H / 4200) }, function () { return { x: rnd() * W, y: rnd() * H, r: .4 + rnd() * 1.05, a: .12 + rnd() * .4, p: rnd() * 6.28 }; });
   }
   function draw(t) {
+    /* the twinkle is slow: about 12 frames a second is enough; the shooting star gets about 30 */
+    var cyc = (t % 14000) / 14000;
+    if (t - last < (cyc < .11 ? 32 : 80)) { if (!reduced && !document.hidden) requestAnimationFrame(draw); return; }
+    last = t;
     ctx.clearRect(0, 0, W, H);
     stars.forEach(function (s) { var a = s.a * (.65 + .35 * Math.sin(t * .0007 + s.p)); ctx.fillStyle = 'rgba(177,205,255,' + a + ')'; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.2832); ctx.fill(); });
-    var cyc = (t % 14000) / 14000;
     if (!reduced && cyc < .11) { var x = W * .2 + cyc * W * 5, y2 = H * .25 + cyc * H * 2, g = ctx.createLinearGradient(x - 130, y2 - 65, x, y2); g.addColorStop(0, 'transparent'); g.addColorStop(1, 'rgba(190,210,255,.35)'); ctx.strokeStyle = g; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x - 130, y2 - 65); ctx.lineTo(x, y2); ctx.stroke(); }
     if (!reduced && !document.hidden) requestAnimationFrame(draw);
   }

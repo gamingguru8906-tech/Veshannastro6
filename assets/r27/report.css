@@ -12,8 +12,8 @@
 .hero-pin.has-photo{background:#04050b}
 .hero-pin.has-photo .moon-orbit,.hero-pin.has-photo::after{display:none}
 .hero-pin.has-photo .hero-shade{background:linear-gradient(to bottom,#04060d80 0%,#04060d00 12%)}
-.hero:has(.has-photo) h1{text-shadow:0 1px 2px #000c,0 2px 22px #04060df0,0 0 60px #04060dcc}
-.hero:has(.has-photo) h1 small{text-shadow:none}
+.hero h1{text-shadow:0 1px 2px #000c,0 2px 22px #04060df0,0 0 60px #04060dcc}
+.hero h1 small{text-shadow:none}
 @media(max-width:700px){.hero-photo{width:100%;height:min(62svh,520px);aspect-ratio:auto;object-position:50% 40%;
   -webkit-mask-image:linear-gradient(to bottom,#000 0,#000 70%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0,#000 70%,transparent 100%)}}
 

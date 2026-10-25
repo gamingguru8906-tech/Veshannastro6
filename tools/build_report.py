@@ -5,6 +5,7 @@ Run from the repo root:  python3 tools/build_report.py
 """
 import json
 import os
+import re
 import sys
 from urllib.parse import quote
 
@@ -47,6 +48,17 @@ CLOSES_AT = OFFER["ends"] + "T23:59:59+05:30"
 ORDER_MSG = "Hi Veshannastro, I would like to order the 2027 Personal Year Report."
 BULK_MSG = "Hi Veshannastro, I would like 2027 reports for more than one person."
 ASK_MSG = "Hi Veshannastro, I have a question about the 2027 report."
+
+
+def page_css():
+    """The page's four stylesheets inlined into one <style>, so nothing blocks the first paint. The files in
+    assets/r27 stay the source: edit them and rebuild. Only this page uses them."""
+    out = []
+    for name in ("styles.css", "sections.css", "report.css", "motion.css"):
+        with open(os.path.join(REPO, "assets", "r27", name), encoding="utf-8") as fh:
+            css = re.sub(r"/\*.*?\*/", "", fh.read(), flags=re.S)
+        out.append(re.sub(r"\s*\n\s*", " ", re.sub(r"[ \t]+", " ", css)).strip())
+    return "".join(out)
 
 
 def wa(text):
@@ -293,14 +305,14 @@ def page():
   <meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="{BASE}/assets/r27/og.jpg">
   <link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest">
   <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" as="image" href="/assets/r27/hero-moon.webp" fetchpriority="high">
-  <link rel="stylesheet" href="/assets/r27/styles.css?v=9"><link rel="stylesheet" href="/assets/r27/sections.css?v=9"><link rel="stylesheet" href="/assets/r27/report.css?v=11"><link rel="stylesheet" href="/assets/r27/motion.css?v=2">
+  <link rel="preload" as="image" href="/assets/r27/hero-moon.webp" imagesrcset="/assets/r27/hero-moon-860.webp 860w, /assets/r27/hero-moon.webp 1280w" imagesizes="(max-width: 700px) 860px, 100vw" fetchpriority="high">
+  <style>{page_css()}</style>
   <script>(function(d){{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;d.documentElement.classList.add("motion");setTimeout(function(){{if(!window.__motionReady)d.documentElement.classList.remove("motion")}},3500)}})(document)</script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R20FKYJK7P"></script>
+  <!-- Google tag: loads on the first tap, key or scroll, or 6 seconds after load, so it never slows the first paint. Events queue in dataLayer until then. --><script>(function(w,d){{var ev=["pointerdown","keydown","touchstart","scroll"],done=0;function go(){{if(done)return;done=1;ev.forEach(function(e){{w.removeEventListener(e,go,{{passive:true}})}});var s=d.createElement("script");s.async=true;s.src="https://www.googletagmanager.com/gtag/js?id=G-R20FKYJK7P";d.head.appendChild(s)}}ev.forEach(function(e){{w.addEventListener(e,go,{{passive:true}})}});w.addEventListener("load",function(){{setTimeout(go,6000)}})}})(window,document)</script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-R20FKYJK7P');gtag('config','AW-18189866057');</script>
   <script type="application/ld+json">{json.dumps(graph, ensure_ascii=False, separators=(",", ":"))}</script>
   <script>window.R27={json.dumps(config, separators=(",", ":"))};</script>
-  <script src="/assets/r27/report.js?v=11" defer></script><script src="/assets/r27/motion.js?v=2" defer></script><script src="/assets/r27/book.js?v=9" defer></script>
+  <script src="/assets/r27/report.js?v=12" defer></script><script src="/assets/r27/motion.js?v=3" defer></script><script src="/assets/r27/book.js?v=11" defer></script>
 </head>
 <body>
   <svg class="fx-defs" width="0" height="0" aria-hidden="true" focusable="false"><filter id="morph-threshold"><feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 255 -140"/></filter></svg>
@@ -318,7 +330,7 @@ def page():
   </nav>
   <main>
     <section class="hero" id="register" aria-labelledby="hero-title">
-      <div class="hero-background" aria-hidden="true"><div class="hero-pin has-photo"><img class="hero-photo" src="/assets/r27/hero-moon.webp" width="1280" height="558" alt="" fetchpriority="high" decoding="async"><div class="moon-orbit"></div><div class="hero-shade"></div></div></div>
+      <div class="hero-background" aria-hidden="true"><div class="hero-pin has-photo"><img class="hero-photo" src="/assets/r27/hero-moon.webp" srcset="/assets/r27/hero-moon-860.webp 860w, /assets/r27/hero-moon.webp 1280w" sizes="(max-width: 700px) 860px, 100vw" width="1280" height="558" alt="" fetchpriority="high"><div class="moon-orbit"></div><div class="hero-shade"></div></div></div>
       <div class="hero-tags" aria-hidden="true"><span style="--x:8%;--y:34vh;--r:-7deg;--t:0s">Mulank</span><span style="--x:83%;--y:27vh;--r:6deg;--t:-2.6s">Bhagyank</span><span style="--x:10%;--y:70vh;--r:5deg;--t:-4.2s">Lo Shu Grid</span><span style="--x:81%;--y:64vh;--r:-5deg;--t:-1.3s">Personal Year</span></div>
       <h1 id="hero-title" class="stagger"><span class="sw" style="--i:0">2027</span> <span class="sw" style="--i:1">Numerology</span> <span class="sw" style="--i:2">Report</span> <br><span class="sw" style="--i:3">Personal</span> <span class="sw" style="--i:4">Year</span> <span class="sw" style="--i:5">Forecast</span> <small class="sw" style="--i:6">by Shashank Agrawal</small></h1>
       <div class="form-card">

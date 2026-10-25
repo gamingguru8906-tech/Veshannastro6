@@ -12,6 +12,14 @@
   var fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
   var raf = window.requestAnimationFrame.bind(window);
 
+  /* Run fn once the element is within about a screen of view, so start-up stays light. */
+  function near(sel, fn) {
+    var el = document.querySelector(sel); if (!el) return;
+    if (!('IntersectionObserver' in window)) return fn();
+    var io = new IntersectionObserver(function (en) { if (en[0].isIntersecting) { io.disconnect(); fn(); } }, { rootMargin: '900px 0px' });
+    io.observe(el);
+  }
+
   /* ---------- reveal on scroll: headings (clip-path), leads (blur), marks, the 11/2 drawing ---------- */
   function reveal(sel, margin, onIn) {
     var els = $$(sel); if (!els.length) return;
@@ -51,7 +59,7 @@
   });
 
   /* ---------- constellation path: a line draws through the order steps as you scroll; each step lights as it is reached ---------- */
-  (function () {
+  near('#how', function () {
     var ol = document.querySelector('#how .report-steps'); if (!ol) return;
     var lis = $$('li', ol); if (lis.length < 2) return;
     var NS = 'http://www.w3.org/2000/svg';
@@ -134,10 +142,10 @@
     addEventListener('scroll', function () { measure(); loop(); }, { passive: true });
     var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(build, 150); });
     build(); loop();
-  })();
+  });
 
   /* ---------- 3D ring of the report chapters: turn with the arrows, a swipe or a click; turns on its own while in view ---------- */
-  (function () {
+  near('#inside', function () {
     var ol = document.querySelector('#inside .inside-list'), ctr = document.querySelector('#inside .ring-controls');
     if (!ol || !ctr) return;
     var items = $$('li', ol), n = items.length; if (n < 3) return;
@@ -184,7 +192,7 @@
     new IntersectionObserver(function (en) { visible = en[0].isIntersecting; }, { threshold: .35 }).observe(stage);
     var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { layout(); show(); }, 150); });
     layout(); show(); tick();
-  })();
+  });
 
   /* ---------- subtle glitch (one brief slice, also on hover) ---------- */
   function glitch(el) {
