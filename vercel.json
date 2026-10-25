@@ -91,6 +91,16 @@
       "permanent": true
     },
     {
+      "source": "/reports/",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/AIquery/",
+      "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
       "source": "/reports",
       "destination": "/2027-numerology-report/",
       "permanent": true
