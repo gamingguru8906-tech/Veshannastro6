@@ -136,6 +136,40 @@ CALCULATORS = [
     ("vehicle-number", "Vehicle Number Calculator", "Indian registration plates, letters included."),
     ("lucky-bank-account", "Bank Account Number Calculator", "The financial vibration of an account number."),
 ]
+# The calculator dock in Explore: three groups, a line icon for each calculator (24px, stroke = currentColor).
+CALC_ICONS = {
+    "life-path-number": '<path d="M4 19c4-1 3-6 8-7s4-6 8-7"/><circle cx="4" cy="19" r="1.6"/><circle cx="20" cy="5" r="1.6"/>',
+    "lo-shu-grid": '<rect x="4" y="4" width="16" height="16" rx="1.5"/><path d="M9.3 4v16M14.7 4v16M4 9.3h16M4 14.7h16"/>',
+    "lucky-number": '<path d="M12 3l1.9 7.1L21 12l-7.1 1.9L12 21l-1.9-7.1L3 12l7.1-1.9Z"/>',
+    "lucky-colour": '<circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16Z" fill="currentColor" stroke="none" opacity=".55"/>',
+    "main-planet-number": '<circle cx="12" cy="12" r="4.5"/><ellipse cx="12" cy="12" rx="10" ry="3.6" transform="rotate(-20 12 12)"/>',
+    "name-numerology": '<path d="M4 18 8.5 6 13 18M5.8 14h5.4"/><path d="M15 11.5a3 3 0 1 1 0 6.5h0a3 3 0 0 1 0-6.5h4V18"/>',
+    "destiny-number": '<circle cx="12" cy="12" r="8.5"/><path d="m15.5 8.5-2 5-5 2 2-5Z"/>',
+    "compound-destiny": '<circle cx="9.5" cy="12" r="5.5"/><circle cx="14.5" cy="12" r="5.5"/>',
+    "lucky-business-name": '<rect x="3.5" y="7.5" width="17" height="12" rx="2"/><path d="M9 7.5V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.5M3.5 12.5h17"/>',
+    "lucky-mobile-number": '<rect x="7" y="3" width="10" height="18" rx="2.2"/><path d="M11 17.5h2"/>',
+    "lucky-house-number": '<path d="M4 11 12 4l8 7v9H4Z"/><path d="M10 20v-5h4v5"/>',
+    "vehicle-number": '<path d="M5 16V11l2-4.5h10L19 11v5"/><rect x="3.5" y="11" width="17" height="5" rx="1.5"/><circle cx="7.5" cy="18" r="1.5"/><circle cx="16.5" cy="18" r="1.5"/>',
+    "lucky-bank-account": '<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 14.5h4"/>',
+}
+CALC_GROUPS = [
+    ("From your date of birth", ["life-path-number", "lo-shu-grid", "lucky-number", "lucky-colour", "main-planet-number"]),
+    ("From your name", ["name-numerology", "destiny-number", "compound-destiny", "lucky-business-name"]),
+    ("Numbers you use", ["lucky-mobile-number", "lucky-house-number", "vehicle-number", "lucky-bank-account"]),
+]
+# The five Vedic sessions, in the words of the kundli booking page (shortened).
+SESSION_DETAILS = [
+    ("The Dhan Matrix", "Dhana Bhava · Artha · Lakshmi Flow",
+     "Where your money comes from, where it quietly leaks, how strong your wealth potential is, and which phases can bring real financial growth."),
+    ("Prana Vitality Blueprint", "Ayur Bhava · Prana · Stability",
+     "Your overall health strength, the vulnerable areas and recovery patterns, with remedies for steadier energy and inner calm."),
+    ("The Worklife Blueprint", "Karma Bhava · Dasha · Profession",
+     "Your strongest professional path, hidden career blocks, job or business suitability and the growth phases ahead."),
+    ("The Union Code", "Saptama Bhava · Vivaha · Harmony",
+     "Compatibility, marriage timing, emotional bonding and long-term stability, with clear guidance for peace in the relationship."),
+    ("Jeevan 360 Reading", "Dharma · Karma · Jeevan Marga",
+     "An overall reading of your growth, purpose, relationships, obstacles and direction, and why certain patterns keep repeating."),
+]
 ABOUT_LINKS = [
     ("/about.html", "About Shashank Agrawal", "Six years of practice, the method and the books."),
     ("/vedic-astrologer-raipur.html", "Vedic astrologer in Raipur", "Kundli and numerology readings from Raipur, Chhattisgarh."),
@@ -245,8 +279,35 @@ def page():
     ]
     tab_buttons = "".join(f'<button type="button" role="tab" id="{i}-tab" aria-controls="{i}" aria-selected="{"true" if n == 0 else "false"}">{label}</button>'
                           for n, (i, label, _) in enumerate(explore_tabs))
-    tab_panels = "".join(f'<div class="explore-panel read-list" role="tabpanel" id="{i}" aria-labelledby="{i}-tab">{link_list(items)}</div>'
-                         for i, _, items in explore_tabs)
+    calc_by_slug = {slug: (t, d) for slug, t, d in CALCULATORS}
+
+    def dock_card(slug, first):
+        t, d = calc_by_slug[slug]
+        short = t.replace(" Numerology Calculator", "").replace(" Calculator", "")
+        return (f'<a class="dock-card{" is-open" if first else ""}" href="/calculators/{slug}.html">'
+                f'<svg class="dock-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{CALC_ICONS[slug]}</svg>'
+                f'<span class="dock-body"><strong>{short}</strong><span>{d}</span><em>Open<span aria-hidden="true"> &rarr;</span></em></span></a>')
+    docks = "".join(f'<div class="dock-group"><p class="dock-title">{title}</p><div class="dock">'
+                    + "".join(dock_card(slug, n == 0) for n, slug in enumerate(slugs)) + '</div></div>' for title, slugs in CALC_GROUPS)
+    docks += '<p class="dock-all"><a href="/calculators/">All numerology calculators on one page</a></p>'
+
+    def panel(i, items):
+        if i == "explore-calculators":
+            return f'<div class="explore-panel calc-docks" role="tabpanel" id="{i}" aria-labelledby="{i}-tab">{docks}</div>'
+        return f'<div class="explore-panel read-list" role="tabpanel" id="{i}" aria-labelledby="{i}-tab">{link_list(items)}</div>'
+    tab_panels = "".join(panel(i, items) for i, _, items in explore_tabs)
+
+    # The five Vedic sessions, pinned while you scroll on wide screens (a plain list everywhere else).
+    vedic = CONSULTS[0]
+    ON = ' class="on"'
+    sessions_list = "".join(f'<li data-i="{n}"{ON if n == 0 else ""}><span class="ss-num">{n + 1:02d}</span><span class="ss-name">{name}</span><span class="ss-tag">{tag}</span></li>'
+                            for n, (name, tag, _) in enumerate(SESSION_DETAILS))
+    sessions_detail = "".join(
+        f'<article data-i="{n}"{ON if n == 0 else ""}><h3><span class="ss-num">{n + 1:02d}</span> {name}</h3><p class="ss-tag">{tag}</p><p>{desc}</p>'
+        f'<p class="ss-meta">{inr(vedic["price"])}, 40 to 45 minutes live on Google Meet</p>'
+        f'<a class="ss-book" href="{wa("Namaste, I would like to book " + name + " (Vedic Kundli consultation).")}" target="_blank" rel="noopener">Book {name} on WhatsApp<span aria-hidden="true"> &rarr;</span></a></article>'
+        for n, (name, tag, desc) in enumerate(SESSION_DETAILS))
+    sessions_steps = "<i></i>" * len(SESSION_DETAILS)
 
     import re
     strip = lambda s: re.sub(r"<[^>]+>", "", s)
@@ -326,7 +387,7 @@ def page():
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-R20FKYJK7P');gtag('config','AW-18189866057');</script>
   <script type="application/ld+json">{json.dumps(graph, ensure_ascii=False, separators=(",", ":"))}</script>
   <script>window.R27={json.dumps(config, separators=(",", ":"))};</script>
-  <script src="/assets/r27/report.js?v=15" defer></script><script src="/assets/r27/motion.js?v=4" defer></script><script src="/assets/r27/book.js?v=11" defer></script>
+  <script src="/assets/r27/report.js?v=15" defer></script><script src="/assets/r27/motion.js?v=6" defer></script><script src="/assets/r27/book.js?v=11" defer></script>
 </head>
 <body>
   <svg class="fx-defs" width="0" height="0" aria-hidden="true" focusable="false"><filter id="morph-threshold"><feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 255 -140"/></filter></svg>
@@ -385,6 +446,8 @@ def page():
       </div>
     </section>
 
+    <section class="signature" aria-label="Curated by Shashank Agrawal"><p class="sig-line"><span>Curated by</span> <span><b>Shashank Agrawal</b></span></p></section>
+
     <section class="report-section book-section" id="preview" aria-labelledby="preview-title"><div class="wrap">
       <header class="section-heading"><div class="kicker">Inside a report</div><h2 id="preview-title">Prepared for one person.</h2>
         <p class="section-lead">Every report is written around a single name and date of birth, on a cover chosen by your Mulank.</p></header>
@@ -440,6 +503,9 @@ def page():
       <div class="morph" aria-hidden="true"><span class="morph-word">Vedic Kundli</span><span class="morph-word">Numerology</span><span class="morph-word">Krishnamurti Paddhati</span><span class="morph-word">Bhrigu Nandi Nadi</span><span class="morph-word">Jaimini Astrology</span></div>
       <div class="plans">{consults}</div>
       <p class="plans-note">{SLOTS} {OFFICE}</p>
+      <div class="sessions" data-sessions><p class="kicker">Five Vedic sessions</p><h3 class="sessions-title">One session for each part of your life.</h3>
+        <div class="sessions-track"><div class="sessions-sticky"><ol class="sessions-list" aria-hidden="true">{sessions_list}</ol><div class="sessions-detail">{sessions_detail}</div></div>
+        <div class="sessions-steps" aria-hidden="true">{sessions_steps}</div></div></div>
     </div></section>
 
     <section class="report-section" id="about" aria-labelledby="about-title"><div class="wrap about-grid">
@@ -488,6 +554,7 @@ def page():
       <div><h2>Free calculators</h2><ul><li><a href="/calculators/name-numerology.html">Name numerology</a></li><li><a href="/calculators/lo-shu-grid.html">Lo Shu grid</a></li><li><a href="/calculators/lucky-mobile-number.html">Mobile number</a></li><li><a href="/calculators/life-path-number.html">Life path number</a></li><li><a href="/calculators/">All calculators</a></li></ul></div>
       <div><h2>Veshannastro</h2><ul><li><a href="/vedic-kundli-booking.html">Vedic kundli consultation</a></li><li><a href="/numerology-booking.html">Numerology consultation</a></li><li><a href="/about.html">About</a></li><li><a href="/contact.html">Contact</a></li><li><a href="/vedic-astrologer-raipur.html">Astrologer in Raipur</a></li><li><a href="/privacy-policy.html">Privacy policy</a></li><li><a href="/terms.html">Terms</a></li><li><a href="/refund-policy.html">Refund and delivery</a></li></ul></div>
     </div>
+    <div class="foot-mark" aria-hidden="true"><svg class="fm-star" viewBox="0 0 32 32"><path d="M16 1 18.9 13.1 31 16 18.9 18.9 16 31 13.1 18.9 1 16 13.1 13.1Z" fill="#f3cd93"/></svg><span class="fm-glow">VESHANNASTRO</span><span class="fm-word">VESHANNASTRO</span><span class="fm-dust"><i style="--x:8%;--y:62%;--d:6.5s;--t:-1.2s"></i><i style="--x:17%;--y:30%;--d:8s;--t:-3.1s"></i><i style="--x:26%;--y:70%;--d:7s;--t:-0.4s"></i><i style="--x:38%;--y:22%;--d:9s;--t:-2.2s"></i><i style="--x:47%;--y:66%;--d:6s;--t:-4s"></i><i style="--x:56%;--y:38%;--d:8.5s;--t:-1.7s"></i><i style="--x:64%;--y:74%;--d:7.5s;--t:-3.6s"></i><i style="--x:73%;--y:26%;--d:6.8s;--t:-0.9s"></i><i style="--x:82%;--y:58%;--d:9.2s;--t:-2.8s"></i><i style="--x:91%;--y:34%;--d:7.2s;--t:-1.4s"></i></span></div>
     <div class="foot-base"><span>// SHASHANK AGRAWAL &nbsp; // VESHANNASTRO</span><span>Numerology and astrology are guidance, not guarantees. &copy; 2026 Veshannastro</span></div>
   </div></footer>
 
