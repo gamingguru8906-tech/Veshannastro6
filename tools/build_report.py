@@ -32,7 +32,7 @@ REPORTS = {
     "classic": {"name": "Classic", "inr": 963, "inr_mrp": 1376, "usd": 20, "usd_mrp": 29, "needs_time": False,
                 "line": "Numerology from your name and date of birth. No birth time needed."},
 }
-OFFER = {"pct": 30, "name": "Diwali offer", "ends": "2026-11-10", "ends_text": "10 November", "limit": 200}
+OFFER = {"pct": 30, "name": "Diwali offer", "starts": "2026-10-24", "ends": "2026-11-10", "ends_text": "10 November", "limit": 200}
 DELIVERY = "24 hours"
 # Pay on the page through Razorpay (api/r27). If the server is not set up or the order cannot be made online,
 # the page falls back to the WhatsApp order on its own, so nothing breaks.
@@ -259,17 +259,31 @@ def page():
            "address": {"@type": "PostalAddress", "streetAddress": ADDRESS["street"], "addressLocality": ADDRESS["city"],
                        "addressRegion": ADDRESS["region"], "postalCode": ADDRESS["postal"], "addressCountry": ADDRESS["country"]},
            "founder": {"@type": "Person", "@id": BASE + "/#shashank", "name": "Shashank Agrawal", "url": BASE + "/about.html"},
+           "image": BASE + "/images/logo.png",
            "sameAs": ["https://www.instagram.com/veshann.astro"]}
+
+    # Optional offer fields Google's Rich Results Test asks for: the report is a PDF sent on WhatsApp (no shipping cost,
+    # within a day), and digital reports are not returnable (refunds only as the refund policy says).
+    abroad = ["US", "GB", "AE", "CA", "AU", "SG"]
+    def offer(price, currency, countries):
+        return {"@type": "Offer", "price": str(price), "priceCurrency": currency, "validFrom": OFFER["starts"], "priceValidUntil": OFFER["ends"],
+                "availability": "https://schema.org/LimitedAvailability", "url": URL + "#register", "seller": {"@id": BASE + "/#organization"},
+                "shippingDetails": {"@type": "OfferShippingDetails",
+                                    "shippingRate": {"@type": "MonetaryAmount", "value": "0", "currency": currency},
+                                    "shippingDestination": [{"@type": "DefinedRegion", "addressCountry": c} for c in countries],
+                                    "deliveryTime": {"@type": "ShippingDeliveryTime",
+                                                     "handlingTime": {"@type": "QuantitativeValue", "minValue": 0, "maxValue": 1, "unitCode": "DAY"},
+                                                     "transitTime": {"@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY"}}},
+                "hasMerchantReturnPolicy": {"@type": "MerchantReturnPolicy", "applicableCountry": countries,
+                                            "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted",
+                                            "merchantReturnLink": BASE + "/refund-policy.html"}}
 
     def product(key):
         r = REPORTS[key]
         return {"@type": "Product", "@id": URL + "#" + key, "name": f"2027 Personal Year Forecast Report: {r['name']}",
                 "description": f"Personalised 2027 numerology report PDF. {r['line']} Delivered within {DELIVERY}.",
                 "image": BASE + "/assets/r27/book/cover.webp", "brand": {"@type": "Brand", "name": "Veshannastro"}, "category": "Numerology report",
-                "offers": [{"@type": "Offer", "price": str(r["inr"]), "priceCurrency": "INR", "priceValidUntil": OFFER["ends"],
-                            "availability": "https://schema.org/LimitedAvailability", "url": URL + "#register", "seller": {"@id": BASE + "/#organization"}},
-                           {"@type": "Offer", "price": str(r["usd"]), "priceCurrency": "USD", "priceValidUntil": OFFER["ends"],
-                            "availability": "https://schema.org/LimitedAvailability", "url": URL + "#register", "seller": {"@id": BASE + "/#organization"}}]}
+                "offers": [offer(r["inr"], "INR", ["IN"]), offer(r["usd"], "USD", abroad)]}
 
     graph = {"@context": "https://schema.org", "@graph": [
         org,
@@ -423,7 +437,7 @@ def page():
     <section class="report-section" id="services" aria-labelledby="services-title"><div class="wrap">
       <header class="section-heading"><div class="kicker">Consultations</div><h2 id="services-title">Live consultations <em>with Shashank.</em></h2>
         <p class="section-lead">Besides the 2027 report, Shashank reads Vedic kundli and numerology one-to-one in live sessions on Google Meet. Every consultation is <mark class="hl">booked on WhatsApp</mark>: message us with the session you want, and we confirm your slot and send the payment link there.</p></header>
-      <div class="morph" aria-hidden="true"><span class="morph-word">Vedic Kundli</span><span class="morph-word">Numerology</span></div>
+      <div class="morph" aria-hidden="true"><span class="morph-word">Vedic Kundli</span><span class="morph-word">Numerology</span><span class="morph-word">Krishnamurti Paddhati</span><span class="morph-word">Bhrigu Nandi Nadi</span><span class="morph-word">Jaimini Astrology</span></div>
       <div class="plans">{consults}</div>
       <p class="plans-note">{SLOTS} {OFFICE}</p>
     </div></section>

@@ -82,6 +82,7 @@ mark.hl{color:#fff;padding:0 .12em;margin:0 -.04em;border-radius:3px;-webkit-box
 .morph-word+.morph-word{opacity:0}
 .morph.moving{filter:url(#morph-threshold)}
 html:not(.motion) .morph{display:none}
+@media(max-width:480px){.morph{height:44px;font-size:clamp(24px,7.8vw,32px)}}   /* the longer names fit a phone */
 
 /* 13. Magnetic hover: buttons lean toward the cursor (computers only, see motion.js) */
 .motion .magnetic,.motion .magnetic:hover{transform:translate3d(var(--mx,0px),var(--my,0px),0);transition:transform .45s var(--m-ease),background .3s,box-shadow .4s}
