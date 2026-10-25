@@ -8,33 +8,28 @@
 /* Used by buildCalcDOBRow() to populate the year dropdown. */
 const curYear = new Date().getFullYear();
 
-/* After a result: one next step that matches the calculator (the 2027 report for date-of-birth numbers, the matching
-   report through Kamala on WhatsApp for names and phone numbers), and "Send my result on WhatsApp" with the result
-   typed in, so the conversation starts from it. Real anchors: crawlable, and they work without more script. */
+/* After a result: the 2027 Personal Year Report first (the one product the site sells), then a second step that
+   matches the calculator: the matching live consultation on WhatsApp for names and phone numbers, otherwise
+   "Send my result on WhatsApp" with the result typed in. Real anchors: crawlable, and they work without more script. */
 var WA_NUMBER = '917646952745';
 var CALC_NAMES = { loshu: 'Lo Shu grid', lifepath: 'Life Path number', lucky: 'lucky number', colour: 'lucky colour',
   planet: 'ruling planet', name: 'name number', destiny: 'Destiny number', compound: 'compound number',
   business: 'business name number', mobile: 'mobile number', house: 'house number', vehicle: 'vehicle number', bank: 'account number' };
+var REPORT_2027 = { label: 'See the 2027 report', href: '/2027-numerology-report/#register' };
 function waLink(text){ return 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(text); }
 function nextStep(calcType){
   if(['loshu','lifepath','lucky','colour','planet'].indexOf(calcType) !== -1){
-    return { msg: 'This is one number. The 2027 Personal Year Report reads it with your Mulank, Lo Shu grid and all twelve months of 2027, with remedies. From ₹963.',
-      label: 'See the 2027 report', href: '/2027-numerology-report/#register' };
+    return { msg: 'This is one number. The 2027 Personal Year Report reads it with your Mulank, Lo Shu grid and all twelve months of 2027, with remedies. From ₹963.' };
   }
   if(['name','destiny','compound'].indexOf(calcType) !== -1){
-    return { msg: 'Want your name read against your date of birth? Name Frequency Alignment is a 20-minute live numerology consultation, ₹974, booked on WhatsApp.',
-      label: 'Book on WhatsApp', href: waLink('Hi, I would like to book Name Frequency Alignment (20 min, ₹974).'), ext: true };
-  }
-  if(calcType === 'business'){
-    return { msg: 'Testing a business name? Send it to us on WhatsApp with the founder\'s date of birth and we will tell you how it reads.',
-      label: 'Ask on WhatsApp', href: waLink('Hi, I checked a business name on your website and have a question.'), ext: true };
+    return { msg: 'The 2027 Personal Year Report reads your numbers together for every month of 2027, with remedies. From ₹963. For your name itself, Name Frequency Alignment is a 20-minute live consultation, ₹974, on WhatsApp.',
+      alt: { label: 'Book Name Frequency Alignment', href: waLink('Hi, I would like to book Name Frequency Alignment (20 min, ₹974).') } };
   }
   if(calcType === 'mobile'){
-    return { msg: 'Want this number read against your own date of birth? The Mobile Number Energy Audit is a 20-minute live numerology consultation, ₹824, booked on WhatsApp.',
-      label: 'Book on WhatsApp', href: waLink('Hi, I would like to book the Mobile Number Energy Audit (20 min, ₹824).'), ext: true };
+    return { msg: 'The 2027 Personal Year Report reads your own numbers for every month of 2027, with remedies. From ₹963. For this phone number itself, the Mobile Number Energy Audit is a 20-minute live consultation, ₹824, on WhatsApp.',
+      alt: { label: 'Book the Mobile Number Audit', href: waLink('Hi, I would like to book the Mobile Number Energy Audit (20 min, ₹824).') } };
   }
-  return { msg: 'Whether this number matters depends on your own birth number. Ask on WhatsApp and we will tell you honestly.',
-    label: 'Ask on WhatsApp', href: waLink('Hi, I checked my ' + (CALC_NAMES[calcType] || 'number') + ' on your website and have a question.'), ext: true };
+  return { msg: 'Whether this number suits you depends on your own birth numbers. The 2027 Personal Year Report reads them for every month of 2027, with remedies. From ₹963.' };
 }
 function resultSummary(resEl, calcType){
   var num = resEl.querySelector('.calc-result-num'), label = resEl.querySelector('.calc-result-label');
@@ -57,14 +52,16 @@ function appendGuideMe(resEl, calcType){
   p.textContent = step.msg;
   var a = document.createElement('a');
   a.className = 'guide-me-btn';
-  a.href = step.href;
-  a.textContent = step.label;
-  if(step.ext){ a.target = '_blank'; a.rel = 'noopener'; }
+  a.href = REPORT_2027.href;
+  a.textContent = REPORT_2027.label;
   var send = document.createElement('a');
   send.className = 'guide-me-btn guide-me-secondary';
-  send.href = waLink('Hi, I used the ' + (CALC_NAMES[calcType] || 'numerology') + ' calculator on your website. My result: ' + resultSummary(resEl, calcType) + '. I would like to know what it means for me.');
   send.target = '_blank'; send.rel = 'noopener';
-  send.textContent = 'Send my result on WhatsApp';
+  if(step.alt){ send.href = step.alt.href; send.textContent = step.alt.label; }
+  else {
+    send.href = waLink('Hi, I used the ' + (CALC_NAMES[calcType] || 'numerology') + ' calculator on your website. My result: ' + resultSummary(resEl, calcType) + '. I would like to know what it means for me.');
+    send.textContent = 'Send my result on WhatsApp';
+  }
   div.appendChild(p);
   div.appendChild(a);
   div.appendChild(document.createTextNode(' '));
