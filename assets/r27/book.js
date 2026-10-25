@@ -5,6 +5,13 @@
   'use strict';
   var stage = document.getElementById('book-stage');
   if (!stage || !stage.animate) return;
+  /* Built only when the stage comes within about a screen of view, so it does not slow the first paint. */
+  if ('IntersectionObserver' in window) {
+    var nearIo = new IntersectionObserver(function (en) { if (en[0].isIntersecting) { nearIo.disconnect(); init(); } }, { rootMargin: '900px 0px' });
+    nearIo.observe(stage);
+  } else init();
+
+  function init() {
   var replay = document.getElementById('book-replay');
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var ROW = [8, 1, 4, 'hero', 6, 7];       // one book per cover design, never repeated
@@ -14,7 +21,10 @@
   var INOUT = 'cubic-bezier(.65,0,.35,1)';
   var TURN = 'cubic-bezier(.42,0,.28,1)';
 
-  function img(src, w, h) { var i = new Image(); i.src = src; i.alt = ''; i.width = w; i.height = h; i.decoding = 'async'; return i; }
+  /* Lazy, and the 480-wide copies of the sample pages on phones (they are shown at about 240 px there). */
+  var SMALL = innerWidth < 760;
+  function img(src, w, h) { var i = new Image(); i.loading = 'lazy'; i.decoding = 'async'; i.alt = ''; i.width = w; i.height = h;
+    i.src = SMALL && src.indexOf('/book/') > -1 ? src.replace('.webp', '-480.webp') : src; return i; }
   function el(cls, kids) { var d = document.createElement('div'); d.className = cls; (kids || []).forEach(function (k) { d.appendChild(k); }); return d; }
 
   var books = ROW.map(function (k) {
@@ -148,4 +158,5 @@
   }, { threshold: .55 }).observe(stage);
   if (replay) replay.addEventListener('click', function () { play(); });
   var rz; addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(function () { if (!playing && started) finalState(); }, 200); });
+  }
 })();
