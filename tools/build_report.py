@@ -88,6 +88,52 @@ STEPS = [
 ]
 
 
+# Live consultations, booked on WhatsApp only. Prices are the ones on the two consultation pages.
+CONSULTS = [
+    {"id": "kundli-consultation", "label": "Vedic astrology", "name": "Vedic Kundli Consultation", "page": "/vedic-kundli-booking.html",
+     "for": "Your birth chart read live: graha, bhava and dasha for one life area, with practical upaya.",
+     "price": 2249, "was": 2999, "off": 25, "note": "40 minutes on Google Meet. A focused 20-minute session is ₹1,874.",
+     "sessions": [("The Dhan Matrix", "wealth and money flow"), ("Prana Vitality Blueprint", "health and energy"),
+                  ("The Worklife Blueprint", "career and timing"), ("The Union Code", "love and marriage"),
+                  ("Jeevan 360 Reading", "the whole life path")],
+     "includes": "Kundli PDF report 2 to 3 days after the session, the recording, a numerology layer and a week of follow-up.",
+     "msg": "Namaste, I would like to book a Vedic Kundli consultation."},
+    {"id": "numerology-consultation", "label": "Numerology", "name": "Numerology Consultation", "page": "/numerology-booking.html",
+     "for": "A focused diagnosis of your number signature, with correction guidance you can act on.",
+     "price": 824, "was": 1099, "off": 25, "from": True, "note": "20 minutes on Google Meet, with a PDF report and the recording.",
+     "sessions": [("The Lo Shu Life Matrix", "₹1,124"), ("Name Frequency Alignment", "₹974"), ("Mobile Number Energy Audit", "₹824")],
+     "includes": "Detailed PDF numerology report, the recording, the invoice and personal correction guidance.",
+     "msg": "Namaste, I would like to book a Numerology consultation."},
+]
+SLOTS = "Session start times: Monday to Friday 7:30 to 9:30 PM IST, Saturday and Sunday 10 AM to 7 PM IST."
+OFFICE = "Office hours are 10 AM to 8 PM IST, every day."
+
+# Every other page on the site, linked from the Explore tabs so each one is a click from the main page.
+CALCULATORS = [
+    ("life-path-number", "Life Path Number Calculator", "The core number from your date of birth."),
+    ("lo-shu-grid", "Lo Shu Grid Calculator", "Your 3x3 grid, with missing and repeated numbers."),
+    ("lucky-number", "Lucky Number Calculator", "Your personal number from the date of birth."),
+    ("lucky-colour", "Lucky Colour Calculator", "Your colour through your ruling planet."),
+    ("main-planet-number", "Ruling Planet Calculator", "Which of the nine planets governs your number."),
+    ("name-numerology", "Name Numerology Calculator", "The Chaldean vibration of the name you use."),
+    ("destiny-number", "Destiny Number Calculator", "Your expression number from the full name."),
+    ("compound-destiny", "Compound Number Calculator", "The two-digit number behind the single digit."),
+    ("lucky-business-name", "Business Name Numerology Calculator", "The vibration a brand name projects."),
+    ("lucky-mobile-number", "Lucky Mobile Number Calculator", "The total vibration of your phone number."),
+    ("lucky-house-number", "House Number Numerology Calculator", "House and flat numbers, letters included."),
+    ("vehicle-number", "Vehicle Number Calculator", "Indian registration plates, letters included."),
+    ("lucky-bank-account", "Bank Account Number Calculator", "The financial vibration of an account number."),
+]
+ABOUT_LINKS = [
+    ("/about.html", "About Shashank Agrawal", "Six years of practice, the method and the books."),
+    ("/vedic-astrologer-raipur.html", "Vedic astrologer in Raipur", "Kundli and numerology readings from Raipur, Chhattisgarh."),
+    ("/contact.html", "Contact", "WhatsApp, phone, email and office hours."),
+    ("/privacy-policy.html", "Privacy policy", "What we keep and why."),
+    ("/terms.html", "Terms and conditions", "Booking, payment and delivery terms."),
+    ("/refund-policy.html", "Refund and delivery policy", "Cancellations, rescheduling and refunds."),
+]
+
+
 def faqs():
     b, c = REPORTS["blend"], REPORTS["classic"]
     pay = ("Buy your 2027 numerology report online on this page by UPI, card or netbanking. If you would like to talk first, message us on WhatsApp and pay from there."
@@ -117,7 +163,13 @@ def faqs():
         ("Is there a free 2027 numerology report?",
          "The Personal Year calculator on this page is free and tells you the number your year is read through. The full report, with every month, your dates, Lo Shu grid and voice note, is paid. You can also read free <a href=\"/blog/2027-numerology-predictions.html\">2027 numerology predictions</a> on our blog."),
         ("Does it replace a full birth chart consultation?",
-         "No. Your Mahadasha, Antardasha and Saturn cycles are read live in a separate consultation with Shashank. Ask on WhatsApp if you would like one."),
+         "No. Your Mahadasha, Antardasha and Saturn cycles are read live in a separate <a href=\"/vedic-kundli-booking.html\">Vedic kundli consultation</a> with Shashank, booked on WhatsApp."),
+        ("Do you offer live astrology and numerology consultations?",
+         "Yes. Shashank reads Vedic kundli live in 40 minutes for ₹2,249 and numerology in 20 minutes from ₹824, both on Google Meet. Every consultation is booked on WhatsApp. See the <a href=\"/vedic-kundli-booking.html\">Vedic kundli consultation</a> and the <a href=\"/numerology-booking.html\">numerology consultation</a>."),
+        ("Are there free numerology calculators?",
+         "Yes. Thirteen free calculators, from Life Path and the Lo Shu grid to mobile, house and vehicle numbers, are on the <a href=\"/calculators/\">numerology calculators page</a>. They use Chaldean (Cheiro) letter values and run in your browser."),
+        ("Who is Shashank Agrawal?",
+         "Shashank Agrawal is a Raipur-based Vedic astrologer and numerologist with more than six years of practice and the author of Numbers &amp; Navgraha: Untold Secret of Numerology. Read <a href=\"/about.html\">about Shashank</a> or about his work as a <a href=\"/vedic-astrologer-raipur.html\">Vedic astrologer in Raipur</a>."),
         ("Why is phase one limited to 200 reports?",
          f"Every report is prepared for one person by Shashank and his team. Phase one takes {OFFER['limit']} reports and closes on {OFFER['ends_text']}."),
     ]
@@ -154,6 +206,33 @@ def page():
     reads = "".join(f'<a href="/blog/{p["slug"]}.html"><strong>{p["h1"]}</strong><span>{p["card"]}</span></a>' for p in POSTS)
     faq_html = "".join(f'<details><summary>{q}<span class="faq-icon" aria-hidden="true"></span></summary><p>{a}</p></details>' for q, a in F)
 
+    def consult(c):
+        rows = "".join(f'<li>{ICON_CHECK}<span><b>{n}</b>{", " if not c.get("from") else ": "}{d}</span></li>' for n, d in c["sessions"])
+        return f"""<article class="plan consult" id="{c['id']}">
+<span class="plan-label">{c['label']}</span>
+<h3>{c['name']}</h3><p class="plan-for">{c['for']}</p>
+<p class="plan-price"><b>{'from ' if c.get('from') else ''}{inr(c['price'])}</b><s>{inr(c['was'])}</s><span class="offer-tag">{c['off']}% off</span></p>
+<p class="plan-usd">{c['note']}</p>
+<ul>{rows}</ul>
+<p class="consult-includes">{c['includes']}</p>
+<div class="consult-actions"><a class="wa-btn" href="{wa(c['msg'])}" target="_blank" rel="noopener">{ICON_WA}<span>Contact us on WhatsApp</span></a><a class="ghost" href="{c['page']}">See all sessions <span aria-hidden="true">&rarr;</span></a></div>
+</article>"""
+    consults = "".join(consult(c) for c in CONSULTS)
+
+    def link_list(items):
+        return "".join(f'<a href="{h}"><strong>{t}</strong><span>{d}</span></a>' for h, t, d in items)
+    explore_tabs = [
+        ("explore-calculators", "Free calculators", [("/calculators/", "All numerology calculators", "Thirteen calculators on one page, Chaldean values.")]
+         + [(f"/calculators/{slug}.html", t, d) for slug, t, d in CALCULATORS]),
+        ("explore-consultations", "Consultations", [(c["page"], c["name"], c["for"]) for c in CONSULTS]
+         + [("/vedic-astrologer-raipur.html", "Astrologer in Raipur", "Consultations for Raipur, Bhilai, Durg and all of Chhattisgarh.")]),
+        ("explore-about", "About and policies", ABOUT_LINKS),
+    ]
+    tab_buttons = "".join(f'<button type="button" role="tab" id="{i}-tab" aria-controls="{i}" aria-selected="{"true" if n == 0 else "false"}">{label}</button>'
+                          for n, (i, label, _) in enumerate(explore_tabs))
+    tab_panels = "".join(f'<div class="explore-panel read-list" role="tabpanel" id="{i}" aria-labelledby="{i}-tab">{link_list(items)}</div>'
+                         for i, _, items in explore_tabs)
+
     import re
     strip = lambda s: re.sub(r"<[^>]+>", "", s)
     org = {"@type": "Organization", "@id": BASE + "/#organization", "name": "Veshannastro", "url": BASE + "/",
@@ -186,6 +265,9 @@ def page():
             {"@type": "ListItem", "position": 1, "name": "Veshannastro", "item": BASE + "/"},
             {"@type": "ListItem", "position": 2, "name": "2027 Numerology Report", "item": URL}]},
         product("blend"), product("classic"),
+        *[{"@type": "Service", "@id": BASE + c["page"] + "#service", "name": c["name"], "url": BASE + c["page"], "provider": {"@id": BASE + "/#organization"},
+           "areaServed": "IN", "description": c["for"],
+           "offers": {"@type": "Offer", "price": str(c["price"]), "priceCurrency": "INR", "url": BASE + c["page"]}} for c in CONSULTS],
         {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": strip(q), "acceptedAnswer": {"@type": "Answer", "text": strip(a)}} for q, a in F]},
     ]}
     config = {"wa": WA, "online": ONLINE_PAY, "ads": ("AW-18189866057/" + ADS_PURCHASE_LABEL) if ADS_PURCHASE_LABEL else "", "usdOnline": USD_ONLINE, "delivery": DELIVERY, "offerEnds": OFFER["ends"], "reports": REPORTS}
@@ -209,24 +291,24 @@ def page():
   <link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest">
   <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" as="image" href="/assets/r27/hero-wide.webp">
-  <link rel="stylesheet" href="/assets/r27/styles.css?v=9"><link rel="stylesheet" href="/assets/r27/sections.css?v=9"><link rel="stylesheet" href="/assets/r27/report.css?v=9">
+  <link rel="stylesheet" href="/assets/r27/styles.css?v=9"><link rel="stylesheet" href="/assets/r27/sections.css?v=9"><link rel="stylesheet" href="/assets/r27/report.css?v=10">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R20FKYJK7P"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-R20FKYJK7P');gtag('config','AW-18189866057');</script>
   <script type="application/ld+json">{json.dumps(graph, ensure_ascii=False, separators=(",", ":"))}</script>
   <script>window.R27={json.dumps(config, separators=(",", ":"))};</script>
-  <script src="/assets/r27/report.js?v=9" defer></script><script src="/assets/r27/book.js?v=9" defer></script>
+  <script src="/assets/r27/report.js?v=10" defer></script><script src="/assets/r27/book.js?v=9" defer></script>
 </head>
 <body>
   <div class="nebula" aria-hidden="true"></div><canvas class="sky" id="star-field" aria-hidden="true"></canvas>
   <div class="grain" aria-hidden="true"></div><div class="vignette" aria-hidden="true"></div><div class="progress" aria-hidden="true"></div>
   <header class="topbar">
     <a class="brand" href="{PATH}" aria-label="VESHANNASTRO home"><b>VESHANNASTRO</b></a>
-    <nav class="nav-links" aria-label="Main navigation"><a href="#inside">Inside</a><a href="#finder">Your Year</a><a href="#pricing">Reports</a><a href="/blog/">Blog</a><a href="#faq">FAQ</a></nav>
+    <nav class="nav-links" aria-label="Main navigation"><a href="#inside">Inside</a><a href="#finder">Your Year</a><a href="#pricing">Reports</a><a href="#services">Consultations</a><a href="/blog/">Blog</a><a href="#faq">FAQ</a></nav>
     <a class="pill pill-nav" href="#register">Get your report</a>
     <button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><i></i><i></i></button>
   </header>
   <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation" inert>
-    <div class="wrap"><ul><li><a href="#inside">Inside</a></li><li><a href="#finder">Your Year</a></li><li><a href="#pricing">Reports</a></li><li><a href="/blog/">Blog</a></li><li><a href="#faq">FAQ</a></li></ul>
+    <div class="wrap"><ul><li><a href="#inside">Inside</a></li><li><a href="#finder">Your Year</a></li><li><a href="#pricing">Reports</a></li><li><a href="#services">Consultations</a></li><li><a href="/calculators/">Calculators</a></li><li><a href="/blog/">Blog</a></li><li><a href="#faq">FAQ</a></li></ul>
     <div class="menu-foot"><a class="pill" href="#register">Get your report</a><a class="ghost" href="{wa(ASK_MSG)}" target="_blank" rel="noopener">Ask on WhatsApp</a></div></div>
   </nav>
   <main>
@@ -314,6 +396,13 @@ def page():
       <p class="plans-note">Phase one is limited to {OFFER['limit']} reports and closes on {OFFER['ends_text']}. Ordering for more than one person? <a href="{wa(BULK_MSG)}" target="_blank" rel="noopener" style="color:var(--cy)">Message us on WhatsApp</a>.</p>
     </div></section>
 
+    <section class="report-section" id="services" aria-labelledby="services-title"><div class="wrap">
+      <header class="section-heading"><div class="kicker">Consultations</div><h2 id="services-title">Live consultations <em>with Shashank.</em></h2>
+        <p class="section-lead">Besides the 2027 report, Shashank reads Vedic kundli and numerology one-to-one in live sessions on Google Meet. Every consultation is booked on WhatsApp: message us with the session you want, and we confirm your slot and send the payment link there.</p></header>
+      <div class="plans">{consults}</div>
+      <p class="plans-note">{SLOTS} {OFFICE}</p>
+    </div></section>
+
     <section class="report-section" id="about" aria-labelledby="about-title"><div class="wrap about-grid">
       <div class="about-copy"><div class="kicker">Owner, VESHANNASTRO</div><h2 class="section-title" id="about-title">Shashank <em>Agrawal</em></h2>
         <p>Shashank Agrawal founded VESHANNASTRO and is the author of <a href="{BOOK}" target="_blank" rel="noopener" style="color:var(--cy)"><em>Numbers &amp; Navgraha: Untold Secret of Numerology</em></a>. He works with Mulank and Bhagyank, the Lo Shu grid, Chaldean name numbers and Vedic astrology.</p>
@@ -334,6 +423,12 @@ def page():
       <p class="read-more"><a href="/blog/">All articles on the blog</a></p>
     </div></section>
 
+    <section class="report-section" id="explore" aria-labelledby="explore-title"><div class="wrap">
+      <header class="section-heading"><div class="kicker">Explore</div><h2 id="explore-title">Everything on <em>Veshannastro.</em></h2>
+        <p class="section-lead">Free calculators, live consultations and everything about the practice, one click from here.</p></header>
+      <div class="explore" data-tabs><div class="explore-tabs" role="tablist" aria-label="Explore the site">{tab_buttons}</div>{tab_panels}</div>
+    </div></section>
+
     <section class="report-section" id="faq" aria-labelledby="faq-title"><div class="wrap">
       <header class="section-heading"><div class="kicker">Questions</div><h2 id="faq-title">Before you <em>order.</em></h2></header>
       <div class="report-faq">{faq_html}</div>
@@ -350,8 +445,8 @@ def page():
         <address style="margin-top:14px">Veshannastro, Shashank Agrawal<br>{ADDRESS['street']}<br>{ADDRESS['city']}, {ADDRESS['region']} {ADDRESS['postal']}<br>
         <a href="{wa(ASK_MSG)}" target="_blank" rel="noopener">WhatsApp {WA_SHOW}</a><br><a href="tel:+{PHONE2}">Phone {PHONE2_SHOW}</a><br><a href="mailto:{EMAIL}">{EMAIL}</a></address></div>
       <div><h2>2027</h2><ul><li><a href="/blog/2027-numerology-predictions.html">2027 numerology predictions</a></li><li><a href="/blog/personal-year-number-2027-calculator.html">2027 personal year calculator</a></li><li><a href="/blog/mulank-predictions-2027.html">Mulank predictions 2027</a></li><li><a href="/blog/">Blog</a></li></ul></div>
-      <div><h2>Free calculators</h2><ul><li><a href="/calculators/name-numerology.html">Name numerology</a></li><li><a href="/calculators/lo-shu-grid.html">Lo Shu grid</a></li><li><a href="/calculators/lucky-mobile-number.html">Mobile number</a></li><li><a href="/calculators/life-path-number.html">Life path number</a></li></ul></div>
-      <div><h2>Veshannastro</h2><ul><li><a href="/about.html">About</a></li><li><a href="/contact.html">Contact</a></li><li><a href="/vedic-astrologer-raipur.html">Astrologer in Raipur</a></li><li><a href="/privacy-policy.html">Privacy policy</a></li><li><a href="/terms.html">Terms</a></li><li><a href="/refund-policy.html">Refund and delivery</a></li></ul></div>
+      <div><h2>Free calculators</h2><ul><li><a href="/calculators/name-numerology.html">Name numerology</a></li><li><a href="/calculators/lo-shu-grid.html">Lo Shu grid</a></li><li><a href="/calculators/lucky-mobile-number.html">Mobile number</a></li><li><a href="/calculators/life-path-number.html">Life path number</a></li><li><a href="/calculators/">All calculators</a></li></ul></div>
+      <div><h2>Veshannastro</h2><ul><li><a href="/vedic-kundli-booking.html">Vedic kundli consultation</a></li><li><a href="/numerology-booking.html">Numerology consultation</a></li><li><a href="/about.html">About</a></li><li><a href="/contact.html">Contact</a></li><li><a href="/vedic-astrologer-raipur.html">Astrologer in Raipur</a></li><li><a href="/privacy-policy.html">Privacy policy</a></li><li><a href="/terms.html">Terms</a></li><li><a href="/refund-policy.html">Refund and delivery</a></li></ul></div>
     </div>
     <div class="foot-base"><span>// SHASHANK AGRAWAL &nbsp; // VESHANNASTRO</span><span>Numerology and astrology are guidance, not guarantees. &copy; 2026 Veshannastro</span></div>
   </div></footer>
@@ -366,30 +461,14 @@ def page():
 """
 
 
-# Services from the old homepage (index.html, var DATA) that Kamala still sells. The old Personal Year Forecast is
-# left out: the 2027 report replaces it, and two personal-year products at two prices would confuse buyers.
-LEGACY_LEFT_OUT = {"Personal Year Forecast"}
-
-
+# Services Kamala sells on WhatsApp besides the 2027 report (tools/kamala_services.json; they used to live in the old
+# homepage's var DATA). An empty link means the service is booked in the WhatsApp chat, not on a page.
 def legacy_services():
-    import subprocess
-    js = ("const fs=require('fs'),vm=require('vm');const h=fs.readFileSync(process.argv[1],'utf8');"
-          "const m=h.match(/var DATA\\s*=\\s*(\\[\\s*\\{[\\s\\S]*?\\}\\s*\\])\\s*;/);if(!m){console.log('[]');process.exit(0)}"
-          "const sb={};vm.createContext(sb);vm.runInContext('var parsed='+m[1],sb,{timeout:500});"
-          "console.log(JSON.stringify(sb.parsed))")
-    try:
-        p = subprocess.run(["node", "-e", js, os.path.join(REPO, "index.html")], capture_output=True, text=True, timeout=30)
-        cats = json.loads(p.stdout or "[]")
-    except Exception as e:  # noqa: BLE001
-        print("could not read the old services list:", e)
-        return []
+    with open(os.path.join(REPO, "tools", "kamala_services.json"), encoding="utf-8") as fh:
+        cats = json.load(fh)["categories"]
     keep = ("t", "d", "p", "was", "off", "unit", "give", "link", "features")
-    out = []
-    for c in cats:
-        items = [{k: s[k] for k in keep if k in s} for s in c.get("services", []) if s.get("t") not in LEGACY_LEFT_OUT]
-        if items:
-            out.append({"id": c["id"], "name": c["name"], "services": items})
-    return out
+    return [{"id": c["id"], "name": c["name"], "services": [{k: s[k] for k in keep if k in s} for s in c["services"]]}
+            for c in cats if c.get("services")]
 
 
 def services_for_kamala():

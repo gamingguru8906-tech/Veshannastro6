@@ -1,0 +1,8 @@
+# Files that stay in the repo but are never served on www.veshannastro.co.in.
+# Build scripts and their data (run locally; their output, such as services.json and the pages, is committed).
+tools/
+build-sitemap.py
+*.py
+*.gs
+*.md
+.github/

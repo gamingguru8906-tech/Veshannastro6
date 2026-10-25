@@ -1,0 +1,233 @@
+{
+ "_about": "Services Kamala sells on WhatsApp besides the 2027 report (moved here from the old homepage in October 2026). tools/build_report.py copies these into services.json. An empty link means the service is booked in the WhatsApp chat.",
+ "categories": [
+  {
+   "id": "kundli",
+   "name": "Vedic Kundli",
+   "services": [
+    {
+     "t": "Vedic Kundli Consultation",
+     "d": "A deep 1-to-1 reading of your full birth chart: career, wealth and timing.",
+     "p": "₹2,249",
+     "was": "₹2,999",
+     "off": "25% off",
+     "give": [
+      "video",
+      "rec"
+     ],
+     "link": "https://www.veshannastro.co.in/vedic-kundli-booking.html",
+     "features": [
+      "45-min live video session",
+      "Career, wealth & marriage timing",
+      "Personalised remedies & gemstones"
+     ]
+    },
+    {
+     "t": "Premium Vedic Life Path Report",
+     "d": "Your chart computed precisely, then written up as a complete life-path map.",
+     "p": "₹699",
+     "was": "₹932",
+     "off": "25% off",
+     "give": [
+      "pdf"
+     ],
+     "link": "",
+     "features": [
+      "Built on the Swiss Ephemeris engine",
+      "Dasha timeline & key life phases",
+      "Strengths, cautions & remedies"
+     ]
+    },
+    {
+     "t": "Divorce & Separation Report",
+     "d": "A focused read on marriage strain, timing and the road ahead.",
+     "p": "₹599",
+     "was": "₹799",
+     "off": "25% off",
+     "give": [
+      "pdf"
+     ],
+     "link": "",
+     "features": [
+      "Marriage stress & timing analysis",
+      "Reconciliation vs separation outlook",
+      "Practical remedial guidance"
+     ]
+    },
+    {
+     "t": "One Question Voice Consultation",
+     "d": "Ask one clear question, get a recorded voice answer from your chart.",
+     "p": "₹399",
+     "unit": "/question",
+     "give": [
+      "rec"
+     ],
+     "link": "",
+     "features": [
+      "One focused question",
+      "Chart-based voice answer",
+      "Delivered within 24–48 hrs"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "numerology",
+   "name": "Numerology",
+   "services": [
+    {
+     "t": "Numerology Consultation",
+     "d": "A live reading of your core numbers and where they steer your life.",
+     "p": "₹824",
+     "was": "₹1,099",
+     "off": "25% off",
+     "give": [
+      "video",
+      "rec"
+     ],
+     "link": "https://www.veshannastro.co.in/numerology-booking.html",
+     "features": [
+      "Live reading of your core numbers",
+      "Name, DOB & lucky-number review",
+      "Session recording shared after"
+     ]
+    },
+    {
+     "t": "Name Numerology Report",
+     "d": "How your name's vibration shapes luck, image and the doors that open.",
+     "p": "₹299",
+     "was": "₹999",
+     "off": "70% off",
+     "give": [
+      "pdf"
+     ],
+     "link": "https://rzp.io/rzp/kZFn4FTO",
+     "features": [
+      "Full name-vibration analysis",
+      "Lucky-spelling suggestions",
+      "Quick PDF delivery"
+     ]
+    },
+    {
+     "t": "Mobile Number Analysis",
+     "d": "Whether your phone number works for or against your energy.",
+     "p": "₹299",
+     "was": "₹999",
+     "off": "70% off",
+     "give": [
+      "pdf"
+     ],
+     "link": "https://rzp.io/rzp/kZFn4FTO",
+     "features": [
+      "Number-energy compatibility check",
+      "Favourable-number suggestions",
+      "PDF report"
+     ]
+    },
+    {
+     "t": "Complete Numerology Report",
+     "d": "Your full numeric blueprint: life path, destiny, cycles and remedies.",
+     "p": "₹999",
+     "was": "₹3,996",
+     "off": "75% off",
+     "give": [
+      "pdf",
+      "gift"
+     ],
+     "link": "https://rzp.io/rzp/W8VAKwW5",
+     "features": [
+      "Life-path, destiny & soul numbers",
+      "Personal year & cycles",
+      "Free bonus gift included"
+     ]
+    },
+    {
+     "t": "Baby Name Report",
+     "d": "A shortlist of names tuned to a strong, harmonious birth chart.",
+     "p": "₹299",
+     "was": "₹999",
+     "off": "70% off",
+     "give": [
+      "pdf"
+     ],
+     "link": "https://rzp.io/rzp/kZFn4FTO",
+     "features": [
+      "Numerology-tuned name shortlist",
+      "Aligned to birth details",
+      "PDF report"
+     ]
+    },
+    {
+     "t": "Business Name Report",
+     "d": "Test a brand name's numbers for growth, trust and momentum.",
+     "p": "₹499",
+     "was": "₹1,996",
+     "off": "75% off",
+     "give": [
+      "pdf"
+     ],
+     "link": "https://rzp.io/rzp/eAuvYdJD",
+     "features": [
+      "Brand-name number testing",
+      "Growth & trust alignment",
+      "PDF report"
+     ]
+    },
+    {
+     "t": "Numerology Compatibility",
+     "d": "How two people's numbers blend in love, work or partnership.",
+     "p": "₹299",
+     "was": "₹999",
+     "off": "70% off",
+     "give": [
+      "pdf"
+     ],
+     "link": "https://rzp.io/rzp/GehUWdel",
+     "features": [
+      "Two-person number match",
+      "Love, work or partnership",
+      "PDF report"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "palm",
+   "name": "Palm reading",
+   "services": [
+    {
+     "t": "Palmistry Report",
+     "d": "A written read of your dominant hand's major lines and mounts.",
+     "p": "₹149",
+     "was": "₹199",
+     "off": "25% off",
+     "give": [
+      "pdf"
+     ],
+     "link": "",
+     "features": [
+      "Major lines & mounts read",
+      "Dominant-hand analysis",
+      "PDF report"
+     ]
+    },
+    {
+     "t": "Palmistry Voice Consultation",
+     "d": "Send a clear palm photo, get a recorded voice reading back.",
+     "p": "₹374",
+     "was": "₹499",
+     "off": "25% off",
+     "give": [
+      "rec"
+     ],
+     "link": "",
+     "features": [
+      "Send a clear palm photo",
+      "Recorded voice reading",
+      "Delivered within 24–48 hrs"
+     ]
+    }
+   ]
+  }
+ ]
+}

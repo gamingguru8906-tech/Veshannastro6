@@ -155,3 +155,16 @@
 .place-list li span{color:#9aa5be;font-size:12px}
 .place-list li[aria-selected=true],.place-list li:hover{background:#8fd8ff1f}
 .place-list .place-own{color:var(--cy);font-size:13px}
+
+/* ---------- consultations (booked on WhatsApp) and the Explore tabs ---------- */
+.consult li b{color:#fff;font-weight:600}
+.consult-includes{margin:-6px 0 22px;color:var(--muted);font-size:13.5px;line-height:1.6}
+.consult-actions{margin-top:auto;display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
+.consult-actions .ghost{color:var(--cy)}
+.explore-tabs{display:flex;flex-wrap:wrap;gap:2px 26px;margin:0 0 22px;border-bottom:1px solid #ffffff1f}
+.explore-tabs button{margin:0 0 -1px;padding:12px 0;border:0;border-bottom:2px solid transparent;background:none;color:#aeb8cd;font:inherit;font-size:14.5px;font-weight:600;cursor:pointer}
+.explore-tabs button:hover{color:#fff}
+.explore-tabs button[aria-selected=true]{color:#fff;border-bottom-color:var(--gold)}
+.explore-tabs button:focus-visible{outline:2px solid var(--cy);outline-offset:3px}
+.explore-panel[hidden]{display:none}
+.explore-panel+.explore-panel{margin-top:16px}

@@ -1,39 +1,33 @@
 # ─────────────────────────────────────────────────────────────
-#  Veshannastro — robots.txt
+#  Veshannastro: robots.txt
 #  https://www.veshannastro.co.in/
-#  Last updated: 2026-10-24
+#  Last updated: 2026-10-25
 #
 #  Machine-readable companions:
-#    /llms.txt       — curated index for language models
-#    /llms-full.txt  — complete site text in markdown
-#    /ai.txt         — AI content-usage policy and accuracy conditions
+#    /llms.txt       curated index for language models
+#    /llms-full.txt  complete site text in markdown
+#    /ai.txt         AI content-usage policy and accuracy conditions
 # ─────────────────────────────────────────────────────────────
 
 # ══ Default: full access ══
 User-agent: *
 Allow: /
 
-# Transactional pages carry no useful search or citation content
-Disallow: /checkout.html
-Disallow: /vedic-checkout.html
-Disallow: /numerology-checkout.html
-Disallow: /union-checkout.html
-Disallow: /thank-you.html
-Disallow: /numerology-thank-you.html
+# The old checkout and booking pages are gone and redirect to live pages. They are not blocked,
+# so search engines can follow the redirects and drop the old addresses.
 
-# Internal / operational endpoints
+# Internal endpoints
 Disallow: /admin
-Disallow: /wallet
 Disallow: /api/
 
-# Parameter noise — canonical booking pages remain crawlable
+# Tracking parameters: the clean addresses stay crawlable
 Disallow: /*?*utm_
 Disallow: /*?*fbclid
 Disallow: /*?*gclid
 # Versioned stylesheets and scripts (?v=) stay crawlable: Google needs them to render the pages.
 
 # ─────────────────────────────────────────────────────────────
-#  AI assistants & AI search crawlers — explicitly welcome.
+#  AI assistants & AI search crawlers: explicitly welcome.
 #  These are the agents that read llms.txt and can cite this
 #  site inside ChatGPT, Claude, Perplexity, Gemini, Copilot
 #  and Apple Intelligence answers.

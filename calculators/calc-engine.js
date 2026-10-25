@@ -22,16 +22,16 @@ function nextStep(calcType){
       label: 'See the 2027 report', href: '/2027-numerology-report/#register' };
   }
   if(['name','destiny','compound'].indexOf(calcType) !== -1){
-    return { msg: 'Want your name read against your date of birth? The Name Numerology Report is ₹299, ordered on WhatsApp.',
-      label: 'Order the Name Report', href: waLink('Hi, I would like the Name Numerology Report (₹299).'), ext: true };
+    return { msg: 'Want your name read against your date of birth? Name Frequency Alignment is a 20-minute live numerology consultation, ₹974, booked on WhatsApp.',
+      label: 'Book on WhatsApp', href: waLink('Hi, I would like to book Name Frequency Alignment (20 min, ₹974).'), ext: true };
   }
   if(calcType === 'business'){
-    return { msg: 'Testing a business name? The Business Name Report checks it against your date of birth, with 3 to 5 options. ₹499 on WhatsApp.',
-      label: 'Order the Business Name Report', href: waLink('Hi, I would like the Business Name Report (₹499).'), ext: true };
+    return { msg: 'Testing a business name? Send it to us on WhatsApp with the founder\'s date of birth and we will tell you how it reads.',
+      label: 'Ask on WhatsApp', href: waLink('Hi, I checked a business name on your website and have a question.'), ext: true };
   }
   if(calcType === 'mobile'){
-    return { msg: 'Want this number read against your own date of birth? The Mobile Number Analysis is ₹299 on WhatsApp.',
-      label: 'Order the Mobile Number Analysis', href: waLink('Hi, I would like the Mobile Number Analysis (₹299).'), ext: true };
+    return { msg: 'Want this number read against your own date of birth? The Mobile Number Energy Audit is a 20-minute live numerology consultation, ₹824, booked on WhatsApp.',
+      label: 'Book on WhatsApp', href: waLink('Hi, I would like to book the Mobile Number Energy Audit (20 min, ₹824).'), ext: true };
   }
   return { msg: 'Whether this number matters depends on your own birth number. Ask on WhatsApp and we will tell you honestly.',
     label: 'Ask on WhatsApp', href: waLink('Hi, I checked my ' + (CALC_NAMES[calcType] || 'number') + ' on your website and have a question.'), ext: true };
