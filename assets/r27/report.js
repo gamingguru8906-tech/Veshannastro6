@@ -77,18 +77,6 @@
 
   /* ---------- report choice + price ---------- */
   var report = 'blend';
-  var pricesRevealed = false;
-  function revealPrices() {
-    pricesRevealed = true;
-    $$('.price-reveal').forEach(function (button) {
-      button.classList.add('is-revealed');
-      button.setAttribute('aria-expanded', 'true');
-      button.removeAttribute('aria-label');
-      $('.price-value', button).removeAttribute('aria-hidden');
-    });
-    refresh();
-  }
-  $$('.price-reveal').forEach(function (button) { button.addEventListener('click', revealPrices); });
   var isIndia = function () { return /\|\+91$/.test(cc.value || 'India|+91'); };
   var price = function () {
     var r = C.reports[report];
@@ -99,10 +87,10 @@
     var r = C.reports[report], p = price();
     $$('[data-report]').forEach(function (b) { b.setAttribute('aria-checked', String(b.getAttribute('data-report') === report)); });
     $('#pb-now').textContent = p.now; $('#pb-was').textContent = p.was; $('#pb-line').textContent = r.line;
-    $('#pay-label').textContent = (C.online && (p.cur === 'INR' || C.usdOnline) ? 'Review and pay ' : 'Review and order ') + (pricesRevealed ? p.now : '');
+    $('#pay-label').textContent = (C.online && (p.cur === 'INR' || C.usdOnline) ? 'Review and pay ' : 'Review and order ') + p.now;
     tob.hidden = !r.needs_time;
     $$('select', tob).forEach(function (s) { s.required = r.needs_time; });
-    $('#sp-name').textContent = r.name; $('#sp-price').textContent = (pricesRevealed ? p.now + ', delivered within ' : 'Delivered within ') + C.delivery;
+    $('#sp-name').textContent = r.name; $('#sp-price').textContent = (p.now + ', delivered within ') + C.delivery;
   }
   function choose(key) { report = key; refresh(); saveDraft(); track('select_item', { item_name: C.reports[key].name }); }
   $$('[data-report]').forEach(function (b) { b.addEventListener('click', function () { choose(b.getAttribute('data-report')); }); });
@@ -682,4 +670,49 @@
   }
   size(); addEventListener('resize', size); requestAnimationFrame(draw);
   document.addEventListener('visibilitychange', function () { if (!document.hidden && !reduced) requestAnimationFrame(draw); });
+})();
+
+/* Continuous reader feedback loop; native scrolling remains available. */
+(function () {
+  var rail = document.querySelector('.feedback-grid');
+  var control = document.querySelector('.feedback-pause');
+  if (!rail || !control) return;
+  var motion = matchMedia('(prefers-reduced-motion: reduce)');
+  var originals = Array.from(rail.children), clones = [];
+  var paused = motion.matches, hovered = false, focused = false, touching = false;
+  var inView = false, last = 0, position = 0, cooldown = 0;
+  originals.forEach(function(card) {
+    var copy = card.cloneNode(true); copy.setAttribute('aria-hidden', 'true');
+    copy.querySelectorAll('a').forEach(function(a) { a.tabIndex = -1; });
+    rail.appendChild(copy); clones.push(copy);
+  });
+  function period() { return clones[0].offsetLeft - originals[0].offsetLeft; }
+  function update() {
+    control.hidden = motion.matches; control.textContent = paused ? 'Resume scrolling' : 'Pause scrolling';
+    control.setAttribute('aria-pressed', String(paused));
+    clones.forEach(function(c) { c.hidden = motion.matches; });
+  }
+  control.addEventListener('click', function() { paused = !paused; update(); });
+  rail.addEventListener('mouseenter', function() { hovered = true; });
+  rail.addEventListener('mouseleave', function() { hovered = false; });
+  rail.addEventListener('focusin', function() { focused = true; });
+  rail.addEventListener('focusout', function(e) { focused = rail.contains(e.relatedTarget); });
+  rail.addEventListener('pointerdown', function() { touching = true; });
+  window.addEventListener('pointerup', function() { if(touching) cooldown = performance.now() + 3000; touching = false; });
+  rail.addEventListener('pointercancel', function() { touching = false; cooldown = performance.now() + 3000; });
+  rail.addEventListener('wheel', function() { cooldown = performance.now() + 3000; }, {passive:true});
+  if ('IntersectionObserver' in window) new IntersectionObserver(function(entries) { inView = entries[0].isIntersecting; }).observe(rail);
+  else inView = true;
+  motion.addEventListener('change', function() { paused = motion.matches; update(); });
+  function frame(now) {
+    var dt = Math.min(now - last, 50); last = now;
+    if (!paused && !motion.matches && !hovered && !focused && !touching && inView && !document.hidden && now > cooldown) {
+      var cycle = period();
+      position += dt * 0.026;
+      if (cycle > 0 && position >= cycle) position -= cycle;
+      rail.scrollLeft = position;
+    } else position = rail.scrollLeft;
+    requestAnimationFrame(frame);
+  }
+  update(); requestAnimationFrame(frame);
 })();
