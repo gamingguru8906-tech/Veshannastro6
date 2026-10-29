@@ -417,7 +417,7 @@ def page():
       <div class="hero-tags" aria-hidden="true"><span style="--x:8%;--y:34vh;--r:-7deg;--t:0s">Mulank</span><span style="--x:83%;--y:27vh;--r:6deg;--t:-2.6s">Bhagyank</span><span style="--x:10%;--y:70vh;--r:5deg;--t:-4.2s">Lo Shu Grid</span><span style="--x:81%;--y:64vh;--r:-5deg;--t:-1.3s">Personal Year</span></div>
       <h1 id="hero-title" class="stagger"><span class="sw" style="--i:0">2027</span> <span class="sw" style="--i:1">Numerology</span> <span class="sw" style="--i:2">Report</span> <br><span class="sw" style="--i:3">Personal</span> <span class="sw" style="--i:4">Year</span> <span class="sw" style="--i:5">Forecast</span> <small class="sw" style="--i:6">by Shashank Agrawal</small></h1>
       <div class="form-card">
-        <div class="form-card-head"><span class="report-mark">{ICON_STAR}Phase one, {OFFER['limit']} reports</span><h2>Get your 2027 Report</h2>
+        <div class="form-card-head"><div class="report-capacity"><span class="capacity-phase">Phase one · Limited release</span><strong><span class="capacity-number">{OFFER['limit']}</span> reports only</strong><span class="capacity-deadline">Bookings close {OFFER['ends_text']}</span></div><h2>Get your 2027 Report</h2>
           <p class="form-lead">What 2027 holds for your health, money, work and relationships, and the remedies for whatever needs care. Prepared for you alone.</p>
           <p class="form-note">Your details are saved as you type, so we can help you finish your order on WhatsApp. <a href="/privacy-policy.html" target="_blank">Privacy</a></p></div>
         <form id="registration" novalidate>
