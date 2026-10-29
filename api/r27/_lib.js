@@ -71,7 +71,7 @@ function readOrder(input) {
   const errors = {};
   const key = clean(input.report, 20);
   const report = CATALOG.reports[key];
-  if (!report) errors.report = 'Choose Astro-Numero Blend or Classic.';
+  if (!report) errors.report = 'Choose Astro-Numero Blend or Classics.';
 
   const name = clean(input.name, 80);
   if (!/^[\p{L}\p{M}][\p{L}\p{M} .'-]{1,79}$/u.test(name)) errors.name = 'Please enter your full name.';

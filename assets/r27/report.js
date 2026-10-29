@@ -116,7 +116,7 @@
   form.addEventListener('change', function (e) { var f = e.target.closest('.field,.consent'); if (f) f.classList.remove('invalid'); saveDraftSoon(); });
 
   /* ---------- the order form is kept on this device as it is typed ----------
-     Switching between Astro-Numero Blend and Classic keeps every detail (they share one form), and a reload,
+     Switching between Astro-Numero Blend and Classics keeps every detail (they share one form), and a reload,
      a trip to WhatsApp or an app switch on a phone brings the details back. Cleared after a paid order. */
   var DRAFT_KEY = 'r27-order-draft', DRAFT_FIELDS = ['name', 'dob-day', 'dob-month', 'dob-year', 'tob-hour', 'tob-min', 'tob-ampm', 'pob', 'email', 'mobile', 'referral'];
   var draftTimer = null;

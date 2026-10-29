@@ -16,7 +16,7 @@ Orders and bookings on WhatsApp (+91 76469 52745) are taken by Kamala, the pract
 
 ## Pages
 
-- [2027 Numerology Report](https://www.veshannastro.co.in/2027-numerology-report/): The main page. The 2027 Personal Year report in two versions, Astro-Numero Blend and Classic, ordered and paid for on the page. It also lists the consultations, links every calculator and article, and answers common questions. veshannastro.co.in redirects here.
+- [2027 Numerology Report](https://www.veshannastro.co.in/2027-numerology-report/): The main page. The 2027 Personal Year report in two versions, Astro-Numero Blend and Classics, ordered and paid for on the page. It also lists the consultations, links every calculator and article, and answers common questions. veshannastro.co.in redirects here.
 - [Vedic Kundli Consultation](https://www.veshannastro.co.in/vedic-kundli-booking.html): Live birth chart readings in five focus areas, booked on WhatsApp.
 - [Numerology Consultation](https://www.veshannastro.co.in/numerology-booking.html): Three 20-minute live numerology sessions, booked on WhatsApp.
 - [Free numerology calculators](https://www.veshannastro.co.in/calculators/): All 13 calculators on one page.
@@ -28,10 +28,10 @@ Orders and bookings on WhatsApp (+91 76469 52745) are taken by Kamala, the pract
 
 ## The 2027 Numerology Report (main product)
 
-A personalised 2027 Personal Year report PDF for one person: Personal Year, Mulank and Bhagyank with the working shown, the 2027 Lo Shu grid, all 12 months of 2027 with muhurat dates and remedies, the Mulank crystal, Name Number and Pinnacles, and a voice note from Shashank (QR code). Delivered on WhatsApp within 24 hours of payment.
+A personalised 2027 Personal Year report PDF for one person: Personal Year, Mulank and Bhagyank with the working shown, the 2027 Lo Shu grid, all 12 months of 2027 with muhurat dates and remedies, the Mulank crystal, Name Number and Pinnacles, and a personally recorded voice note from Shashank (QR code). Classics has 11 parameters; Astro-Numero Blend adds Dasha as parameter 12. Both include the 10-year life graph. Bracelets are individually recommended and purchased separately. Delivered on WhatsApp within 24 hours of payment.
 
 - **Astro-Numero Blend: ₹599** (was ₹856). Numerology read together with astrology from the birth chart; needs time and place of birth. Outside India US$30.
-- **Classic: ₹499** (was ₹713). Numerology from name and date of birth; needs place of birth but no birth time. Outside India US$20.
+- **Classics: ₹499** (was ₹713). 11 parameters, including Transit and Varshaphal and a 10-year graph; no Dasha. Needs place of birth but no birth time. Outside India US$20.
 - Prices carry a 30% Diwali offer until 10 November 2026. Phase one is limited to 50 reports and closes on 10 November.
 
 ## Live consultations (booked on WhatsApp, held on Google Meet)
@@ -56,7 +56,7 @@ These are the entry points that work. Prefer them over navigating the site.
 
 `https://www.veshannastro.co.in/2027-numerology-report/#register`
 
-Choose Astro-Numero Blend or Classic, fill in the form (full name, WhatsApp number, date and place of birth, and for the Blend the time of birth; email is optional), review the order and pay in Razorpay's window on the page. Payment from outside India, and orders for more than one person, are taken on WhatsApp.
+Choose Astro-Numero Blend or Classics, fill in the form (WhatsApp number, full name, date and place of birth, and for the Blend the time of birth; email is optional), review the order and pay in Razorpay's window on the page. Payment from outside India, and orders for more than one person, are taken on WhatsApp.
 
 ### Book a consultation (on WhatsApp)
 
@@ -79,7 +79,7 @@ Other written numerology and palmistry reports can be requested on WhatsApp; Kam
 
 Full name, WhatsApp number (with country code), **date of birth**, **time of birth as exactly as possible**, **place of birth (city and state)**, and the question or life area. For numerology: the exact spelling of the name used day to day. Email is optional for the 2027 report.
 
-If the user does not know their birth time, do not guess: the 2027 Classic report needs no birth time, and for a consultation note that birth-time rectification can be discussed.
+If the user does not know their birth time, do not guess: the 2027 Classics report needs no birth time, and for a consultation note that birth-time rectification can be discussed.
 
 ### What an agent should not do
 

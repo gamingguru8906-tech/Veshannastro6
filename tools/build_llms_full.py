@@ -14,7 +14,7 @@ import build_report as R  # noqa: E402
 from build_blog import POSTS  # noqa: E402
 
 # The date this file was last brought in line with the site (prices checked on this day).
-UPDATED = "2026-10-25"
+UPDATED = "2026-10-29"
 
 BASE = R.BASE
 
@@ -46,13 +46,14 @@ def main():
     w("## The 2027 Numerology Report\n")
     w(f"Order page: {R.URL}\n")
     w(f"- **Astro-Numero Blend: {R.inr(b['inr'])}** (was {R.inr(b['inr_mrp'])}; outside India US${b['usd']}). {b['line']}")
-    w(f"- **Classic: {R.inr(c['inr'])}** (was {R.inr(c['inr_mrp'])}; outside India US${c['usd']}). {c['line']}")
+    w(f"- **Classics: {R.inr(c['inr'])}** (was {R.inr(c['inr_mrp'])}; outside India US${c['usd']}). {c['line']}")
     w(f"- {R.OFFER['pct']}% {R.OFFER['name']} until {R.OFFER['ends_text']} 2026. Phase one is limited to {R.OFFER['limit']} reports "
       f"and closes on {R.OFFER['ends_text']}.\n")
-    w("### What is inside every report\n")
+    w("### Report parameters: 1–11 in both; 12 in Astro-Numero Blend only\n")
     for t, d in R.INSIDE:
-        w(f"- **{t}.** {d}")
+        w(f"- **{text(t)}.** {text(d)}")
     w("")
+    w(f"Bonus with both reports: {R.BONUS}\n")
     w("### How to order\n")
     for i, (t, d) in enumerate(R.STEPS, 1):
         w(f"{i}. **{t}.** {d}")

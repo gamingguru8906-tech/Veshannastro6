@@ -28,9 +28,9 @@ ADDRESS = {"street": "Currency Tower, G.E. Road, VIP Road", "city": "Raipur", "r
 # Prices after the 30% Diwali offer, and the original price shown struck through.
 REPORTS = {
     "blend": {"name": "Astro-Numero Blend", "inr": 599, "inr_mrp": 856, "usd": 30, "usd_mrp": 43, "needs_time": True,
-              "line": "Numerology and astrology read together. Needs your time of birth."},
-    "classic": {"name": "Classic", "inr": 499, "inr_mrp": 713, "usd": 20, "usd_mrp": 29, "needs_time": False,
-                "line": "Numerology from your name and date of birth. No birth time needed."},
+              "line": "12 parameters, including Dasha. Needs your time of birth."},
+    "classic": {"name": "Classics", "inr": 499, "inr_mrp": 713, "usd": 20, "usd_mrp": 29, "needs_time": False,
+                "line": "11 parameters, with a 10-year graph. No Dasha or birth time needed."},
 }
 OFFER = {"pct": 30, "name": "Diwali offer", "starts": "2026-10-24", "ends": "2026-11-10", "ends_text": "10 November", "limit": 50}
 DELIVERY = "24 hours"
@@ -84,24 +84,29 @@ ICON_CLOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-
 ICON_STAR = '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 1 18.9 13.1 31 16 18.9 18.9 16 31 13.1 18.9 1 16 13.1 13.1Z" fill="#cfe2ff"/></svg>'
 
 INSIDE = [
-    ("Your Personal Year and zodiac reading", "A chapter written for your exact Personal Year and sun sign: your home, work, money, relationships and health in 2027, with a personal note from Shashank."),
-    ("Your numbers, worked out", "Your Personal Year, Mulank and Bhagyank, with every step of the calculation shown so you can see where each number comes from."),
-    ("All 12 months, one page each", "Which months are favourable and which ask for care, what each one means for you, the full-moon date and a simple remedy to follow."),
-    ("Muhurat, lucky and power dates", "Auspicious dates for every month from the Hindu Panchang, plus the dates that line up with your birth weekday and Personal Month."),
-    ("Your 2027 Lo Shu grid", "Your date of birth plotted on the Lo Shu grid with your destiny number added and your 2027 Personal Year marked, so you can see where this year's energy sits in your chart."),
-    ("Your crystal for 2027", "The bracelet crystal suited to your Mulank this year, and why it was chosen for you."),
-    ("Name Number and Pinnacles", "How the world experiences your name, whether it is aligned with your date of birth, and the life chapter you are living through right now."),
-    ("A voice note from Shashank", "Scan the QR code in your report to hear 30 to 60 seconds from Shashank on your year: its strengths, its cautions, what to do and what to avoid."),
+    ("Your Personal Year number", "Your 2027 Personal Year, Mulank and Bhagyank, with the calculation steps shown. Understand the themes of your annual forecast through your own date of birth."),
+    ("Your Lo Shu grid", 'Your birth-date numerology chart, including missing and repeated numbers and your 2027 Personal Year. Explore the <a href="/calculators/lo-shu-grid.html">Lo Shu grid calculator</a> for a first look.'),
+    ("Elemental balance", "An individual element-balance assessment derived from the Lo Shu grid. The report explains the patterns in your chart and the areas that need attention."),
+    ("Your zodiac reading", "Your zodiac sign alongside your Personal Year: a personalised perspective on work, relationships, money and wellbeing in 2027."),
+    ("Pinnacles and Name Number", "Your numerology Pinnacles describe life phases, while your Name Number explores the name you use. See how these patterns relate to your current chapter."),
+    ("Your 10-year life graph", "A longer view of your numerology cycles alongside the 2027 forecast. The ten-year graph is included in both Classics and Astro-Numero Blend."),
+    ("Yantra, mantra and bracelet guidance", "Recommendations chosen through your individual assessment, including a bracelet crystal and why it suits you. Physical bracelets are purchased separately; they are not included in the report price."),
+    ("Golden remedies", 'Personalised numerology remedies for the patterns in your report, with practical steps for the year. Read the <a href="/blog/mulank-predictions-2027.html">2027 Mulank predictions</a> for broader birth-number themes.'),
+    ("Month-by-month action plan", "All twelve months of 2027, with Personal Month themes, favourable periods, dates that ask for care, muhurat, lucky dates and remedies to guide your planning."),
+    ("Space energy shift", "Personalised guidance on your home and work environment, bringing Vastu and space-energy considerations into your annual action plan."),
+    ("Transit and Varshaphal", "Annual astrology guidance through transits and Varshaphal, alongside the other report parameters. This is included in both Classics and Astro-Numero Blend."),
+    ("Dasha · Astro-Numero Blend only", "The twelfth parameter adds Dasha analysis to your annual forecast. Astro-Numero Blend includes all eleven Classics parameters plus this additional astrology layer and requires your birth time."),
 ]
+BONUS = "A voice note personally recorded for you by Shashank, accessed through the QR code in your PDF. Included with both reports, in addition to the numbered parameters."
 
 PLAN_ITEMS = {
-    "blend": ["Everything in Classic", "Read together with astrology from your birth chart", "Needs your date, time and place of birth"],
-    "classic": ["Your Personal Year, Mulank, Bhagyank and Lo Shu grid", "All 12 months of 2027 with muhurat dates and remedies", "Needs your name, date and place of birth"],
+    "blend": ["All 12 parameters: everything in Classics, plus Dasha", "10-year life graph and all twelve months of 2027", "Needs your date, time and place of birth"],
+    "classic": ["11 parameters, from Personal Year to Transit and Varshaphal", "10-year life graph and all twelve months of 2027", "No Dasha analysis; no birth time needed"],
 }
-PLAN_COMMON = ["Your crystal, Name Number and Pinnacles", "Voice note from Shashank (QR code)", f"PDF on WhatsApp within {DELIVERY}"]
+PLAN_COMMON = ["Individual remedies and bracelet recommendation (bracelet sold separately)", "Personally recorded voice note from Shashank (QR code)", f"PDF on WhatsApp within {DELIVERY}"]
 
 STEPS = [
-    ("Choose your report", "Pick Astro-Numero Blend or Classic and add your birth details. One report is made for one person."),
+    ("Choose your report", "Pick Astro-Numero Blend or Classics and add your birth details. One report is made for one person."),
     ("Pay the energy exchange", "Pay online by UPI, card or netbanking, or message us on WhatsApp if you would like to talk first."
      if ONLINE_PAY else "Send your details to us on WhatsApp. We confirm them and share the payment link in the same chat."),
     ("Receive your report", f"Your personalised PDF arrives on WhatsApp within {DELIVERY}, with the QR code to your voice note inside."),
@@ -194,19 +199,27 @@ def faqs():
            if ONLINE_PAY else "Send your details from this page to WhatsApp. We confirm them and send a secure payment link (UPI, card or netbanking) in the same chat.")
     return [
         ("What is the 2027 numerology report price in India?",
-         f"The Astro-Numero Blend is {inr(b['inr'])} (was {inr(b['inr_mrp'])}) and the Classic is {inr(c['inr'])} (was {inr(c['inr_mrp'])}), with the {OFFER['pct']}% {OFFER['name']} until {OFFER['ends_text']}. Outside India they are US${b['usd']} and US${c['usd']}."),
-        ("What is the difference between Astro-Numero Blend and Classic?",
-         "Classic is a numerology report built from your name and date of birth. Astro-Numero Blend reads your numerology together with astrology from your birth chart, so it also needs your time of birth."),
+         f"The Astro-Numero Blend is {inr(b['inr'])} (was {inr(b['inr_mrp'])}) and the Classics is {inr(c['inr'])} (was {inr(c['inr_mrp'])}), with the {OFFER['pct']}% {OFFER['name']} until {OFFER['ends_text']}. Outside India they are US${b['usd']} and US${c['usd']}."),
+        ("What is the difference between Astro-Numero Blend and Classics?",
+         "Classics includes 11 parameters. Astro-Numero Blend includes the same 11 plus Dasha, making 12. Both include the 10-year life graph, Transit and Varshaphal, all twelve months of 2027 and a personally recorded voice note. The Blend also needs your time of birth."),
         ("Is this a generic yearly horoscope?",
          "No. Your Personal Year, Mulank, Lo Shu grid and Name Number come from your own date of birth and name, and Chapter 1 is written for your exact Personal Year and sun sign combination. Two people rarely get the same report."),
         ("I don't know my time of birth. Can I still get it?",
-         "Yes. Choose Classic. It is built from your date of birth and your name, so your birth time is not needed. The Astro-Numero Blend needs your time of birth."),
+         "Yes. Choose Classics. It is built from your date of birth and your name, so your birth time is not needed. The Astro-Numero Blend needs your time of birth."),
         ("Is the 2027 numerology report a PDF, and when will I receive it?",
          f"Yes. Your 2027 numerology report PDF arrives on your WhatsApp within {DELIVERY} of payment. Inside is a QR code that opens a 30 to 60 second voice note from Shashank about your year."),
         ("What is a 2027 astro numero report?",
          "It is a report that reads numerology and astrology together. Our 2027 astro numero report is the Astro-Numero Blend: your numbers read alongside your birth chart, which is why it needs your time of birth."),
         ("Does it include a 2027 Lo Shu grid report?",
          "Yes. Every report has a 2027 Lo Shu grid report page: your date of birth plotted on the grid with your destiny number added and your 2027 Personal Year marked."),
+        ("Are bracelets included in the price?",
+         "Your individual assessment includes yantra, mantra and bracelet recommendations. A physical bracelet is purchased separately. Ask us on WhatsApp about your recommendation before choosing one."),
+        ("How does the elemental assessment relate to the Lo Shu grid?",
+         "Our elemental assessment is derived from the Lo Shu grid and interpreted for your individual chart. It is explained within your report; different numerology and five-element traditions should not be assumed to use an identical mapping."),
+        ("Is this a lifetime report or an annual forecast?",
+         "It is primarily your 2027 annual forecast. Both versions also include a 10-year life graph and Pinnacles for longer-term context, plus a month-by-month action plan for 2027."),
+        ("Is the voice note personally recorded?",
+         "Yes. Shashank personally records your voice note for you. It is a bonus with both reports, accessed through the QR code in your PDF."),
         ("How do I pay?", pay),
         ("What if my report does not arrive?",
          f"If your report has not reached you within {DELIVERY} of payment, message us on WhatsApp with your payment reference. We send it straight away, or refund you in full if we cannot deliver it. The <a href=\"/refund-policy.html\">refund and delivery policy</a> has the details."),
@@ -217,7 +230,7 @@ def faqs():
         ("Is there a free 2027 numerology report?",
          "The Personal Year calculator on this page is free and tells you the number your year is read through. The full report, with every month, your dates, Lo Shu grid and voice note, is paid. You can also read free <a href=\"/blog/2027-numerology-predictions.html\">2027 numerology predictions</a> on our blog."),
         ("Does it replace a full birth chart consultation?",
-         "No. Your Mahadasha, Antardasha and Saturn cycles are read live in a separate <a href=\"/vedic-kundli-booking.html\">Vedic kundli consultation</a> with Shashank, booked on WhatsApp."),
+         "No. Dasha analysis is included in Astro-Numero Blend, while Classics has the other 11 parameters. Both are annual 2027 reports. For a live discussion of your birth chart, book a separate <a href=\"/vedic-kundli-booking.html\">Vedic kundli consultation</a> with Shashank, booked on WhatsApp."),
         ("Do you offer live astrology and numerology consultations?",
          "Yes. Shashank reads Vedic kundli live in 40 to 45 minutes for ₹2,249 and numerology in 20 minutes from ₹824, both on Google Meet. Every consultation is booked on WhatsApp. See the <a href=\"/vedic-kundli-booking.html\">Vedic kundli consultation</a> and the <a href=\"/numerology-booking.html\">numerology consultation</a>."),
         ("Are there free numerology calculators?",
@@ -422,7 +435,7 @@ def page():
           <p class="form-note">Your details are saved as you type, so we can help you finish your order on WhatsApp. <a href="/privacy-policy.html" target="_blank">Privacy</a></p></div>
         <form id="registration" novalidate>
           <div class="subject-toggle report-toggle" role="radiogroup" aria-label="Choose your report">
-            <button type="button" role="radio" aria-checked="true" data-report="blend">Astro-Numero Blend</button><button type="button" role="radio" aria-checked="false" data-report="classic">Classic</button></div>
+            <button type="button" role="radio" aria-checked="true" data-report="blend">Astro-Numero Blend</button><button type="button" role="radio" aria-checked="false" data-report="classic">Classics</button></div>
           <div class="price-box" aria-live="polite"><span class="pb-label">Energy exchange</span>{reveal_price('<b id="pb-now">' + inr(b['inr']) + '</b>', "pb-now")}
             <span class="pb-was">{reveal_price('<s id="pb-was">' + inr(b['inr_mrp']) + '</s>')} <span class="offer-tag">{OFFER['name']}, {OFFER['pct']}% off</span></span>
             <p class="pb-desc"><span id="pb-line">{b['line']}</span> <span class="phase-note">Phase one: {OFFER['limit']} reports, closes {OFFER['ends_text']}.</span></p></div>
@@ -438,7 +451,7 @@ def page():
               <select id="tob-hour" name="tob_hour" aria-label="Hour" required><option value="">Hour</option></select>
               <select id="tob-min" name="tob_min" aria-label="Minute" required><option value="">Min</option></select>
               <select id="tob-ampm" name="tob_ampm" aria-label="AM or PM" required><option value="">AM/PM</option><option>AM</option><option>PM</option></select></div>
-              <span class="field-hint">Not sure of your birth time? Choose Classic.</span><span class="field-error">Enter your time of birth, or switch to Classic.</span></div>
+              <span class="field-hint">Not sure of your birth time? Choose Classics.</span><span class="field-error">Enter your time of birth, or switch to Classics.</span></div>
             <div class="field field-wide"><label for="pob">Place of birth <i>*</i></label><div class="place-box"><input id="pob" name="pob" type="text" autocomplete="off" placeholder="Start typing your birth city" required role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="pob-list"><ul id="pob-list" class="place-list" role="listbox" aria-label="Matching places" hidden></ul></div><span class="field-error">Enter your place of birth.</span></div>
           </div>
           <div class="form-submit">
@@ -467,9 +480,10 @@ def page():
 
     <section class="report-section" id="inside" aria-labelledby="inside-title"><div class="wrap">
       <header class="section-heading"><div class="kicker">What's inside</div><h2 id="inside-title">Your whole year, <em>mapped month by month.</em></h2>
-        <p class="section-lead">A personalised 2027 numerology report, complete and detailed. Not a horoscope written for millions: it is <mark class="hl">built from your own date of birth and name</mark>, from VESHANNASTRO, owned by Shashank Agrawal.</p></header>
+        <p class="section-lead">A personalised 2027 annual numerology report: 11 parameters in Classics, or all 12 in Astro-Numero Blend. The twelfth parameter, Dasha, is exclusive to the Blend. Not a horoscope written for millions: it is <mark class="hl">built from your own date of birth and name</mark>, from VESHANNASTRO, owned by Shashank Agrawal.</p></header>
       <div class="covers-fan" aria-label="2027 report covers by Mulank">{covers}</div>
       <p class="covers-note">Your cover is chosen by your Mulank, the number of your birth day. Mulank 3, 5, 6 and 9 receive the same cover.</p>
+      <p class="covers-note"><strong>Bonus with both reports:</strong> {BONUS}</p>
       <ol class="inside-list" style="margin-top:48px">{inside}</ol>
       <div class="ring-controls" hidden><button type="button" class="ring-prev" aria-label="Previous chapter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg></button><span class="ring-count" aria-live="polite">01 / {len(INSIDE):02d}</span><button type="button" class="ring-next" aria-label="Next chapter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button></div>
     </div></section>
@@ -477,7 +491,7 @@ def page():
     <div class="marquee" aria-hidden="true"><div class="marquee-track"><div class="marquee-row"><span class="mq-item">Personal Year</span><i class="mq-dot"></i><span class="mq-item mq-outline" data-text="Mulank">Mulank</span><i class="mq-dot"></i><span class="mq-item">Bhagyank</span><i class="mq-dot"></i><span class="mq-item mq-outline" data-text="Lo Shu Grid">Lo Shu Grid</span><i class="mq-dot"></i><span class="mq-item">Muhurat Dates</span><i class="mq-dot"></i><span class="mq-item mq-outline" data-text="Name Number">Name Number</span><i class="mq-dot"></i><span class="mq-item">Pinnacles</span><i class="mq-dot"></i><span class="mq-item mq-outline" data-text="12 Months of 2027">12 Months of 2027</span><i class="mq-dot"></i><span class="mq-item">Remedies</span><i class="mq-dot"></i></div><div class="marquee-row"><span class="mq-item">Personal Year</span><i class="mq-dot"></i><span class="mq-item mq-outline" data-text="Mulank">Mulank</span><i class="mq-dot"></i><span class="mq-item">Bhagyank</span><i class="mq-dot"></i><span class="mq-item mq-outline" data-text="Lo Shu Grid">Lo Shu Grid</span><i class="mq-dot"></i><span class="mq-item">Muhurat Dates</span><i class="mq-dot"></i><span class="mq-item mq-outline" data-text="Name Number">Name Number</span><i class="mq-dot"></i><span class="mq-item">Pinnacles</span><i class="mq-dot"></i><span class="mq-item mq-outline" data-text="12 Months of 2027">12 Months of 2027</span><i class="mq-dot"></i><span class="mq-item">Remedies</span><i class="mq-dot"></i></div></div></div>
 
     <section class="report-section" id="finder" aria-labelledby="finder-title"><div class="wrap">
-      <header class="section-heading"><div class="kicker">Try it</div><h2 id="finder-title">Find your <em>Personal Year</em> for 2027.</h2>
+      <header class="section-heading"><div class="kicker">Personal Year Number Calculator</div><h2 id="finder-title">Find your <em>Personal Year</em> for 2027.</h2>
         <p class="section-lead">Every year carries a number that is personal to you, worked out from your birth day, birth month and the year itself. It sets the theme your whole report is read against. This 2027 personal year calculator also shows the cover your report is printed on.</p></header>
       <div class="year-finder">
         <form class="finder-form" autocomplete="off" aria-label="Find your Personal Year">
@@ -497,7 +511,7 @@ def page():
 
     <section class="report-section" id="pricing" aria-labelledby="pricing-title"><div class="wrap">
       <header class="section-heading"><div class="kicker">{OFFER['name']}, {OFFER['pct']}% off</div><h2 id="pricing-title">2027 numerology report <em>price in India.</em></h2>
-        <p class="section-lead">Two reports. The Astro-Numero Blend is our 2027 astro numero report, <mark class="hl">numerology and astrology read together</mark>; Classic reads your numbers alone. The amount is an energy exchange for a reading prepared for you alone.</p></header>
+        <p class="section-lead">Two reports, prepared for your year. <mark class="hl">Classics has 11 parameters; Astro-Numero Blend has 12.</mark> The Blend adds Dasha. Both include the 10-year graph and a personally recorded voice note. The amount is an energy exchange for a reading prepared for you alone.</p></header>
       <div class="countdown" data-ends="{CLOSES_AT}" hidden><p class="cd-title">The {OFFER['name']} ends in</p>
         <div class="cd-tiles" role="timer" aria-label="Time left in the {OFFER['name']}">{cd_tiles}</div>
         <p class="cd-note">Phase one closes on {OFFER['ends_text']} at 11:59 PM IST, or sooner if all {OFFER['limit']} reports are taken.</p></div>
@@ -617,9 +631,10 @@ def services_for_kamala():
         "categories": [{"id": "r27", "name": "2027 Personal Year Report", "services": r27}] + legacy_services(),
         "offer": (f"2027 reports: {OFFER['pct']}% {OFFER['name']} until {OFFER['ends_text']}. Phase one is limited to "
                   f"{OFFER['limit']} reports and closes on {OFFER['ends_text']}. One report per person; for two or more people "
-                  f"the order is taken on WhatsApp. Outside India: Astro-Numero Blend US${REPORTS['blend']['usd']}, Classic "
+                  f"the order is taken on WhatsApp. Outside India: Astro-Numero Blend US${REPORTS['blend']['usd']}, Classics "
                   f"US${REPORTS['classic']['usd']}. Order page: {URL}"),
-        "inside": [f"{t}: {d}" for t, d in INSIDE],
+        "inside": [re.sub(r"<[^>]+>", "", f"{t}: {d}") for t, d in INSIDE],
+        "bonus": BONUS,
         "faq": [{"q": text(q), "a": text(a)} for q, a in faqs()],
         "blog": [{"title": p["h1"], "about": p["card"], "url": f"{BASE}/blog/{p['slug']}.html"} for p in POSTS],
     }
