@@ -2,16 +2,16 @@
   "reports": {
     "blend": {
       "name": "Astro-Numero Blend",
-      "inr": 1263,
-      "inr_mrp": 1804,
+      "inr": 599,
+      "inr_mrp": 856,
       "usd": 30,
       "usd_mrp": 43,
       "needs_time": true
     },
     "classic": {
       "name": "Classic",
-      "inr": 963,
-      "inr_mrp": 1376,
+      "inr": 499,
+      "inr_mrp": 713,
       "usd": 20,
       "usd_mrp": 29,
       "needs_time": false

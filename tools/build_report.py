@@ -27,9 +27,9 @@ ADDRESS = {"street": "Currency Tower, G.E. Road, VIP Road", "city": "Raipur", "r
 
 # Prices after the 30% Diwali offer, and the original price shown struck through.
 REPORTS = {
-    "blend": {"name": "Astro-Numero Blend", "inr": 1263, "inr_mrp": 1804, "usd": 30, "usd_mrp": 43, "needs_time": True,
+    "blend": {"name": "Astro-Numero Blend", "inr": 599, "inr_mrp": 856, "usd": 30, "usd_mrp": 43, "needs_time": True,
               "line": "Numerology and astrology read together. Needs your time of birth."},
-    "classic": {"name": "Classic", "inr": 963, "inr_mrp": 1376, "usd": 20, "usd_mrp": 29, "needs_time": False,
+    "classic": {"name": "Classic", "inr": 499, "inr_mrp": 713, "usd": 20, "usd_mrp": 29, "needs_time": False,
                 "line": "Numerology from your name and date of birth. No birth time needed."},
 }
 OFFER = {"pct": 30, "name": "Diwali offer", "starts": "2026-10-24", "ends": "2026-11-10", "ends_text": "10 November", "limit": 200}

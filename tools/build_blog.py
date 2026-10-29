@@ -47,7 +47,7 @@ def toc(items):
 
 def cta(question):
     return f"""<div class="cta-box"><h2>Want your whole 2027 mapped?</h2>
-<p>The 2027 Personal Year Report reads all twelve of your months, with muhurat and lucky dates, your Lo Shu grid and a voice note from Shashank. Astro-Numero Blend ₹1,263 or Classic ₹963 (Diwali offer, 30% off). Delivered on WhatsApp within 24 hours.</p>
+<p>The 2027 Personal Year Report reads all twelve of your months, with muhurat and lucky dates, your Lo Shu grid and a voice note from Shashank. Astro-Numero Blend ₹599 or Classic ₹499 (Diwali offer, 30% off). Delivered on WhatsApp within 24 hours.</p>
 <div class="btn-row"><a class="btn btn-gold" href="/2027-numerology-report/#register">Get your 2027 report</a>{wa_btn("Ask a question", question, "btn btn-line")}</div></div>"""
 
 

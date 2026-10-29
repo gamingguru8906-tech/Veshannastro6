@@ -19,17 +19,17 @@ var REPORT_2027 = { label: 'See the 2027 report', href: '/2027-numerology-report
 function waLink(text){ return 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(text); }
 function nextStep(calcType){
   if(['loshu','lifepath','lucky','colour','planet'].indexOf(calcType) !== -1){
-    return { msg: 'This is one number. The 2027 Personal Year Report reads it with your Mulank, Lo Shu grid and all twelve months of 2027, with remedies. From ₹963.' };
+    return { msg: 'This is one number. The 2027 Personal Year Report reads it with your Mulank, Lo Shu grid and all twelve months of 2027, with remedies. From ₹499.' };
   }
   if(['name','destiny','compound'].indexOf(calcType) !== -1){
-    return { msg: 'The 2027 Personal Year Report reads your numbers together for every month of 2027, with remedies. From ₹963. For your name itself, Name Frequency Alignment is a 20-minute live consultation, ₹974, on WhatsApp.',
+    return { msg: 'The 2027 Personal Year Report reads your numbers together for every month of 2027, with remedies. From ₹499. For your name itself, Name Frequency Alignment is a 20-minute live consultation, ₹974, on WhatsApp.',
       alt: { label: 'Book Name Frequency Alignment', href: waLink('Hi, I would like to book Name Frequency Alignment (20 min, ₹974).') } };
   }
   if(calcType === 'mobile'){
-    return { msg: 'The 2027 Personal Year Report reads your own numbers for every month of 2027, with remedies. From ₹963. For this phone number itself, the Mobile Number Energy Audit is a 20-minute live consultation, ₹824, on WhatsApp.',
+    return { msg: 'The 2027 Personal Year Report reads your own numbers for every month of 2027, with remedies. From ₹499. For this phone number itself, the Mobile Number Energy Audit is a 20-minute live consultation, ₹824, on WhatsApp.',
       alt: { label: 'Book the Mobile Number Audit', href: waLink('Hi, I would like to book the Mobile Number Energy Audit (20 min, ₹824).') } };
   }
-  return { msg: 'Whether this number suits you depends on your own birth numbers. The 2027 Personal Year Report reads them for every month of 2027, with remedies. From ₹963.' };
+  return { msg: 'Whether this number suits you depends on your own birth numbers. The 2027 Personal Year Report reads them for every month of 2027, with remedies. From ₹499.' };
 }
 function resultSummary(resEl, calcType){
   var num = resEl.querySelector('.calc-result-num'), label = resEl.querySelector('.calc-result-label');
