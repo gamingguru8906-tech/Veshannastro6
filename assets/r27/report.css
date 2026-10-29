@@ -198,3 +198,14 @@
 .paid-dialog .local-payment-note:empty{display:none}
 @media(prefers-reduced-motion:reduce){.pr-spin,.paid-steps li.now::before{animation:none}}
 .paid-dialog[data-state="checking"] .dialog-foot{display:none}
+
+/* Report prices reveal together on click, tap, Enter or Space. */
+.price-reveal{position:relative;display:inline-block;min-height:44px;min-width:80px;padding:4px 0;border:0;border-radius:6px;background:transparent;color:inherit;font:inherit;text-align:inherit;cursor:pointer;vertical-align:middle}
+.price-reveal .price-value{display:inline-block;filter:blur(7px);user-select:none;pointer-events:none;transition:filter .2s ease}
+.price-reveal .price-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;white-space:nowrap;color:var(--gold);font:600 11px/1.3 sans-serif;text-shadow:0 1px 6px #04050b}
+.price-reveal:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+.price-reveal.is-revealed .price-value{filter:none;user-select:auto}
+.price-reveal.is-revealed .price-hint{display:none}
+.price-reveal.is-revealed{cursor:default}
+.price-box .pb-now .price-value{font-size:32px}
+@media(prefers-reduced-motion:reduce){.price-reveal .price-value{transition:none}}

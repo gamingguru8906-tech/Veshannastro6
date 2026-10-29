@@ -77,6 +77,18 @@
 
   /* ---------- report choice + price ---------- */
   var report = 'blend';
+  var pricesRevealed = false;
+  function revealPrices() {
+    pricesRevealed = true;
+    $$('.price-reveal').forEach(function (button) {
+      button.classList.add('is-revealed');
+      button.setAttribute('aria-expanded', 'true');
+      button.removeAttribute('aria-label');
+      $('.price-value', button).removeAttribute('aria-hidden');
+    });
+    refresh();
+  }
+  $$('.price-reveal').forEach(function (button) { button.addEventListener('click', revealPrices); });
   var isIndia = function () { return /\|\+91$/.test(cc.value || 'India|+91'); };
   var price = function () {
     var r = C.reports[report];
@@ -87,10 +99,10 @@
     var r = C.reports[report], p = price();
     $$('[data-report]').forEach(function (b) { b.setAttribute('aria-checked', String(b.getAttribute('data-report') === report)); });
     $('#pb-now').textContent = p.now; $('#pb-was').textContent = p.was; $('#pb-line').textContent = r.line;
-    $('#pay-label').textContent = (C.online && (p.cur === 'INR' || C.usdOnline) ? 'Review and pay ' : 'Review and order ') + p.now;
+    $('#pay-label').textContent = (C.online && (p.cur === 'INR' || C.usdOnline) ? 'Review and pay ' : 'Review and order ') + (pricesRevealed ? p.now : '');
     tob.hidden = !r.needs_time;
     $$('select', tob).forEach(function (s) { s.required = r.needs_time; });
-    $('#sp-name').textContent = r.name; $('#sp-price').textContent = p.now + ', delivered within ' + C.delivery;
+    $('#sp-name').textContent = r.name; $('#sp-price').textContent = (pricesRevealed ? p.now + ', delivered within ' : 'Delivered within ') + C.delivery;
   }
   function choose(key) { report = key; refresh(); saveDraft(); track('select_item', { item_name: C.reports[key].name }); }
   $$('[data-report]').forEach(function (b) { b.addEventListener('click', function () { choose(b.getAttribute('data-report')); }); });
@@ -518,7 +530,7 @@
       '<button type="button" class="outline-button" id="order-another">Order a report for someone else</button>';
     form.hidden = true; card.appendChild(box);
     card.scrollIntoView({ block: 'center', behavior: reduced ? 'auto' : 'smooth' });
-    $('#order-another').addEventListener('click', function () { box.remove(); form.hidden = false; form.reset(); clearDraft(); delete $('#pob').dataset.picked; cc.value = 'India|+91'; paid = null; refresh(); $('#name').focus(); });
+    $('#order-another').addEventListener('click', function () { box.remove(); form.hidden = false; form.reset(); clearDraft(); delete $('#pob').dataset.picked; cc.value = 'India|+91'; paid = null; refresh(); $('#mobile').focus(); });
   }
 
   form.addEventListener('submit', function (e) {
@@ -526,6 +538,7 @@
     var o = collect(), p = price();
     if (!validate(o)) return;
     track('begin_checkout', { currency: p.cur, value: p.amount, items: [{ item_name: o.reportName, price: p.amount }] });
+    revealPrices();
     review(o, p);
   });
 

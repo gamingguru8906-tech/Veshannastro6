@@ -65,6 +65,14 @@ def wa(text):
     return f"https://wa.me/{WA}?text={quote(text)}"
 
 
+def blur_report_amounts(value):
+    return re.sub(r"₹[\d,]+|US\$[\d,]+", lambda m: reveal_price(m.group()), value)
+
+def reveal_price(content, extra_class=""):
+    return ('<button type="button" class="price-reveal ' + extra_class + '" aria-label="Reveal report prices" aria-expanded="false">'
+            '<span class="price-value" aria-hidden="true">' + content + '</span><span class="price-hint">Tap to reveal</span></button>')
+
+
 def inr(n):
     s = str(n)
     return "₹" + (s[:-3] + "," + s[-3:] if len(s) > 3 else s)
@@ -246,14 +254,14 @@ def page():
         return f"""<article class="plan{' featured' if featured else ''}">
 <span class="plan-label">{'Selected by default' if featured else 'No birth time needed'}</span>
 <h3>{r['name']}</h3><p class="plan-for">{r['line']}</p>
-<p class="plan-price"><b>{inr(r['inr'])}</b><s>{inr(r['inr_mrp'])}</s><span class="offer-tag">{OFFER['pct']}% off</span></p>
-<p class="plan-usd">Outside India: US${r['usd']} <s>US${r['usd_mrp']}</s></p>
+<p class="plan-price">{reveal_price('<b>' + inr(r['inr']) + '</b> <s>' + inr(r['inr_mrp']) + '</s>')}<span class="offer-tag">{OFFER['pct']}% off</span></p>
+<p class="plan-usd">Outside India: {reveal_price("US$" + str(r['usd']) + " <s>US$" + str(r['usd_mrp']) + "</s>")}</p>
 <ul>{items}</ul>
 <a class="pill get-report" href="#register" data-pick="{key}"><span>Choose {r['name']}</span></a>
 </article>"""
 
     reads = "".join(f'<a href="/blog/{p["slug"]}.html"><strong>{p["h1"]}</strong><span>{p["card"]}</span></a>' for p in POSTS)
-    faq_html = "".join(f'<details><summary>{q}<span class="faq-icon" aria-hidden="true"></span></summary><p>{a}</p></details>' for q, a in F)
+    faq_html = "".join(f'<details><summary>{q}<span class="faq-icon" aria-hidden="true"></span></summary><p>{blur_report_amounts(a) if q == F[0][0] else a}</p></details>' for q, a in F)
 
     def consult(c):
         rows = "".join(f'<li>{ICON_CHECK}<span><b>{n}</b>{", " if not c.get("from") else ": "}{d}</span></li>' for n, d in c["sessions"])
@@ -387,7 +395,7 @@ def page():
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-R20FKYJK7P');gtag('config','AW-18189866057');</script>
   <script type="application/ld+json">{json.dumps(graph, ensure_ascii=False, separators=(",", ":"))}</script>
   <script>window.R27={json.dumps(config, separators=(",", ":"))};</script>
-  <script src="/assets/r27/report.js?v=15" defer></script><script src="/assets/r27/motion.js?v=6" defer></script><script src="/assets/r27/book.js?v=11" defer></script>
+  <script src="/assets/r27/report.js?v=16" defer></script><script src="/assets/r27/motion.js?v=6" defer></script><script src="/assets/r27/book.js?v=11" defer></script>
 </head>
 <body>
   <svg class="fx-defs" width="0" height="0" aria-hidden="true" focusable="false"><filter id="morph-threshold"><feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 255 -140"/></filter></svg>
@@ -415,11 +423,13 @@ def page():
         <form id="registration" novalidate>
           <div class="subject-toggle report-toggle" role="radiogroup" aria-label="Choose your report">
             <button type="button" role="radio" aria-checked="true" data-report="blend">Astro-Numero Blend</button><button type="button" role="radio" aria-checked="false" data-report="classic">Classic</button></div>
-          <div class="price-box" aria-live="polite"><span class="pb-label">Energy exchange</span><b class="pb-now" id="pb-now">{inr(b['inr'])}</b>
-            <span class="pb-was"><s id="pb-was">{inr(b['inr_mrp'])}</s> <span class="offer-tag">{OFFER['name']}, {OFFER['pct']}% off</span></span>
+          <div class="price-box" aria-live="polite"><span class="pb-label">Energy exchange</span>{reveal_price('<b id="pb-now">' + inr(b['inr']) + '</b>', "pb-now")}
+            <span class="pb-was">{reveal_price('<s id="pb-was">' + inr(b['inr_mrp']) + '</s>')} <span class="offer-tag">{OFFER['name']}, {OFFER['pct']}% off</span></span>
             <p class="pb-desc"><span id="pb-line">{b['line']}</span> <span class="phase-note">Phase one: {OFFER['limit']} reports, closes {OFFER['ends_text']}.</span></p></div>
           <div class="form-grid">
+            <div class="field field-wide"><label for="mobile">WhatsApp number <i>*</i></label><div class="phone-row"><select id="country-code" name="country_code" aria-label="Country code" autocomplete="tel-country-code"><option value="India|+91">+91 India</option></select><input id="mobile" name="mobile" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="98765 43210" required></div><span class="field-error">Enter your number without the country code.</span></div>
             <div class="field field-wide"><label for="name">Full name <i>*</i></label><input id="name" name="name" type="text" autocomplete="name" placeholder="As it appears on your records" required><span class="field-error">Enter your full name.</span></div>
+            <div class="field field-wide"><label for="email">Email <span class="optional">(optional)</span></label><input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com"><span class="field-error">Check the email, or leave it empty.</span></div>
             <div class="field field-wide"><label for="dob-day">Date of birth <i>*</i></label><div class="dob-row">
               <select id="dob-day" name="dob_day" aria-label="Day" required><option value="">Day</option></select>
               <select id="dob-month" name="dob_month" aria-label="Month" required><option value="">Month</option></select>
@@ -430,15 +440,13 @@ def page():
               <select id="tob-ampm" name="tob_ampm" aria-label="AM or PM" required><option value="">AM/PM</option><option>AM</option><option>PM</option></select></div>
               <span class="field-hint">Not sure of your birth time? Choose Classic.</span><span class="field-error">Enter your time of birth, or switch to Classic.</span></div>
             <div class="field field-wide"><label for="pob">Place of birth <i>*</i></label><div class="place-box"><input id="pob" name="pob" type="text" autocomplete="off" placeholder="Start typing your birth city" required role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="pob-list"><ul id="pob-list" class="place-list" role="listbox" aria-label="Matching places" hidden></ul></div><span class="field-error">Enter your place of birth.</span></div>
-            <div class="field field-wide"><label for="email">Email <span class="optional">(optional)</span></label><input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com"><span class="field-error">Check the email, or leave it empty.</span></div>
-            <div class="field field-wide"><label for="mobile">WhatsApp number <i>*</i></label><div class="phone-row"><select id="country-code" name="country_code" aria-label="Country code" autocomplete="tel-country-code"><option value="India|+91">+91 India</option></select><input id="mobile" name="mobile" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="98765 43210" required></div><span class="field-error">Enter your number without the country code.</span></div>
           </div>
           <div class="form-submit">
             <div class="field"><label for="referral">Referral code (optional)</label><input id="referral" name="referral" placeholder="If someone referred you" autocomplete="off"></div>
             <label class="consent"><input type="checkbox" name="terms" required><span>I have read the <a href="/terms.html" target="_blank">terms</a>, <a href="/privacy-policy.html" target="_blank">privacy policy</a> and <a href="/refund-policy.html" target="_blank">refund and delivery policy</a>.</span></label>
             <label class="consent"><input type="checkbox" name="wa_ok" required><span>Send my report and order updates to my WhatsApp.</span></label>
             <p id="form-error" class="form-error" role="alert" hidden>Please complete the highlighted fields.</p>
-            <button class="pill" type="submit"><span id="pay-label">Review and order {inr(b['inr'])}</span></button>
+            <button class="pill" type="submit"><span id="pay-label">Review and order</span></button>
             <p class="delivery-line">{ICON_CLOCK}<span>Delivered on WhatsApp within {DELIVERY} of payment.</span></p>
             <p class="form-links"><a href="{wa(BULK_MSG)}" target="_blank" rel="noopener">Ordering for more than one person? Message us on WhatsApp</a></p>
           </div>
@@ -569,7 +577,7 @@ def page():
     <div id="paid-details"></div><p class="local-payment-note" id="paid-note"></p></div>
     <footer class="dialog-foot"><a id="paid-wa" class="outline-button" href="#" target="_blank" rel="noopener" hidden>Message us on WhatsApp</a><button type="button" class="pill" id="paid-close" hidden>Done</button></footer></dialog>
 
-  <div class="sticky-pay" id="sticky-pay"><div class="sp-text"><b id="sp-name">Astro-Numero Blend</b><span id="sp-price">{inr(b['inr'])}, delivered within {DELIVERY}</span></div><a class="pill get-report" href="#register">Order</a></div>
+  <div class="sticky-pay" id="sticky-pay"><div class="sp-text"><b id="sp-name">Astro-Numero Blend</b><span id="sp-price">Delivered within {DELIVERY}</span></div><a class="pill get-report" href="#register">Order</a></div>
   <a class="wa-float" href="{wa(ASK_MSG)}" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">{ICON_WA}<span>WhatsApp</span></a>
 </body>
 </html>
