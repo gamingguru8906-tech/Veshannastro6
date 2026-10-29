@@ -438,15 +438,12 @@ def page():
       <div class="hero-tags" aria-hidden="true"><span style="--x:8%;--y:34vh;--r:-7deg;--t:0s">Mulank</span><span style="--x:83%;--y:27vh;--r:6deg;--t:-2.6s">Bhagyank</span><span style="--x:10%;--y:70vh;--r:5deg;--t:-4.2s">Lo Shu Grid</span><span style="--x:81%;--y:64vh;--r:-5deg;--t:-1.3s">Personal Year</span></div>
       <h1 id="hero-title" class="stagger"><span class="sw" style="--i:0">2027</span> <span class="sw" style="--i:1">Numerology</span> <span class="sw" style="--i:2">Report</span> <br><span class="sw" style="--i:3">Personal</span> <span class="sw" style="--i:4">Year</span> <span class="sw" style="--i:5">Forecast</span> <small class="sw" style="--i:6">by Shashank Agrawal</small></h1>
       <div class="form-card">
-        <div class="form-card-head"><div class="report-capacity"><span class="capacity-phase">Phase one · Limited release</span><strong><span class="capacity-number">{OFFER['limit']}</span> reports only</strong><span class="capacity-deadline">Bookings close {OFFER['ends_text']}</span></div><h2>Get your 2027 Report</h2>
+        <div class="form-card-head"><div class="report-capacity"><span class="capacity-phase">Phase one · Limited release</span><strong><span class="capacity-number">{OFFER['limit']}</span> reports only</strong><span class="capacity-deadline">Bookings close {OFFER['ends_text']}</span></div><div class="report-heading-details"><h2>Get your 2027 Report</h2><a class="free-details" href="https://qrto.org/Lm8Dj4" target="_blank" rel="noopener" aria-label="Open free report details document in a new tab"><img src="/assets/r27/free-details-qr.png" width="132" height="132" alt="QR code for the free report details document"><span><strong>Free report details</strong><span>Scan or tap this QR</span><small>Explore before you order · Opens in a new tab</small></span></a></div>
           <p class="form-lead">What 2027 holds for your health, money, work and relationships, and the remedies for whatever needs care. Prepared for you alone.</p>
           <p class="form-note">Your details are saved as you type, so we can help you finish your order on WhatsApp. <a href="/privacy-policy.html" target="_blank">Privacy</a></p></div>
         <form id="registration" novalidate>
           <div class="subject-toggle report-toggle" role="radiogroup" aria-label="Choose your report">
             <button type="button" role="radio" aria-checked="true" data-report="blend">Astro-Numero Blend</button><button type="button" role="radio" aria-checked="false" data-report="classic">Classics</button></div>
-          <div class="price-box" aria-live="polite"><span class="pb-label">Energy exchange</span>{reveal_price('<b id="pb-now">' + inr(b['inr']) + '</b>', "pb-now")}
-            <span class="pb-was">{reveal_price('<s id="pb-was">' + inr(b['inr_mrp']) + '</s>')} <span class="offer-tag">{OFFER['name']}, {OFFER['pct']}% off</span></span>
-            <p class="pb-desc"><span id="pb-line">{b['line']}</span> <span class="phase-note">Phase one: {OFFER['limit']} reports, closes {OFFER['ends_text']}.</span></p></div>
           <div class="form-grid">
             <div class="field field-wide"><label for="mobile">WhatsApp number <i>*</i></label><div class="phone-row"><select id="country-code" name="country_code" aria-label="Country code" autocomplete="tel-country-code"><option value="India|+91">+91 India</option></select><input id="mobile" name="mobile" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="98765 43210" required></div><span class="field-error">Enter your number without the country code.</span></div>
             <div class="field field-wide"><label for="name">Full name <i>*</i></label><input id="name" name="name" type="text" autocomplete="name" placeholder="As it appears on your records" required><span class="field-error">Enter your full name.</span></div>
@@ -464,6 +461,9 @@ def page():
           </div>
           <div class="form-submit">
             <div class="field"><label for="referral">Referral code (optional)</label><input id="referral" name="referral" placeholder="If someone referred you" autocomplete="off"></div>
+          <div class="price-box" aria-live="polite"><span class="pb-label">Energy exchange</span>{reveal_price('<b id="pb-now">' + inr(b['inr']) + '</b>', "pb-now")}
+            <span class="pb-was">{reveal_price('<s id="pb-was">' + inr(b['inr_mrp']) + '</s>')} <span class="offer-tag">{OFFER['name']}, {OFFER['pct']}% off</span></span>
+            <p class="pb-desc"><span id="pb-line">{b['line']}</span> <span class="phase-note">Phase one: {OFFER['limit']} reports, closes {OFFER['ends_text']}.</span></p></div>
             <label class="consent"><input type="checkbox" name="terms" required><span>I have read the <a href="/terms.html" target="_blank">terms</a>, <a href="/privacy-policy.html" target="_blank">privacy policy</a> and <a href="/refund-policy.html" target="_blank">refund and delivery policy</a>.</span></label>
             <label class="consent"><input type="checkbox" name="wa_ok" required><span>Send my report and order updates to my WhatsApp.</span></label>
             <p id="form-error" class="form-error" role="alert" hidden>Please complete the highlighted fields.</p>
