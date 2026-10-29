@@ -226,3 +226,13 @@
   body{padding-bottom:calc(152px + env(safe-area-inset-bottom))}
   .report-capacity{margin-bottom:10px}
 }
+
+/* Original reader messages, framed within the existing report palette. */
+.feedback-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start;margin-top:36px}
+.feedback-card{margin:0;padding:22px;border:1px solid #f3cd9338;border-radius:20px;background:linear-gradient(145deg,#f3cd9309,#ffffff04);box-shadow:0 12px 32px #0003;overflow:hidden}
+.feedback-card blockquote{margin:12px 0 22px;color:#e5eaf2;font-size:18px;line-height:1.65}
+.feedback-card a{display:block;border-radius:12px;overflow:hidden}
+.feedback-card a:focus-visible{outline:3px solid var(--cy);outline-offset:4px}
+.feedback-card img{display:block;width:100%;height:auto}
+.feedback-open{display:block;margin-top:12px;color:#b4bdcc;font-size:12px}
+@media(max-width:760px){.feedback-grid{grid-template-columns:1fr;gap:20px}.feedback-card{padding:18px}.feedback-card blockquote{font-size:17px}}
