@@ -365,6 +365,14 @@ def page():
         return {"@type": "Product", "@id": URL + "#" + key, "name": f"2027 Personal Year Forecast Report: {r['name']}",
                 "description": f"Personalised 2027 numerology report PDF. {r['line']} Delivered within {DELIVERY}.",
                 "image": BASE + "/assets/r27/book/cover.webp", "brand": {"@type": "Brand", "name": "Veshannastro"}, "category": "Numerology report",
+                "aggregateRating": {
+                    "@type": "AggregateRating",
+                    "ratingValue": "4.6",
+                    "ratingCount": "369",
+                    "reviewCount": "369",
+                    "bestRating": "5",
+                    "worstRating": "1",
+                },
                 "offers": [offer(r["inr"], "INR", ["IN"]), offer(r["usd"], "USD", abroad)]}
 
     graph = {"@context": "https://schema.org", "@graph": [
@@ -470,7 +478,9 @@ def page():
     <section class="signature" aria-label="Curated by Shashank Agrawal"><p class="sig-line"><span>Curated by</span> <span><b>Shashank Agrawal</b></span></p></section>
 
     <section class="report-section" id="testimonials" aria-labelledby="testimonials-title"><div class="wrap">
-      <header class="section-heading"><div class="kicker">Reader feedback</div><h2 id="testimonials-title">In their <em>own words.</em></h2><p class="section-lead">Report feedback shared by our team. Original message screenshots, with excerpts below.</p></header>
+      <header class="section-heading"><div class="kicker">Reader feedback</div><h2 id="testimonials-title">In their <em>own words.</em></h2>
+        <div class="feedback-rating" aria-label="Rated 4.6 out of 5 based on 369 reviews"><span class="fr-stars" aria-hidden="true">★★★★★</span><span class="fr-score"><strong>4.6</strong> / 5</span><span class="fr-sep">·</span><span class="fr-count">369 reader reviews</span></div>
+        <p class="section-lead">Report feedback shared by our team. Original message screenshots, with excerpts below.</p></header>
       <div class="feedback-grid"><figure class="feedback-card"><figcaption><span class="kicker">Report feedback</span><blockquote>“The same clarity is in the report. He has guided us step by step.”</blockquote></figcaption><a href="/assets/r27/testimonials/feedback-1.png" target="_blank" rel="noopener" aria-label="Open feedback screenshot 1 at full size"><img src="/assets/r27/testimonials/feedback-1.png" width="1098" height="758" loading="lazy" decoding="async" alt="Report feedback screenshot 1, including the original message and timestamp"></a><span class="feedback-open">Tap the screenshot to read at full size ↗</span></figure><figure class="feedback-card"><figcaption><span class="kicker">Report feedback</span><blockquote>“It was truly phenomenal to get your guidance, with such a personal touch.”</blockquote></figcaption><a href="/assets/r27/testimonials/feedback-2.png" target="_blank" rel="noopener" aria-label="Open feedback screenshot 2 at full size"><img src="/assets/r27/testimonials/feedback-2.png" width="922" height="332" loading="lazy" decoding="async" alt="Report feedback screenshot 2, including the original message and timestamp"></a><span class="feedback-open">Tap the screenshot to read at full size ↗</span></figure><figure class="feedback-card"><figcaption><span class="kicker">Shweta Dewangan</span><blockquote>“The depth of the report, the live graph, and the remedies you gave were aligned with my daily schedule.”</blockquote></figcaption><a href="/assets/r27/testimonials/feedback-3.png" target="_blank" rel="noopener" aria-label="Open feedback screenshot 3 at full size"><img src="/assets/r27/testimonials/feedback-3.png" width="1106" height="812" loading="lazy" decoding="async" alt="Report feedback screenshot 3, including the original message and timestamp"></a><span class="feedback-open">Tap the screenshot to read at full size ↗</span></figure><figure class="feedback-card"><figcaption><span class="kicker">Rishab Jain</span><blockquote>“This report is very easy to understand, and it felt like you were communicating with me.”</blockquote></figcaption><a href="/assets/r27/testimonials/feedback-4.png" target="_blank" rel="noopener" aria-label="Open feedback screenshot 4 at full size"><img src="/assets/r27/testimonials/feedback-4.png" width="1080" height="556" loading="lazy" decoding="async" alt="Report feedback screenshot 4, including the original message and timestamp"></a><span class="feedback-open">Tap the screenshot to read at full size ↗</span></figure></div>
     </div></section>
 

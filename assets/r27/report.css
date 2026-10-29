@@ -228,6 +228,11 @@
 }
 
 /* Original reader messages, framed within the existing report palette. */
+.feedback-rating{display:inline-flex;align-items:center;gap:10px;margin:14px 0 6px;padding:8px 18px;background:linear-gradient(135deg,#f3cd9318,#ffffff08);border:1px solid #f3cd9340;border-radius:999px;font-size:14px;color:#f4f7ff}
+.fr-stars{color:var(--gold,#f3cd93);letter-spacing:2px;font-size:15px}
+.fr-score strong{color:#fff;font-weight:700}
+.fr-sep{color:#ffffff40}
+.fr-count{color:#c0c9dc;font-size:13.5px}
 .feedback-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start;margin-top:36px}
 .feedback-card{margin:0;padding:22px;border:1px solid #f3cd9338;border-radius:20px;background:linear-gradient(145deg,#f3cd9309,#ffffff04);box-shadow:0 12px 32px #0003;overflow:hidden}
 .feedback-card blockquote{margin:12px 0 22px;color:#e5eaf2;font-size:18px;line-height:1.65}
