@@ -255,3 +255,12 @@
 .feedback-card figcaption{min-height:145px}
 .feedback-grid:focus-visible,.feedback-pause:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
 @media(max-width:760px){.feedback-grid{gap:16px}.feedback-grid .feedback-card{flex-basis:88%}.feedback-card figcaption{min-height:150px}.feedback-controls{align-items:center}}
+
+/* Dusky yellow prices and a cool silver glass capacity plaque. */
+.price-box .pb-now,.plan .plan-price b,.report-price{color:#d6bd72}
+.price-box{border-color:#d6bd7247;background:#b59a4810}
+.report-capacity{border-color:#dce3ed;background:linear-gradient(135deg,#edf3ff26,#a5b3c011 55%,#edf3ff20);box-shadow:0 0 0 4px #10172090,0 0 0 5px #d6dfeb65,inset 0 1px 16px #ffffff18,0 12px 30px #0003;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);color:#eef2f7}
+.report-capacity::before{border-color:#e2e8f066}
+.capacity-number{color:#edf2f8;text-shadow:0 1px 1px #fff4,0 0 20px #dce6f32b}
+.capacity-phase{color:#dce3ed}
+.capacity-deadline{color:#c8d1df}

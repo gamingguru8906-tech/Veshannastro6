@@ -675,8 +675,7 @@
 /* Continuous reader feedback loop; native scrolling remains available. */
 (function () {
   var rail = document.querySelector('.feedback-grid');
-  var control = document.querySelector('.feedback-pause');
-  if (!rail || !control) return;
+  if (!rail) return;
   var motion = matchMedia('(prefers-reduced-motion: reduce)');
   var originals = Array.from(rail.children), clones = [];
   var paused = motion.matches, hovered = false, focused = false, touching = false;
@@ -688,11 +687,8 @@
   });
   function period() { return clones[0].offsetLeft - originals[0].offsetLeft; }
   function update() {
-    control.hidden = motion.matches; control.textContent = paused ? 'Resume scrolling' : 'Pause scrolling';
-    control.setAttribute('aria-pressed', String(paused));
     clones.forEach(function(c) { c.hidden = motion.matches; });
   }
-  control.addEventListener('click', function() { paused = !paused; update(); });
   rail.addEventListener('mouseenter', function() { hovered = true; });
   rail.addEventListener('mouseleave', function() { hovered = false; });
   rail.addEventListener('focusin', function() { focused = true; });
