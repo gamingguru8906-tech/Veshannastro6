@@ -32,7 +32,7 @@ REPORTS = {
     "classic": {"name": "Classic", "inr": 499, "inr_mrp": 713, "usd": 20, "usd_mrp": 29, "needs_time": False,
                 "line": "Numerology from your name and date of birth. No birth time needed."},
 }
-OFFER = {"pct": 30, "name": "Diwali offer", "starts": "2026-10-24", "ends": "2026-11-10", "ends_text": "10 November", "limit": 200}
+OFFER = {"pct": 30, "name": "Diwali offer", "starts": "2026-10-24", "ends": "2026-11-10", "ends_text": "10 November", "limit": 50}
 DELIVERY = "24 hours"
 # Pay on the page through Razorpay (api/r27). If the server is not set up or the order cannot be made online,
 # the page falls back to the WhatsApp order on its own, so nothing breaks.
@@ -224,7 +224,7 @@ def faqs():
          "Yes. Thirteen free calculators, from Life Path and the Lo Shu grid to mobile, house and vehicle numbers, are on the <a href=\"/calculators/\">numerology calculators page</a>. They use Chaldean (Cheiro) letter values and run in your browser."),
         ("Who is Shashank Agrawal?",
          "Shashank Agrawal is a Raipur-based Vedic astrologer and numerologist with more than six years of practice and the author of Numbers &amp; Navgraha: Untold Secret of Numerology. Read <a href=\"/about.html\">about Shashank</a> or about his work as a <a href=\"/vedic-astrologer-raipur.html\">Vedic astrologer in Raipur</a>."),
-        ("Why is phase one limited to 200 reports?",
+        (f"Why is phase one limited to {OFFER['limit']} reports?",
          f"Every report is prepared for one person by Shashank and his team. Phase one takes {OFFER['limit']} reports and closes on {OFFER['ends_text']}."),
     ]
 
