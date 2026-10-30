@@ -277,7 +277,7 @@ for n in range(1, 10):
         (f"What are the lucky colour, day and numbers for Personal Year {n}?", f"Colour: {d['colour'].lower()}. Day: {d['day']}. Numbers: {d['numbers']}."),
     ]
     add(slug=f"personal-year-{n}-in-2027", cat="Personal Year 2027",
-        title=(f"Personal Year {n} in 2027: Meaning and Predictions" if n != 2 else "Personal Year 2 in 2027 Meaning: 11/2 Year Predictions"),
+        title=f"Personal Year {n} in 2027: {d['name']} | Veshannastro",
         h1=f"Personal Year {n} in 2027",
         desc=(f"Personal Year {n} in 2027 ({d['name'].lower()}): career, love, money, health, month-by-month forecast, lucky colour and remedy."
               if n != 2 else "Personal Year 2 in 2027 meaning: a doubled 2 in an 11/2 year. Career, love, money and health predictions, month-by-month forecast, lucky colour, remedy."),
@@ -349,7 +349,7 @@ def body_mulank():
 
 
 add(slug="mulank-predictions-2027", cat="Mulank 2027",
-    title="Mulank Predictions 2027: Mulank 1 to 9, 2027 Kaisa Rahega",
+    title="Mulank Predictions 2027 in English & Hindi | Veshannastro",
     h1="Mulank Predictions 2027: Mulank 1 to 9",
     desc="Mulank 1 to 9 predictions for 2027 by ank jyotish: career, money, love, health, lucky colour and remedy, in English and Hindi. Free Mulank calculator.",
     card="Mulank 1 to 9 for 2027 by ank jyotish, in English and Hindi, with a free Mulank and Bhagyank calculator.",
@@ -382,7 +382,7 @@ def supplied_article():
     return "\n".join(out)
 
 add(slug="numerology-2027", cat="2027 Forecast",
-    title="Numerology 2027: Horoscope for Moolank 1 to 9",
+    title="Numerology Horoscope 2027: Moolank 1 to 9 Predictions | Veshannastro",
     h1="Numerology 2027",
     desc="Numerology 2027 by Shashank Agrawal: a Moon-year horoscope for Moolank 1 to 9, covering career, money, relationships, personal growth and remedies.",
     card="A 2027 numerology horoscope for all nine Moolank numbers, with career, relationships and Moon-year remedies.",
