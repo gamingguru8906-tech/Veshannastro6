@@ -28,9 +28,9 @@ ADDRESS = {"street": "Currency Tower, G.E. Road, VIP Road", "city": "Raipur", "r
 # Prices after the 30% Diwali offer, and the original price shown struck through.
 REPORTS = {
     "blend": {"name": "Astro-Numero Blend", "inr": 599, "inr_mrp": 856, "usd": 30, "usd_mrp": 43, "needs_time": True,
-              "line": "12 parameters, including Dasha. Needs your time of birth."},
+              "line": "12 parameters, including Transit, Varshaphal and Dasha. Needs your time of birth."},
     "classic": {"name": "Classics", "inr": 499, "inr_mrp": 713, "usd": 20, "usd_mrp": 29, "needs_time": False,
-                "line": "11 parameters, with a 10-year graph. No Dasha or birth time needed."},
+                "line": "10 parameters, built around your action plan and remedies. No birth time needed."},
 }
 OFFER = {"pct": 30, "name": "Diwali offer", "starts": "2026-10-24", "ends": "2026-11-10", "ends_text": "10 November", "limit": 50}
 DELIVERY = "24 hours"
@@ -86,21 +86,21 @@ INSIDE = [
     ("Your Personal Year number", "Your 2027 Personal Year, Mulank and Bhagyank, with the calculation steps shown. Understand the themes of your annual forecast through your own date of birth."),
     ("Your Lo Shu grid", 'Your birth-date numerology chart, including missing and repeated numbers and your 2027 Personal Year. Explore the <a href="/calculators/lo-shu-grid.html">Lo Shu grid calculator</a> for a first look.'),
     ("Elemental balance", "An individual element-balance assessment derived from the Lo Shu grid. The report explains the patterns in your chart and the areas that need attention."),
-    ("Your zodiac reading", "Your zodiac sign alongside your Personal Year: a personalised perspective on work, relationships, money and wellbeing in 2027."),
+    ("Your zodiac reading", "Your Vedic sun sign alongside your Personal Year: a personalised perspective on work, relationships, money and wellbeing in 2027."),
     ("Pinnacles and Name Number", "Your numerology Pinnacles describe life phases, while your Name Number explores the name you use. See how these patterns relate to your current chapter."),
     ("Your 10-year life graph", "A longer view of your numerology cycles alongside the 2027 forecast. The ten-year graph is included in both Classics and Astro-Numero Blend."),
     ("Yantra, mantra and bracelet guidance", "Recommendations chosen through your individual assessment, including a bracelet crystal and why it suits you. Physical bracelets are purchased separately; they are not included in the report price."),
     ("Golden remedies", 'Personalised numerology remedies for the patterns in your report, with practical steps for the year. Read the <a href="/blog/mulank-predictions-2027.html">2027 Mulank predictions</a> for broader birth-number themes.'),
     ("Month-by-month action plan", "All twelve months of 2027, with Personal Month themes, favourable periods, dates that ask for care, muhurat, lucky dates and remedies to guide your planning."),
     ("Space energy shift", "Personalised guidance on your home and work environment, bringing Vastu and space-energy considerations into your annual action plan."),
-    ("Transit and Varshaphal", "Annual astrology guidance through transits and Varshaphal, alongside the other report parameters. This is included in both Classics and Astro-Numero Blend."),
-    ("Dasha · Astro-Numero Blend only", "The twelfth parameter adds Dasha analysis to your annual forecast. Astro-Numero Blend includes all eleven Classics parameters plus this additional astrology layer and requires your birth time."),
+    ("Transit and Varshaphal · Astro-Numero Blend only", "Your 2027 transits and your Varshaphal, the birth chart for your coming year, read from your exact time of birth. Not part of Classics."),
+    ("Dasha · Astro-Numero Blend only", "Your Dasha analysis: the planetary periods that pattern your life, read for 2027. Astro-Numero Blend includes all ten Classics parameters plus Transit and Varshaphal, and Dasha, which is why it needs your birth time."),
 ]
 BONUS = "A voice note personally recorded for you by Shashank, accessed through the QR code in your PDF. Included with both reports, in addition to the numbered parameters."
 
 PLAN_ITEMS = {
-    "blend": ["All 12 parameters: everything in Classics, plus Dasha", "10-year life graph and all twelve months of 2027", "Needs your date, time and place of birth"],
-    "classic": ["11 parameters, from Personal Year to Transit and Varshaphal", "10-year life graph and all twelve months of 2027", "No Dasha analysis; no birth time needed"],
+    "blend": ["All 12 parameters: everything in Classics, plus Transit, Varshaphal and Dasha", "10-year life graph and all twelve months of 2027", "Needs your date, time and place of birth"],
+    "classic": ["10 parameters, from Personal Year to Space Energy Shift", "10-year life graph and all twelve months of 2027", "No Transit, Varshaphal or Dasha; no birth time needed"],
 }
 PLAN_COMMON = ["Individual remedies and bracelet recommendation (bracelet sold separately)", "Personally recorded voice note from Shashank (QR code)", f"PDF on WhatsApp within {DELIVERY}"]
 
@@ -222,7 +222,7 @@ def faqs():
         ("What is the 2027 numerology report price in India?",
          f"The Astro-Numero Blend is {inr(b['inr'])} (was {inr(b['inr_mrp'])}) and the Classics is {inr(c['inr'])} (was {inr(c['inr_mrp'])}), with the {OFFER['pct']}% {OFFER['name']} until {OFFER['ends_text']}. Outside India they are US${b['usd']} and US${c['usd']}."),
         ("What is the difference between Astro-Numero Blend and Classics?",
-         "Classics includes 11 parameters. Astro-Numero Blend includes the same 11 plus Dasha, making 12. Both include the 10-year life graph, Transit and Varshaphal, all twelve months of 2027 and a personally recorded voice note. The Blend also needs your time of birth."),
+         "Classics includes 10 parameters, centred on your month-by-month action plan, yantra, mantra, remedies and space energy shift. Astro-Numero Blend includes the same 10 plus Transit and Varshaphal, and Dasha, making 12. Both include the 10-year life graph, all twelve months of 2027 and a personally recorded voice note. The Blend also needs your time of birth."),
         ("Is this a generic yearly horoscope?",
          "No. Your Personal Year, Mulank, Lo Shu grid and Name Number come from your own date of birth and name, and Chapter 1 is written for your exact Personal Year and sun sign combination. Two people rarely get the same report."),
         ("I don't know my time of birth. Can I still get it?",
@@ -251,7 +251,7 @@ def faqs():
         ("Is there a free 2027 numerology report?",
          "The Personal Year calculator on this page is free and tells you the number your year is read through. The full report, with every month, your dates, Lo Shu grid and voice note, is paid. You can also read free <a href=\"/blog/2027-numerology-predictions.html\">2027 numerology predictions</a> on our blog."),
         ("Does it replace a full birth chart consultation?",
-         "No. Dasha analysis is included in Astro-Numero Blend, while Classics has the other 11 parameters. Both are annual 2027 reports. For a live discussion of your birth chart, book a separate <a href=\"/vedic-kundli-booking.html\">online astrology consultation</a> with Shashank, booked on WhatsApp."),
+         "No. Transit, Varshaphal and Dasha are included in Astro-Numero Blend, while Classics has the other 10 parameters. Both are annual 2027 reports. For a live discussion of your birth chart, book a separate <a href=\"/vedic-kundli-booking.html\">online astrology consultation</a> with Shashank, booked on WhatsApp."),
         ("Do you offer live astrology and numerology consultations?",
          "Yes, as separate sessions, each booked on WhatsApp. The <a href=\"/vedic-kundli-booking.html\">online astrology consultation</a> is ₹3,699 and lasts strictly 40 to 45 minutes on Google Meet. The <a href=\"/numerology-booking.html\">online numerology consultation</a> is ₹555 for one service you choose, such as your Lo Shu grid, name, mobile number, bank account number or PIN alignment, in 20 minutes on Google Meet. The muhurat selection consultation is ₹1,269 and gives auspicious dates and times for an event such as an exam application, a launch, a property purchase or a registration. These fees are for clients in India only."),
         ("Are there free numerology calculators?",
@@ -533,7 +533,7 @@ def page():
 
     <section class="report-section" id="inside" aria-labelledby="inside-title"><div class="wrap">
       <header class="section-heading"><div class="kicker">What's inside</div><h2 id="inside-title">Your whole year, <em>mapped month by month.</em></h2>
-        <p class="section-lead">A personalised 2027 annual numerology report: 11 parameters in Classics, or all 12 in Astro-Numero Blend. The twelfth parameter, Dasha, is exclusive to the Blend. Not a horoscope written for millions: it is <mark class="hl">built from your own date of birth and name</mark>, from VESHANNASTRO, owned by Shashank Agrawal.</p></header>
+        <p class="section-lead">A personalised 2027 annual numerology report: 10 parameters in Classics, or all 12 in Astro-Numero Blend. The last two, Transit and Varshaphal, and Dasha, are exclusive to the Blend. Not a horoscope written for millions: it is <mark class="hl">built from your own date of birth and name</mark>, from VESHANNASTRO, owned by Shashank Agrawal.</p></header>
       <div class="covers-fan" aria-label="2027 report covers by Mulank">{covers}</div>
       <p class="covers-note">Your cover is chosen by your Mulank, the number of your birth day: each of the nine has its own cover and page design.</p>
       <p class="covers-note"><strong>Bonus with both reports:</strong> {BONUS}</p>
@@ -564,7 +564,7 @@ def page():
 
     <section class="report-section" id="pricing" aria-labelledby="pricing-title"><div class="wrap">
       <header class="section-heading"><div class="kicker">{OFFER['name']}, {OFFER['pct']}% off</div><h2 id="pricing-title">2027 numerology report <em>price in India.</em></h2>
-        <p class="section-lead">Two reports, prepared for your year. <mark class="hl">Classics has 11 parameters; Astro-Numero Blend has 12.</mark> The Blend adds Dasha. Both include the 10-year graph and a personally recorded voice note. The amount is an energy exchange for a reading prepared for you alone.</p></header>
+        <p class="section-lead">Two reports, prepared for your year. <mark class="hl">Classics has 10 parameters; Astro-Numero Blend has 12.</mark> The Blend adds Transit and Varshaphal, and Dasha. Both include the 10-year graph and a personally recorded voice note. The amount is an energy exchange for a reading prepared for you alone.</p></header>
       <div class="countdown" data-ends="{CLOSES_AT}" hidden><p class="cd-title">The {OFFER['name']} ends in</p>
         <div class="cd-tiles" role="timer" aria-label="Time left in the {OFFER['name']}">{cd_tiles}</div>
         <p class="cd-note">Phase one closes on {OFFER['ends_text']} at 11:59 PM IST, or sooner if all {OFFER['limit']} reports are taken.</p></div>

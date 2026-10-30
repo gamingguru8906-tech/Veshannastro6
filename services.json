@@ -7,7 +7,7 @@
    "services": [
     {
      "t": "2027 Report: Astro-Numero Blend",
-     "d": "12 parameters, including Dasha. Needs your time of birth. A personalised 2027 Personal Year report PDF for one person.",
+     "d": "12 parameters, including Transit, Varshaphal and Dasha. Needs your time of birth. A personalised 2027 Personal Year report PDF for one person.",
      "p": "₹599",
      "was": "₹856",
      "off": "30% off",
@@ -22,7 +22,7 @@
       "pob"
      ],
      "features": [
-      "All 12 parameters: everything in Classics, plus Dasha",
+      "All 12 parameters: everything in Classics, plus Transit, Varshaphal and Dasha",
       "10-year life graph and all twelve months of 2027",
       "Needs your date, time and place of birth",
       "Individual remedies and bracelet recommendation (bracelet sold separately)",
@@ -32,7 +32,7 @@
     },
     {
      "t": "2027 Report: Classics",
-     "d": "11 parameters, with a 10-year graph. No Dasha or birth time needed. A personalised 2027 Personal Year report PDF for one person.",
+     "d": "10 parameters, built around your action plan and remedies. No birth time needed. A personalised 2027 Personal Year report PDF for one person.",
      "p": "₹499",
      "was": "₹713",
      "off": "30% off",
@@ -46,9 +46,9 @@
       "pob"
      ],
      "features": [
-      "11 parameters, from Personal Year to Transit and Varshaphal",
+      "10 parameters, from Personal Year to Space Energy Shift",
       "10-year life graph and all twelve months of 2027",
-      "No Dasha analysis; no birth time needed",
+      "No Transit, Varshaphal or Dasha; no birth time needed",
       "Individual remedies and bracelet recommendation (bracelet sold separately)",
       "Personally recorded voice note from Shashank (QR code)",
       "Delivered on WhatsApp within 24 hours"
@@ -318,15 +318,15 @@
   "Your Personal Year number: Your 2027 Personal Year, Mulank and Bhagyank, with the calculation steps shown. Understand the themes of your annual forecast through your own date of birth.",
   "Your Lo Shu grid: Your birth-date numerology chart, including missing and repeated numbers and your 2027 Personal Year. Explore the Lo Shu grid calculator for a first look.",
   "Elemental balance: An individual element-balance assessment derived from the Lo Shu grid. The report explains the patterns in your chart and the areas that need attention.",
-  "Your zodiac reading: Your zodiac sign alongside your Personal Year: a personalised perspective on work, relationships, money and wellbeing in 2027.",
+  "Your zodiac reading: Your Vedic sun sign alongside your Personal Year: a personalised perspective on work, relationships, money and wellbeing in 2027.",
   "Pinnacles and Name Number: Your numerology Pinnacles describe life phases, while your Name Number explores the name you use. See how these patterns relate to your current chapter.",
   "Your 10-year life graph: A longer view of your numerology cycles alongside the 2027 forecast. The ten-year graph is included in both Classics and Astro-Numero Blend.",
   "Yantra, mantra and bracelet guidance: Recommendations chosen through your individual assessment, including a bracelet crystal and why it suits you. Physical bracelets are purchased separately; they are not included in the report price.",
   "Golden remedies: Personalised numerology remedies for the patterns in your report, with practical steps for the year. Read the 2027 Mulank predictions for broader birth-number themes.",
   "Month-by-month action plan: All twelve months of 2027, with Personal Month themes, favourable periods, dates that ask for care, muhurat, lucky dates and remedies to guide your planning.",
   "Space energy shift: Personalised guidance on your home and work environment, bringing Vastu and space-energy considerations into your annual action plan.",
-  "Transit and Varshaphal: Annual astrology guidance through transits and Varshaphal, alongside the other report parameters. This is included in both Classics and Astro-Numero Blend.",
-  "Dasha · Astro-Numero Blend only: The twelfth parameter adds Dasha analysis to your annual forecast. Astro-Numero Blend includes all eleven Classics parameters plus this additional astrology layer and requires your birth time."
+  "Transit and Varshaphal · Astro-Numero Blend only: Your 2027 transits and your Varshaphal, the birth chart for your coming year, read from your exact time of birth. Not part of Classics.",
+  "Dasha · Astro-Numero Blend only: Your Dasha analysis: the planetary periods that pattern your life, read for 2027. Astro-Numero Blend includes all ten Classics parameters plus Transit and Varshaphal, and Dasha, which is why it needs your birth time."
  ],
  "bonus": "A voice note personally recorded for you by Shashank, accessed through the QR code in your PDF. Included with both reports, in addition to the numbered parameters.",
  "faq": [
@@ -336,7 +336,7 @@
   },
   {
    "q": "What is the difference between Astro-Numero Blend and Classics?",
-   "a": "Classics includes 11 parameters. Astro-Numero Blend includes the same 11 plus Dasha, making 12. Both include the 10-year life graph, Transit and Varshaphal, all twelve months of 2027 and a personally recorded voice note. The Blend also needs your time of birth."
+   "a": "Classics includes 10 parameters, centred on your month-by-month action plan, yantra, mantra, remedies and space energy shift. Astro-Numero Blend includes the same 10 plus Transit and Varshaphal, and Dasha, making 12. Both include the 10-year life graph, all twelve months of 2027 and a personally recorded voice note. The Blend also needs your time of birth."
   },
   {
    "q": "Is this a generic yearly horoscope?",
@@ -396,7 +396,7 @@
   },
   {
    "q": "Does it replace a full birth chart consultation?",
-   "a": "No. Dasha analysis is included in Astro-Numero Blend, while Classics has the other 11 parameters. Both are annual 2027 reports. For a live discussion of your birth chart, book a separate online astrology consultation with Shashank, booked on WhatsApp."
+   "a": "No. Transit, Varshaphal and Dasha are included in Astro-Numero Blend, while Classics has the other 10 parameters. Both are annual 2027 reports. For a live discussion of your birth chart, book a separate online astrology consultation with Shashank, booked on WhatsApp."
   },
   {
    "q": "Do you offer live astrology and numerology consultations?",
