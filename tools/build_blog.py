@@ -357,6 +357,42 @@ add(slug="mulank-predictions-2027", cat="Mulank 2027",
     body=body_mulank(), faqs=MULANK_FAQ, question="Hi Veshannastro, I have a question about my Mulank for 2027.",
     related=["2027-numerology-predictions", "personal-year-number-2027-calculator", "personal-year-8-in-2027"])
 
+# Supplied article: wording is maintained verbatim in a separate source file.
+def supplied_article():
+    from pathlib import Path
+    text = Path(REPO, "content/blog/numerology-2027.txt").read_text(encoding="utf-8")
+    lines = text.strip().splitlines()
+    def linked(line):
+        # Preserve the visible URL and wording, adding only crawlable link markup.
+        return re.sub(r"https://[^\s<]+", lambda m: '<a href="' + m.group() + '">' + m.group() + '</a>', esc(line))
+    out = ['<h1>' + esc(lines[0]) + '</h1>', '<p class="post-meta">' + esc(lines[1]) + '</p>']
+    headings = {"How to find your Moolank", "Remedies for 2027, a Moon year", "A note on Moolank and Personal Year", "Also on Veshannastro - the full 2027 cluster"}
+    out.append('<img src="/images/blog/numerology-2027.jpg" width="1200" height="630" alt="2027 numerology artwork" style="display:block;width:100%;height:auto;border-radius:16px;margin:24px 0">')
+    for block in "\n".join(lines[2:]).strip().split("\n\n"):
+        block = block.strip()
+        if not block:
+            continue
+        if block.startswith("- "):
+            out.append('<ul>' + ''.join('<li>' + linked(line[2:]) + '</li>' for line in block.splitlines()) + '</ul>')
+        elif block in headings or block.startswith("Numerology Number "):
+            anchor = re.sub(r"[^a-z0-9]+", "-", block.lower()).strip("-")
+            out.append('<h2 id="' + anchor + '">' + esc(block) + '</h2>')
+        else:
+            out.append('<p>' + linked(block) + '</p>')
+    return "\n".join(out)
+
+add(slug="numerology-2027", cat="2027 Forecast",
+    title="Numerology 2027: Horoscope for Moolank 1 to 9",
+    h1="Numerology 2027",
+    desc="Numerology 2027 by Shashank Agrawal: a Moon-year horoscope for Moolank 1 to 9, covering career, money, relationships, personal growth and remedies.",
+    card="A 2027 numerology horoscope for all nine Moolank numbers, with career, relationships and Moon-year remedies.",
+    lede="", body=supplied_article(), faqs=[], verbatim=True,
+    question="Hi Veshannastro, I have a question about Numerology 2027.",
+    related=["2027-numerology-predictions", "mulank-predictions-2027", "personal-year-number-2027-calculator"])
+for post in POSTS:
+    if post["slug"] in ("2027-numerology-predictions", "mulank-predictions-2027", "personal-year-number-2027-calculator"):
+        post["related"].append("numerology-2027")
+
 BY_SLUG = {p["slug"]: p for p in POSTS}
 
 
@@ -390,7 +426,27 @@ def card(p, tag="h3"):
             f'<div class="pc-body"><span class="pc-cat">{p["cat"]}</span><{tag}>{p["h1"]}</{tag}><p>{p["card"]}</p><span class="pc-meta">{mins} min read</span></div></a>')
 
 
+def verbatim_post_page(p):
+    path = f"{BLOG}{p['slug']}.html"
+    crumbs = [("/2027-numerology-report/", "Home"), (BLOG, "Blog"), (path, p["h1"])]
+    related = "".join(card(BY_SLUG[x]) for x in p["related"])
+    html = f"""<div class="wrap">{crumb_html(crumbs)}
+<p class="post-meta"><time datetime="2026-10-30">30 October 2026</time> · {read_mins(p)} min read</p>
+<article class="article" id="supplied-article" style="overflow-wrap:anywhere">{p['body']}</article>
+{AUTHOR_BOX}
+<section class="blog-group" aria-labelledby="keep-reading"><h2 id="keep-reading">Keep reading</h2><div class="post-list">{related}</div></section></div>"""
+    schema = [{"@type": "BlogPosting", "@id": url(path) + "#post", "headline": p["h1"], "description": p["desc"],
+        "datePublished": "2026-10-30", "dateModified": "2026-10-30", "image": BASE + "/images/blog/numerology-2027.jpg",
+        "author": {"@type": "Person", "@id": PERSON_ID, "name": "Shashank Agrawal", "url": BASE + "/about.html"},
+        "publisher": {"@type": "Organization", "@id": ORG_ID, "name": "Veshannastro"},
+        "mainEntityOfPage": url(path), "articleSection": p["cat"], "inLanguage": "en-IN", "wordCount": words(p["body"])}]
+    return page(path, p["title"], p["desc"], html, crumbs=crumbs, schema=schema, og_type="article",
+        og_image="/images/blog/numerology-2027.jpg", active=BLOG, wa_text=p["question"])
+
+
 def post_page(p):
+    if p.get("verbatim"):
+        return verbatim_post_page(p)
     path = f"{BLOG}{p['slug']}.html"
     crumbs = [("/2027-numerology-report/", "Home"), (BLOG, "Blog"), (path, p["h1"])]
     mins = read_mins(p)
