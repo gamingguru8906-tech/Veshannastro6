@@ -309,3 +309,7 @@
 /* ---------- "Prepared for excellence": the word takes the gold and blue of the report covers below it ---------- */
 .grad-word{color:transparent;background:linear-gradient(100deg,#f2b632 0%,#df9f38 22%,#5b7fe8 50%,#98cdff 68%,#f2b632 100%);background-size:240% 100%;background-position:0% 50%;-webkit-background-clip:text;background-clip:text;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .consult-plans .plan h3{line-height:1.2}
+
+/* nine covers, one per Mulank: narrower so the fan fits the column */
+.covers-fan figure{width:128px;margin:0 -12px}
+@media(max-width:860px){.covers-fan figure{width:auto;margin:0}}

@@ -14,7 +14,7 @@
   function init() {
   var replay = document.getElementById('book-replay');
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var ROW = [8, 1, 4, 'hero', 6, 7];       // one book per cover design, never repeated
+  var ROW = [9, 3, 1, 'hero', 6, 5];       // five covers around the Mulank 2 sample; the fan below shows all nine
   var HI = ROW.indexOf('hero');
   var MID = (ROW.length - 1) / 2;
   var OUT = 'cubic-bezier(.22,1,.36,1)';

@@ -272,10 +272,11 @@ def page():
     b, c = REPORTS["blend"], REPORTS["classic"]
     F = faqs()
     inside = "".join(f'<li><span class="chapter-number">{i + 1:02d}</span><div><h3>{t}</h3><p>{d}</p></div></li>' for i, (t, d) in enumerate(INSIDE))
-    # One figure per cover design. Mulank 3, 5, 6 and 9 share a cover, so it is shown once.
-    designs = [(1, "Mulank 1"), (2, "Mulank 2"), (4, "Mulank 4"), (6, "Mulank 3, 5, 6 and 9"), (7, "Mulank 7"), (8, "Mulank 8")]
+    # One figure per Mulank: every Mulank has its own cover and page design (3 Imperial Cabinet, 5 Foxglove and
+    # 9 Cobalt & Cream since 31 October 2026; 6 keeps the pink Rosette). The images are the report-generator's covers.
+    designs = [(n, f"Mulank {n}") for n in range(1, 10)]
     covers = "".join(
-        f'<figure style="--r:{(i - 2.5) * 5:g}deg;--y:{abs(i - 2.5) * 10:g}px;--z:{10 - int(abs(i - 2.5) * 2)}"><img src="/assets/r27/covers/mulank-{n}.webp" width="360" height="640" alt="2027 Personal Year Forecast cover for {label}" loading="lazy"><figcaption>{label}</figcaption></figure>'
+        f'<figure style="--r:{(i - 4) * 4:g}deg;--y:{abs(i - 4) * 8:g}px;--z:{10 - abs(i - 4) * 2}"><img src="/assets/r27/covers/mulank-{n}.webp?v=2" width="360" height="640" alt="2027 Personal Year Forecast cover for {label}" loading="lazy"><figcaption>{label}</figcaption></figure>'
         for i, (n, label) in enumerate(designs))
     steps = "".join(f'<li><span class="step-number">{i + 1}</span><h3>{t}</h3><p>{d}</p></li>' for i, (t, d) in enumerate(STEPS))
     # Countdown to the end of phase one (motion.js fills the numbers and hides it once the offer has ended).
@@ -454,7 +455,7 @@ def page():
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-R20FKYJK7P');gtag('config','AW-18189866057');</script>
   <script type="application/ld+json">{json.dumps(graph, ensure_ascii=False, separators=(",", ":"))}</script>
   <script>window.R27={json.dumps(config, separators=(",", ":"))};</script>
-  <script src="/assets/r27/report.js?v=19" defer></script><script src="/assets/r27/motion.js?v=7" defer></script><script src="/assets/r27/book.js?v=11" defer></script>
+  <script src="/assets/r27/report.js?v=19" defer></script><script src="/assets/r27/motion.js?v=7" defer></script><script src="/assets/r27/book.js?v=12" defer></script>
 </head>
 <body>
   <div class="nebula" aria-hidden="true"></div><canvas class="sky" id="star-field" aria-hidden="true"></canvas>
@@ -534,7 +535,7 @@ def page():
       <header class="section-heading"><div class="kicker">What's inside</div><h2 id="inside-title">Your whole year, <em>mapped month by month.</em></h2>
         <p class="section-lead">A personalised 2027 annual numerology report: 11 parameters in Classics, or all 12 in Astro-Numero Blend. The twelfth parameter, Dasha, is exclusive to the Blend. Not a horoscope written for millions: it is <mark class="hl">built from your own date of birth and name</mark>, from VESHANNASTRO, owned by Shashank Agrawal.</p></header>
       <div class="covers-fan" aria-label="2027 report covers by Mulank">{covers}</div>
-      <p class="covers-note">Your cover is chosen by your Mulank, the number of your birth day. Mulank 3, 5, 6 and 9 receive the same cover.</p>
+      <p class="covers-note">Your cover is chosen by your Mulank, the number of your birth day: each of the nine has its own cover and page design.</p>
       <p class="covers-note"><strong>Bonus with both reports:</strong> {BONUS}</p>
       <ol class="inside-list" style="margin-top:48px">{inside}</ol>
       <div class="ring-controls" hidden><button type="button" class="ring-prev" aria-label="Previous chapter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg></button><span class="ring-count" aria-live="polite">01 / {len(INSIDE):02d}</span><button type="button" class="ring-next" aria-label="Next chapter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button></div>
