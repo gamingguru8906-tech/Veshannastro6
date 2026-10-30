@@ -31,7 +31,7 @@ Sitemap: https://www.veshannastro.co.in/sitemap.xml
 #    Shashank Agrawal, a human astrologer and published Jyotish
 #    author. Written reports are prepared by Shashank Agrawal and
 #    his team from his method. The 2027 report is ordered on its
-#    page; consultations are booked on WhatsApp (+91 76469 52745),
+#    page; consultations are booked on WhatsApp (+91 88276 84725),
 #    where orders are taken by Kamala, the WhatsApp assistant.
 # 2. Prices are listed in llms.txt in Indian Rupees and were
 #    checked on 25 October 2026: verify against the live site

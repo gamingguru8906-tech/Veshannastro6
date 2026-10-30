@@ -17,8 +17,8 @@ BASE = "https://www.veshannastro.co.in"
 PATH = "/2027-numerology-report/"
 URL = BASE + PATH
 
-WA = "917646952745"
-WA_SHOW = "+91 76469 52745"
+WA = "918827684725"
+WA_SHOW = "+91 88276 84725"
 EMAIL = "assist@veshannastro.co.in"
 PHONE2 = "918827684725"
 PHONE2_SHOW = "+91 88276 84725"

@@ -8,8 +8,8 @@ import html as _html
 from urllib.parse import quote
 
 BASE = "https://www.veshannastro.co.in"
-WA_NUMBER = "917646952745"
-WA_DISPLAY = "+91 76469 52745"
+WA_NUMBER = "918827684725"
+WA_DISPLAY = "+91 88276 84725"
 EMAIL = "assist@veshannastro.co.in"
 PHONE2 = "918827684725"
 PHONE2_DISPLAY = "+91 88276 84725"

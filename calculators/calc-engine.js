@@ -11,7 +11,7 @@ const curYear = new Date().getFullYear();
 /* After a result: the 2027 Personal Year Report first (the one product the site sells), then a second step that
    matches the calculator: the matching live consultation on WhatsApp for names and phone numbers, otherwise
    "Send my result on WhatsApp" with the result typed in. Real anchors: crawlable, and they work without more script. */
-var WA_NUMBER = '917646952745';
+var WA_NUMBER = '918827684725';
 var CALC_NAMES = { loshu: 'Lo Shu grid', lifepath: 'Life Path number', lucky: 'lucky number', colour: 'lucky colour',
   planet: 'ruling planet', name: 'name number', destiny: 'Destiny number', compound: 'compound number',
   business: 'business name number', mobile: 'mobile number', house: 'house number', vehicle: 'vehicle number', bank: 'account number' };
