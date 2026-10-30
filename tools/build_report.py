@@ -112,22 +112,44 @@ STEPS = [
 ]
 
 
-# Live consultations, booked on WhatsApp only. Prices are the ones on the two consultation pages.
+# Live consultations, booked on WhatsApp only. The fees are flat (no offers or vouchers) and are for clients in India:
+# the cards and the FAQ say so, services.json marks them "region": "IN", and Kamala (whatsapp-agent) will not send an
+# INR payment link for them to a WhatsApp number outside India. tools/kamala_services.json must carry the same fees
+# (the build stops if it does not).
 CONSULTS = [
-    {"id": "kundli-consultation", "label": "Vedic astrology", "name": "Vedic Kundli Consultation", "page": "/vedic-kundli-booking.html",
+    {"id": "kundli-consultation", "label": "Vedic astrology", "name": "Online Astrology Consultation", "page": "/vedic-kundli-booking.html",
      "for": "Your birth chart read live: graha, bhava and dasha for one life area, with practical upaya.",
-     "price": 2249, "was": 2999, "off": 25, "note": "40 to 45 minutes on Google Meet. A focused 20-minute session is ₹1,874.",
+     "price": 3699, "note": "Session duration: strictly 40 to 45 minutes, live on Google Meet.",
      "sessions": [("The Dhan Matrix", "wealth and money flow"), ("Prana Vitality Blueprint", "health and energy"),
                   ("The Worklife Blueprint", "career and timing"), ("The Union Code", "love and marriage"),
                   ("Jeevan 360 Reading", "the whole life path")],
      "includes": "Kundli PDF report 2 to 3 days after the session, the recording, a numerology layer and a week of follow-up.",
-     "msg": "Namaste, I would like to book a Vedic Kundli consultation."},
-    {"id": "numerology-consultation", "label": "Numerology", "name": "Numerology Consultation", "page": "/numerology-booking.html",
+     "msg": "Namaste, I would like to book the Online Astrology Consultation (₹3,699, 40 to 45 minutes)."},
+    {"id": "numerology-consultation", "label": "Numerology", "name": "Online Numerology Consultation", "page": "/numerology-booking.html",
      "for": "A focused diagnosis of your number signature, with correction guidance you can act on.",
-     "price": 824, "was": 1099, "off": 25, "from": True, "note": "20 minutes on Google Meet, with a PDF report and the recording.",
-     "sessions": [("The Lo Shu Life Matrix", "₹1,124"), ("Name Frequency Alignment", "₹974"), ("Mobile Number Energy Audit", "₹824")],
+     "price": 555, "unit": "for one service", "note": "20 minutes on Google Meet, with a PDF report and the recording.",
+     # One flat fee buys exactly one of these; the card asks the visitor to pick one before booking.
+     "choose": ["The Lo Shu Life Matrix", "Name Frequency Alignment", "Mobile Number Energy Audit",
+                "Bank account number alignment", "PIN number alignment", "UPI / bank PIN alignment",
+                "ATM PIN alignment", "Time of account opening"],
      "includes": "Detailed PDF numerology report, the recording, the invoice and personal correction guidance.",
-     "msg": "Namaste, I would like to book a Numerology consultation."},
+     "msg": "Namaste, I would like to book the Online Numerology Consultation (₹555) for: "},
+    {"id": "muhurat-consultation", "label": "Muhurat", "name": "Muhurat Selection Consultation", "page": "",
+     "for": "Calculated auspicious dates and times for the events that matter most:",
+     "price": 1269, "note": "Tell us the event and the dates you are considering when you book.",
+     "sessions": [("Submitting banking or competitive examination applications", ""), ("Launching a new brand or product", ""),
+                  ("Buying property and griha pravesh (housewarming)", ""), ("Formal legal or official registrations", "")],
+     "includes": "",
+     "msg": "Namaste, I would like to book the Muhurat Selection Consultation (₹1,269)."},
+]
+INDIA_ONLY = "All consultation fees are in Indian rupees and are valid for clients in India only. Outside India? Message us on WhatsApp before booking."
+# The systems Shashank reads with. Shown as cards so nobody reads them as five things delivered in one session.
+EXPERTISE = [
+    ("Vedic Kundli", "Parashari reading of the birth chart: graha, bhava and dasha."),
+    ("Numerology", "Mulank, Bhagyank, the Lo Shu grid and Chaldean name numbers."),
+    ("Krishnamurti Paddhati", "KP: Placidus cusps and sub-lords, used to time specific events."),
+    ("Bhrigu Nandi Nadi", "A Nadi method that reads planets through their sign links and Jupiter's transits."),
+    ("Jaimini Astrology", "Chara karakas, rashi drishti and chara dasha from the Jaimini Sutras."),
 ]
 SLOTS = "Session start times: Monday to Friday 7:30 to 9:30 PM IST, Saturday and Sunday 10 AM to 7 PM IST."
 OFFICE = "Office hours are 10 AM to 8 PM IST, every day."
@@ -229,9 +251,9 @@ def faqs():
         ("Is there a free 2027 numerology report?",
          "The Personal Year calculator on this page is free and tells you the number your year is read through. The full report, with every month, your dates, Lo Shu grid and voice note, is paid. You can also read free <a href=\"/blog/2027-numerology-predictions.html\">2027 numerology predictions</a> on our blog."),
         ("Does it replace a full birth chart consultation?",
-         "No. Dasha analysis is included in Astro-Numero Blend, while Classics has the other 11 parameters. Both are annual 2027 reports. For a live discussion of your birth chart, book a separate <a href=\"/vedic-kundli-booking.html\">Vedic kundli consultation</a> with Shashank, booked on WhatsApp."),
+         "No. Dasha analysis is included in Astro-Numero Blend, while Classics has the other 11 parameters. Both are annual 2027 reports. For a live discussion of your birth chart, book a separate <a href=\"/vedic-kundli-booking.html\">online astrology consultation</a> with Shashank, booked on WhatsApp."),
         ("Do you offer live astrology and numerology consultations?",
-         "Yes. Shashank reads Vedic kundli live in 40 to 45 minutes for ₹2,249 and numerology in 20 minutes from ₹824, both on Google Meet. Every consultation is booked on WhatsApp. See the <a href=\"/vedic-kundli-booking.html\">Vedic kundli consultation</a> and the <a href=\"/numerology-booking.html\">numerology consultation</a>."),
+         "Yes, as separate sessions, each booked on WhatsApp. The <a href=\"/vedic-kundli-booking.html\">online astrology consultation</a> is ₹3,699 and lasts strictly 40 to 45 minutes on Google Meet. The <a href=\"/numerology-booking.html\">online numerology consultation</a> is ₹555 for one service you choose, such as your Lo Shu grid, name, mobile number, bank account number or PIN alignment, in 20 minutes on Google Meet. The muhurat selection consultation is ₹1,269 and gives auspicious dates and times for an event such as an exam application, a launch, a property purchase or a registration. These fees are for clients in India only."),
         ("Are there free numerology calculators?",
          "Yes. Thirteen free calculators, from Life Path and the Lo Shu grid to mobile, house and vehicle numbers, are on the <a href=\"/calculators/\">numerology calculators page</a>. They use Chaldean (Cheiro) letter values and run in your browser."),
         ("Who is Shashank Agrawal?",
@@ -276,24 +298,39 @@ def page():
     faq_html = "".join(f'<details><summary>{q}<span class="faq-icon" aria-hidden="true"></span></summary><p>{blur_report_amounts(a) if q == F[0][0] else a}</p></details>' for q, a in F)
 
     def consult(c):
-        rows = "".join(f'<li>{ICON_CHECK}<span><b>{n}</b>{", " if not c.get("from") else ": "}{d}</span></li>' for n, d in c["sessions"])
+        if c.get("choose"):
+            # Pick exactly one service for the one flat fee; report.js puts the choice into the WhatsApp message.
+            group = c["id"] + "-service"
+            opts = "".join(f'<li><label class="pick"><input type="radio" name="{group}" value="{esc(o)}" required>'
+                           f'<span class="pick-dot" aria-hidden="true"></span><span>{o}</span></label></li>' for o in c["choose"])
+            rows = (f'<fieldset class="consult-pick"><legend>Choose one service</legend><ul>{opts}</ul>'
+                    f'<p class="pick-error" role="alert" hidden>Choose one service first.</p></fieldset>')
+            href = wa(c["msg"] + "(I will choose the service in the chat)")
+            pick = f' data-service-pick="{group}" data-msg="{esc(c["msg"])}"'
+        else:
+            rows = "<ul>" + "".join(f'<li>{ICON_CHECK}<span><b>{n}</b>{", " + d if d else ""}</span></li>' for n, d in c["sessions"]) + "</ul>"
+            href, pick = wa(c["msg"]), ""
+        unit = f'<span class="price-unit">{c["unit"]}</span>' if c.get("unit") else ""
+        includes = f'<p class="consult-includes">{c["includes"]}</p>' if c["includes"] else ""
+        more = f'<a class="ghost" href="{c["page"]}">See all sessions <span aria-hidden="true">&rarr;</span></a>' if c["page"] else ""
         return f"""<article class="plan consult" id="{c['id']}">
 <span class="plan-label">{c['label']}</span>
 <h3>{c['name']}</h3><p class="plan-for">{c['for']}</p>
-<p class="plan-price"><b>{'from ' if c.get('from') else ''}{inr(c['price'])}</b><s>{inr(c['was'])}</s><span class="offer-tag">{c['off']}% off</span></p>
+<p class="plan-price"><b>{inr(c['price'])}</b>{unit}<span class="region-tag">India only</span></p>
 <p class="plan-usd">{c['note']}</p>
-<ul>{rows}</ul>
-<p class="consult-includes">{c['includes']}</p>
-<div class="consult-actions"><a class="wa-btn" href="{wa(c['msg'])}" target="_blank" rel="noopener">{ICON_WA}<span>Contact us on WhatsApp</span></a><a class="ghost" href="{c['page']}">See all sessions <span aria-hidden="true">&rarr;</span></a></div>
+{rows}
+{includes}<div class="consult-actions"><a class="wa-btn" href="{href}"{pick} target="_blank" rel="noopener">{ICON_WA}<span>Contact us on WhatsApp</span></a>{more}</div>
 </article>"""
     consults = "".join(consult(c) for c in CONSULTS)
+    expertise = "".join(f'<li class="xp-card" style="--i:{n}"><span class="xp-num">{n + 1:02d}</span><strong>{t}</strong><span class="xp-line">{d}</span></li>'
+                        for n, (t, d) in enumerate(EXPERTISE))
 
     def link_list(items):
         return "".join(f'<a href="{h}"><strong>{t}</strong><span>{d}</span></a>' for h, t, d in items)
     explore_tabs = [
         ("explore-calculators", "Free calculators", [("/calculators/", "All numerology calculators", "Thirteen calculators on one page, Chaldean values.")]
          + [(f"/calculators/{slug}.html", t, d) for slug, t, d in CALCULATORS]),
-        ("explore-consultations", "Consultations", [(c["page"], c["name"], c["for"]) for c in CONSULTS]
+        ("explore-consultations", "Consultations", [(c["page"] or "#" + c["id"], c["name"], c["for"].rstrip(":") + ".") for c in CONSULTS]
          + [("/vedic-astrologer-raipur.html", "Astrologer in Raipur", "Consultations for Raipur, Bhilai, Durg and all of Chhattisgarh.")]),
         ("explore-about", "About and policies", ABOUT_LINKS),
     ]
@@ -325,7 +362,7 @@ def page():
     sessions_detail = "".join(
         f'<article data-i="{n}"{ON if n == 0 else ""}><h3><span class="ss-num">{n + 1:02d}</span> {name}</h3><p class="ss-tag">{tag}</p><p>{desc}</p>'
         f'<p class="ss-meta">{inr(vedic["price"])}, 40 to 45 minutes live on Google Meet</p>'
-        f'<a class="ss-book" href="{wa("Namaste, I would like to book " + name + " (Vedic Kundli consultation).")}" target="_blank" rel="noopener">Book {name} on WhatsApp<span aria-hidden="true"> &rarr;</span></a></article>'
+        f'<a class="ss-book" href="{wa("Namaste, I would like to book " + name + " (Online Astrology Consultation, ₹3,699).")}" target="_blank" rel="noopener">Book {name} on WhatsApp<span aria-hidden="true"> &rarr;</span></a></article>'
         for n, (name, tag, desc) in enumerate(SESSION_DETAILS))
     sessions_steps = "<i></i>" * len(SESSION_DETAILS)
 
@@ -383,9 +420,11 @@ def page():
             {"@type": "ListItem", "position": 1, "name": "Veshannastro", "item": BASE + "/"},
             {"@type": "ListItem", "position": 2, "name": "2027 Numerology Report", "item": URL}]},
         product("blend"), product("classic"),
-        *[{"@type": "Service", "@id": BASE + c["page"] + "#service", "name": c["name"], "url": BASE + c["page"], "provider": {"@id": BASE + "/#organization"},
-           "areaServed": "IN", "description": c["for"],
-           "offers": {"@type": "Offer", "price": str(c["price"]), "priceCurrency": "INR", "url": BASE + c["page"]}} for c in CONSULTS],
+        *[{"@type": "Service", "@id": (BASE + c["page"] if c["page"] else URL) + "#" + ("service" if c["page"] else c["id"]), "name": c["name"],
+           "url": BASE + c["page"] if c["page"] else URL + "#" + c["id"], "provider": {"@id": BASE + "/#organization"},
+           "areaServed": "IN", "description": c["for"].rstrip(":") + ".",
+           "offers": {"@type": "Offer", "price": str(c["price"]), "priceCurrency": "INR", "eligibleRegion": "IN",
+                      "url": BASE + c["page"] if c["page"] else URL + "#" + c["id"]}} for c in CONSULTS],
         {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": strip(q), "acceptedAnswer": {"@type": "Answer", "text": strip(a)}} for q, a in F]},
     ]}
     config = {"wa": WA, "online": ONLINE_PAY, "ads": ("AW-18189866057/" + ADS_PURCHASE_LABEL) if ADS_PURCHASE_LABEL else "", "usdOnline": USD_ONLINE, "delivery": DELIVERY, "offerEnds": OFFER["ends"], "reports": REPORTS}
@@ -415,10 +454,9 @@ def page():
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-R20FKYJK7P');gtag('config','AW-18189866057');</script>
   <script type="application/ld+json">{json.dumps(graph, ensure_ascii=False, separators=(",", ":"))}</script>
   <script>window.R27={json.dumps(config, separators=(",", ":"))};</script>
-  <script src="/assets/r27/report.js?v=18" defer></script><script src="/assets/r27/motion.js?v=6" defer></script><script src="/assets/r27/book.js?v=11" defer></script>
+  <script src="/assets/r27/report.js?v=19" defer></script><script src="/assets/r27/motion.js?v=7" defer></script><script src="/assets/r27/book.js?v=11" defer></script>
 </head>
 <body>
-  <svg class="fx-defs" width="0" height="0" aria-hidden="true" focusable="false"><filter id="morph-threshold"><feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 255 -140"/></filter></svg>
   <div class="nebula" aria-hidden="true"></div><canvas class="sky" id="star-field" aria-hidden="true"></canvas>
   <div class="grain" aria-hidden="true"></div><div class="vignette" aria-hidden="true"></div><div class="progress" aria-hidden="true"></div>
   <header class="topbar">
@@ -477,14 +515,14 @@ def page():
     <section class="signature" aria-label="Curated by Shashank Agrawal"><p class="sig-line"><span>Curated by</span> <span><b>Shashank Agrawal</b></span></p></section>
 
     <section class="report-section" id="testimonials" aria-labelledby="testimonials-title"><div class="wrap">
-      <header class="section-heading"><div class="kicker">Reader feedback</div><h2 id="testimonials-title">In their <em>own words.</em></h2>
+      <header class="section-heading"><div class="kicker">Client success stories and reviews</div><h2 id="testimonials-title">Reviews of people <em>who trust&nbsp;us.</em></h2>
         <div class="feedback-rating" aria-label="Rated 4.6 out of 5 based on 369 reviews"><span class="fr-stars" aria-hidden="true">★★★★★</span><span class="fr-score"><strong>4.6</strong> / 5</span><span class="fr-sep">·</span><span class="fr-count">369 reader reviews</span></div>
         <p class="section-lead">Report feedback shared by our team. Original message screenshots, with excerpts below.</p></header>
       <div class="feedback-controls"><span>Swipe to explore reader feedback</span></div><div class="feedback-grid" tabindex="0" role="region" aria-label="Reader feedback carousel"><figure class="feedback-card"><figcaption><span class="kicker">Report feedback</span><blockquote>“The same clarity is in the report. He has guided us step by step.”</blockquote></figcaption><a href="/assets/r27/testimonials/feedback-1.png" target="_blank" rel="noopener" aria-label="Open feedback screenshot 1 at full size"><img src="/assets/r27/testimonials/feedback-1.png" width="1098" height="758" loading="lazy" decoding="async" alt="Report feedback screenshot 1, including the original message and timestamp"></a><span class="feedback-open">Tap the screenshot to read at full size ↗</span></figure><figure class="feedback-card"><figcaption><span class="kicker">Report feedback</span><blockquote>“It was truly phenomenal to get your guidance, with such a personal touch.”</blockquote></figcaption><a href="/assets/r27/testimonials/feedback-2.png" target="_blank" rel="noopener" aria-label="Open feedback screenshot 2 at full size"><img src="/assets/r27/testimonials/feedback-2.png" width="922" height="332" loading="lazy" decoding="async" alt="Report feedback screenshot 2, including the original message and timestamp"></a><span class="feedback-open">Tap the screenshot to read at full size ↗</span></figure><figure class="feedback-card"><figcaption><span class="kicker">Shweta Dewangan</span><blockquote>“The depth of the report, the live graph, and the remedies you gave were aligned with my daily schedule.”</blockquote></figcaption><a href="/assets/r27/testimonials/feedback-3.png" target="_blank" rel="noopener" aria-label="Open feedback screenshot 3 at full size"><img src="/assets/r27/testimonials/feedback-3.png" width="1106" height="812" loading="lazy" decoding="async" alt="Report feedback screenshot 3, including the original message and timestamp"></a><span class="feedback-open">Tap the screenshot to read at full size ↗</span></figure><figure class="feedback-card"><figcaption><span class="kicker">Rishab Jain</span><blockquote>“This report is very easy to understand, and it felt like you were communicating with me.”</blockquote></figcaption><a href="/assets/r27/testimonials/feedback-4.png" target="_blank" rel="noopener" aria-label="Open feedback screenshot 4 at full size"><img src="/assets/r27/testimonials/feedback-4.png" width="1080" height="556" loading="lazy" decoding="async" alt="Report feedback screenshot 4, including the original message and timestamp"></a><span class="feedback-open">Tap the screenshot to read at full size ↗</span></figure></div>
     </div></section>
 
     <section class="report-section book-section" id="preview" aria-labelledby="preview-title"><div class="wrap">
-      <header class="section-heading"><div class="kicker">Inside a report</div><h2 id="preview-title">Prepared for one person.</h2>
+      <header class="section-heading"><div class="kicker">Inside a report</div><h2 id="preview-title">Prepared for <span class="grad-word">excellence</span>.</h2>
         <p class="section-lead">Every report is written around a single name and date of birth, on a cover chosen by your Mulank.</p></header>
       <div class="book-stage" id="book-stage" aria-hidden="true"></div>
       <noscript><div class="book-noscript"><img src="/assets/r27/book/cover.webp" alt="Sample 2027 report cover" width="150"><img src="/assets/r27/book/page-2.webp" alt="Sample 2027 report page" width="150"><img src="/assets/r27/book/page-3.webp" alt="Sample 2027 report monthly page" width="150"></div></noscript>
@@ -535,11 +573,14 @@ def page():
 
     <section class="report-section" id="services" aria-labelledby="services-title"><div class="wrap">
       <header class="section-heading"><div class="kicker">Consultations</div><h2 id="services-title">Live consultations <em>with Shashank.</em></h2>
-        <p class="section-lead">Besides the 2027 report, Shashank reads Vedic kundli and numerology one-to-one in live sessions on Google Meet. Every consultation is <mark class="hl">booked on WhatsApp</mark>: message us with the session you want, and we confirm your slot and send the payment link there.</p></header>
-      <div class="morph" aria-hidden="true"><span class="morph-word">Vedic Kundli</span><span class="morph-word">Numerology</span><span class="morph-word">Krishnamurti Paddhati</span><span class="morph-word">Bhrigu Nandi Nadi</span><span class="morph-word">Jaimini Astrology</span></div>
-      <div class="plans">{consults}</div>
-      <p class="plans-note">{SLOTS} {OFFICE}</p>
-      <div class="sessions" data-sessions><p class="kicker">Five Vedic sessions</p><h3 class="sessions-title">One session for each part of your life.</h3>
+        <p class="section-lead">Besides the 2027 report, Shashank gives three live consultations: astrology, numerology and muhurat selection. Each one is a separate one-to-one session with its own fee, <mark class="hl">booked on WhatsApp</mark>: message us with the consultation you want, and we confirm your slot and send the payment link there.</p></header>
+      <div class="expertise">
+        <div class="xp-head"><h3 class="xp-title">Our areas of expertise</h3><p class="xp-note">The systems Shashank reads with. One consultation does not cover all five: each consultation below is a separate session with its own fee.</p></div>
+        <ul class="xp-grid">{expertise}</ul>
+      </div>
+      <div class="plans consult-plans">{consults}</div>
+      <p class="plans-note"><b class="region-note">{INDIA_ONLY}</b> {SLOTS} {OFFICE}</p>
+      <div class="sessions" data-sessions><p class="kicker">Five Vedic sessions</p><h3 class="sessions-title">Pick the one session that fits your question.</h3>
         <div class="sessions-track"><div class="sessions-sticky"><ol class="sessions-list" aria-hidden="true">{sessions_list}</ol><div class="sessions-detail">{sessions_detail}</div></div>
         <div class="sessions-steps" aria-hidden="true">{sessions_steps}</div></div></div>
     </div></section>
@@ -617,7 +658,13 @@ def page():
 def legacy_services():
     with open(os.path.join(REPO, "tools", "kamala_services.json"), encoding="utf-8") as fh:
         cats = json.load(fh)["categories"]
-    keep = ("t", "d", "p", "was", "off", "unit", "give", "link", "features")
+    keep = ("t", "d", "p", "was", "off", "unit", "give", "link", "features", "region", "options")
+    # The consultation cards on the page and Kamala's list must charge the same flat fee.
+    listed = {s["t"]: s for c in cats for s in c.get("services", [])}
+    for c in CONSULTS:
+        s = listed.get(c["name"])
+        if not s or s["p"] != inr(c["price"]) or "was" in s or s.get("region") != "IN":
+            raise SystemExit(f"tools/kamala_services.json is out of step with CONSULTS for {c['name']}")
     return [{"id": c["id"], "name": c["name"], "services": [{k: s[k] for k in keep if k in s} for s in c["services"]]}
             for c in cats if c.get("services")]
 

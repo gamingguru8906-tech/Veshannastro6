@@ -49,12 +49,13 @@
   /* Near the bottom of the page some items can never reach their trigger line: show whatever is on screen. */
   function revealOnScreen() {
     if (innerHeight + scrollY < document.documentElement.scrollHeight - 80) return;
-    $$('.section-heading h2:not(.in), .about-copy h2:not(.in), .closing-title:not(.in), .section-lead:not(.in), mark.hl:not(.in), .draw-num:not(.in), .kicker:not(.in), .plan:not(.in), .sig-line:not(.in), .foot-mark:not(.in)').forEach(function (e) {
+    $$('.section-heading h2:not(.in), .about-copy h2:not(.in), .closing-title:not(.in), .section-lead:not(.in), mark.hl:not(.in), .draw-num:not(.in), .kicker:not(.in), .plan:not(.in), .xp-card:not(.in), .sig-line:not(.in), .foot-mark:not(.in)').forEach(function (e) {
       var r = e.getBoundingClientRect(); if (r.top < innerHeight && r.bottom > 0) e.classList.add('in');
     });
   }
   addEventListener('scroll', function () { raf(revealOnScreen); }, { passive: true });
   reveal('mark.hl', '0px 0px -30% 0px');
+  reveal('.xp-card', '0px 0px -10% 0px');
   reveal('.draw-num', '0px 0px -20% 0px', function () {
     var g = document.querySelector('#year-2027 .glitch');
     if (g) setTimeout(function () { glitch(g); }, 2500);   /* once the outline has drawn */
@@ -335,34 +336,6 @@
     }).observe(el);
   });
 
-  /* ---------- fluid morph: one word melts into the other ---------- */
-  $$('.morph').forEach(function (box) {
-    var words = $$('.morph-word', box); if (words.length < 2) return;
-    var cur = 0, visible = false, busy = false, timer = null;
-    var MORPH = 1100, HOLD = 2200;
-    function set(el, f) {                                   /* f: 0 hidden, 1 sharp */
-      var blur = f >= 1 ? 0 : Math.min(8 / Math.max(f, 0.0001) - 8, 60);
-      el.style.filter = blur ? 'blur(' + blur.toFixed(2) + 'px)' : '';
-      el.style.opacity = Math.pow(Math.max(f, 0), 0.4).toFixed(3);
-    }
-    function morph() {
-      if (busy) return; busy = true;
-      var a = words[cur], b = words[(cur + 1) % words.length], t0 = performance.now();
-      box.classList.add('moving');
-      raf(function step(now) {
-        var f = Math.min(1, (now - t0) / MORPH);
-        set(b, f); set(a, 1 - f);
-        if (f < 1) return raf(step);
-        set(a, 0); set(b, 1); box.classList.remove('moving');
-        cur = (cur + 1) % words.length; busy = false;
-      });
-    }
-    new IntersectionObserver(function (en) {
-      visible = en[0].isIntersecting;
-      if (visible && !timer) timer = setTimeout(function run() { morph(); timer = setTimeout(run, MORPH + HOLD); }, 1200);
-      if (!visible && timer) { clearTimeout(timer); timer = null; }
-    }).observe(box);
-  });
 
   if (!fine) return;                                        /* the last two need a mouse */
 

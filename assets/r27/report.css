@@ -264,3 +264,48 @@
 .capacity-number{color:#edf2f8;text-shadow:0 1px 1px #fff4,0 0 20px #dce6f32b}
 .capacity-phase{color:#dce3ed}
 .capacity-deadline{color:#c8d1df}
+
+/* ---------- consultations: three cards with flat fees for India, and the numerology service picker ---------- */
+.consult-plans{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:1100px){.consult-plans{grid-template-columns:repeat(2,minmax(0,1fr))}.consult-plans .plan:last-child{grid-column:1/-1}}
+@media(max-width:760px){.consult-plans{grid-template-columns:1fr}.consult-plans .plan:last-child{grid-column:auto}}
+.plan .price-unit{color:#aeb8cd;font-size:14px}
+.region-tag{display:inline-block;padding:4px 9px;border-radius:4px;border:1px solid #8fd8ff59;background:#8fd8ff14;color:var(--cy);font-size:11.5px;font-weight:700;letter-spacing:.04em}
+.plans-note .region-note{display:block;margin:0 0 6px;color:#dbe3f3;font-weight:600}
+.consult-pick{min-width:0;margin:0 0 22px;padding:0;border:0}
+.consult-pick legend{margin:0 0 10px;padding:0;color:var(--gold);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+.plan .consult-pick ul{margin:0;gap:6px}
+.plan .consult-pick li{display:block}
+.pick{position:relative;display:grid;grid-template-columns:16px 1fr;gap:10px;align-items:center;padding:7px 10px;border:1px solid #ffffff14;border-radius:8px;color:#c6d1e6;font-size:14px;line-height:1.4;cursor:pointer;transition:border-color .2s,background-color .2s,color .2s}
+.pick:hover{border-color:#f3cd9359;background:#ffffff06}
+.pick input{position:absolute;width:1px;height:1px;opacity:0}
+.pick-dot{display:grid;place-items:center;width:16px;height:16px;border:1.5px solid #f3cd93a6;border-radius:50%}
+.pick-dot::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--gold);transform:scale(0);transition:transform .2s}
+.pick input:checked+.pick-dot::after{transform:scale(1)}
+.pick:has(input:checked){border-color:#f3cd9399;background:#f3cd9312;color:#fff}
+.pick input:focus-visible+.pick-dot{outline:2px solid var(--cy);outline-offset:2px}
+.consult-pick.invalid .pick{border-color:#ff9c9c66}
+.pick-error{margin:8px 0 0;color:#ff9c9c;font-size:13px}
+
+/* ---------- our areas of expertise: glass cards (a backdrop blur over a soft glow; no SVG filter on the text) ---------- */
+.expertise{position:relative;margin:0 0 clamp(28px,4vw,44px)}
+.expertise::before{content:"";position:absolute;z-index:0;left:6%;right:6%;top:42%;bottom:-6%;border-radius:50%;background:radial-gradient(closest-side at 30% 50%,#f3cd9326,transparent),radial-gradient(closest-side at 72% 50%,#8fd8ff22,transparent);filter:blur(28px);pointer-events:none}
+.xp-head{position:relative;z-index:1;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 24px;margin:0 0 16px}
+.xp-title{margin:0;color:#f4f7ff;font-size:clamp(20px,2.2vw,26px);font-weight:400;letter-spacing:-.02em}
+.xp-note{max-width:60ch;margin:0;color:var(--muted);font-size:14px;line-height:1.6}
+.xp-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:0;padding:0;list-style:none}
+.xp-card{position:relative;display:flex;flex-direction:column;gap:8px;padding:18px 18px 20px;border:1px solid #ffffff24;border-radius:14px;background:linear-gradient(155deg,#ffffff17,#ffffff05 62%);-webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%);box-shadow:inset 0 1px 0 #ffffff1f,0 20px 40px -28px #000000e6;transition:transform .45s var(--ease),border-color .45s,box-shadow .45s}
+.xp-card::before{content:"";position:absolute;inset:0;padding:1px;border-radius:inherit;background:linear-gradient(140deg,#f3cd9370,transparent 40%,transparent 62%,#8fd8ff52);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.5;transition:opacity .45s;pointer-events:none}
+.xp-card:hover{transform:translate3d(0,-4px,0);border-color:#ffffff33;box-shadow:inset 0 1px 0 #ffffff2e,0 26px 46px -26px #000}
+.xp-card:hover::before{opacity:1}
+.xp-num{color:var(--gold);font-size:11px;font-weight:700;letter-spacing:.16em;font-variant-numeric:tabular-nums}
+.xp-card strong{color:#fff;font-size:16.5px;font-weight:600;line-height:1.25;letter-spacing:-.01em}
+.xp-line{color:#c6d1e6;font-size:13.5px;line-height:1.55}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.xp-card{background:#0b1222eb}}
+@media(max-width:1100px){.xp-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){.xp-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.xp-card{padding:14px 14px 16px}.xp-card:last-child:nth-child(odd){grid-column:1/-1}.xp-card strong{font-size:15.5px}.xp-line{font-size:13px}}
+@media(max-width:340px){.xp-grid{grid-template-columns:1fr}}
+
+/* ---------- "Prepared for excellence": the word takes the gold and blue of the report covers below it ---------- */
+.grad-word{color:transparent;background:linear-gradient(100deg,#f2b632 0%,#df9f38 22%,#5b7fe8 50%,#98cdff 68%,#f2b632 100%);background-size:240% 100%;background-position:0% 50%;-webkit-background-clip:text;background-clip:text;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.consult-plans .plan h3{line-height:1.2}

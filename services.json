@@ -61,21 +61,39 @@
    "name": "Vedic Kundli",
    "services": [
     {
-     "t": "Vedic Kundli Consultation",
-     "d": "A deep 1-to-1 reading of your full birth chart: career, wealth and timing.",
-     "p": "₹2,249",
-     "was": "₹2,999",
-     "off": "25% off",
+     "t": "Online Astrology Consultation",
+     "d": "A deep 1-to-1 reading of your full Vedic birth chart (kundli): career, wealth and timing.",
+     "p": "₹3,699",
      "give": [
       "video",
       "rec"
      ],
      "link": "https://www.veshannastro.co.in/vedic-kundli-booking.html",
      "features": [
-      "40 to 45 minute live video session",
+      "Strictly 40 to 45 minute live video session on Google Meet",
       "Career, wealth & marriage timing",
-      "Personalised remedies & gemstones"
-     ]
+      "Personalised remedies & gemstones",
+      "Flat fee: no discounts or vouchers apply",
+      "Fee valid for clients in India only"
+     ],
+     "region": "IN"
+    },
+    {
+     "t": "Muhurat Selection Consultation",
+     "d": "Calculated auspicious dates and times for an important event.",
+     "p": "₹1,269",
+     "give": [
+      "video"
+     ],
+     "link": "https://www.veshannastro.co.in/2027-numerology-report/#muhurat-consultation",
+     "features": [
+      "Submitting banking or competitive examination applications",
+      "Launching a new brand or product",
+      "Buying property and griha pravesh (housewarming)",
+      "Formal legal or official registrations",
+      "Fee valid for clients in India only"
+     ],
+     "region": "IN"
     },
     {
      "t": "Premium Vedic Life Path Report",
@@ -131,20 +149,30 @@
    "name": "Numerology",
    "services": [
     {
-     "t": "Numerology Consultation",
-     "d": "A live reading of your core numbers and where they steer your life.",
-     "p": "₹824",
-     "was": "₹1,099",
-     "off": "25% off",
+     "t": "Online Numerology Consultation",
+     "d": "A live 20-minute reading for ONE service the client chooses, at one flat fee.",
+     "p": "₹555",
      "give": [
       "video",
       "rec"
      ],
      "link": "https://www.veshannastro.co.in/numerology-booking.html",
      "features": [
-      "Live reading of your core numbers",
-      "Name, DOB & lucky-number review",
-      "Session recording shared after"
+      "Choose exactly one service: Lo Shu Life Matrix, name, mobile number, bank account number, PIN, UPI / bank PIN, ATM PIN or time of account opening",
+      "20-minute live session on Google Meet",
+      "PDF report and the session recording",
+      "Fee valid for clients in India only"
+     ],
+     "region": "IN",
+     "options": [
+      "The Lo Shu Life Matrix",
+      "Name Frequency Alignment",
+      "Mobile Number Energy Audit",
+      "Bank account number alignment",
+      "PIN number alignment",
+      "UPI / bank PIN alignment",
+      "ATM PIN alignment",
+      "Time of account opening"
      ]
     },
     {
@@ -368,11 +396,11 @@
   },
   {
    "q": "Does it replace a full birth chart consultation?",
-   "a": "No. Dasha analysis is included in Astro-Numero Blend, while Classics has the other 11 parameters. Both are annual 2027 reports. For a live discussion of your birth chart, book a separate Vedic kundli consultation with Shashank, booked on WhatsApp."
+   "a": "No. Dasha analysis is included in Astro-Numero Blend, while Classics has the other 11 parameters. Both are annual 2027 reports. For a live discussion of your birth chart, book a separate online astrology consultation with Shashank, booked on WhatsApp."
   },
   {
    "q": "Do you offer live astrology and numerology consultations?",
-   "a": "Yes. Shashank reads Vedic kundli live in 40 to 45 minutes for ₹2,249 and numerology in 20 minutes from ₹824, both on Google Meet. Every consultation is booked on WhatsApp. See the Vedic kundli consultation and the numerology consultation."
+   "a": "Yes, as separate sessions, each booked on WhatsApp. The online astrology consultation is ₹3,699 and lasts strictly 40 to 45 minutes on Google Meet. The online numerology consultation is ₹555 for one service you choose, such as your Lo Shu grid, name, mobile number, bank account number or PIN alignment, in 20 minutes on Google Meet. The muhurat selection consultation is ₹1,269 and gives auspicious dates and times for an event such as an exam application, a launch, a property purchase or a registration. These fees are for clients in India only."
   },
   {
    "q": "Are there free numerology calculators?",

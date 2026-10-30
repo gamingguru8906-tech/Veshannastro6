@@ -14,7 +14,7 @@ import build_report as R  # noqa: E402
 from build_blog import POSTS  # noqa: E402
 
 # The date this file was last brought in line with the site (prices checked on this day).
-UPDATED = "2026-10-29"
+UPDATED = "2026-10-31"
 
 BASE = R.BASE
 
@@ -61,15 +61,25 @@ def main():
 
     w("## Live consultations\n")
     w("Every consultation is booked on WhatsApp: message us with the session you want, and we confirm your slot and send the "
-      "payment link there. Sessions are held live on Google Meet.\n")
+      "payment link there. Each consultation is a separate session with its own flat fee.\n")
+    w(R.INDIA_ONLY + "\n")
+    w("Areas of expertise (the systems Shashank reads with; one consultation does not cover all five):\n")
+    for t, d in R.EXPERTISE:
+        w(f"- {t}: {d}")
+    w("")
     for k in R.CONSULTS:
-        price = ("from " if k.get("from") else "") + R.inr(k["price"])
-        w(f"### {k['name']}: {price}\n")
-        w(f"{k['for']} {k['note']}\n")
-        for n, d in k["sessions"]:
-            w(f"- {n}{': ' if k.get('from') else ', '}{d}")
-        w(f"\nIncludes: {k['includes']}")
-        w(f"Page: {BASE}{k['page']}\n")
+        w(f"### {k['name']}: {R.inr(k['price'])}{' ' + k['unit'] if k.get('unit') else ''}\n")
+        w(f"{k['for']} {k['note']}\n" if not k.get("sessions") or not k["for"].endswith(":") else f"{k['note']}\n\n{k['for']}\n")
+        if k.get("choose"):
+            w("Choose exactly one service:")
+            for n in k["choose"]:
+                w(f"- {n}")
+        else:
+            for n, d in k["sessions"]:
+                w(f"- {n}{', ' + d if d else ''}")
+        if k["includes"]:
+            w(f"\nIncludes: {k['includes']}")
+        w(f"Page: {BASE}{k['page'] or R.PATH + '#' + k['id']}\n")
     w(f"{R.SLOTS} {R.OFFICE}\n")
     w("---\n")
 

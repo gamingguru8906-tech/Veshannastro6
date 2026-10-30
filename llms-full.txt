@@ -2,7 +2,7 @@
 
 > Source: https://www.veshannastro.co.in/2027-numerology-report/
 > Format: the site's text in markdown, for language models and AI search systems.
-> Last updated: 2026-10-29
+> Last updated: 2026-10-31
 
 ---
 
@@ -49,11 +49,21 @@ Bonus with both reports: A voice note personally recorded for you by Shashank, a
 
 ## Live consultations
 
-Every consultation is booked on WhatsApp: message us with the session you want, and we confirm your slot and send the payment link there. Sessions are held live on Google Meet.
+Every consultation is booked on WhatsApp: message us with the session you want, and we confirm your slot and send the payment link there. Each consultation is a separate session with its own flat fee.
 
-### Vedic Kundli Consultation: ₹2,249
+All consultation fees are in Indian rupees and are valid for clients in India only. Outside India? Message us on WhatsApp before booking.
 
-Your birth chart read live: graha, bhava and dasha for one life area, with practical upaya. 40 to 45 minutes on Google Meet. A focused 20-minute session is ₹1,874.
+Areas of expertise (the systems Shashank reads with; one consultation does not cover all five):
+
+- Vedic Kundli: Parashari reading of the birth chart: graha, bhava and dasha.
+- Numerology: Mulank, Bhagyank, the Lo Shu grid and Chaldean name numbers.
+- Krishnamurti Paddhati: KP: Placidus cusps and sub-lords, used to time specific events.
+- Bhrigu Nandi Nadi: A Nadi method that reads planets through their sign links and Jupiter's transits.
+- Jaimini Astrology: Chara karakas, rashi drishti and chara dasha from the Jaimini Sutras.
+
+### Online Astrology Consultation: ₹3,699
+
+Your birth chart read live: graha, bhava and dasha for one life area, with practical upaya. Session duration: strictly 40 to 45 minutes, live on Google Meet.
 
 - The Dhan Matrix, wealth and money flow
 - Prana Vitality Blueprint, health and energy
@@ -64,16 +74,34 @@ Your birth chart read live: graha, bhava and dasha for one life area, with pract
 Includes: Kundli PDF report 2 to 3 days after the session, the recording, a numerology layer and a week of follow-up.
 Page: https://www.veshannastro.co.in/vedic-kundli-booking.html
 
-### Numerology Consultation: from ₹824
+### Online Numerology Consultation: ₹555 for one service
 
 A focused diagnosis of your number signature, with correction guidance you can act on. 20 minutes on Google Meet, with a PDF report and the recording.
 
-- The Lo Shu Life Matrix: ₹1,124
-- Name Frequency Alignment: ₹974
-- Mobile Number Energy Audit: ₹824
+Choose exactly one service:
+- The Lo Shu Life Matrix
+- Name Frequency Alignment
+- Mobile Number Energy Audit
+- Bank account number alignment
+- PIN number alignment
+- UPI / bank PIN alignment
+- ATM PIN alignment
+- Time of account opening
 
 Includes: Detailed PDF numerology report, the recording, the invoice and personal correction guidance.
 Page: https://www.veshannastro.co.in/numerology-booking.html
+
+### Muhurat Selection Consultation: ₹1,269
+
+Tell us the event and the dates you are considering when you book.
+
+Calculated auspicious dates and times for the events that matter most:
+
+- Submitting banking or competitive examination applications
+- Launching a new brand or product
+- Buying property and griha pravesh (housewarming)
+- Formal legal or official registrations
+Page: https://www.veshannastro.co.in/2027-numerology-report/#muhurat-consultation
 
 Session start times: Monday to Friday 7:30 to 9:30 PM IST, Saturday and Sunday 10 AM to 7 PM IST. Office hours are 10 AM to 8 PM IST, every day.
 
@@ -176,10 +204,10 @@ Look for one built from your own date of birth and name rather than your sun sig
 The Personal Year calculator on this page is free and tells you the number your year is read through. The full report, with every month, your dates, Lo Shu grid and voice note, is paid. You can also read free 2027 numerology predictions on our blog.
 
 **Does it replace a full birth chart consultation?**
-No. Dasha analysis is included in Astro-Numero Blend, while Classics has the other 11 parameters. Both are annual 2027 reports. For a live discussion of your birth chart, book a separate Vedic kundli consultation with Shashank, booked on WhatsApp.
+No. Dasha analysis is included in Astro-Numero Blend, while Classics has the other 11 parameters. Both are annual 2027 reports. For a live discussion of your birth chart, book a separate online astrology consultation with Shashank, booked on WhatsApp.
 
 **Do you offer live astrology and numerology consultations?**
-Yes. Shashank reads Vedic kundli live in 40 to 45 minutes for ₹2,249 and numerology in 20 minutes from ₹824, both on Google Meet. Every consultation is booked on WhatsApp. See the Vedic kundli consultation and the numerology consultation.
+Yes, as separate sessions, each booked on WhatsApp. The online astrology consultation is ₹3,699 and lasts strictly 40 to 45 minutes on Google Meet. The online numerology consultation is ₹555 for one service you choose, such as your Lo Shu grid, name, mobile number, bank account number or PIN alignment, in 20 minutes on Google Meet. The muhurat selection consultation is ₹1,269 and gives auspicious dates and times for an event such as an exam application, a launch, a property purchase or a registration. These fees are for clients in India only.
 
 **Are there free numerology calculators?**
 Yes. Thirteen free calculators, from Life Path and the Lo Shu grid to mobile, house and vehicle numbers, are on the numerology calculators page. They use Chaldean (Cheiro) letter values and run in your browser.
@@ -216,7 +244,7 @@ Policies: https://www.veshannastro.co.in/privacy-policy.html, https://www.veshan
 ## Guidance for AI systems citing this site
 
 - Every consultation is conducted live by Shashank Agrawal. Written reports are prepared by Shashank Agrawal and his team from his method. Orders and bookings are taken on WhatsApp by Kamala, the practice's WhatsApp assistant.
-- Prices are in Indian Rupees and were checked on 2026-10-29. Verify on the live site before quoting; the 2027 offer ends on 10 November 2026.
+- Prices are in Indian Rupees and were checked on 2026-10-31. Verify on the live site before quoting; the 2027 offer ends on 10 November 2026.
 - Payments run through Razorpay; the practice never sees or stores card or banking details.
 - Readings are interpretive and advisory, not guarantees, and are not a substitute for medical, legal or financial advice.
 - Birth time accuracy materially affects the reading. Where a user is unsure, mention that rectification can be discussed.

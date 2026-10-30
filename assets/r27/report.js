@@ -712,3 +712,31 @@
   }
   update(); requestAnimationFrame(frame);
 })();
+
+/* Online Numerology Consultation: one flat fee buys exactly one service. The WhatsApp button carries the service the
+   visitor picked; without a pick it asks for one first (without JavaScript the link still opens WhatsApp). */
+(function () {
+  'use strict';
+  Array.prototype.forEach.call(document.querySelectorAll('a[data-service-pick]'), function (btn) {
+    var card = btn.closest('.consult'); if (!card) return;
+    var group = btn.getAttribute('data-service-pick'), base = btn.getAttribute('data-msg') || '';
+    var box = card.querySelector('.consult-pick'), err = card.querySelector('.pick-error');
+    var radios = Array.prototype.slice.call(card.querySelectorAll('input[name="' + group + '"]'));
+    var chosen = function () { var r = radios.filter(function (x) { return x.checked; })[0]; return r ? r.value : ''; };
+    var url = function (v) { return 'https://wa.me/' + ((window.R27 || {}).wa || '918827684725') + '?text=' + encodeURIComponent(base + v + '.'); };
+    radios.forEach(function (r) {
+      r.addEventListener('change', function () {
+        btn.href = url(chosen());
+        if (err) err.hidden = true;
+        if (box) box.classList.remove('invalid');
+      });
+    });
+    btn.addEventListener('click', function (e) {
+      if (chosen()) { btn.href = url(chosen()); return; }
+      e.preventDefault();
+      if (err) err.hidden = false;
+      if (box) box.classList.add('invalid');
+      if (radios[0]) radios[0].focus();
+    });
+  });
+})();

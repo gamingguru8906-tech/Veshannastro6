@@ -6,20 +6,38 @@
    "name": "Vedic Kundli",
    "services": [
     {
-     "t": "Vedic Kundli Consultation",
-     "d": "A deep 1-to-1 reading of your full birth chart: career, wealth and timing.",
-     "p": "₹2,249",
-     "was": "₹2,999",
-     "off": "25% off",
+     "t": "Online Astrology Consultation",
+     "d": "A deep 1-to-1 reading of your full Vedic birth chart (kundli): career, wealth and timing.",
+     "p": "₹3,699",
      "give": [
       "video",
       "rec"
      ],
      "link": "https://www.veshannastro.co.in/vedic-kundli-booking.html",
      "features": [
-      "40 to 45 minute live video session",
+      "Strictly 40 to 45 minute live video session on Google Meet",
       "Career, wealth & marriage timing",
-      "Personalised remedies & gemstones"
+      "Personalised remedies & gemstones",
+      "Flat fee: no discounts or vouchers apply",
+      "Fee valid for clients in India only"
+     ],
+     "region": "IN"
+    },
+    {
+     "t": "Muhurat Selection Consultation",
+     "d": "Calculated auspicious dates and times for an important event.",
+     "p": "₹1,269",
+     "region": "IN",
+     "give": [
+      "video"
+     ],
+     "link": "https://www.veshannastro.co.in/2027-numerology-report/#muhurat-consultation",
+     "features": [
+      "Submitting banking or competitive examination applications",
+      "Launching a new brand or product",
+      "Buying property and griha pravesh (housewarming)",
+      "Formal legal or official registrations",
+      "Fee valid for clients in India only"
      ]
     },
     {
@@ -76,20 +94,30 @@
    "name": "Numerology",
    "services": [
     {
-     "t": "Numerology Consultation",
-     "d": "A live reading of your core numbers and where they steer your life.",
-     "p": "₹824",
-     "was": "₹1,099",
-     "off": "25% off",
+     "t": "Online Numerology Consultation",
+     "d": "A live 20-minute reading for ONE service the client chooses, at one flat fee.",
+     "p": "₹555",
      "give": [
       "video",
       "rec"
      ],
      "link": "https://www.veshannastro.co.in/numerology-booking.html",
      "features": [
-      "Live reading of your core numbers",
-      "Name, DOB & lucky-number review",
-      "Session recording shared after"
+      "Choose exactly one service: Lo Shu Life Matrix, name, mobile number, bank account number, PIN, UPI / bank PIN, ATM PIN or time of account opening",
+      "20-minute live session on Google Meet",
+      "PDF report and the session recording",
+      "Fee valid for clients in India only"
+     ],
+     "region": "IN",
+     "options": [
+      "The Lo Shu Life Matrix",
+      "Name Frequency Alignment",
+      "Mobile Number Energy Audit",
+      "Bank account number alignment",
+      "PIN number alignment",
+      "UPI / bank PIN alignment",
+      "ATM PIN alignment",
+      "Time of account opening"
      ]
     },
     {
