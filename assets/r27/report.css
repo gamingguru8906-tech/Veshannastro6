@@ -118,7 +118,7 @@
 /* ---------- footer ---------- */
 .site-footer{position:relative;z-index:2;padding:clamp(48px,8vh,80px) 0 120px;border-top:1px solid var(--line2)}
 .foot-cols{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:28px}
-.foot-cols h2{font-size:13px;font-weight:700;letter-spacing:.06em;color:#fff;margin:0 0 12px}
+.foot-cols .foot-title{font-size:13px;font-weight:700;letter-spacing:.06em;color:#fff;margin:0 0 12px}
 .foot-cols ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .foot-cols a{color:var(--muted);font-size:14px}
 .foot-cols a:hover{color:#fff}
@@ -201,7 +201,11 @@
 
 /* Report prices reveal together on click, tap, Enter or Space. */
 .report-price{display:inline-block;vertical-align:middle}
-.price-box .pb-now .price-value{font-size:32px}
+/* A price inside a sentence, list or plan line reads as part of that text, not as the big price-card figure
+   (sections.css gives .report-price an 88px size and its span the small grey label style). */
+.report-price:not(.pb-now){display:inline;vertical-align:baseline;margin:0;color:inherit;font-size:inherit;font-weight:inherit;line-height:inherit;letter-spacing:inherit}
+.report-price:not(.pb-now)>.price-value{color:inherit;font-size:inherit;font-weight:inherit;letter-spacing:inherit;text-transform:none}
+.price-box .pb-now .price-value{font-size:32px;color:inherit;letter-spacing:inherit}  /* not the small-label look of .report-price span */
 
 /* Prominent, truthful phase capacity; no remaining-stock claim. */
 .report-capacity{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;margin:2px 0 12px;padding:16px 14px;border:2px solid #f3cd93;border-radius:14px;background:linear-gradient(135deg,#372713,#17131b 65%,#352713);box-shadow:0 0 0 4px #080d19,0 0 0 5px #f3cd9370,0 0 28px #f3cd9320;text-align:center;color:#fff0cc}
@@ -313,3 +317,39 @@
 /* nine covers, one per Mulank: narrower so the fan fits the column */
 .covers-fan figure{width:128px;margin:0 -12px}
 @media(max-width:860px){.covers-fan figure{width:auto;margin:0}}
+
+/* ---------- readability and tap targets (design audit, Oct 2026) ----------
+   iPhones zoom into any field set below 16px, so the form uses 16px. Small print stays at 12px or more,
+   reading text at 15-17px, and every control reaches a 44px tap target. Button placements are unchanged. */
+.field input,.field select{min-height:48px;font-size:16px}
+.field label{font-size:11.5px}
+.form-card-head p,.form-card-head p.form-lead{font-size:15px}
+.form-card-head p.form-note,.form-note,.field-hint,.shared-note,.payment-total p,.field-error{font-size:13px}
+.consent{align-items:center;gap:12px;min-height:44px;margin-top:6px}
+.consent input{width:22px;height:22px;margin:0}
+.consent span{font-size:14px}
+.subject-toggle button,.report-toggle button{min-height:44px;font-size:14px}
+.report-toggle button{flex:1 1 auto;padding-inline:10px;white-space:nowrap}
+.burger{width:44px;height:44px}.burger i{left:13px}.burger i:first-child{top:19px}.burger i:nth-child(2){top:24px}
+.form-links,.delivery-line,.phase-note{font-size:13.5px}
+.report-mark,.capacity-phase,.price-box .pb-label,.finder-number span,.cd-tile span{font-size:11.5px}
+.capacity-deadline,.price-box .pb-was{font-size:13.5px}
+.price-box .pb-desc{font-size:13.5px}
+.free-details span span{font-size:13px}.free-details small{font-size:12px}
+.kicker,.finder-field>span,.dock-title,.cd-title{font-size:11.5px}
+.cd-note,.feedback-open,.feedback-controls{font-size:13.5px}
+.book-caption,.covers-note{font-size:14.5px}.covers-fan figcaption{font-size:12px}
+.plan .plan-for{font-size:15px}.plan li{font-size:15.5px}.plan .plan-usd{font-size:14px}.plans-note{font-size:15px}
+.inside-list p,.report-steps p{font-size:16px}
+.xp-line{font-size:14.5px}.xp-note{font-size:15px}
+.read-list strong{font-size:16.5px}.read-list span{font-size:14.5px}
+.report-faq details p{font-size:16.5px}
+.consult-includes,.sessions-detail .ss-meta{font-size:14.5px}
+.pick{min-height:44px;font-size:15px}
+.ss-book{padding:10px 0}
+.dock-body>span{font-size:14px}
+.foot-cols ul{gap:2px}.foot-cols a{display:inline-block;padding:6px 0;font-size:15px}.foot-cols address{font-size:15px}
+.foot-base{font-size:13px}
+.sticky-pay .sp-text{font-size:13px}
+@media(max-width:760px){.signature{padding-block:40px}}
+@media(max-width:420px){.dob-row,.tob-row{gap:6px}.dob-row select,.tob-row select{padding-left:10px;padding-right:6px}}

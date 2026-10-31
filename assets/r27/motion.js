@@ -49,7 +49,7 @@
   /* Near the bottom of the page some items can never reach their trigger line: show whatever is on screen. */
   function revealOnScreen() {
     if (innerHeight + scrollY < document.documentElement.scrollHeight - 80) return;
-    $$('.section-heading h2:not(.in), .about-copy h2:not(.in), .closing-title:not(.in), .section-lead:not(.in), mark.hl:not(.in), .draw-num:not(.in), .kicker:not(.in), .plan:not(.in), .xp-card:not(.in), .sig-line:not(.in), .foot-mark:not(.in)').forEach(function (e) {
+    $$('.section-heading h2:not(.in), .about-copy h2:not(.in), .closing-title:not(.in), .section-lead:not(.in), mark.hl:not(.in), .draw-num:not(.in), .kicker:not(.in), .plan:not(.in), .xp-card:not(.in), .sig-line:not(.in), .foot-mark:not(.in), .rise-group:not(.in)').forEach(function (e) {
       var r = e.getBoundingClientRect(); if (r.top < innerHeight && r.bottom > 0) e.classList.add('in');
     });
   }
@@ -63,6 +63,26 @@
   reveal('.kicker', '0px 0px -10% 0px');                   /* the small label slides in with its line */
   reveal('.sig-line', '0px 0px -15% 0px');                 /* "Curated by Shashank Agrawal" */
   reveal('.foot-mark', '0px 0px -4% 0px');                 /* the footer wordmark */
+
+  /* ---------- card groups rise in one after another (the price cards, reader feedback, articles, FAQ, countdown) ---------- */
+  [['.plans', '.plan'], ['.feedback-grid', '.feedback-card'], ['.read-list', 'a'], ['.report-faq', 'details'],
+   ['.cd-tiles', '.cd-tile'], ['.foot-cols', ':scope > div']].forEach(function (g) {
+    $$(g[0]).forEach(function (group) {
+      group.classList.add('rise-group');
+      $$(g[1], group).forEach(function (el, i) { el.classList.add('rise'); el.style.setProperty('--rd', Math.min(i, 7) * 80 + 'ms'); });
+    });
+  });
+  reveal('.rise-group', '0px 0px -12% 0px');
+
+  /* ---------- the moon rises a little as the page scrolls past the hero ---------- */
+  var moon = document.querySelector('.hero-photo');
+  if (moon) {
+    var mf = 0;
+    addEventListener('scroll', function () {
+      if (mf) return;
+      mf = raf(function () { mf = 0; var y = scrollY; if (y < innerHeight * 1.5) moon.style.translate = '0 ' + (-y * .12).toFixed(1) + 'px'; });
+    }, { passive: true });
+  }
 
   /* ---------- card sheen: a light streak crosses each price card once as it arrives, and again on hover ---------- */
   function sheen(card) { card.classList.remove('sheen'); void card.offsetWidth; card.classList.add('sheen'); }
@@ -337,7 +357,30 @@
   });
 
 
-  if (!fine) return;                                        /* the last two need a mouse */
+  if (!fine) return;                                        /* the last three need a mouse */
+
+  /* ---------- 3D tilt: price and feedback cards lean toward the cursor, with a soft glare that follows it ---------- */
+  $$('.plan, .feedback-card').forEach(function (card) {
+    var glare = document.createElement('span'), pending = null, f = 0;
+    glare.className = 'tilt-glare'; glare.setAttribute('aria-hidden', 'true');
+    card.appendChild(glare); card.classList.add('tilt');
+    card.addEventListener('pointermove', function (e) {
+      if (e.pointerType !== 'mouse') return;
+      pending = e; if (f) return;
+      f = raf(function () {
+        f = 0; var r = card.getBoundingClientRect();
+        var px = (pending.clientX - r.left) / r.width, py = (pending.clientY - r.top) / r.height;
+        card.classList.add('tilting');
+        card.style.setProperty('--ty', ((px - .5) * 6).toFixed(2) + 'deg');
+        card.style.setProperty('--tx', ((.5 - py) * 5).toFixed(2) + 'deg');
+        card.style.setProperty('--gx', (px * 100).toFixed(1) + '%');
+        card.style.setProperty('--gy', (py * 100).toFixed(1) + '%');
+      });
+    });
+    card.addEventListener('pointerleave', function () {
+      card.classList.remove('tilting'); card.style.setProperty('--tx', '0deg'); card.style.setProperty('--ty', '0deg');
+    });
+  });
 
   /* ---------- magnetic hover: buttons lean toward the cursor ---------- */
   $$('.pill, .wa-btn').forEach(function (btn) {

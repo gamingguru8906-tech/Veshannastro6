@@ -9,8 +9,8 @@
 
 /* 1. Staggered fade up: the hero headline, word by word */
 .stagger .sw{display:inline-block}
-.motion .stagger .sw{opacity:0;transform:translate3d(0,.55em,0);filter:blur(6px);animation:m-rise .9s var(--m-ease) forwards;animation-delay:calc(var(--i) * 70ms + 80ms)}
-.motion .stagger small.sw{display:block;animation-delay:calc(var(--i) * 70ms + 200ms)}
+.motion .stagger .sw{opacity:0;transform:translate3d(0,.55em,0);filter:blur(5px);animation:m-rise .75s var(--m-ease) forwards;animation-delay:calc(var(--i) * 45ms)}
+.motion .stagger small.sw{display:block;animation-delay:calc(var(--i) * 45ms + 120ms)}
 @keyframes m-rise{to{opacity:1;transform:none;filter:none}}
 
 /* 2. Clip-path reveal: section headings slide up out of an invisible boundary */
@@ -85,8 +85,8 @@ mark.hl{color:#fff;padding:0 .12em;margin:0 -.04em;border-radius:3px;-webkit-box
 @keyframes grad-drift{to{background-position:100% 50%}}
 
 /* 13. Magnetic hover: buttons lean toward the cursor (computers only, see motion.js) */
-.motion .magnetic,.motion .magnetic:hover{transform:translate3d(var(--mx,0px),var(--my,0px),0);transition:transform .45s var(--m-ease),background .3s,box-shadow .4s}
-.motion .magnetic.pulling{transition:transform .12s linear,background .3s,box-shadow .4s}
+.motion .magnetic,.motion .magnetic:hover{transform:translate3d(var(--mx,0px),var(--my,0px),0);transition:transform .45s var(--m-ease),background .3s,box-shadow .4s,scale .18s var(--m-ease)}
+.motion .magnetic.pulling{transition:transform .12s linear,background .3s,box-shadow .4s,scale .18s var(--m-ease)}
 
 /* 14. Cursor spotlight: About text stays dim until the cursor lights it (computers only) */
 @property --sr{syntax:'<length>';inherits:true;initial-value:0px}
@@ -285,8 +285,78 @@ mark.hl{color:#fff;padding:0 .12em;margin:0 -.04em;border-radius:3px;-webkit-box
 .motion .foot-mark.in .fm-dust i{animation:fm-drift var(--d) ease-in-out var(--t) infinite alternate}
 @keyframes fm-drift{0%{opacity:0;transform:translate3d(0,0,0)}45%{opacity:.85}100%{opacity:.12;transform:translate3d(0,-28px,0)}}
 
+/* ===== Fourth set (design audit, Oct 2026): more depth and light, still transform / opacity / filter only ===== */
+
+/* 28. Shooting stars cross the hero sky now and then */
+.shooting-stars{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.shooting-stars i{position:absolute;left:var(--x);top:var(--y);width:clamp(90px,12vw,180px);height:1.5px;border-radius:2px;opacity:0;
+  background:linear-gradient(90deg,#cfe6ff00,#cfe6ffb3 70%,#fff);filter:drop-shadow(0 0 6px #8fd8ffb3);transform:rotate(18deg) translate3d(-30vw,0,0)}
+.shooting-stars i::after{content:'';position:absolute;right:-2px;top:50%;width:4px;height:4px;margin-top:-2px;border-radius:50%;background:#fff;box-shadow:0 0 10px 2px #cfe6ff}
+.motion .shooting-stars i{animation:m-shoot var(--d,11s) cubic-bezier(.45,0,.2,1) var(--t,0s) infinite}
+@keyframes m-shoot{0%{opacity:0;transform:rotate(18deg) translate3d(-30vw,0,0)}1.5%{opacity:1}7%,100%{opacity:0;transform:rotate(18deg) translate3d(30vw,0,0)}}
+
+/* 29. A thread of gold and blue light runs round the order card's edge */
+@property --fc-a{syntax:'<angle>';inherits:false;initial-value:0deg}
+.form-card::before{content:'';position:absolute;inset:-1px;z-index:0;padding:1px;border-radius:inherit;pointer-events:none;opacity:.8;
+  background:conic-gradient(from var(--fc-a),#f3cd9300 0deg,#f3cd93c2 36deg,#8fd8ff8c 84deg,#8fd8ff00 130deg,#f3cd9300 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.motion .form-card::before{animation:m-orbit 10s linear infinite}
+@keyframes m-orbit{to{--fc-a:360deg}}
+
+/* 30. A light sweep crosses the "50 reports only" plaque every few seconds */
+.report-capacity{overflow:hidden}
+.report-capacity::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(105deg,transparent 36%,#ffffff2e 48%,#f3cd9329 53%,transparent 64%) no-repeat 130% 0/260% 100%}
+.motion .report-capacity::after{animation:m-plaque 6.5s var(--m-ease) 1.6s infinite}
+@keyframes m-plaque{0%{background-position:130% 0}28%,100%{background-position:-30% 0}}
+
+/* 31. The soft-blue word in each section heading carries a slow shimmer */
+.motion .section-heading h2 em,.motion .section-title em{background-image:linear-gradient(100deg,#8fa6d6 0%,#cfe2ff 30%,#fff 45%,#cfe2ff 60%,#8fa6d6 100%);
+  background-size:250% 100%;animation:m-shimmer 8s ease-in-out infinite alternate}
+@keyframes m-shimmer{from{background-position:0% 50%}to{background-position:100% 50%}}
+
+/* 32. Card groups rise in one after another (motion.js marks them; "translate", so tilt and hover transforms still work) */
+.motion .rise-group .rise{opacity:0;translate:0 28px;filter:blur(4px)}
+.motion .rise-group.in .rise{opacity:1;translate:0 0;filter:none;
+  transition:opacity .9s var(--m-ease) var(--rd,0s),translate .9s var(--m-ease) var(--rd,0s),filter .9s var(--m-ease) var(--rd,0s)}
+
+/* 33. Cards lean toward the cursor with a soft glare (computers only, see motion.js) */
+.feedback-card{position:relative}
+.motion .tilt{transform:perspective(900px) rotateX(var(--tx,0deg)) rotateY(var(--ty,0deg));transition:transform .6s var(--m-ease)}
+.motion .tilt.tilting{transition:transform .12s linear}
+.tilt-glare{position:absolute;inset:0;z-index:3;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .4s;
+  background:radial-gradient(380px circle at var(--gx,50%) var(--gy,50%),#ffffff17,#f3cd930a 30%,transparent 55%)}
+.tilt.tilting .tilt-glare{opacity:1}
+
+/* 34. Buttons press in a touch when tapped */
+.outline-button{transition:scale .18s var(--m-ease),background .25s}
+.subject-toggle button{transition:background .25s,color .25s,scale .18s var(--m-ease)}
+.ring-controls button{transition:border-color .3s,background .3s,scale .18s var(--m-ease)}
+.pill:active,.outline-button:active,.subject-toggle button:active,.ring-controls button:active{scale:.97}
+
+/* 35. FAQ answers slide open; the plus turns as it becomes a minus */
+.motion .report-faq details[open]>:not(summary){animation:m-faq .55s var(--m-ease) both}
+@keyframes m-faq{from{opacity:0;translate:0 -8px}}
+.report-faq summary{transition:color .3s}
+.report-faq summary:hover{color:var(--m-gold)}
+.faq-icon{transition:rotate .5s var(--m-ease)}
+.report-faq details[open] .faq-icon{rotate:180deg}
+
+/* 36. The reader feedback rail fades out at its edges */
+.feedback-grid{-webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
+.feedback-grid:focus-within{-webkit-mask-image:none;mask-image:none}
+
+/* 37. Article links draw a gold-to-blue line under themselves on hover */
+.read-list a{position:relative}
+.read-list a::after{content:'';position:absolute;left:20px;right:20px;bottom:0;height:1px;background:linear-gradient(90deg,var(--m-gold),var(--m-cyan));transform:scaleX(0);transform-origin:0 50%;transition:transform .5s var(--m-ease)}
+.read-list a:hover::after,.read-list a:focus-visible::after{transform:none}
+.read-list a:hover strong{color:var(--m-cream)}
+
 @media(prefers-reduced-motion:reduce){
   .marquee-track,.closing-title b,.hero-photo,.cd-tile::before,.cd-tile::after,.plan::before,.hero-tags span,.fm-dust i,.sig-line b{animation:none!important}
   .dock-card,.dock-body{transition:none!important}
   .grad-word,.xp-card{animation:none!important;opacity:1!important}
+  .shooting-stars{display:none}
+  .form-card::before,.report-capacity::after,.section-heading h2 em,.section-title em{animation:none!important}
+  .rise{opacity:1!important;translate:none!important;filter:none!important}
 }
