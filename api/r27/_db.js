@@ -63,26 +63,22 @@ function dobText(iso) {
 const validVisitor = v => /^[a-z0-9]{16,40}$/.test(String(v || ''));
 
 /**
- * The order form, saved against the WhatsApp number. Fills only what Kamala does not know yet (her chats win),
- * and links this browser's earlier activity to the number.
+ * The order form, saved against the WhatsApp number as typed: an unverified lead only. Anyone can type any number,
+ * so this never writes Kamala's customer record (users) and never changes a lead that has already paid; details tied
+ * to a number come only from that number's owner (a WhatsApp chat, a paid order, or an account proven by its code).
+ * Links this browser's earlier activity to the lead.
  */
 async function saveLead(o, stage, visitor, priceText) {
   const p = db();
   if (!p) return 'skipped';
   await ensureSchema();
-  await p.query(`INSERT INTO users (phone, name, email, dob, tob, pob, first_source, first_contact, last_contact)
-    VALUES ($1,$2,$3,$4,$5,$6,'website',NOW(),NOW())
-    ON CONFLICT (phone) DO UPDATE SET
-      name=COALESCE(NULLIF(users.name,''), EXCLUDED.name), email=COALESCE(NULLIF(users.email,''), EXCLUDED.email),
-      dob=COALESCE(NULLIF(users.dob,''), EXCLUDED.dob), tob=COALESCE(NULLIF(users.tob,''), NULLIF(EXCLUDED.tob,'')),
-      pob=COALESCE(NULLIF(users.pob,''), EXCLUDED.pob), first_source=COALESCE(users.first_source, 'website')`,
-  [o.phone, o.name, o.email, dobText(o.dob), o.tob || '', o.pob]);
   await p.query(`INSERT INTO web_leads (phone, name, email, dob, tob, pob, report, report_name, price, referral, stage)
     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
     ON CONFLICT (phone) DO UPDATE SET name=EXCLUDED.name, email=EXCLUDED.email, dob=EXCLUDED.dob,
       tob=COALESCE(NULLIF(EXCLUDED.tob,''), web_leads.tob), pob=EXCLUDED.pob, report=EXCLUDED.report,
       report_name=EXCLUDED.report_name, price=EXCLUDED.price, referral=COALESCE(NULLIF(EXCLUDED.referral,''), web_leads.referral),
-      stage=CASE WHEN web_leads.stage='paid' THEN 'paid' ELSE EXCLUDED.stage END, times=web_leads.times + 1, last_at=NOW()`,
+      stage=EXCLUDED.stage, times=web_leads.times + 1, last_at=NOW()
+    WHERE web_leads.stage <> 'paid'`,
   [o.phone, o.name, o.email, dobText(o.dob), o.tob || '', o.pob, o.key, o.report.name, priceText, o.referral || '', stage]);
   if (validVisitor(visitor)) {
     await p.query(`INSERT INTO web_visitors (visitor, phone) VALUES ($1,$2)

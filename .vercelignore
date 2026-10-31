@@ -6,3 +6,5 @@ build-sitemap.py
 *.gs
 *.md
 .github/
+db/
+tests/

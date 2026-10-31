@@ -42,6 +42,9 @@ ADS_PURCHASE_LABEL = ""
 # Pay in US dollars on the page. Needs international payments on in Razorpay and R27_USD=on in Vercel.
 # Off: buyers outside India send their order on WhatsApp.
 USD_ONLINE = False
+# Customer accounts (sign in with a WhatsApp code, api/account). Turn on once db/2026-11-accounts.sql has run in Neon,
+# AUTH_DATABASE_URL and AUTH_OTP_PEPPER are set in Vercel, and the login_code template is approved in WhatsApp Manager.
+ACCOUNTS_LIVE = False
 # Phase one closes at the end of this day, India time.
 CLOSES_AT = OFFER["ends"] + "T23:59:59+05:30"
 
@@ -50,11 +53,18 @@ BULK_MSG = "Hi Veshannastro, I would like 2027 reports for more than one person.
 ASK_MSG = "Hi Veshannastro, I have a question about the 2027 report."
 
 
+# The account button and sign-in sheet (assets/r27/account.js), only when ACCOUNTS_LIVE is on.
+ACCOUNT_BUTTON = '    <button class="acct-btn" type="button" aria-haspopup="dialog" aria-controls="account-dialog" aria-label="Sign in to your account"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.2" r="3.7"/><path d="M4.6 20.2c.9-3.9 3.9-6.1 7.4-6.1s6.5 2.2 7.4 6.1"/></svg><span class="acct-initial" aria-hidden="true"></span></button>\n' if ACCOUNTS_LIVE else ""
+ACCOUNT_DIALOG = '  <dialog id="account-dialog" class="account-dialog" aria-labelledby="acct-title"><div class="acct-sheet">\n    <header class="acct-head"><p class="acct-kicker">Veshannastro account</p><h2 id="acct-title">Sign in with WhatsApp</h2><button class="close-dialog" type="button" data-acct-close aria-label="Close">&times;</button></header>\n    <div class="acct-step" data-step="loading" aria-busy="true" aria-label="Loading your account"><div class="sk-line w60"></div><div class="sk-line w80"></div><div class="sk-line tall"></div><div class="sk-line tall"></div></div>\n    <form class="acct-step" data-step="phone" id="acct-phone-form" novalidate>\n      <p class="acct-lead">We send a 6-digit code to your WhatsApp. No password to remember.</p>\n      <div class="field"><label for="acct-mobile">WhatsApp number</label><div class="phone-row"><select id="acct-cc" aria-label="Country code"><option value="India|+91">India +91</option></select><input id="acct-mobile" data-focus type="tel" inputmode="tel" autocomplete="tel-national" placeholder="98765 43210" maxlength="20" aria-describedby="acct-mobile-err"></div><span class="field-error" id="acct-mobile-err" hidden></span></div>\n      <p class="acct-error" id="acct-phone-err" role="alert" hidden></p>\n      <button class="pill acct-submit" type="submit">Send code on WhatsApp</button>\n      <p class="acct-fine">By continuing you agree to our <a href="/terms.html">terms</a> and <a href="/privacy-policy.html">privacy policy</a>.</p>\n    </form>\n    <form class="acct-step" data-step="code" id="acct-code-form" novalidate>\n      <p class="acct-lead">Enter the code we sent on WhatsApp to <b id="acct-sent-to"></b>. It works for 5 minutes.</p>\n      <div class="otp"><input id="acct-otp" data-focus type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" aria-label="6-digit code" aria-describedby="acct-otp-err"><div class="otp-cells" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div></div>\n      <p class="acct-error" id="acct-otp-err" role="alert" hidden></p>\n      <button class="pill acct-submit" type="submit">Verify and sign in</button>\n      <div class="acct-row"><button type="button" class="link-btn" data-acct-back>Change number</button><button type="button" class="link-btn" id="acct-resend" disabled>Resend code in 60s</button></div>\n    </form>\n    <form class="acct-step" data-step="profile" id="acct-profile-form" novalidate>\n      <p class="acct-lead"><b id="acct-profile-for"></b> is verified. Add your details to finish your account.</p>\n      <div class="field"><label for="acct-name">Full name</label><input id="acct-name" data-focus autocomplete="name" maxlength="80" aria-describedby="acct-name-err"><span class="field-error" id="acct-name-err" hidden></span></div>\n      <div class="field"><label for="acct-email">Email</label><input id="acct-email" type="email" autocomplete="email" maxlength="120" aria-describedby="acct-email-err"><span class="field-error" id="acct-email-err" hidden></span></div>\n      <div class="field"><label for="acct-dob">Date of birth</label><input id="acct-dob" type="date" min="1900-01-01" autocomplete="bday" aria-describedby="acct-dob-err"><span class="field-error" id="acct-dob-err" hidden></span></div>\n      <p class="acct-error" id="acct-profile-err" role="alert" hidden></p>\n      <button class="pill acct-submit" type="submit">Create account</button>\n    </form>\n    <section class="acct-step" data-step="done">\n      <div class="acct-who"><span class="acct-avatar" aria-hidden="true"></span><div><h3 id="acct-hello"></h3><p id="acct-sub"></p></div></div>\n      <dl class="acct-details" id="acct-details"></dl>\n      <div class="acct-actions"><a class="pill" href="#register" data-acct-close data-focus>Get your report</a><button type="button" class="outline-button" id="acct-logout">Log out</button></div>\n    </section>\n  </div></dialog>\n' if ACCOUNTS_LIVE else ""
+# The script always loads: it also runs the header's sliding light, and stops early when there is no account button.
+ACCOUNT_SCRIPT = '<script src="/assets/r27/account.js?v=1" defer></script>'
+
+
 def page_css():
-    """The page's four stylesheets inlined into one <style>, so nothing blocks the first paint. The files in
+    """The page's five stylesheets inlined into one <style>, so nothing blocks the first paint. The files in
     assets/r27 stay the source: edit them and rebuild. Only this page uses them."""
     out = []
-    for name in ("styles.css", "sections.css", "report.css", "motion.css"):
+    for name in ("styles.css", "sections.css", "report.css", "motion.css", "account.css"):
         with open(os.path.join(REPO, "assets", "r27", name), encoding="utf-8") as fh:
             css = re.sub(r"/\*.*?\*/", "", fh.read(), flags=re.S)
         out.append(re.sub(r"\s*\n\s*", " ", re.sub(r"[ \t]+", " ", css)).strip())
@@ -455,7 +465,7 @@ def page():
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-R20FKYJK7P');gtag('config','AW-18189866057');</script>
   <script type="application/ld+json">{json.dumps(graph, ensure_ascii=False, separators=(",", ":"))}</script>
   <script>window.R27={json.dumps(config, separators=(",", ":"))};</script>
-  <script src="/assets/r27/report.js?v=20" defer></script><script src="/assets/r27/motion.js?v=10" defer></script><script src="/assets/r27/book.js?v=12" defer></script>
+  <script src="/assets/r27/report.js?v=20" defer></script><script src="/assets/r27/motion.js?v=10" defer></script><script src="/assets/r27/book.js?v=12" defer></script>{ACCOUNT_SCRIPT}
 </head>
 <body>
   <div class="nebula" aria-hidden="true"></div><canvas class="sky" id="star-field" aria-hidden="true"></canvas>
@@ -463,7 +473,7 @@ def page():
   <header class="topbar">
     <a class="brand" href="{PATH}" aria-label="VESHANNASTRO home"><b>VESHANNASTRO</b></a>
     <nav class="nav-links" aria-label="Main navigation"><a href="#inside">Inside</a><a href="#finder">Your Year</a><a href="#pricing">Reports</a><a href="#services">Consultations</a><a href="/blog/">Blog</a><a href="#faq">FAQ</a></nav>
-    <a class="pill pill-nav" href="#register">Get your report</a>
+{ACCOUNT_BUTTON}    <a class="pill pill-nav" href="#register">Get your report</a>
     <button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><i></i><i></i></button>
   </header>
   <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation" inert>
@@ -637,7 +647,7 @@ def page():
     <div class="foot-base"><span>// SHASHANK AGRAWAL &nbsp; // VESHANNASTRO</span><span>Numerology and astrology are guidance, not guarantees. &copy; 2026 Veshannastro</span></div>
   </div></footer>
 
-  <dialog id="review-dialog" class="review-dialog" aria-labelledby="review-title"><div class="review-scroll"><header class="review-head"><div class="dialog-title-row"><h2 id="review-title">Check your details</h2><button class="close-dialog" type="button" data-close aria-label="Close">&times;</button></div><p id="review-sub">Edit anything before you continue.</p></header><div id="review-content"></div><p class="local-payment-note" id="review-note"></p><p class="form-error" id="pay-error" role="alert" hidden></p></div>
+{ACCOUNT_DIALOG}  <dialog id="review-dialog" class="review-dialog" aria-labelledby="review-title"><div class="review-scroll"><header class="review-head"><div class="dialog-title-row"><h2 id="review-title">Check your details</h2><button class="close-dialog" type="button" data-close aria-label="Close">&times;</button></div><p id="review-sub">Edit anything before you continue.</p></header><div id="review-content"></div><p class="local-payment-note" id="review-note"></p><p class="form-error" id="pay-error" role="alert" hidden></p></div>
     <footer class="dialog-foot"><button type="button" class="outline-button" data-close id="review-edit">Edit details</button><a id="review-go" class="wa-btn" href="#" target="_blank" rel="noopener">{ICON_WA}<span>Send order on WhatsApp</span></a><button type="button" class="pill pay-btn" id="review-pay" hidden><span id="review-pay-label">Pay</span></button><button type="button" class="pill" id="review-done" data-close hidden>Close</button></footer></dialog>
 
   <dialog id="paid-dialog" class="review-dialog paid-dialog" aria-labelledby="paid-title" data-state="checking"><div class="review-scroll">
