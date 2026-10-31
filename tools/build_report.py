@@ -455,7 +455,7 @@ def page():
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-R20FKYJK7P');gtag('config','AW-18189866057');</script>
   <script type="application/ld+json">{json.dumps(graph, ensure_ascii=False, separators=(",", ":"))}</script>
   <script>window.R27={json.dumps(config, separators=(",", ":"))};</script>
-  <script src="/assets/r27/report.js?v=19" defer></script><script src="/assets/r27/motion.js?v=10" defer></script><script src="/assets/r27/book.js?v=12" defer></script>
+  <script src="/assets/r27/report.js?v=20" defer></script><script src="/assets/r27/motion.js?v=10" defer></script><script src="/assets/r27/book.js?v=12" defer></script>
 </head>
 <body>
   <div class="nebula" aria-hidden="true"></div><canvas class="sky" id="star-field" aria-hidden="true"></canvas>

@@ -526,7 +526,6 @@
     var o = collect(), p = price();
     if (!validate(o)) return;
     track('begin_checkout', { currency: p.cur, value: p.amount, items: [{ item_name: o.reportName, price: p.amount }] });
-    revealPrices();
     review(o, p);
   });
 
