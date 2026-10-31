@@ -143,7 +143,7 @@ CONSULTS = [
      "msg": "Namaste, I would like to book the Muhurat Selection Consultation (₹1,269)."},
 ]
 INDIA_ONLY = "All consultation fees are in Indian rupees and are valid for clients in India only. Outside India? Message us on WhatsApp before booking."
-# The systems Shashank reads with. Shown as cards so nobody reads them as five things delivered in one session.
+# The systems Shashank reads with, typed one name at a time (the note above them says each consultation is separate).
 EXPERTISE = [
     ("Vedic Kundli", "Parashari reading of the birth chart: graha, bhava and dasha."),
     ("Numerology", "Mulank, Bhagyank, the Lo Shu grid and Chaldean name numbers."),
@@ -323,8 +323,8 @@ def page():
 {includes}<div class="consult-actions"><a class="wa-btn" href="{href}"{pick} target="_blank" rel="noopener">{ICON_WA}<span>Contact us on WhatsApp</span></a>{more}</div>
 </article>"""
     consults = "".join(consult(c) for c in CONSULTS)
-    expertise = "".join(f'<li class="xp-card" style="--i:{n}"><span class="xp-num">{n + 1:02d}</span><strong>{t}</strong><span class="xp-line">{d}</span></li>'
-                        for n, (t, d) in enumerate(EXPERTISE))
+    expertise = "".join(f'<li><b>{t}</b><span class="sr-only">: {d}</span></li>' for t, d in EXPERTISE)
+    expertise_words = "|".join(t for t, _ in EXPERTISE)
 
     def link_list(items):
         return "".join(f'<a href="{h}"><strong>{t}</strong><span>{d}</span></a>' for h, t, d in items)
@@ -455,7 +455,7 @@ def page():
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-R20FKYJK7P');gtag('config','AW-18189866057');</script>
   <script type="application/ld+json">{json.dumps(graph, ensure_ascii=False, separators=(",", ":"))}</script>
   <script>window.R27={json.dumps(config, separators=(",", ":"))};</script>
-  <script src="/assets/r27/report.js?v=19" defer></script><script src="/assets/r27/motion.js?v=8" defer></script><script src="/assets/r27/book.js?v=12" defer></script>
+  <script src="/assets/r27/report.js?v=19" defer></script><script src="/assets/r27/motion.js?v=10" defer></script><script src="/assets/r27/book.js?v=12" defer></script>
 </head>
 <body>
   <div class="nebula" aria-hidden="true"></div><canvas class="sky" id="star-field" aria-hidden="true"></canvas>
@@ -577,7 +577,8 @@ def page():
         <p class="section-lead">Besides the 2027 report, Shashank gives three live consultations: astrology, numerology and muhurat selection. Each one is a separate one-to-one session with its own fee, <mark class="hl">booked on WhatsApp</mark>: message us with the consultation you want, and we confirm your slot and send the payment link there.</p></header>
       <div class="expertise">
         <div class="xp-head"><h3 class="xp-title">Our areas of expertise</h3><p class="xp-note">The systems Shashank reads with. One consultation does not cover all five: each consultation below is a separate session with its own fee.</p></div>
-        <ul class="xp-grid">{expertise}</ul>
+        <ul class="xp-names">{expertise}</ul>
+        <p class="xp-type" aria-hidden="true" data-words="{expertise_words}"><span class="xp-count"><b>01</b> / {len(EXPERTISE):02d}</span><span class="xp-stage"><span class="xp-word"></span><i class="xp-caret"></i></span></p>
       </div>
       <div class="plans consult-plans">{consults}</div>
       <p class="plans-note"><b class="region-note">{INDIA_ONLY}</b> {SLOTS} {OFFICE}</p>

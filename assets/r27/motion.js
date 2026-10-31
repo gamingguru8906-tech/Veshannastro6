@@ -49,13 +49,12 @@
   /* Near the bottom of the page some items can never reach their trigger line: show whatever is on screen. */
   function revealOnScreen() {
     if (innerHeight + scrollY < document.documentElement.scrollHeight - 80) return;
-    $$('.section-heading h2:not(.in), .about-copy h2:not(.in), .closing-title:not(.in), .section-lead:not(.in), mark.hl:not(.in), .draw-num:not(.in), .kicker:not(.in), .plan:not(.in), .xp-card:not(.in), .sig-line:not(.in), .foot-mark:not(.in), .rise-group:not(.in)').forEach(function (e) {
+    $$('.section-heading h2:not(.in), .about-copy h2:not(.in), .closing-title:not(.in), .section-lead:not(.in), mark.hl:not(.in), .draw-num:not(.in), .kicker:not(.in), .plan:not(.in), .sig-line:not(.in), .foot-mark:not(.in), .rise-group:not(.in)').forEach(function (e) {
       var r = e.getBoundingClientRect(); if (r.top < innerHeight && r.bottom > 0) e.classList.add('in');
     });
   }
   addEventListener('scroll', function () { raf(revealOnScreen); }, { passive: true });
   reveal('mark.hl', '0px 0px -30% 0px');
-  reveal('.xp-card', '0px 0px -10% 0px');
   reveal('.draw-num', '0px 0px -20% 0px', function () {
     var g = document.querySelector('#year-2027 .glitch');
     if (g) setTimeout(function () { glitch(g); }, 2500);   /* once the outline has drawn */
@@ -356,6 +355,43 @@
     }).observe(el);
   });
 
+
+  /* ---------- areas of expertise: type a name, hold it, type it back out, then the next (paused off screen) ---------- */
+  $$('.xp-type').forEach(function (box) {
+    var words = (box.getAttribute('data-words') || '').split('|').filter(Boolean); if (!words.length) return;
+    var out = box.querySelector('.xp-word'), num = box.querySelector('.xp-count b');
+    var w = 0, visible = false, started = false, next = null;
+    var pad = function (x) { return (x < 10 ? '0' : '') + x; };
+    function wait(fn, ms) { setTimeout(function () { if (visible) fn(); else next = fn; }, ms); }
+    function type(i) {
+      var word = words[w];
+      if (i === 0) { box.classList.add('typing'); num.textContent = pad(w + 1); num.classList.remove('tick'); void num.offsetWidth; num.classList.add('tick'); }
+      if (i < word.length) {
+        var ch = document.createElement('span'); ch.className = 'ch'; ch.textContent = word[i]; ch.setAttribute('data-c', word[i]);
+        out.appendChild(ch);
+        return wait(function () { type(i + 1); }, word[i] === ' ' ? 40 : 70 + Math.random() * 45);
+      }
+      box.classList.remove('typing');
+      wait(erase, 1900);
+    }
+    function erase() {
+      var left = $$('.ch:not(.out)', out);
+      if (left.length) {
+        var ch = left[left.length - 1];
+        box.classList.add('typing'); ch.classList.add('out');
+        setTimeout(function () { ch.remove(); }, 200);
+        return wait(erase, 42);
+      }
+      box.classList.remove('typing');
+      w = (w + 1) % words.length;
+      wait(function () { type(0); }, 380);
+    }
+    new IntersectionObserver(function (en) {
+      visible = en[0].isIntersecting; if (!visible) return;
+      if (!started) { started = true; type(0); }
+      else if (next) { var f = next; next = null; f(); }
+    }).observe(box);
+  });
 
   if (!fine) return;                                        /* the last three need a mouse */
 

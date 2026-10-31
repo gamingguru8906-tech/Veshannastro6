@@ -76,10 +76,17 @@ mark.hl{color:#fff;padding:0 .12em;margin:0 -.04em;border-radius:3px;-webkit-box
 .flip .fl.out{transform:rotateX(90deg);opacity:0}
 .flip .fl.pre{transform:rotateX(-90deg);opacity:0;transition:none}
 
-/* 12. Areas of expertise: the glass cards rise in one after another ("translate", so the hover lift still works) */
-.motion .xp-card{opacity:0}
-.motion .xp-card.in{animation:xp-rise .8s var(--m-ease) calc(var(--i) * 90ms) both}
-@keyframes xp-rise{from{opacity:0;translate:0 18px}to{opacity:1;translate:0 0}}
+/* 12. Areas of expertise: each name types in letter by letter (a short soft rise), holds, then types back out
+   before the next one arrives; the fill drifts slowly so the letters catch the light (motion.js) */
+.motion .xp-word .ch{animation:xp-type-in .3s var(--m-ease) both,xp-glint 6s ease-in-out infinite alternate}
+.motion .xp-word .ch.out{animation:xp-type-out .2s ease-in both}
+@keyframes xp-type-in{from{opacity:0;transform:translate3d(0,.25em,0);filter:blur(2px)}}
+@keyframes xp-type-out{to{opacity:0;transform:translate3d(0,-.15em,0)}}
+@keyframes xp-glint{to{background-position:50% 100%}}
+.motion .xp-caret{animation:xp-blink 1.05s steps(1,end) infinite}
+.xp-type.typing .xp-caret{animation:none}
+@keyframes xp-blink{50%{opacity:0}}
+.motion .xp-count b.tick{animation:m-tick .45s var(--m-ease)}
 /* and "excellence" drifts slowly through its gold and blue */
 .motion .grad-word{animation:grad-drift 9s ease-in-out infinite alternate}
 @keyframes grad-drift{to{background-position:100% 50%}}
@@ -355,7 +362,7 @@ mark.hl{color:#fff;padding:0 .12em;margin:0 -.04em;border-radius:3px;-webkit-box
 @media(prefers-reduced-motion:reduce){
   .marquee-track,.closing-title b,.hero-photo,.cd-tile::before,.cd-tile::after,.plan::before,.hero-tags span,.fm-dust i,.sig-line b{animation:none!important}
   .dock-card,.dock-body{transition:none!important}
-  .grad-word,.xp-card{animation:none!important;opacity:1!important}
+  .grad-word{animation:none!important;opacity:1!important}
   .shooting-stars{display:none}
   .form-card::before,.report-capacity::after,.section-heading h2 em,.section-title em{animation:none!important}
   .rise{opacity:1!important;translate:none!important;filter:none!important}
