@@ -1,0 +1,82 @@
+/* Sizing for the 2027 page. Loaded after the section styles (before perf.css), so the originals stay as they were and
+   this file alone decides how roomy the page is. Phones were getting desktop-scale spacing: about 31 screens of
+   scrolling, with cards padded like posters. Phones now get tight, even spacing; computers a proportional trim. */
+
+/* ---------- computers and tablets: the same design, about 15% tighter ---------- */
+.report-section{padding:clamp(64px,9vh,112px) 0}
+.section-heading{margin-bottom:clamp(28px,4.4vh,48px)}
+.section-heading h2,.section-title{font-size:clamp(30px,3.9vw,50px)}
+.form-card{max-width:500px;padding:clamp(20px,2vw,28px)}
+.plan{padding:clamp(20px,2.4vw,30px)}
+.price-card{padding:clamp(24px,3.4vw,44px)}
+.report-steps li{padding:clamp(20px,2.4vw,28px)}
+.year-finder{padding:clamp(20px,2.4vw,30px)}
+.book-section{padding:clamp(52px,7.5vh,92px) 0 clamp(44px,6.5vh,76px)}
+.signature{padding:clamp(40px,8vh,88px) var(--pad)}
+.sessions{margin-top:clamp(44px,6vw,80px)}
+.report-faq summary{padding:20px 0}
+
+/* ---------- phones ---------- */
+@media(max-width:760px){
+  :root{--pad:16px}
+  /* sections and headings */
+  .report-section{padding:48px 0}
+  .section-heading{margin-bottom:22px}
+  .section-heading h2,.section-title{font-size:clamp(25px,7.2vw,31px);line-height:1.12}
+  .section-lead{font-size:14.5px;line-height:1.6}
+  .kicker{font-size:10px;letter-spacing:.18em}
+  .closing-title{font-size:clamp(28px,8.4vw,36px)}
+  .about-copy .section-title{font-size:clamp(28px,8.4vw,36px)}
+
+  /* the hero and the order card */
+  .hero{padding:80px var(--pad) 36px}
+  .hero h1{font-size:clamp(26px,7.4vw,32px);margin-bottom:16px}
+  .hero h1 small{margin-top:10px;padding:5px 12px;font-size:12.5px}
+  .form-card{padding:16px;border-radius:16px}
+  .form-card-head{gap:8px;margin-bottom:14px}
+  .form-card-head h2{font-size:22px}
+  .report-capacity{padding:12px 12px;margin-bottom:8px}
+  .subject-toggle{margin-bottom:12px}
+  .subject-toggle button{padding:8px 10px}
+  .form-grid{gap:10px;margin-top:12px}
+  .field{gap:6px}
+  .field input,.field select{padding:11px 12px;font-size:16px}  /* 16px: phones do not zoom in on focus */
+
+  /* cards */
+  .plans,.consult-plans{gap:12px}
+  .plan{padding:16px;border-radius:16px}
+  .plan h3{font-size:20px}
+  .plan .plan-price b{font-size:32px}
+  .price-card{gap:20px;padding:18px;border-radius:16px}
+  .report-price{font-size:clamp(44px,12vw,56px)}
+  .report-steps{gap:10px}
+  .report-steps li{padding:16px;border-radius:14px}
+  .year-finder{gap:16px;padding:16px;border-radius:16px}
+  .finder-result{gap:14px;padding:14px}
+  .finder-number b{font-size:60px}
+  .feedback-grid .feedback-card{padding:15px;border-radius:16px}
+  .inside-grid,.about-grid{gap:22px}
+  .inside-list{margin-top:26px!important}
+  .inside-list h3{font-size:16.5px}
+  .report-faq summary{padding:16px 0;font-size:15.5px}
+
+  /* bands between sections */
+  .book-section{padding:40px 0 36px}
+  .book-stage{height:clamp(280px,42svh,440px)}
+  .marquee{padding:10px 0}
+  .mq-item{font-size:30px}
+  .signature{padding:32px var(--pad)}
+  .sig-line{font-size:19px}
+  .sessions{margin-top:36px}
+  .sessions-title{font-size:22px}
+  .countdown{margin-bottom:22px}
+  .cd-tile b{font-size:26px}
+  .expertise{margin-bottom:22px}
+  .covers-fan{gap:18px 10px}
+  .foot-mark{margin:28px 0 12px}
+  .site-footer{padding:36px 0 120px}
+}
+@media(max-width:380px){
+  .form-card{padding:14px}
+  .plan,.price-card,.year-finder{padding:14px}
+}

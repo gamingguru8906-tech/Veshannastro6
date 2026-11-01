@@ -12,8 +12,8 @@ Object.assign(process.env, {
 });
 
 /* ---------- a fake pg with row-level security ---------- */
-const store = { otps: new Map(), sessions: new Map(), accounts: new Map(), limits: new Map() };
-const snapshot = () => ({ otps: new Map([...store.otps].map(([k, v]) => [k, { ...v }])), sessions: new Map([...store.sessions].map(([k, v]) => [k, { ...v }])), accounts: new Map([...store.accounts].map(([k, v]) => [k, { ...v }])), limits: new Map([...store.limits].map(([k, v]) => [k, { ...v }])) });
+const store = { otps: new Map(), sessions: new Map(), accounts: new Map(), limits: new Map(), extras: false, ordersFn: false, orders: [] };
+const snapshot = () => ({ extras: store.extras, ordersFn: store.ordersFn, orders: store.orders, otps: new Map([...store.otps].map(([k, v]) => [k, { ...v }])), sessions: new Map([...store.sessions].map(([k, v]) => [k, { ...v }])), accounts: new Map([...store.accounts].map(([k, v]) => [k, { ...v }])), limits: new Map([...store.limits].map(([k, v]) => [k, { ...v }])) });
 const rls = msg => { const e = new Error('new row violates row-level security policy: ' + msg); e.code = '42501'; throw e; };
 let clock = Date.now();
 class FakeClient {
@@ -61,15 +61,34 @@ class FakeClient {
       return { rows: r && r.expires > now ? [{ phone: r.phone, stale: false }] : [] };
     }
     if (/^UPDATE web_sessions SET last_seen_at/.test(sql)) return { rows: [] };
-    if (/SELECT name, email, dob::text AS dob FROM web_accounts/.test(sql)) {
+    if (/^SAVEPOINT|^ROLLBACK TO SAVEPOINT/.test(sql)) return { rows: [] };
+    if (/FROM information_schema\.columns WHERE table_name = 'web_accounts' AND column_name = 'tob'/.test(sql)) return { rows: store.extras ? [{}] : [], rowCount: store.extras ? 1 : 0 };
+    const pick = (a, sqlText) => /tob, pob, gender/.test(sqlText) ? { ...a } : { name: a.name, email: a.email, dob: a.dob };
+    if (/^SELECT name, email, dob::text AS dob(, tob, pob, gender)? FROM web_accounts/.test(sql)) {
+      if (/tob/.test(sql) && !store.extras) throw Object.assign(new Error('column "tob" does not exist'), { code: '42703' });
       const a = p[0] === s['app.phone'] && store.accounts.get(p[0]);
-      return { rows: a ? [{ ...a }] : [] };
+      return { rows: a ? [pick(a, sql)] : [] };
     }
     if (/INSERT INTO web_accounts/.test(sql)) {
       if (p[0] !== s['app.phone']) rls('accounts');
+      if (/tob/.test(sql) && !store.extras) throw Object.assign(new Error('column "tob" does not exist'), { code: '42703' });
       if (store.accounts.has(p[0])) return { rows: [] };
-      store.accounts.set(p[0], { name: p[1], email: p[2], dob: p[3] });
-      return { rows: [{ name: p[1], email: p[2], dob: p[3] }] };
+      const a = { name: p[1], email: p[2], dob: p[3], tob: p[4] || null, pob: p[5] || null, gender: p[6] || null };
+      store.accounts.set(p[0], a);
+      return { rows: [pick(a, sql)] };
+    }
+    if (/^UPDATE web_accounts SET tob = \$2, pob = \$3, gender = \$4/.test(sql)) {
+      const a = p[0] === s['app.phone'] && store.accounts.get(p[0]);
+      if (!a) return { rows: [] };
+      Object.assign(a, { tob: p[1], pob: p[2], gender: p[3] });
+      return { rows: [{ ...a }] };
+    }
+    // The SECURITY DEFINER function runs as the owner: no row-level security, it finds the number from the session.
+    if (/^SELECT \* FROM web_account_orders\(\$1\)/.test(sql)) {
+      if (!store.ordersFn) throw Object.assign(new Error('function web_account_orders(text) does not exist'), { code: '42883' });
+      const sess = store.sessions.get(p[0]);
+      if (!sess || sess.expires <= now) return { rows: [] };
+      return { rows: store.orders.filter(o => o.phone === sess.phone).map(({ phone, ...o }) => o) };
     }
     throw new Error('Unexpected SQL in test: ' + sql.slice(0, 80));
   }
@@ -146,7 +165,7 @@ test('the full sign-in: code, new account, profile, me, logout', async () => {
 
   const made = await run(req('profile', { cookie, body: { name: 'Asha Rao', email: 'Asha@Example.com', dob: '1990-06-15' } }));
   assert.strictEqual(made.statusCode, 201);
-  assert.deepStrictEqual(made.body.account, { name: 'Asha Rao', first: 'Asha', email: 'asha@example.com', dob: '1990-06-15', phone: '+919876543210' });
+  assert.deepStrictEqual(made.body.account, { name: 'Asha Rao', first: 'Asha', email: 'asha@example.com', dob: '1990-06-15', tob: '', pob: '', gender: '', phone: '+919876543210' });
 
   // an existing account is never overwritten by a second profile call
   const again = await run(req('profile', { cookie, body: { name: 'Someone Else', email: 'x@y.zz', dob: '1980-01-01' } }));
@@ -226,6 +245,68 @@ test('one number gets at most 5 codes an hour, one IP at most 12', async () => {
   assert.strictEqual(ipCodes.filter(c => c === 202).length, 12);
   assert.strictEqual(ipCodes[12], 429);
   clock += 2 * 3600 * 1000;
+});
+
+// After db/2026-11-accounts-orders.sql: the optional columns exist (the API re-checks every 10 minutes).
+function migrated() {
+  store.extras = true; store.ordersFn = true;
+  const real = Date.now; Date.now = () => real() + 11 * 60 * 1000;
+  return () => { Date.now = real; };
+}
+async function signIn(P) {
+  clock += 61 * 1000;
+  await run(req('send-code', { body: P }));
+  return cookieOf(await run(req('verify', { body: { ...P, otp: lastCode() } })));
+}
+
+test('orders before the second migration: an empty list that says it is pending, never an error', async () => {
+  const cookie = await signIn({ code: '+91', mobile: '9000000010' });
+  const r = await run(req('orders', { method: 'GET', cookie }));
+  assert.strictEqual(r.statusCode, 200);
+  assert.deepStrictEqual([r.body.pending, r.body.orders], [true, []]);
+  const d = await run(req('details', { cookie, body: { tob: '07:05' } }));
+  assert.ok([409, 503].includes(d.statusCode));
+});
+
+test('birth details: optional at sign-up, checked, and editable later', async () => {
+  const restore = migrated();
+  try {
+    const cookie = await signIn({ code: '+91', mobile: '9000000011' });
+    const bad = await run(req('profile', { cookie, body: { name: 'Meera Joshi', email: 'meera@example.com', dob: '1992-04-09', tob: '25:61', gender: 'robot' } }));
+    assert.strictEqual(bad.statusCode, 400);
+    assert.deepStrictEqual(Object.keys(bad.body.errors).sort(), ['gender', 'tob']);
+    const bare = await run(req('profile', { cookie, body: { name: 'Meera Joshi', email: 'meera@example.com', dob: '1992-04-09', tob: '', pob: '', gender: '' } }));
+    assert.strictEqual(bare.statusCode, 201);
+    assert.deepStrictEqual([bare.body.account.tob, bare.body.account.pob, bare.body.account.gender], ['', '', '']);
+    const set = await run(req('details', { cookie, body: { tob: '19:54', pob: 'Raipur, Chhattisgarh', gender: 'female' } }));
+    assert.strictEqual(set.statusCode, 200);
+    assert.deepStrictEqual([set.body.account.tob, set.body.account.pob, set.body.account.gender], ['19:54', 'Raipur, Chhattisgarh', 'female']);
+    const me = await run(req('me', { method: 'GET', cookie }));
+    assert.strictEqual(me.body.account.pob, 'Raipur, Chhattisgarh');
+    assert.strictEqual((await run(req('details', { cookie: '__Host-vs_session=' + 'B'.repeat(43), body: { tob: '10:00' } }))).statusCode, 401);
+    assert.strictEqual((await run(req('details', { cookie, body: { tob: '10:00' }, origin: 'https://evil.example' }))).statusCode, 403);
+  } finally { restore(); }
+});
+
+test('orders: only the signed-in number sees its orders', async () => {
+  const restore = migrated();
+  try {
+    store.orders = [
+      { phone: '919000000012', ref: 'order_Pq1234ABCD5678', title: 'Astro-Numero Blend', kind: 'report', amount: '599', currency: 'INR', paid_at: new Date('2026-10-30T10:00:00Z'), appointment_at: null, invoice: 'VA-2610-014', delivered_at: new Date('2026-10-30T18:00:00Z') },
+      { phone: '919000000012', ref: 'plink_ZZ99', title: 'Online Astrology Consultation', kind: 'consultation', amount: '3699.00', currency: 'INR', paid_at: new Date('2026-09-01T10:00:00Z'), appointment_at: new Date('2026-09-02T13:30:00Z'), invoice: null, delivered_at: null },
+      { phone: '919000000013', ref: 'order_someoneelse', title: 'Classics', kind: 'report', amount: '499', currency: 'INR', paid_at: new Date(), appointment_at: null, invoice: '', delivered_at: null }
+    ];
+    const cookie = await signIn({ code: '+91', mobile: '9000000012' });
+    const r = await run(req('orders', { method: 'GET', cookie }));
+    assert.strictEqual(r.statusCode, 200);
+    assert.strictEqual(r.body.pending, false);
+    assert.strictEqual(r.body.orders.length, 2);
+    assert.deepStrictEqual(r.body.orders[0], { ref: 'ABCD5678', title: 'Astro-Numero Blend', kind: 'report', amount: 599, currency: 'INR', paid_at: '2026-10-30T10:00:00.000Z', appointment_at: null, invoice: 'VA-2610-014', delivered_at: '2026-10-30T18:00:00.000Z' });
+    assert.strictEqual(r.body.orders[1].kind, 'consultation');
+    assert.ok(!JSON.stringify(r.body).includes('someoneelse'));
+    assert.strictEqual((await run(req('orders', { method: 'GET' }))).statusCode, 401);
+    assert.strictEqual((await run(req('orders', { method: 'GET', cookie: '__Host-vs_session=' + 'C'.repeat(43) }))).statusCode, 401);
+  } finally { restore(); store.orders = []; }
 });
 
 test('helpers: numbers, profile checks, hashed rate-limit keys', () => {

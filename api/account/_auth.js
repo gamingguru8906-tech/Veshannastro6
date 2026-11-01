@@ -126,10 +126,29 @@ function readProfile(input) {
   if (!m || d.getUTCFullYear() !== +m[1] || d.getUTCMonth() !== +m[2] - 1 || d.getUTCDate() !== +m[3] || +m[1] < 1900 || dob > todayIST()) {
     errors.dob = 'Please enter your real date of birth.';
   }
-  return Object.keys(errors).length ? { ok: false, errors } : { ok: true, profile: { name, email, dob } };
+  const extra = readExtras(input, errors);
+  return Object.keys(errors).length ? { ok: false, errors } : { ok: true, profile: Object.assign({ name, email, dob }, extra) };
 }
+/** The optional details (birth time, birth place, gender): empty is fine and saves as nothing; a wrong value is an error. */
+const GENDERS = ['male', 'female', 'other'];
+function readExtras(input, errors) {
+  const tob = r27.clean(input.tob, 5);
+  if (tob && !/^([01]\d|2[0-3]):[0-5]\d$/.test(tob)) errors.tob = 'Please choose the hour, minute and AM or PM, or leave the time empty.';
+  const pob = r27.clean(input.pob, 120);
+  if (pob && pob.length < 2) errors.pob = 'Please enter your town or city of birth, or leave it empty.';
+  const gender = r27.clean(input.gender, 10).toLowerCase();
+  if (gender && !GENDERS.includes(gender)) errors.gender = 'Please choose an option, or leave it empty.';
+  return { tob: tob || null, pob: pob || null, gender: gender || null };
+}
+function readDetails(input) {
+  const errors = {};
+  const extra = readExtras(input || {}, errors);
+  return Object.keys(errors).length ? { ok: false, errors } : { ok: true, details: extra };
+}
+const ACCOUNT_COLUMNS = 'name, email, dob::text AS dob, tob, pob, gender';
 const isoDate = v => (v instanceof Date ? new Date(v.getTime() - v.getTimezoneOffset() * 60000).toISOString() : String(v)).slice(0, 10);
-const publicAccount = (a, phone) => ({ name: a.name, first: String(a.name).split(' ')[0], email: a.email, dob: isoDate(a.dob), phone: '+' + phone });
+const publicAccount = (a, phone) => ({ name: a.name, first: String(a.name).split(' ')[0], email: a.email, dob: isoDate(a.dob),
+  tob: a.tob || '', pob: a.pob || '', gender: a.gender || '', phone: '+' + phone });
 
 /* ---------- rate limits (fixed one-hour windows in Postgres, shared by every instance) ---------- */
 async function hit(client, key, limit, windowSec = 3600) {
@@ -162,5 +181,6 @@ async function sessionPhone(client, req) {
 module.exports = {
   CODE_TTL_SEC, RESEND_AFTER_SEC, MAX_CODE_TRIES, SESSION_DAYS, COOKIE, LIMITS,
   configured, db, tx, scope, sha256, newCode, codeHash, newToken, bucket, sameHex, clientIp, allowedOrigin, guard,
-  readCookie, validToken, sessionCookie, clearCookie, readProfile, publicAccount, hit, Refusal, tooMany, sessionPhone, r27
+  readCookie, validToken, sessionCookie, clearCookie, readProfile, readDetails, ACCOUNT_COLUMNS, publicAccount, hit, Refusal, tooMany,
+  sessionPhone, r27
 };

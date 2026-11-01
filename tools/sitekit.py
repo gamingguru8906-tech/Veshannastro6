@@ -19,6 +19,7 @@ SHOP = "https://shop.veshannastro.co.in"
 PRICE_INR = 1999
 PRICE_USD = 30
 UPDATED = "2026-10-24"
+ASSET_V = "2026-11-02"  # bump when assets/site.css or site.js change
 OG_DEFAULT = "/images/og-image.png"
 
 NAV = [
@@ -114,18 +115,20 @@ def crumb_html(crumbs):
     return '<nav class="crumb" aria-label="Breadcrumb"><ol>' + "".join(lis) + "</ol></nav>"
 
 
+ICON_USER = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.2" r="3.7"/><path d="M4.6 20.2c.9-3.9 3.9-6.1 7.4-6.1s6.5 2.2 7.4 6.1"/></svg>'
+
+
 def header(active):
+    """Same layout as the 2027 page: the account button far left (it leads to /account/, where phones also find the
+    site links), the wordmark, the links on computers, the order button."""
     cur = ' aria-current="page"'
-    links = "".join(f'<a href="{p}"{cur if p == active else ""}>{n}</a>' for p, n in NAV)
-    mlinks = "".join(f'<li><a href="{p}">{n}</a></li>' for p, n in NAV)
+    links = "".join(f'<a href="{p}"{cur if p == active else ""}><span>{n}</span></a>' for p, n in NAV)
     return f"""<header class="site-head"><div class="wrap">
+<a class="acct-btn" href="/account/" aria-label="Your account">{ICON_USER}</a>
 <a class="brand" href="/2027-numerology-report/" aria-label="Veshannastro home"><b>VESHANNASTRO</b></a>
 <nav class="nav" aria-label="Main">{links}</nav>
 <a class="btn btn-gold head-cta" href="/2027-numerology-report/#register">Get your 2027 report</a>
-<button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-menu"><i aria-hidden="true"></i>Menu</button>
-</div></header>
-<nav class="mobile-menu" id="mobile-menu" aria-label="Mobile"><ul>{mlinks}</ul>
-{wa_btn("Chat on WhatsApp", "Hi Veshannastro, I have a question.")}</nav>"""
+</div></header>"""
 
 
 def footer():
@@ -176,7 +179,7 @@ def page(path, title, description, body, *, crumbs=None, schema=None, robots="in
     if crumbs:
         graph.append(breadcrumb_ld(crumbs))
     ld_block = ld({"@context": "https://schema.org", "@graph": graph}) if graph else ""
-    script_tags = "".join(f'<script src="{s}" defer></script>' for s in ("/assets/site.js", *scripts))
+    script_tags = "".join(f'<script src="{s}" defer></script>' for s in (f"/assets/site.js?v={ASSET_V}", *scripts))
     pre = f'<link rel="preload" href="{preload}" as="image">' if preload else ""
     return f"""<!doctype html>
 <html lang="en-IN">
@@ -208,7 +211,7 @@ def page(path, title, description, body, *, crumbs=None, schema=None, robots="in
 <link rel="manifest" href="/site.webmanifest">
 <link rel="alternate" type="text/plain" href="{BASE}/llms.txt" title="llms.txt">
 <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
-{pre}<link rel="stylesheet" href="/assets/site.css?v={UPDATED}">
+{pre}<link rel="stylesheet" href="/assets/site.css?v={ASSET_V}">
 {GTAG}
 {ld_block}
 {head_extra}

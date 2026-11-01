@@ -594,15 +594,10 @@
   }
   ff.addEventListener('input', calc); ff.addEventListener('change', calc); ff.addEventListener('submit', function (e) { e.preventDefault(); });
 
-  /* ---------- menu, header, smooth scroll ---------- */
-  var burger = $('.burger'), menu = $('#mobile-menu');
-  function closeMenu() { burger.setAttribute('aria-expanded', 'false'); burger.setAttribute('aria-label', 'Open menu'); menu.classList.remove('open'); menu.inert = true; document.body.classList.remove('menu-open'); }
-  burger.addEventListener('click', function () {
-    if (burger.getAttribute('aria-expanded') === 'true') return closeMenu();
-    burger.setAttribute('aria-expanded', 'true'); burger.setAttribute('aria-label', 'Close menu'); menu.inert = false; menu.classList.add('open'); document.body.classList.add('menu-open');
-  });
-  $$('a', menu).forEach(function (a) { a.addEventListener('click', closeMenu); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(); });
+  /* ---------- header, smooth scroll ----------
+     The header's left button is the account (a plain link to /account/, see account.js); the site menu lives on
+     that page, so there is no slide-in menu to open or close here. */
+  function closeMenu() {}
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href="#register"]');
     if (a) { e.preventDefault(); closeMenu(); $('.form-card').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' }); setTimeout(function () { $('#name').focus({ preventScroll: true }); }, reduced ? 0 : 700); }
@@ -623,6 +618,16 @@
   if ('ResizeObserver' in window) new ResizeObserver(remeasure).observe(document.body); else addEventListener('load', remeasure);
   addEventListener('resize', remeasure);
   addEventListener('scroll', onScroll, { passive: true }); requestAnimationFrame(onScroll);
+
+  /* While the page is moving, decorative loops hold still (perf.css) and the star field stops redrawing, so each
+     scrolled frame only has to move what is already painted. The class changes twice per gesture, not per frame. */
+  var scrolling = false, scrollEnd = 0;
+  addEventListener('scroll', function () {
+    if (!scrolling) { scrolling = true; root.classList.add('scrolling'); }
+    clearTimeout(scrollEnd);
+    scrollEnd = setTimeout(function () { scrolling = false; root.classList.remove('scrolling'); }, 180);
+  }, { passive: true });
+  window.__isScrolling = function () { return scrolling; };
 
   /* sticky mobile bar: shows once the form is out of view */
   var sticky = $('#sticky-pay');
@@ -652,7 +657,8 @@
   function size() {
     /* phones fire resize while the address bar slides; only rebuild when the size really changes */
     if (W && innerWidth === W && Math.abs(innerHeight - H) < 140) return;
-    W = innerWidth; H = innerHeight; var r = Math.min(devicePixelRatio || 1, W < 760 ? 1.5 : 2);
+    /* stars are sub-pixel dots: phones draw them at 1x, which is a quarter of the pixels of a 2x canvas */
+    W = innerWidth; H = innerHeight; var r = Math.min(devicePixelRatio || 1, W < 900 ? 1 : 2);
     sky.width = W * r; sky.height = H * r; ctx.setTransform(r, 0, 0, r, 0, 0);
     var seed = 2719, rnd = function () { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
     stars = Array.from({ length: Math.round(W * H / 4200) }, function () { return { x: rnd() * W, y: rnd() * H, r: .4 + rnd() * 1.05, a: .12 + rnd() * .4, p: rnd() * 6.28 }; });
@@ -660,7 +666,7 @@
   function draw(t) {
     /* the twinkle is slow: about 12 frames a second is enough; the shooting star gets about 30 */
     var cyc = (t % 14000) / 14000;
-    if (t - last < (cyc < .11 ? 32 : 80)) { if (!reduced && !document.hidden) requestAnimationFrame(draw); return; }
+    if (scrolling || t - last < (cyc < .11 ? 32 : 80)) { if (!reduced && !document.hidden) requestAnimationFrame(draw); return; }
     last = t;
     ctx.clearRect(0, 0, W, H);
     stars.forEach(function (s) { var a = s.a * (.65 + .35 * Math.sin(t * .0007 + s.p)); ctx.fillStyle = 'rgba(177,205,255,' + a + ')'; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.2832); ctx.fill(); });
@@ -696,20 +702,28 @@
   window.addEventListener('pointerup', function() { if(touching) cooldown = performance.now() + 3000; touching = false; });
   rail.addEventListener('pointercancel', function() { touching = false; cooldown = performance.now() + 3000; });
   rail.addEventListener('wheel', function() { cooldown = performance.now() + 3000; }, {passive:true});
-  if ('IntersectionObserver' in window) new IntersectionObserver(function(entries) { inView = entries[0].isIntersecting; }).observe(rail);
-  else inView = true;
-  motion.addEventListener('change', function() { paused = motion.matches; update(); });
+  /* The loop runs only while the rail is on screen, measures its period once per size change (not every frame),
+     and stands still while the page itself is being scrolled. */
+  var running = false, cycle = 0;
+  function start() { if (running || paused) return; running = true; last = performance.now(); requestAnimationFrame(frame); }
+  if ('IntersectionObserver' in window) new IntersectionObserver(function(entries) { inView = entries[0].isIntersecting; if (inView) start(); }).observe(rail);
+  else { inView = true; start(); }
+  if ('ResizeObserver' in window) new ResizeObserver(function() { cycle = 0; }).observe(rail);
+  motion.addEventListener('change', function() { paused = motion.matches; update(); start(); });
+  var pageMoving = function() { return window.__isScrolling ? window.__isScrolling() : false; };
   function frame(now) {
     var dt = Math.min(now - last, 50); last = now;
-    if (!paused && !motion.matches && !hovered && !focused && !touching && inView && !document.hidden && now > cooldown) {
-      var cycle = period();
+    if (!inView || paused || motion.matches || document.hidden) { running = false; return; }
+    if (!hovered && !focused && !touching && now > cooldown && !pageMoving()) {
+      if (!cycle) cycle = period();
       position += dt * 0.026;
       if (cycle > 0 && position >= cycle) position -= cycle;
       rail.scrollLeft = position;
     } else position = rail.scrollLeft;
     requestAnimationFrame(frame);
   }
-  update(); requestAnimationFrame(frame);
+  document.addEventListener('visibilitychange', function() { if (!document.hidden) start(); });
+  update();
 })();
 
 /* Online Numerology Consultation: one flat fee buys exactly one service. The WhatsApp button carries the service the

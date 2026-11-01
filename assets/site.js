@@ -37,10 +37,14 @@
   /* ---------- night sky ---------- */
   var sky = $('#sky');
   if (sky && sky.getContext) {
-    var ctx = sky.getContext('2d'), stars = [], w = 0, h = 0;
+    var ctx = sky.getContext('2d'), stars = [], w = 0, h = 0, last = -1e9, moving = false, still = 0;
+    /* The twinkle is slow, so about 12 frames a second is enough; nothing redraws while the page scrolls; phones draw
+       at 1x (the stars are sub-pixel dots) and ignore the resize the address bar fires as it slides. */
+    addEventListener('scroll', function () { moving = true; clearTimeout(still); still = setTimeout(function () { moving = false; }, 180); }, { passive: true });
     var size = function () {
+      if (w && innerWidth === w && Math.abs(innerHeight - h) < 140) return;
       w = innerWidth; h = innerHeight;
-      var r = Math.min(window.devicePixelRatio || 1, 2);
+      var r = Math.min(window.devicePixelRatio || 1, w < 900 ? 1 : 2);
       sky.width = w * r; sky.height = h * r; ctx.setTransform(r, 0, 0, r, 0, 0);
       var seed = 2027, rnd = function () { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
       stars = Array.from({ length: Math.round(w * h / 5200) }, function () {
@@ -48,6 +52,8 @@
       });
     };
     var draw = function (t) {
+      if (moving || t - last < 80) { if (!reduced && !document.hidden) requestAnimationFrame(draw); return; }
+      last = t;
       ctx.clearRect(0, 0, w, h);
       for (var i = 0; i < stars.length; i++) {
         var s = stars[i], a = reduced ? s.a : s.a * (.7 + .3 * Math.sin(t * .0006 + s.p));

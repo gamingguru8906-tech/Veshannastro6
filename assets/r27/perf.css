@@ -1,0 +1,51 @@
+/* Performance layer for the 2027 page and the account page. Loaded last, so it overrides the files before it.
+   Measured with Playwright on a 390px phone profile at 4x CPU throttle (tools: see the commit message):
+   the page was spending most of every scroll frame repainting ~20 decorative loops under live blur.
+
+   1. While the page scrolls, every decorative loop holds still (html.scrolling, set by report.js and account.js
+      on the first scroll event and cleared 180ms after the last). One-shot reveals are not listed, so they still play.
+   2. Phones, tablets and anything without a mouse get flat surfaces instead of live backdrop blur, no full-screen
+      blur or blend layers, and no loop that repaints on every frame (background-position, custom properties).
+   3. Computers keep the glass, with lighter blur and no saturate pass. */
+
+/* ---------- 1. hold the loops still while scrolling ---------- */
+.scrolling :is(.hero-photo,.closing-title b,.sig-line b,.xp-caret,.grad-word,.cst-tip-glow,.fm-dust i,.shooting-stars i,
+  .section-heading h2 em,.section-title em,.video-sound,.studio-ring,.pr-spin),
+.scrolling :is(.cd-tile,.plan,.form-submit>.pill,.report-closing .pill,.form-card,.paid-steps li.now)::before,
+.scrolling :is(.cd-tile,.form-submit>.pill,.report-closing .pill,.report-capacity)::after{animation-play-state:paused!important}
+
+/* ---------- everywhere: the full-screen layers are static ----------
+   The nebula's gradients already fade to nothing, so they need no 70px blur or drift; the grain no longer blends with
+   everything under it (an overlay blend made every scrolled frame recomposite the whole screen). The order card is a
+   solid surface in the same colours instead of live glass over the moon photo. */
+.nebula{inset:0;filter:none;animation:none;opacity:.42}
+.grain{mix-blend-mode:normal;opacity:.03}
+.form-card{-webkit-backdrop-filter:none;backdrop-filter:none;
+  background:linear-gradient(160deg,#182238f2 0%,#0d1426f5 48%,#0b1729f2 100%);box-shadow:0 30px 80px #00000066,inset 0 1px #ffffff1f}
+
+/* ---------- 3. computers: the header keeps a light glass, without the saturate pass ---------- */
+.topbar,.topbar.solid{-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+
+/* ---------- 2. phones, tablets and touch screens: no live blur, nothing that repaints every frame ---------- */
+@media (max-width:900px),(hover:none){
+  *,*::before,*::after{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+
+  .grain{display:none}
+
+  /* surfaces that were glass become solid, in the same colours */
+  .topbar,.topbar.solid{background:#080c19f5}
+  .year-finder{background:linear-gradient(160deg,#141c31,#0a0e1b)}
+  .report-capacity{background:linear-gradient(135deg,#232b38,#161c27 55%,#212937)}
+  .sticky-pay{background:#05070ffa}
+  .account-dialog::backdrop,.policy-dialog::backdrop,.review-dialog::backdrop{background:#020308e6}
+
+  /* loops that repaint on every frame: off (the gradients stay, still) */
+  .motion :is(.closing-title b,.sig-line.in b,.grad-word,.section-heading h2 em,.section-title em){animation:none}
+  .motion .xp-word .ch{animation:xp-type-in .3s var(--m-ease) both}
+  .motion :is(.form-card,.plan)::before,.motion .report-capacity::after{animation:none}
+  .hero-photo{animation:none}
+
+  /* reveals fade and rise instead of un-blurring: a blur on text is re-rasterised on every frame of the transition */
+  .motion :is(.stagger .sw,.section-lead,.sig-line>span,.rise-group .rise){filter:none!important}
+}
+@media (prefers-reduced-motion:reduce){.scrolling *{animation-play-state:paused}}

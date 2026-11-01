@@ -40,6 +40,19 @@
           "value": "noindex"
         }
       ]
+    },
+    {
+      "source": "/account/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
     }
   ],
   "redirects": [
@@ -62,6 +75,31 @@
     {
       "source": "/index.html",
       "destination": "/2027-numerology-report/",
+      "permanent": true
+    },
+    {
+      "source": "/signin",
+      "destination": "/account/",
+      "permanent": true
+    },
+    {
+      "source": "/login",
+      "destination": "/account/",
+      "permanent": true
+    },
+    {
+      "source": "/my-account",
+      "destination": "/account/",
+      "permanent": true
+    },
+    {
+      "source": "/account.html",
+      "destination": "/account/",
+      "permanent": true
+    },
+    {
+      "source": "/account",
+      "destination": "/account/",
       "permanent": true
     },
     {

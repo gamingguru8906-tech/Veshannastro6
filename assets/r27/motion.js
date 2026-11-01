@@ -172,7 +172,14 @@
         if (cur !== target) raf(step); else running = false;
       });
     }
-    addEventListener('scroll', function () { measure(); loop(); }, { passive: true });
+    /* Only while the steps are near the screen: elsewhere on the page a scroll costs nothing here. The read happens
+       inside a frame, after the browser has laid the frame out, so it never forces an extra layout. */
+    var near = true, mf = 0;
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (en) { near = en[0].isIntersecting; if (near) { measure(); loop(); } }, { rootMargin: '200px 0px' }).observe(wrap);
+    addEventListener('scroll', function () {
+      if (!near || mf) return;
+      mf = raf(function () { mf = 0; measure(); loop(); });
+    }, { passive: true });
     var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(build, 150); });
     build(); loop();
   });
