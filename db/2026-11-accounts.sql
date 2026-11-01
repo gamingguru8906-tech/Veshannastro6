@@ -1,10 +1,11 @@
 -- Customer accounts for veshannastro.co.in: sign in with a WhatsApp code (OTP).
 --
--- Run ONCE in the Neon SQL editor, connected as the database owner (the role Kamala's DATABASE_URL uses).
+-- Run ONCE in the SQL editor (Supabase or Neon), connected as the database owner (the role Kamala's DATABASE_URL uses).
 -- Before running, replace CHANGE_ME below with a long random password, for example from:
 --     node -e "console.log(require('crypto').randomBytes(24).toString('base64url'))"
 -- Then set in Vercel (Production):
---     AUTH_DATABASE_URL = postgresql://web_auth:<that password>@<your Neon host>/<db>?sslmode=require
+--     AUTH_DATABASE_URL = postgresql://web_auth:<that password>@<your host>/<db>?sslmode=require
+--       (Supabase pooler: user web_auth.<project ref>, host aws-0-<region>.pooler.supabase.com, port 6543)
 --     AUTH_OTP_PEPPER   = another long random value (keys the stored code hashes)
 --
 -- What it does
@@ -117,5 +118,17 @@ CREATE OR REPLACE FUNCTION web_auth_cleanup() RETURNS void
 $$;
 REVOKE ALL ON FUNCTION web_auth_cleanup() FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION web_auth_cleanup() TO web_auth;
+
+-- Supabase: its public API roles (anon, authenticated) get access to new tables and functions by default. The website
+-- never uses them, so that access is removed. (Elsewhere these roles do not exist and this does nothing.)
+DO $$ BEGIN
+  IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'anon') AND EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'authenticated') THEN
+    EXECUTE 'REVOKE ALL ON web_accounts, web_sessions, web_otps, web_auth_limits FROM anon, authenticated';
+    EXECUTE 'REVOKE ALL ON FUNCTION web_auth_cleanup() FROM anon, authenticated';
+    IF to_regprocedure('web_account_orders(text)') IS NOT NULL THEN
+      EXECUTE 'REVOKE ALL ON FUNCTION web_account_orders(text) FROM anon, authenticated';
+    END IF;
+  END IF;
+END $$;
 
 COMMIT;

@@ -65,4 +65,16 @@ END $$;
 REVOKE ALL ON FUNCTION web_account_orders(TEXT) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION web_account_orders(TEXT) TO web_auth;
 
+-- Supabase: its public API roles (anon, authenticated) get access to new tables and functions by default. The website
+-- never uses them, so that access is removed. (Elsewhere these roles do not exist and this does nothing.)
+DO $$ BEGIN
+  IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'anon') AND EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'authenticated') THEN
+    EXECUTE 'REVOKE ALL ON web_accounts, web_sessions, web_otps, web_auth_limits FROM anon, authenticated';
+    EXECUTE 'REVOKE ALL ON FUNCTION web_auth_cleanup() FROM anon, authenticated';
+    IF to_regprocedure('web_account_orders(text)') IS NOT NULL THEN
+      EXECUTE 'REVOKE ALL ON FUNCTION web_account_orders(text) FROM anon, authenticated';
+    END IF;
+  END IF;
+END $$;
+
 COMMIT;

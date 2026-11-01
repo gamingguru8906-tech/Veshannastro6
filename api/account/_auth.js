@@ -9,6 +9,7 @@
 // transaction that names the one number or session it may see, so Postgres row-level security enforces "your own
 // account only" even if a bug here asked for more. The browser never sends an account id: the session decides.
 const crypto = require('crypto');
+const tls = require('tls');
 const { Pool } = require('pg');
 const r27 = require('../r27/_lib');
 
@@ -32,7 +33,9 @@ function db() {
   if (!pool) {
     const url = new URL(env('AUTH_DATABASE_URL'));
     url.searchParams.delete('sslmode'); // the ssl option below decides: encrypted and verified, never "accept anything"
-    pool = new Pool({ connectionString: url.toString(), ssl: { rejectUnauthorized: true }, max: 2, idleTimeoutMillis: 10000, connectionTimeoutMillis: 7000 });
+    // Verified TLS: the public roots plus Supabase's own root (its database certificates are signed by it).
+    const ca = tls.rootCertificates.concat(require('./_supabase-ca'));
+    pool = new Pool({ connectionString: url.toString(), ssl: { rejectUnauthorized: true, ca }, max: 2, idleTimeoutMillis: 10000, connectionTimeoutMillis: 7000 });
     pool.on('error', e => console.error('Auth database idle connection error:', e.message));
   }
   return pool;
