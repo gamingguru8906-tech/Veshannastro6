@@ -86,7 +86,7 @@
   function refresh() {
     var r = C.reports[report], p = price();
     $$('[data-report]').forEach(function (b) { b.setAttribute('aria-checked', String(b.getAttribute('data-report') === report)); });
-    $('#pb-now').textContent = p.now; $('#pb-was').textContent = p.was; $('#pb-line').textContent = r.line;
+    $('#pb-now').textContent = p.now; $('#pb-was').textContent = p.was; $('#pb-line').textContent = r.pb || r.line;
     $('#pay-label').textContent = (C.online && (p.cur === 'INR' || C.usdOnline) ? 'Review and pay ' : 'Review and order ') + p.now;
     tob.hidden = !r.needs_time;
     $$('select', tob).forEach(function (s) { s.required = r.needs_time; });
@@ -595,9 +595,8 @@
   ff.addEventListener('input', calc); ff.addEventListener('change', calc); ff.addEventListener('submit', function (e) { e.preventDefault(); });
 
   /* ---------- header, smooth scroll ----------
-     The header's left button is the account (a plain link to /account/, see account.js); the site menu lives on
-     that page, so there is no slide-in menu to open or close here. */
-  function closeMenu() {}
+     The header's account button and three-dot menu are run by account.js (it loads on every page with this header). */
+  function closeMenu() { if (window.__closeSiteMenu) window.__closeSiteMenu(); }
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href="#register"]');
     if (a) { e.preventDefault(); closeMenu(); $('.form-card').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' }); setTimeout(function () { $('#name').focus({ preventScroll: true }); }, reduced ? 0 : 700); }

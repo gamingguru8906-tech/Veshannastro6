@@ -28,9 +28,11 @@ ADDRESS = {"street": "Currency Tower, G.E. Road, VIP Road", "city": "Raipur", "r
 # Prices after the 30% Diwali offer, and the original price shown struck through.
 REPORTS = {
     "blend": {"name": "Astro-Numero Blend", "inr": 599, "inr_mrp": 856, "usd": 30, "usd_mrp": 43, "needs_time": True,
-              "line": "12 parameters, including Transit, Varshaphal and Dasha. Needs your time of birth."},
+              "line": "12 parameters, including Transit, Varshaphal and Dasha. Needs your time of birth.",
+              "pb": "Your year measured through 12 unique parameters."},
     "classic": {"name": "Classics", "inr": 499, "inr_mrp": 713, "usd": 20, "usd_mrp": 29, "needs_time": False,
-                "line": "10 parameters, built around your action plan and remedies. No birth time needed."},
+                "line": "10 parameters, built around your action plan and remedies. No birth time needed.",
+                "pb": "Your year measured through 10 unique parameters."},
 }
 OFFER = {"pct": 30, "name": "Diwali offer", "starts": "2026-10-24", "ends": "2026-11-10", "ends_text": "10 November", "limit": 50}
 DELIVERY = "24 hours"
@@ -52,26 +54,36 @@ ASK_MSG = "Hi Veshannastro, I have a question about the 2027 report."
 
 # The header, shared with the account page (tools/build_account.py). Far left: the account button, a plain link to
 # /account/ (account.js shows the first letter of a signed-in name on it). Then the wordmark, the section links on
-# computers, and the order button. Phones have no slide-in menu: the site links sit on the account page.
+# computers, the order button, and the three-dot menu on the right (every page, phones and computers).
 ICON_USER = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.2" r="3.7"/><path d="M4.6 20.2c.9-3.9 3.9-6.1 7.4-6.1s6.5 2.2 7.4 6.1"/></svg>'
 NAV_LINKS = [("#inside", "Inside"), ("#finder", "Your Year"), ("#pricing", "Reports"), ("#services", "Consultations"), ("/blog/", "Blog"), ("#faq", "FAQ")]
 
 
+MENU_LINKS = [("#inside", "Inside the report"), ("#finder", "Your Personal Year"), ("#pricing", "Reports and prices"), ("#services", "Consultations"),
+              ("/calculators/", "Free calculators"), ("/blog/", "Blog"), ("#faq", "Questions"), ("/about.html", "About Shashank"), ("/contact.html", "Contact")]
+ICON_DOTS = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5.5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="18.5" r="1.7"/></svg>'
+
+
 def topbar(base="", current=""):
-    """base: "" on the 2027 page (links jump to its sections), the page path elsewhere."""
+    """base: "" on the 2027 page (links jump to its sections), the page path elsewhere.
+    Left: the account button. Right: the three-dot menu, which opens a small panel of every page (account.js)."""
     href = lambda h: h if h.startswith("/") else base + h
     links = "".join(f'<a href="{href(h)}"><span>{n}</span></a>' for h, n in NAV_LINKS)
+    menu = "".join(f'<li><a href="{href(h)}">{n}</a></li>' for h, n in MENU_LINKS)
     acct_cur = ' aria-current="page"' if current == "account" else ""
     return (f'  <header class="topbar">\n'
             f'    <a class="acct-btn" href="/account/"{acct_cur} aria-label="Your account">{ICON_USER}<span class="acct-initial" aria-hidden="true"></span></a>\n'
             f'    <a class="brand" href="{PATH}" aria-label="VESHANNASTRO home"><b>VESHANNASTRO</b></a>\n'
             f'    <nav class="nav-links" aria-label="Main navigation">{links}</nav>\n'
             f'    <a class="pill pill-nav" href="{href("#register")}">Get your report</a>\n'
-            f'  </header>\n')
+            f'    <button class="menu-dots" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="site-menu">{ICON_DOTS}</button>\n'
+            f'  </header>\n'
+            f'  <nav class="site-menu" id="site-menu" aria-label="Site menu" hidden><ul>{menu}</ul>\n'
+            f'    <div class="site-menu-foot"><a class="site-menu-acct" href="/account/">Your account</a><a href="{wa(ASK_MSG)}" target="_blank" rel="noopener">Ask on WhatsApp</a></div></nav>\n')
 
 
 # Runs the account button on every page that has it, and the account page itself (see build_account.py).
-ACCOUNT_SCRIPT = '<script src="/assets/r27/account.js?v=2" defer></script>'
+ACCOUNT_SCRIPT = '<script src="/assets/r27/account.js?v=3" defer></script>'
 
 
 def page_css():
@@ -479,7 +491,7 @@ def page():
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-R20FKYJK7P');gtag('config','AW-18189866057');</script>
   <script type="application/ld+json">{json.dumps(graph, ensure_ascii=False, separators=(",", ":"))}</script>
   <script>window.R27={json.dumps(config, separators=(",", ":"))};</script>
-  <script src="/assets/r27/report.js?v=21" defer></script><script src="/assets/r27/motion.js?v=11" defer></script><script src="/assets/r27/book.js?v=12" defer></script>{ACCOUNT_SCRIPT}
+  <script src="/assets/r27/report.js?v=22" defer></script><script src="/assets/r27/motion.js?v=12" defer></script><script src="/assets/r27/book.js?v=12" defer></script>{ACCOUNT_SCRIPT}
 </head>
 <body>
   <div class="nebula" aria-hidden="true"></div><canvas class="sky" id="star-field" aria-hidden="true"></canvas>
@@ -515,7 +527,7 @@ def page():
             <div class="field"><label for="referral">Referral code (optional)</label><input id="referral" name="referral" placeholder="If someone referred you" autocomplete="off"></div>
           <div class="price-box" aria-live="polite"><span class="pb-label">Energy exchange</span>{reveal_price('<b id="pb-now">' + inr(b['inr']) + '</b>', "pb-now")}
             <span class="pb-was">{reveal_price('<s id="pb-was">' + inr(b['inr_mrp']) + '</s>')} <span class="offer-tag">{OFFER['name']}, {OFFER['pct']}% off</span></span>
-            <p class="pb-desc"><span id="pb-line">{b['line']}</span> <span class="phase-note">Phase one: {OFFER['limit']} reports, closes {OFFER['ends_text']}.</span></p></div>
+            <p class="pb-desc"><span id="pb-line">{b['pb']}</span> <span class="phase-note">Only {OFFER['limit']} reports will be booked. Offers valid till {OFFER['ends_text']} only.</span></p></div>
             <label class="consent"><input type="checkbox" name="terms" required><span>I have read the <a href="/terms.html" target="_blank">terms</a>, <a href="/privacy-policy.html" target="_blank">privacy policy</a> and <a href="/refund-policy.html" target="_blank">refund and delivery policy</a>.</span></label>
             <label class="consent"><input type="checkbox" name="wa_ok" required><span>Send my report and order updates to my WhatsApp.</span></label>
             <p id="form-error" class="form-error" role="alert" hidden>Please complete the highlighted fields.</p>

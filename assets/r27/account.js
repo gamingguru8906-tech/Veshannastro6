@@ -33,6 +33,31 @@
   }
   paintButton(null);
 
+  /* ---------- the three-dot menu, right of the header: a small panel of every page ---------- */
+  (function () {
+    var dots = $('.menu-dots'), menu = $('#site-menu');
+    if (!dots || !menu) return;
+    function close(back) {
+      if (menu.hidden) return;
+      dots.setAttribute('aria-expanded', 'false'); dots.setAttribute('aria-label', 'Open menu');
+      menu.classList.remove('open');
+      setTimeout(function () { if (!menu.classList.contains('open')) menu.hidden = true; }, reduced ? 0 : 180);
+      if (back) dots.focus({ preventScroll: true });
+    }
+    function open() {
+      menu.hidden = false;
+      dots.setAttribute('aria-expanded', 'true'); dots.setAttribute('aria-label', 'Close menu');
+      requestAnimationFrame(function () { menu.classList.add('open'); });
+      var first = $('a', menu); if (first) setTimeout(function () { first.focus({ preventScroll: true }); }, 60);
+    }
+    dots.addEventListener('click', function (e) { e.stopPropagation(); menu.hidden ? open() : close(true); });
+    $$('a', menu).forEach(function (a) { a.addEventListener('click', function () { close(false); }); });
+    document.addEventListener('click', function (e) { if (!menu.hidden && !menu.contains(e.target) && e.target !== dots) close(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) close(true); });
+    addEventListener('scroll', function () { if (!menu.hidden && menu.classList.contains('open')) close(false); }, { passive: true });
+    window.__closeSiteMenu = function () { close(false); };
+  })();
+
   var app = $('#acct-app');
   if (!app) {
     // Any other page: someone who signed in before has their session confirmed quietly, after the page has settled.

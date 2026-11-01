@@ -9,8 +9,8 @@
 
 /* 1. Staggered fade up: the hero headline, word by word */
 .stagger .sw{display:inline-block}
-.motion .stagger .sw{opacity:0;transform:translate3d(0,.55em,0);filter:blur(5px);animation:m-rise .75s var(--m-ease) forwards;animation-delay:calc(var(--i) * 45ms)}
-.motion .stagger small.sw{display:block;animation-delay:calc(var(--i) * 45ms + 120ms)}
+.motion .stagger .sw{opacity:0;transform:translate3d(0,.9em,0);filter:blur(5px);animation:m-rise .8s var(--m-ease) forwards;animation-delay:calc(var(--i) * 140ms + 150ms)}
+.motion .stagger small.sw{display:block;animation-delay:calc(var(--i) * 140ms + 300ms)}
 @keyframes m-rise{to{opacity:1;transform:none;filter:none}}
 
 /* 2. Clip-path reveal: section headings slide up out of an invisible boundary */

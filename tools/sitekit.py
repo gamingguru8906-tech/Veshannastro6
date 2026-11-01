@@ -19,7 +19,7 @@ SHOP = "https://shop.veshannastro.co.in"
 PRICE_INR = 1999
 PRICE_USD = 30
 UPDATED = "2026-10-24"
-ASSET_V = "2026-11-02"  # bump when assets/site.css or site.js change
+ASSET_V = "2026-11-02b"  # bump when assets/site.css or site.js change
 OG_DEFAULT = "/images/og-image.png"
 
 NAV = [
@@ -115,20 +115,25 @@ def crumb_html(crumbs):
     return '<nav class="crumb" aria-label="Breadcrumb"><ol>' + "".join(lis) + "</ol></nav>"
 
 
+ICON_DOTS = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5.5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="18.5" r="1.7"/></svg>'
 ICON_USER = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.2" r="3.7"/><path d="M4.6 20.2c.9-3.9 3.9-6.1 7.4-6.1s6.5 2.2 7.4 6.1"/></svg>'
 
 
 def header(active):
-    """Same layout as the 2027 page: the account button far left (it leads to /account/, where phones also find the
-    site links), the wordmark, the links on computers, the order button."""
+    """Same layout as the 2027 page: the account button far left, the wordmark, the links on computers, the order
+    button, and the three-dot menu far right (assets/site.js opens it)."""
     cur = ' aria-current="page"'
     links = "".join(f'<a href="{p}"{cur if p == active else ""}><span>{n}</span></a>' for p, n in NAV)
+    mlinks = "".join(f'<li><a href="{p}">{n}</a></li>' for p, n in NAV)
     return f"""<header class="site-head"><div class="wrap">
 <a class="acct-btn" href="/account/" aria-label="Your account">{ICON_USER}</a>
 <a class="brand" href="/2027-numerology-report/" aria-label="Veshannastro home"><b>VESHANNASTRO</b></a>
 <nav class="nav" aria-label="Main">{links}</nav>
 <a class="btn btn-gold head-cta" href="/2027-numerology-report/#register">Get your 2027 report</a>
-</div></header>"""
+<button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">{ICON_DOTS}</button>
+</div></header>
+<nav class="mobile-menu" id="mobile-menu" aria-label="Site menu"><ul>{mlinks}<li><a href="/account/">Your account</a></li></ul>
+{wa_btn("Ask on WhatsApp", "Hi Veshannastro, I have a question.")}</nav>"""
 
 
 def footer():
