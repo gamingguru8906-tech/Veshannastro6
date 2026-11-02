@@ -54,11 +54,12 @@
   var app = $('#acct-app');
   if (!app) {
     // Any other page: someone who signed in before has their session confirmed quietly, after the page has settled.
-    if (btn && hint()) addEventListener('load', function () {
+    var confirm = function () {
       (window.requestIdleCallback || setTimeout)(function () {
         call('me').then(function (r) { if (r.ok) { if (!r.signedIn) setHint(''); else if (r.account) setHint(r.account.first); paintButton(r); } });
       });
-    });
+    };
+    if (btn && hint()) { if (document.readyState === 'complete') confirm(); else addEventListener('load', confirm); }
     return;
   }
 

@@ -614,7 +614,7 @@
     if (prog) prog.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, scrollY / max) : 0) + ')';
   }
   var remeasure = function () { measure(); onScroll(); };
-  if ('ResizeObserver' in window) new ResizeObserver(remeasure).observe(document.body); else addEventListener('load', remeasure);
+  if ('ResizeObserver' in window) new ResizeObserver(remeasure).observe(document.body); else if (document.readyState === 'complete') remeasure(); else addEventListener('load', remeasure);
   addEventListener('resize', remeasure);
   addEventListener('scroll', onScroll, { passive: true }); requestAnimationFrame(onScroll);
 
@@ -627,6 +627,9 @@
     scrollEnd = setTimeout(function () { scrolling = false; root.classList.remove('scrolling'); }, 180);
   }, { passive: true });
   window.__isScrolling = function () { return scrolling; };
+  /* The loops that repaint on every frame (perf.css) start once the page has settled. */
+  var startFx = function () { setTimeout(function () { root.classList.add('fx'); }, 2500); };
+  if (document.readyState === 'complete') startFx(); else addEventListener('load', startFx);
 
   /* sticky mobile bar: shows once the form is out of view */
   var sticky = $('#sticky-pay');

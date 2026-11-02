@@ -86,7 +86,7 @@ def topbar(base="", current=""):
 
 
 # Runs the account button on every page that has it, and the account page itself (see build_account.py).
-ACCOUNT_SCRIPT = '<script src="/assets/r27/account.js?v=4" defer></script>'
+ACCOUNT_SCRIPT = '<script src="/assets/r27/account.js?v=5" defer></script>'
 
 
 def page_css():
@@ -489,12 +489,13 @@ def page():
   <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" as="image" href="/assets/r27/hero-moon.webp" imagesrcset="/assets/r27/hero-moon-860.webp 860w, /assets/r27/hero-moon.webp 1280w" imagesizes="(max-width: 700px) 860px, 100vw" fetchpriority="high">
   <style>{page_css()}</style>
-  <script>(function(d){{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;d.documentElement.classList.add("motion");setTimeout(function(){{if(!window.__motionReady)d.documentElement.classList.remove("motion")}},3500)}})(document)</script>
+  <script>(function(d){{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;d.documentElement.classList.add("motion");setTimeout(function(){{if(!window.__motionReady)d.documentElement.classList.remove("motion")}},6000)}})(document)</script>
   <!-- Google tag: loads on the first tap, key or scroll, or 6 seconds after load, so it never slows the first paint. Events queue in dataLayer until then. --><script>(function(w,d){{var ev=["pointerdown","keydown","touchstart","scroll"],done=0;function go(){{if(done)return;done=1;ev.forEach(function(e){{w.removeEventListener(e,go,{{passive:true}})}});var s=d.createElement("script");s.async=true;s.src="https://www.googletagmanager.com/gtag/js?id=G-R20FKYJK7P";d.head.appendChild(s)}}ev.forEach(function(e){{w.addEventListener(e,go,{{passive:true}})}});w.addEventListener("load",function(){{setTimeout(go,6000)}})}})(window,document)</script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-R20FKYJK7P');gtag('config','AW-18189866057');</script>
   <script type="application/ld+json">{json.dumps(graph, ensure_ascii=False, separators=(",", ":"))}</script>
   <script>window.R27={json.dumps(config, separators=(",", ":"))};</script>
-  <script src="/assets/r27/report.js?v=24" defer></script><script src="/assets/r27/motion.js?v=12" defer></script><script src="/assets/r27/book.js?v=12" defer></script>{ACCOUNT_SCRIPT}
+  <!-- The page scripts load right after the first paint (in this order), so the hero shows before they run. The order form stays locked (onsubmit) until report.js takes it over. -->
+  <script>(function(d){{var s=["/assets/r27/report.js?v=26","/assets/r27/motion.js?v=13","/assets/r27/book.js?v=12","/assets/r27/account.js?v=5"];function go(){{s.forEach(function(u){{var e=d.createElement("script");e.src=u;e.async=false;d.head.appendChild(e)}})}}function after(){{requestAnimationFrame(function(){{setTimeout(go,0)}})}}d.readyState==="loading"?d.addEventListener("DOMContentLoaded",after):after()}})(document)</script>
 </head>
 <body>
   <div class="nebula" aria-hidden="true"></div><canvas class="sky" id="star-field" aria-hidden="true"></canvas>
@@ -508,7 +509,7 @@ def page():
         <div class="form-card-head"><div class="report-capacity"><span class="capacity-phase">Phase one · Limited release</span><strong><span class="capacity-number">{OFFER['limit']}</span> reports only</strong><span class="capacity-deadline">Bookings close {OFFER['ends_text']}</span></div><div class="report-heading-details"><h2>Get your 2027 Report</h2><a class="free-details" href="https://qrto.org/Lm8Dj4" target="_blank" rel="noopener" aria-label="Open free report details document in a new tab"><img src="/assets/r27/free-details-qr.png" width="132" height="132" alt="QR code for the free report details document"><span><strong>Free report details</strong><span>Scan or tap this QR</span><small>Explore before you order · Opens in a new tab</small></span></a></div>
           <p class="form-lead">What 2027 holds for your health, money, work and relationships, and the remedies for whatever needs care. Prepared for you alone.</p>
           <p class="form-note">Your details are saved as you type, so we can help you finish your order on WhatsApp. <a href="/privacy-policy.html" target="_blank">Privacy</a></p></div>
-        <form id="registration" novalidate>
+        <form id="registration" novalidate onsubmit="return false">
           <div class="subject-toggle report-toggle" role="radiogroup" aria-label="Choose your report">
             <button type="button" role="radio" aria-checked="true" data-report="blend">Astro-Numero Blend</button><button type="button" role="radio" aria-checked="false" data-report="classic">Classics</button></div>
           <div class="form-grid">

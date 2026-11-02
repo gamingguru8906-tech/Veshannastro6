@@ -25,6 +25,19 @@
 /* ---------- the background haze: removed ---------- */
 .nebula{display:none}
 
+/* ---------- the loops that repaint on the main thread: same look, less work ----------
+   They start once the page has settled (html.fx, set by report.js 2.5s after load, about when the heading has
+   built), and redraw 15 to 24 times a second instead of 60: they are slow drifts, so the steps do not show. */
+html:not(.fx) :is(.closing-title b,.sig-line b,.grad-word,.section-heading h2 em,.section-title em),
+html:not(.fx) :is(.form-card)::before,html:not(.fx) .report-capacity::after{animation-play-state:paused!important}
+.motion .closing-title b{animation-timing-function:steps(135)}
+.motion .sig-line.in b{animation-timing-function:steps(105)}
+.motion .grad-word{animation-timing-function:steps(135)}
+.motion :is(.section-heading h2 em,.section-title em){animation-timing-function:steps(120)}
+.motion .xp-word .ch{animation-timing-function:var(--m-ease),steps(90)}
+.motion .form-card::before{animation-timing-function:steps(240)}
+.motion .report-capacity::after{animation-timing-function:steps(98)}
+
 /* ---------- 2. hold the repaint-heavy loops still while the page is moving ---------- */
 .scrolling :is(.closing-title b,.sig-line b,.grad-word,.section-heading h2 em,.section-title em,.xp-word .ch),
 .scrolling :is(.form-card,.plan)::before,
@@ -58,5 +71,15 @@
   .motion .sig-line>span{filter:blur(4px)}
   .motion .rise-group .rise{filter:blur(2px)}
   .motion .section-lead.in,.motion .sig-line.in>span,.motion .rise-group.in .rise{filter:none}
+}
+/* ---------- first paint: sections below the fold are laid out and painted only as they come near ----------
+   content-visibility:auto lets the browser skip the ~25 screens nobody can see yet, so the hero paints sooner.
+   Each section keeps its measured height as a placeholder (and remembers its real one once seen), so the scrollbar
+   and menu jumps stay where they should. */
+@supports (content-visibility:auto){
+  :is(#testimonials,#preview,#inside,#finder,#how,#pricing,#services,#about,#year-2027,#read,#explore,#faq),
+  main>section.report-section:not([id]),.marquee,.site-footer{content-visibility:auto}
+  #testimonials{contain-intrinsic-block-size:auto 998px}#preview{contain-intrinsic-block-size:auto 1013px}#inside{contain-intrinsic-block-size:auto 1492px}#finder{contain-intrinsic-block-size:auto 787px}#how{contain-intrinsic-block-size:auto 577px}#pricing{contain-intrinsic-block-size:auto 1358px}#services{contain-intrinsic-block-size:auto 4596px}#about{contain-intrinsic-block-size:auto 500px}#year-2027{contain-intrinsic-block-size:auto 734px}#read{contain-intrinsic-block-size:auto 1114px}#explore{contain-intrinsic-block-size:auto 899px}#faq{contain-intrinsic-block-size:auto 1769px}main>section.report-section:not([id]){contain-intrinsic-block-size:auto 424px}.marquee{contain-intrinsic-block-size:auto 167px}.site-footer{contain-intrinsic-block-size:auto 830px}
+  @media(max-width:760px){#testimonials{contain-intrinsic-block-size:auto 839px}#preview{contain-intrinsic-block-size:auto 695px}#inside{contain-intrinsic-block-size:auto 1881px}#finder{contain-intrinsic-block-size:auto 903px}#how{contain-intrinsic-block-size:auto 871px}#pricing{contain-intrinsic-block-size:auto 1950px}#services{contain-intrinsic-block-size:auto 4431px}#about{contain-intrinsic-block-size:auto 537px}#year-2027{contain-intrinsic-block-size:auto 664px}#read{contain-intrinsic-block-size:auto 1963px}#explore{contain-intrinsic-block-size:auto 1999px}#faq{contain-intrinsic-block-size:auto 1620px}main>section.report-section:not([id]){contain-intrinsic-block-size:auto 331px}.marquee{contain-intrinsic-block-size:auto 54px}.site-footer{contain-intrinsic-block-size:auto 1301px}}
 }
 @media (prefers-reduced-motion:reduce){.scrolling *{animation-play-state:paused}}

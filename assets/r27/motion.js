@@ -28,7 +28,8 @@
   /* A jump to a section (menu link) builds everything first, so the page does not change height mid-scroll;
      and everything is built a few seconds after load anyway. */
   document.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('a[href^="#"]')) buildAll(); }, true);
-  addEventListener('load', function () { setTimeout(function () { (window.requestIdleCallback || setTimeout)(buildAll); }, 4000); });
+  var later = function () { setTimeout(function () { (window.requestIdleCallback || setTimeout)(buildAll); }, 4000); };
+  if (document.readyState === 'complete') later(); else addEventListener('load', later);
   if (location.hash) buildAll();
 
   /* ---------- reveal on scroll: headings (clip-path), leads (blur), marks, the 11/2 drawing ---------- */
