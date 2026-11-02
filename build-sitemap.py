@@ -7,6 +7,7 @@ lastmod is the date of the page's last commit, or today when the page has uncomm
 import datetime
 import glob
 import io
+import os
 import re
 import subprocess
 
@@ -38,7 +39,9 @@ def lastmod(path):
     dirty = subprocess.run(["git", "status", "--porcelain", "--", path], capture_output=True, text=True).stdout.strip()
     if dirty:
         return TODAY
-    day = subprocess.run(["git", "log", "-1", "--format=%cs", "--", path], capture_output=True, text=True).stdout.strip()
+    # Commit day in India time, so an evening commit is not dated the day before.
+    day = subprocess.run(["git", "log", "-1", "--date=format-local:%Y-%m-%d", "--format=%cd", "--", path],
+                         capture_output=True, text=True, env={**os.environ, "TZ": "Asia/Kolkata"}).stdout.strip()
     return day or TODAY
 
 
