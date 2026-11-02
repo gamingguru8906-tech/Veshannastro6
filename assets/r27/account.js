@@ -33,29 +33,22 @@
   }
   paintButton(null);
 
-  /* ---------- the three-dot menu, right of the header: a small panel of every page ---------- */
+  /* ---------- the three dots, right of the header: the full-screen menu fades in over the page ---------- */
   (function () {
-    var dots = $('.menu-dots'), menu = $('#site-menu');
+    var dots = $('.menu-dots'), menu = $('#mobile-menu');
     if (!dots || !menu) return;
-    function close(back) {
-      if (menu.hidden) return;
+    function close() {
       dots.setAttribute('aria-expanded', 'false'); dots.setAttribute('aria-label', 'Open menu');
-      menu.classList.remove('open');
-      setTimeout(function () { if (!menu.classList.contains('open')) menu.hidden = true; }, reduced ? 0 : 180);
-      if (back) dots.focus({ preventScroll: true });
+      menu.classList.remove('open'); menu.inert = true; document.body.classList.remove('menu-open');
     }
-    function open() {
-      menu.hidden = false;
+    dots.addEventListener('click', function () {
+      if (dots.getAttribute('aria-expanded') === 'true') return close();
       dots.setAttribute('aria-expanded', 'true'); dots.setAttribute('aria-label', 'Close menu');
-      requestAnimationFrame(function () { menu.classList.add('open'); });
-      var first = $('a', menu); if (first) setTimeout(function () { first.focus({ preventScroll: true }); }, 60);
-    }
-    dots.addEventListener('click', function (e) { e.stopPropagation(); menu.hidden ? open() : close(true); });
-    $$('a', menu).forEach(function (a) { a.addEventListener('click', function () { close(false); }); });
-    document.addEventListener('click', function (e) { if (!menu.hidden && !menu.contains(e.target) && e.target !== dots) close(false); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) close(true); });
-    addEventListener('scroll', function () { if (!menu.hidden && menu.classList.contains('open')) close(false); }, { passive: true });
-    window.__closeSiteMenu = function () { close(false); };
+      menu.inert = false; menu.classList.add('open'); document.body.classList.add('menu-open');
+    });
+    $$('a', menu).forEach(function (a) { a.addEventListener('click', close); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && menu.classList.contains('open')) { close(); dots.focus(); } });
+    window.__closeSiteMenu = close;
   })();
 
   var app = $('#acct-app');

@@ -19,7 +19,7 @@ SHOP = "https://shop.veshannastro.co.in"
 PRICE_INR = 1999
 PRICE_USD = 30
 UPDATED = "2026-10-24"
-ASSET_V = "2026-11-02b"  # bump when assets/site.css or site.js change
+ASSET_V = "2026-11-02c"  # bump when assets/site.css or site.js change
 OG_DEFAULT = "/images/og-image.png"
 
 NAV = [
@@ -132,8 +132,8 @@ def header(active):
 <a class="btn btn-gold head-cta" href="/2027-numerology-report/#register">Get your 2027 report</a>
 <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">{ICON_DOTS}</button>
 </div></header>
-<nav class="mobile-menu" id="mobile-menu" aria-label="Site menu"><ul>{mlinks}<li><a href="/account/">Your account</a></li></ul>
-{wa_btn("Ask on WhatsApp", "Hi Veshannastro, I have a question.")}</nav>"""
+<nav class="mobile-menu" id="mobile-menu" aria-label="Mobile"><ul>{mlinks}</ul>
+{wa_btn("Chat on WhatsApp", "Hi Veshannastro, I have a question.")}</nav>"""
 
 
 def footer():

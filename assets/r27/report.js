@@ -618,8 +618,8 @@
   addEventListener('resize', remeasure);
   addEventListener('scroll', onScroll, { passive: true }); requestAnimationFrame(onScroll);
 
-  /* While the page is moving, decorative loops hold still (perf.css) and the star field stops redrawing, so each
-     scrolled frame only has to move what is already painted. The class changes twice per gesture, not per frame. */
+  /* While the page is moving, the few loops that repaint their whole layer hold still (perf.css), so each scrolled
+     frame mostly moves what is already painted. The class changes twice per gesture, not per frame. */
   var scrolling = false, scrollEnd = 0;
   addEventListener('scroll', function () {
     if (!scrolling) { scrolling = true; root.classList.add('scrolling'); }
@@ -651,29 +651,34 @@
     show(0);
   });
 
-  /* ---------- star field (from the original site) ---------- */
-  var sky = $('#star-field'), ctx = sky.getContext('2d'), stars = [], W = 0, H = 0, last = -1e9;
+  /* ---------- star field (from the original site) ----------
+     The same stars, the same twinkle, without redrawing anything: each star's steady part is drawn once on the base
+     canvas, its twinkling part on one of two layers above it, and the layers fade in and out at different speeds in
+     CSS (perf.css). The shooting star is a CSS streak. A canvas that redrew 12 times a second made the glass header
+     and order bar above it re-blur on every redraw. */
+  var sky = $('#star-field'), W = 0, H = 0;
+  var tw = [0, 1].map(function (i) {
+    var c = document.createElement('canvas'); c.className = 'sky sky-tw sky-tw' + (i + 1); c.setAttribute('aria-hidden', 'true');
+    sky.parentNode.insertBefore(c, sky.nextSibling); return c;
+  });
+  if (!reduced) { var shoot = document.createElement('div'); shoot.className = 'sky-shoot'; shoot.setAttribute('aria-hidden', 'true'); sky.parentNode.insertBefore(shoot, tw[1].nextSibling); }
   function size() {
     /* phones fire resize while the address bar slides; only rebuild when the size really changes */
     if (W && innerWidth === W && Math.abs(innerHeight - H) < 140) return;
-    /* stars are sub-pixel dots: phones draw them at 1x, which is a quarter of the pixels of a 2x canvas */
-    W = innerWidth; H = innerHeight; var r = Math.min(devicePixelRatio || 1, W < 900 ? 1 : 2);
-    sky.width = W * r; sky.height = H * r; ctx.setTransform(r, 0, 0, r, 0, 0);
+    W = innerWidth; H = innerHeight; var r = Math.min(devicePixelRatio || 1, W < 760 ? 1.5 : 2);
     var seed = 2719, rnd = function () { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
-    stars = Array.from({ length: Math.round(W * H / 4200) }, function () { return { x: rnd() * W, y: rnd() * H, r: .4 + rnd() * 1.05, a: .12 + rnd() * .4, p: rnd() * 6.28 }; });
+    var stars = Array.from({ length: Math.round(W * H / 4200) }, function () { return { x: rnd() * W, y: rnd() * H, r: .4 + rnd() * 1.05, a: .12 + rnd() * .4, p: rnd() * 6.28 }; });
+    [sky].concat(tw).forEach(function (c, layer) {
+      c.width = W * r; c.height = H * r; var ctx = c.getContext('2d'); ctx.setTransform(r, 0, 0, r, 0, 0); ctx.clearRect(0, 0, W, H);
+      stars.forEach(function (s, i) {
+        if (layer && (i % 2) !== layer - 1) return;
+        var a = layer ? s.a * (reduced ? 0 : .35) : s.a * (reduced ? .82 : .65);
+        if (!a) return;
+        ctx.fillStyle = 'rgba(177,205,255,' + a.toFixed(3) + ')'; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.2832); ctx.fill();
+      });
+    });
   }
-  function draw(t) {
-    /* the twinkle is slow: about 12 frames a second is enough; the shooting star gets about 30 */
-    var cyc = (t % 14000) / 14000;
-    if (scrolling || t - last < (cyc < .11 ? 32 : 80)) { if (!reduced && !document.hidden) requestAnimationFrame(draw); return; }
-    last = t;
-    ctx.clearRect(0, 0, W, H);
-    stars.forEach(function (s) { var a = s.a * (.65 + .35 * Math.sin(t * .0007 + s.p)); ctx.fillStyle = 'rgba(177,205,255,' + a + ')'; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.2832); ctx.fill(); });
-    if (!reduced && cyc < .11) { var x = W * .2 + cyc * W * 5, y2 = H * .25 + cyc * H * 2, g = ctx.createLinearGradient(x - 130, y2 - 65, x, y2); g.addColorStop(0, 'transparent'); g.addColorStop(1, 'rgba(190,210,255,.35)'); ctx.strokeStyle = g; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x - 130, y2 - 65); ctx.lineTo(x, y2); ctx.stroke(); }
-    if (!reduced && !document.hidden) requestAnimationFrame(draw);
-  }
-  size(); addEventListener('resize', size); requestAnimationFrame(draw);
-  document.addEventListener('visibilitychange', function () { if (!document.hidden && !reduced) requestAnimationFrame(draw); });
+  size(); addEventListener('resize', size);
 })();
 
 /* Continuous reader feedback loop; native scrolling remains available. */
