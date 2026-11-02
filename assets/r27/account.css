@@ -150,6 +150,9 @@ form[data-view=profile]{max-width:640px}
 .sk-line.w60{width:60%}.sk-line.w80{width:80%}.sk-line.tall{height:56px;border-radius:12px}
 @keyframes sk{to{opacity:.45}}
 [data-view=loading] .acct-card{max-width:520px}
+/* the placeholder takes the height of the signed-out view, so nothing below moves when it swaps in */
+.acct-view[data-view=loading].on{height:137px;overflow:hidden}
+@media(max-width:520px){.acct-view[data-view=loading].on{height:223px}}
 
 /* signed in */
 .dash-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}

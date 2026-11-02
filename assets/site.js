@@ -34,36 +34,35 @@
     if (window.vsLog) window.vsLog('whatsapp_click', { link_text: (a.textContent || '').trim().slice(0, 60) });
   });
 
-  /* ---------- night sky ---------- */
+  /* ---------- night sky ----------
+     Drawn once: each star's steady part on the base canvas, its twinkling part on one of two layers that fade in
+     and out in CSS (site.css), so nothing redraws while the page is open. */
   var sky = $('#sky');
   if (sky && sky.getContext) {
-    var ctx = sky.getContext('2d'), stars = [], w = 0, h = 0, last = -1e9;
-    /* The twinkle is slow, so about 12 frames a second looks the same as 60; phones ignore the resize the address
-       bar fires as it slides. */
+    var w = 0, h = 0;
+    var tw = [0, 1].map(function (i) {
+      var c = document.createElement('canvas'); c.className = 'sky sky-tw sky-tw' + (i + 1); c.setAttribute('aria-hidden', 'true');
+      sky.parentNode.insertBefore(c, sky.nextSibling); return c;
+    });
     var size = function () {
       if (w && innerWidth === w && Math.abs(innerHeight - h) < 140) return;
       w = innerWidth; h = innerHeight;
       var r = Math.min(window.devicePixelRatio || 1, 2);
-      sky.width = w * r; sky.height = h * r; ctx.setTransform(r, 0, 0, r, 0, 0);
       var seed = 2027, rnd = function () { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
-      stars = Array.from({ length: Math.round(w * h / 5200) }, function () {
-        return { x: rnd() * w, y: rnd() * h, r: .35 + rnd() * 1, a: .1 + rnd() * .4, p: rnd() * 6.28 };
+      var stars = Array.from({ length: Math.round(w * h / 5200) }, function () {
+        return { x: rnd() * w, y: rnd() * h, r: .35 + rnd() * 1, a: .1 + rnd() * .4 };
+      });
+      [sky].concat(tw).forEach(function (c, layer) {
+        c.width = w * r; c.height = h * r; var ctx = c.getContext('2d'); ctx.setTransform(r, 0, 0, r, 0, 0); ctx.clearRect(0, 0, w, h);
+        stars.forEach(function (s, i) {
+          if (layer && (i % 2) !== layer - 1) return;
+          var a = layer ? s.a * (reduced ? 0 : .3) : s.a * (reduced ? .85 : .7);
+          if (!a) return;
+          ctx.fillStyle = 'rgba(190,212,255,' + a.toFixed(3) + ')'; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.2832); ctx.fill();
+        });
       });
     };
-    var draw = function (t) {
-      if (t - last < 80) { if (!reduced && !document.hidden) requestAnimationFrame(draw); return; }
-      last = t;
-      ctx.clearRect(0, 0, w, h);
-      for (var i = 0; i < stars.length; i++) {
-        var s = stars[i], a = reduced ? s.a : s.a * (.7 + .3 * Math.sin(t * .0006 + s.p));
-        ctx.fillStyle = 'rgba(190,212,255,' + a + ')';
-        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.2832); ctx.fill();
-      }
-      if (!reduced && !document.hidden) requestAnimationFrame(draw);
-    };
     size(); addEventListener('resize', size);
-    requestAnimationFrame(draw);
-    document.addEventListener('visibilitychange', function () { if (!document.hidden && !reduced) requestAnimationFrame(draw); });
   }
 
   /* ---------- numerology helpers ---------- */

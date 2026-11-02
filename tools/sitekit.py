@@ -19,7 +19,7 @@ SHOP = "https://shop.veshannastro.co.in"
 PRICE_INR = 1999
 PRICE_USD = 30
 UPDATED = "2026-10-24"
-ASSET_V = "2026-11-02c"  # bump when assets/site.css or site.js change
+ASSET_V = "2026-11-02d"  # bump when assets/site.css or site.js change
 OG_DEFAULT = "/images/og-image.png"
 
 NAV = [
@@ -43,7 +43,7 @@ WA_ICON = ('<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path 
 CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m5 12.5 4.2 4L19 7"/></svg>'
 STAR = '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 1 18.9 13.1 31 16 18.9 18.9 16 31 13.1 18.9 1 16 13.1 13.1Z" fill="currentColor"/></svg>'
 
-GTAG = """<script async src="https://www.googletagmanager.com/gtag/js?id=G-R20FKYJK7P"></script>
+GTAG = """<!-- Google tag: loads on the first tap, key or scroll, or 6 seconds after load (as on the 2027 page), so it never slows the first paint. Events queue in dataLayer until then. --><script>(function(w,d){var ev=["pointerdown","keydown","touchstart","scroll"],done=0;function go(){if(done)return;done=1;ev.forEach(function(e){w.removeEventListener(e,go,{passive:true})});var s=d.createElement("script");s.async=true;s.src="https://www.googletagmanager.com/gtag/js?id=G-R20FKYJK7P";d.head.appendChild(s)}ev.forEach(function(e){w.addEventListener(e,go,{passive:true})});w.addEventListener("load",function(){setTimeout(go,6000)})})(window,document)</script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-R20FKYJK7P');gtag('config','AW-18189866057');</script>"""
 
 
