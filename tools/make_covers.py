@@ -12,6 +12,8 @@ FONT = "data:font/woff2;base64," + base64.b64encode(open(os.path.join(REPO, "ass
 
 def mark(p):
     s = p["slug"]
+    if p["cat"] == "Muhurat":
+        return ""
     if s.startswith("personal-year-") and s.endswith("-in-2027"):
         return s.split("-")[2]
     if s.startswith("mulank"):
@@ -51,7 +53,10 @@ if __name__ == "__main__":
     with sync_playwright() as pw:
         b = pw.chromium.launch()
         pg = b.new_page(viewport={"width": 1200, "height": 630})
+        only = set(sys.argv[1:])  # optional: slugs to render, e.g. the posts just added
         for p in POSTS:
+            if only and p["slug"] not in only:
+                continue
             pg.set_content(tpl(p), wait_until="load")
             pg.wait_for_timeout(150)
             fp = os.path.join(out, p["slug"] + ".jpg")

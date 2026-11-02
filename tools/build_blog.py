@@ -409,6 +409,10 @@ for post in POSTS:
     if post["slug"] in ("2027-numerology-predictions", "mulank-predictions-2027", "personal-year-number-2027-calculator"):
         post["related"].append("numerology-2027")
 
+# 20-26. Muhurat articles (markdown in tools/muhurat/, built by muhurat_posts.py) ----------------
+from muhurat_posts import POSTS as MUHURAT_POSTS  # noqa: E402
+POSTS.extend(MUHURAT_POSTS)
+
 BY_SLUG = {p["slug"]: p for p in POSTS}
 
 
@@ -472,6 +476,7 @@ def post_page(p):
     path = f"{BLOG}{p['slug']}.html"
     crumbs = [("/2027-numerology-report/", "Home"), (BLOG, "Blog"), (path, p["h1"])]
     mins = read_mins(p)
+    pub = p.get("published", PUBLISHED)
     upd = p.get("updated")
     upd_html = f'<span>Updated <time datetime="{upd}">{date_text(upd)}</time></span>' if upd else ""
     vhtml, vschema = video_block(p["slug"])
@@ -485,17 +490,17 @@ def post_page(p):
 <p class="post-cat"><a href="{BLOG}#{p['cat'].lower().replace(' ', '-')}">{p['cat']}</a></p>
 <h1>{p['h1']}</h1>
 <p class="lede">{p['lede']}</p>
-<p class="post-meta"><span>By <a href="/about.html">Shashank Agrawal</a></span><span><time datetime="{PUBLISHED}">{PUBLISHED_TEXT}</time></span>{upd_html}<span>{mins} min read</span></p>
+<p class="post-meta"><span>By <a href="/about.html">Shashank Agrawal</a></span><span><time datetime="{pub}">{date_text(pub)}</time></span>{upd_html}<span>{mins} min read</span></p>
 </header>
 {vhtml}
 {body}
-{cta(p['question'])}
+{p.get('cta') or cta(p['question'])}
 {AUTHOR_BOX}
 </article>
 <section class="blog-group" aria-labelledby="keep-reading"><h2 id="keep-reading">Keep reading</h2><div class="post-list">{related}</div></section>
 </div>"""
     schema = [{"@type": "BlogPosting", "@id": url(path) + "#post", "headline": p["h1"], "description": p["desc"],
-               "datePublished": PUBLISHED, "dateModified": p.get("updated") or UPDATED, "image": f"{BASE}/images/blog/{p['slug']}.jpg",
+               "datePublished": pub, "dateModified": p.get("updated") or p.get("published") or UPDATED, "image": f"{BASE}/images/blog/{p['slug']}.jpg",
                "author": {"@type": "Person", "@id": PERSON_ID, "name": "Shashank Agrawal", "url": BASE + "/about.html"},
                "publisher": {"@type": "Organization", "@id": ORG_ID, "name": "Veshannastro", "logo": {"@type": "ImageObject", "url": BASE + "/images/logo.jpg"}},
                "mainEntityOfPage": url(path), "articleSection": p["cat"], "inLanguage": "en-IN", "wordCount": words(p["body"])},
@@ -513,22 +518,23 @@ def index_page():
     groups = []
     for cat, intro in [("2027 Forecast", "What 2027 means in numerology, and how to find your own number."),
                        ("Personal Year 2027", "Find your Personal Year with the calculator, then read your year."),
-                       ("Mulank 2027", "Indian numerology predictions for every birth number.")]:
+                       ("Mulank 2027", "Indian numerology predictions for every birth number."),
+                       ("Muhurat", "How a muhurat is chosen from the panchang and your own kundli, event by event.")]:
         cards = "".join(card(p) for p in POSTS if p["cat"] == cat and p is not feat)
         if cards:
             gid = cat.lower().replace(" ", "-")
             groups.append(f'<section class="blog-group" id="{gid}" aria-labelledby="{gid}-h"><h2 id="{gid}-h">{cat}</h2><p class="muted" style="margin:-8px 0 18px">{intro}</p><div class="post-list">{cards}</div></section>')
     body = f"""<div class="wrap">{crumb_html(crumbs)}
-<header class="blog-head"><h1>Numerology blog</h1><p class="lede">2027 predictions, Personal Year readings, Mulank and Bhagyank, and how to work your numbers out yourself. Written by Shashank Agrawal.</p></header>
+<header class="blog-head"><h1>Numerology and muhurat blog</h1><p class="lede">2027 predictions, Personal Year readings, Mulank and Bhagyank, how to work your numbers out yourself, and how a muhurat is chosen for weddings, homes, vehicles and business. Written by Shashank Agrawal.</p></header>
 <a class="featured" href="{BLOG}{feat['slug']}.html"><img src="/images/blog/{feat['slug']}.jpg" width="1200" height="630" alt="{esc(feat['h1'])}"><div class="pc-body"><span class="pc-cat">{feat['cat']}</span><h2>{feat['h1']}</h2><p>{feat['card']}</p><span class="text-link">Read the forecast</span></div></a>
 {"".join(groups)}
 </div>"""
     items = [{"@type": "ListItem", "position": i + 1, "url": url(f"{BLOG}{p['slug']}.html"), "name": p["h1"]} for i, p in enumerate(POSTS)]
-    schema = org_graph() + [{"@type": "Blog", "@id": url(BLOG) + "#blog", "name": "Veshannastro Numerology Blog", "url": url(BLOG),
+    schema = org_graph() + [{"@type": "Blog", "@id": url(BLOG) + "#blog", "name": "Veshannastro Numerology and Muhurat Blog", "url": url(BLOG),
                "publisher": {"@type": "Organization", "@id": ORG_ID, "name": "Veshannastro"}, "inLanguage": "en-IN"},
               {"@type": "ItemList", "itemListElement": items}]
-    return page(BLOG, "Numerology Blog: 2027 Predictions, Personal Year & Mulank",
-                "Numerology articles by Shashank Agrawal: 2027 predictions, Personal Year 1 to 9 in 2027, Mulank predictions in English and Hindi, and a free 2027 calculator.",
+    return page(BLOG, "Numerology & Muhurat Blog: 2027 Predictions, Mulank",
+                "Articles by Shashank Agrawal: 2027 numerology predictions, Personal Year 1 to 9, Mulank in English and Hindi, and how a muhurat is chosen for each event.",
                 body, crumbs=crumbs, schema=schema, active=BLOG, wa_text="Hi Veshannastro, I have a question.")
 
 
