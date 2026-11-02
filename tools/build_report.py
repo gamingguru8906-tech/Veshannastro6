@@ -20,21 +20,13 @@ URL = BASE + PATH
 WA = "918827684725"
 WA_SHOW = "+91 88276 84725"
 EMAIL = "assist@veshannastro.co.in"
-PHONE2 = "918827684725"
-PHONE2_SHOW = "+91 88276 84725"
+PHONE2 = "917646952745"
+PHONE2_SHOW = "+91 76469 52745"
 BOOK = "https://amzn.in/d/05h90t9v"
 ADDRESS = {"street": "Currency Tower, G.E. Road, VIP Road", "city": "Raipur", "region": "Chhattisgarh", "postal": "492001", "country": "IN"}
 
-# Prices after the 30% Diwali offer, and the original price shown struck through.
-REPORTS = {
-    "blend": {"name": "Astro-Numero Blend", "inr": 599, "inr_mrp": 856, "usd": 30, "usd_mrp": 43, "needs_time": True,
-              "line": "12 parameters, including Transit, Varshaphal and Dasha. Needs your time of birth.",
-              "pb": "Your year measured through 12 unique parameters."},
-    "classic": {"name": "Classics", "inr": 499, "inr_mrp": 713, "usd": 20, "usd_mrp": 29, "needs_time": False,
-                "line": "10 parameters, built around your action plan and remedies. No birth time needed.",
-                "pb": "Your year measured through 10 unique parameters."},
-}
-OFFER = {"pct": 30, "name": "Diwali offer", "starts": "2026-10-24", "ends": "2026-11-10", "ends_text": "10 November", "limit": 50}
+# Prices and the offer live in tools/prices.py (shared with the blog).
+from prices import REPORTS, OFFER  # noqa: E402
 DELIVERY = "24 hours"
 # Pay on the page through Razorpay (api/r27). If the server is not set up or the order cannot be made online,
 # the page falls back to the WhatsApp order on its own, so nothing breaks.

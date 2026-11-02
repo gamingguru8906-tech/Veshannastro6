@@ -202,3 +202,13 @@ p{margin:0 0 1.1rem;}
 .guide-me-btn:hover{background:var(--gold-light);}
 .guide-me-btn.guide-me-secondary{background:transparent;border:1px solid var(--gold);margin-top:.5rem;}
 .guide-me-btn.guide-me-secondary:hover{background:var(--beige);}
+
+/* ── Phone sticky report bar (calc-engine.js shows it after the calculator) ── */
+.sticky-cta{display:none}
+@media(max-width:760px){
+  .sticky-cta{display:block;position:fixed;left:0;right:0;bottom:0;z-index:50;padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+    background:rgba(252,251,248,.97);border-top:1px solid var(--seam);transform:translateY(110%);visibility:hidden;transition:transform .25s,visibility .25s}
+  .sticky-cta.on{transform:none;visibility:visible}
+  .sticky-cta .btn{display:block;text-align:center}
+}
+@media(prefers-reduced-motion:reduce){.sticky-cta{transition:none}}

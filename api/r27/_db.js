@@ -89,7 +89,7 @@ async function saveLead(o, stage, visitor, priceText) {
 }
 
 const KINDS = new Set(['visit', 'select_item', 'begin_checkout', 'add_payment_info', 'purchase', 'payment_failed', 'generate_lead',
-  'personal_year_calculated', 'use_calculator_date', 'whatsapp_click', 'cover_seen']);
+  'personal_year_calculated', 'use_calculator_date', 'whatsapp_click', 'cover_seen', 'report_click']);
 
 /** What this browser did on the site (a small batch at a time). Attached to the number once the visitor is known. */
 async function addEvents(visitor, events) {

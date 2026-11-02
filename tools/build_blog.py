@@ -9,7 +9,8 @@ import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 from sitekit import (org_graph, page, write, wa, wa_btn, esc, url, faq_ld, faq_html, crumb_html, BASE, ORG_ID, PERSON_ID,
-                     PRICE_USD, BOOK_URL, BOOK_TITLE, UPDATED)
+                     PRICE_USD, BOOK_URL, BOOK_TITLE, UPDATED, WA_NUMBER)
+from prices import REPORTS, OFFER, from_inr
 from data2027 import (PY, MULANK, BHAGYANK, PLANET, PLANET_HI, PERSONAL_MONTH, UNIVERSAL_MONTHS, reduce,
                       personal_months, example_birthdays)
 
@@ -21,17 +22,22 @@ PUBLISHED_TEXT = "24 October 2026"
 # slug -> {"id": YouTube id, "title": ..., "upload": "YYYY-MM-DD", "desc": ...}
 VIDEOS = {}
 
+# Report prices come from tools/prices.py, the same table the report page and the payment server use.
+BLEND_INR, CLASSIC_INR, FROM_INR = REPORTS["blend"]["inr"], REPORTS["classic"]["inr"], from_inr()
+OFFER_NOTE = f" ({OFFER['name']}, {OFFER['pct']}% off)" if REPORTS["classic"]["inr"] < REPORTS["classic"]["inr_mrp"] else ""
+ORDER_HREF = "/2027-numerology-report/#register"
+
 PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 4.5v15l13-7.5z"/></svg>'
 
 
 def finder(suffix):
-    return f"""<div class="finder" data-finder data-order="/2027-numerology-report/#register">
+    return f"""<div class="finder" data-finder data-order="{ORDER_HREF}" data-wa="{WA_NUMBER}" data-from="{FROM_INR}">
 <form class="finder-form" autocomplete="off" aria-label="2027 Personal Year calculator">
 <div class="field"><label for="f-day{suffix}">Birth day</label><input id="f-day{suffix}" name="day" type="number" inputmode="numeric" min="1" max="31" placeholder="14"></div>
 <div class="field"><label for="f-month{suffix}">Birth month</label><select id="f-month{suffix}" name="month"><option value="">Select</option></select></div>
-<div class="field"><label for="f-year{suffix}">Birth year</label><input id="f-year{suffix}" name="year" type="number" inputmode="numeric" min="1900" placeholder="1992"></div>
+<div class="field"><label for="f-year{suffix}">Birth year <span class="opt">(optional)</span></label><input id="f-year{suffix}" name="year" type="number" inputmode="numeric" min="1900" placeholder="1992"></div>
 </form>
-<div class="finder-result" aria-live="polite"><p class="finder-empty">Enter your birth day, month and year to see your 2027 Personal Year number.</p></div>
+<div class="finder-result" aria-live="polite"><p class="finder-empty">Enter your birth day and month to see your 2027 Personal Year number. The year is not needed.</p></div>
 </div>"""
 
 
@@ -47,8 +53,14 @@ def toc(items):
 
 def cta(question):
     return f"""<div class="cta-box"><h2>Want your whole 2027 mapped?</h2>
-<p>The 2027 Personal Year Report reads all twelve of your months, with muhurat and lucky dates, your Lo Shu grid, a 10-year life graph and a personally recorded voice note from Shashank. Astro-Numero Blend (12 parameters, including Transit, Varshaphal and Dasha) ₹599 or Classics (10 parameters) ₹499 (Diwali offer, 30% off). Delivered on WhatsApp within 24 hours.</p>
-<div class="btn-row"><a class="btn btn-gold" href="/2027-numerology-report/#register">Get your 2027 report</a>{wa_btn("Ask a question", question, "btn btn-line")}</div></div>"""
+<p>The 2027 Personal Year Report reads all twelve of your months, with muhurat and lucky dates, your Lo Shu grid, a 10-year life graph and a personally recorded voice note from Shashank. Astro-Numero Blend (12 parameters, including Transit, Varshaphal and Dasha) ₹{BLEND_INR} or Classics (10 parameters) ₹{CLASSIC_INR}{OFFER_NOTE}. Delivered on WhatsApp within 24 hours.</p>
+<div class="btn-row"><a class="btn btn-gold" href="{ORDER_HREF}" data-cta="bottom-box">Get your 2027 report</a>{wa_btn("Ask a question", question, "btn btn-line")}</div></div>"""
+
+
+def mid_box(lead, pos):
+    """The report box inside a post, where the reader is, not only at the end."""
+    return f"""<div class="cta-box cta-inline"><p>{lead} The 2027 report adds what a free page cannot: all twelve of your months, your Lo Shu grid, a 10-year life graph, remedies and a voice note from Shashank. From ₹{FROM_INR}, on WhatsApp within 24 hours.</p>
+<a class="btn btn-gold" href="{ORDER_HREF}" data-cta="{pos}">Get your 2027 report</a></div>"""
 
 
 AUTHOR_BOX = f"""<aside class="author-box"><img src="/images/shashank-agrawal-160.jpg" width="72" height="72" alt="Shashank Agrawal" loading="lazy">
@@ -182,7 +194,7 @@ def body_calc():
         work = f"{rd} + {rm} + 2 = {tot}" + (f" = {reduce(tot)}" if tot > 9 else "")
         rows += f"<tr><th>{d} {mname}</th><td>{work}</td><td><a href=\"{BLOG}personal-year-{reduce(tot)}-in-2027.html\">Personal Year {reduce(tot)}</a></td></tr>"
     meaning_rows = "".join(
-        f'<tr><th><a href="{BLOG}personal-year-{n}-in-2027.html">{n}</a></th><td>{PLANET[n]}</td><td>{PY[n]["name"]}</td></tr>' for n in range(1, 10))
+        f'<tr><th><a href="{BLOG}personal-year-{n}-in-2027.html">Personal Year {n} in 2027</a></th><td>{PLANET[n]}</td><td>{PY[n]["name"]}</td></tr>' for n in range(1, 10))
     pm_rows = "".join(f"<tr><th>{k}</th><td>{v}</td></tr>" for k, v in PERSONAL_MONTH.items())
     return f"""
 {toc([("calculator", "2027 personal year calculator"), ("method", "How to calculate it by hand"), ("examples", "Worked examples"),
@@ -190,7 +202,7 @@ def body_calc():
       ("difference", "Personal Year, Mulank and life path"), ("faq", "Questions")])}
 
 <h2 id="calculator">2027 personal year calculator</h2>
-<p>Enter your birth day, month and year. The result appears as you type, with the working shown.</p>
+<p>Enter your birth day and month. The result appears as you type, with the working shown. Your birth year is optional; it does not change your Personal Year.</p>
 {finder("-calc")}
 
 <h2 id="method">How to calculate your personal year number for 2027</h2>
@@ -205,6 +217,7 @@ def body_calc():
 
 <h2 id="examples">Worked examples for 2027</h2>
 <div class="table-wrap"><table><thead><tr><th>Birthday</th><th>Working</th><th>2027 result</th></tr></thead><tbody>{rows}</tbody></table></div>
+{mid_box("Your Personal Year is the theme of 2027. It does not say which months to act in, or what to do about the hard ones.", "mid-box")}
 
 <h2 id="eleven">When the sum passes through 11</h2>
 <p>If your birth day and month add up with 2 to exactly 11 before you reduce, as for someone born on 4 May (4 + 5 + 2 = 11), many numerologists call it an 11/2 Personal Year: a Personal Year 2 with the master number 11's sharper intuition and nervous energy. Read the <a href="{BLOG}personal-year-2-in-2027.html">Personal Year 2 post</a> and its section on 11/2.</p>
@@ -224,9 +237,10 @@ def body_calc():
 
 
 add(slug="personal-year-number-2027-calculator", cat="2027 Forecast",
-    title="Personal Year Number 2027 Calculator: How to Calculate Yours",
+    title="Personal Year Calculator 2027: How to Calculate Yours",
     h1="How to calculate your Personal Year number for 2027",
-    desc="Free 2027 personal year calculator, plus how to calculate your personal year number for 2027 by hand, with worked examples, 11/2 years and Personal Months.",
+    desc="Free Personal Year calculator for 2027. Find your Personal Year number in seconds, with worked examples, Personal Months and all 9 year themes.",
+    updated="2026-11-02", sticky=True,
     card="Free 2027 personal year calculator, the method step by step, and worked examples for different birthdays.",
     lede="Your Personal Year number sets the theme of 2027 for you. Use the free calculator below, or work it out by hand in four steps.",
     body=body_calc(), faqs=CALC_FAQ, question="Hi Veshannastro, I have a question about my 2027 Personal Year.",
@@ -305,8 +319,7 @@ def body_mulank():
         m = MULANK[n]
         sections += f"""
 <section id="mulank-{n}">
-<h2 class="mulank-head"><span class="n" aria-hidden="true">{n}</span><span>Mulank {n} prediction 2027 ({PLANET[n]})</span></h2>
-<p class="mulank-sub hindi" lang="hi">मूलांक {n} के लिए 2027 कैसा रहेगा ({PLANET_HI[n]})</p>
+<div class="mulank-head"><span class="n" aria-hidden="true">{n}</span><h2><span>Mulank {n} prediction 2027 ({PLANET[n]})</span> <span class="mulank-sub hindi" lang="hi">मूलांक {n} के लिए 2027 कैसा रहेगा ({PLANET_HI[n]})</span></h2></div>
 <p><strong>{m['tone']}.</strong> {m['rel']} {m['body']}</p>
 <div class="table-wrap"><table><tbody>
 <tr><th>Career</th><td>{m['career']}</td></tr>
@@ -317,11 +330,12 @@ def body_mulank():
 <tr><th>Remedy</th><td>{m['remedy']}</td></tr>
 </tbody></table></div>
 <p class="hindi" lang="hi">{m['hi']}</p>
+<p class="mulank-cta">Mulank {n} with your Personal Year: your whole 2027 mapped month by month, from ₹{FROM_INR}. <a class="text-link" href="{ORDER_HREF}" data-cta="mulank-{n}">Get the 2027 report</a> <span aria-hidden="true">·</span> <a class="text-link" href="{BLOG}personal-year-number-2027-calculator.html">Find your Personal Year</a></p>
 </section>"""
     bh_rows = "".join(f"<tr><th>Bhagyank {n}</th><td>{PLANET[n]}</td><td>{t}</td></tr>" for n, t in BHAGYANK.items())
     return f"""
 <p class="lede hindi" lang="hi" style="margin-top:-8px">मूलांक के अनुसार 2027 कैसा रहेगा: मूलांक 1 से 9 का 2027 भविष्यफल</p>
-{toc([("calculator", "Mulank and Bhagyank calculator"), ("how", "How these predictions are read")] + [(f"mulank-{n}", f"Mulank {n}") for n in range(1, 10)] + [("bhagyank", "Bhagyank predictions 2027"), ("birth-number", "Birth number and life path"), ("faq", "Questions")])}
+{toc([("calculator", "Mulank and Bhagyank calculator"), ("how", "How these predictions are read")] + [(f"mulank-{n}", f"Mulank {n} in 2027") for n in range(1, 10)] + [("bhagyank", "Bhagyank predictions 2027"), ("birth-number", "Birth number and life path"), ("faq", "Questions")])}
 
 <h2 id="calculator">Mulank and Bhagyank calculator</h2>
 <p>Enter your date of birth to find your Mulank (birth number), Bhagyank (destiny number) and 2027 Personal Year.</p>
@@ -337,6 +351,7 @@ def body_mulank():
 <h2 id="how">How these predictions are read</h2>
 <p>2027 adds up to 11, which reduces to 2, and 2 is the Moon's number. Each Mulank is ruled by a planet: 1 Sun, 2 Moon, 3 Jupiter, 4 Rahu, 5 Mercury, 6 Venus, 7 Ketu, 8 Saturn, 9 Mars. The classical friendships between planets set the tone: the Sun, Jupiter and Mars are friends of the Moon; Rahu and Saturn are not. That gives each Mulank its starting point for the year.</p>
 <div class="table-wrap"><table><thead><tr><th>Mulank</th><th>Planet</th><th>2027 tone</th></tr></thead><tbody>{quick}</tbody></table></div>
+{mid_box("Your Mulank sets how 2027 sits with you. Your Personal Year and your full date of birth decide when it pays to move.", "mid-box")}
 {sections}
 
 <h2 id="bhagyank">Bhagyank predictions 2027</h2>
@@ -349,9 +364,10 @@ def body_mulank():
 
 
 add(slug="mulank-predictions-2027", cat="Mulank 2027",
-    title="Mulank Predictions 2027 in English & Hindi | Veshannastro",
+    title="Mulank Predictions 2027: Mulank 1-9 Kaisa Rahega | Veshannastro",
     h1="Mulank Predictions 2027: Mulank 1 to 9",
-    desc="Mulank 1 to 9 predictions for 2027 by ank jyotish: career, money, love, health, lucky colour and remedy, in English and Hindi. Free Mulank calculator.",
+    desc="मूलांक 1 से 9 का 2027 भविष्यफल: career, money, love, health, lucky colour and remedy for each Mulank, in English and Hindi. Free Mulank calculator.",
+    updated="2026-11-02", sticky=True,
     card="Mulank 1 to 9 for 2027 by ank jyotish, in English and Hindi, with a free Mulank and Bhagyank calculator.",
     lede="2027 is a year of the number 2, ruled by the Moon. In ank jyotish, how the year treats you depends on whether your Mulank's planet is a friend of the Moon. Here is the 2027 prediction for every Mulank.",
     body=body_mulank(), faqs=MULANK_FAQ, question="Hi Veshannastro, I have a question about my Mulank for 2027.",
@@ -422,7 +438,7 @@ def video_block(slug):
 
 def card(p, tag="h3"):
     mins = read_mins(p)
-    return (f'<a class="post-card" href="{BLOG}{p["slug"]}.html"><img src="/images/blog/{p["slug"]}.jpg" width="1200" height="630" alt="" loading="lazy">'
+    return (f'<a class="post-card" href="{BLOG}{p["slug"]}.html"><img src="/images/blog/{p["slug"]}.jpg" width="1200" height="630" alt="{esc(p["h1"])}" loading="lazy">'
             f'<div class="pc-body"><span class="pc-cat">{p["cat"]}</span><{tag}>{p["h1"]}</{tag}><p>{p["card"]}</p><span class="pc-meta">{mins} min read</span></div></a>')
 
 
@@ -444,12 +460,20 @@ def verbatim_post_page(p):
         og_image="/images/blog/numerology-2027.jpg", active=BLOG, wa_text=p["question"])
 
 
+def date_text(iso):
+    import datetime
+    d = datetime.date.fromisoformat(iso)
+    return f"{d.day} {d.strftime('%B')} {d.year}"
+
+
 def post_page(p):
     if p.get("verbatim"):
         return verbatim_post_page(p)
     path = f"{BLOG}{p['slug']}.html"
     crumbs = [("/2027-numerology-report/", "Home"), (BLOG, "Blog"), (path, p["h1"])]
     mins = read_mins(p)
+    upd = p.get("updated")
+    upd_html = f'<span>Updated <time datetime="{upd}">{date_text(upd)}</time></span>' if upd else ""
     vhtml, vschema = video_block(p["slug"])
     faq_block = f'<h2 id="faq">Questions</h2><div class="faq">{faq_html(p["faqs"])}</div>'
     body = p["body"]
@@ -461,7 +485,7 @@ def post_page(p):
 <p class="post-cat"><a href="{BLOG}#{p['cat'].lower().replace(' ', '-')}">{p['cat']}</a></p>
 <h1>{p['h1']}</h1>
 <p class="lede">{p['lede']}</p>
-<p class="post-meta"><span>By <a href="/about.html">Shashank Agrawal</a></span><span><time datetime="{PUBLISHED}">{PUBLISHED_TEXT}</time></span><span>{mins} min read</span></p>
+<p class="post-meta"><span>By <a href="/about.html">Shashank Agrawal</a></span><span><time datetime="{PUBLISHED}">{PUBLISHED_TEXT}</time></span>{upd_html}<span>{mins} min read</span></p>
 </header>
 {vhtml}
 {body}
@@ -471,15 +495,16 @@ def post_page(p):
 <section class="blog-group" aria-labelledby="keep-reading"><h2 id="keep-reading">Keep reading</h2><div class="post-list">{related}</div></section>
 </div>"""
     schema = [{"@type": "BlogPosting", "@id": url(path) + "#post", "headline": p["h1"], "description": p["desc"],
-               "datePublished": PUBLISHED, "dateModified": UPDATED, "image": f"{BASE}/images/blog/{p['slug']}.jpg",
+               "datePublished": PUBLISHED, "dateModified": p.get("updated") or UPDATED, "image": f"{BASE}/images/blog/{p['slug']}.jpg",
                "author": {"@type": "Person", "@id": PERSON_ID, "name": "Shashank Agrawal", "url": BASE + "/about.html"},
                "publisher": {"@type": "Organization", "@id": ORG_ID, "name": "Veshannastro", "logo": {"@type": "ImageObject", "url": BASE + "/images/logo.jpg"}},
                "mainEntityOfPage": url(path), "articleSection": p["cat"], "inLanguage": "en-IN", "wordCount": words(p["body"])},
               faq_ld(p["faqs"])]
     if vschema:
         schema.append(vschema)
+    sticky = (f"Get your 2027 report, from ₹{FROM_INR}", ORDER_HREF, ".finder") if p.get("sticky") else None
     return page(path, p["title"], p["desc"], html, crumbs=crumbs, schema=schema, og_type="article",
-                og_image=f"/images/blog/{p['slug']}.jpg", active=BLOG, wa_text=p["question"])
+                og_image=f"/images/blog/{p['slug']}.jpg", active=BLOG, wa_text=p["question"], sticky=sticky)
 
 
 def index_page():
@@ -495,7 +520,7 @@ def index_page():
             groups.append(f'<section class="blog-group" id="{gid}" aria-labelledby="{gid}-h"><h2 id="{gid}-h">{cat}</h2><p class="muted" style="margin:-8px 0 18px">{intro}</p><div class="post-list">{cards}</div></section>')
     body = f"""<div class="wrap">{crumb_html(crumbs)}
 <header class="blog-head"><h1>Numerology blog</h1><p class="lede">2027 predictions, Personal Year readings, Mulank and Bhagyank, and how to work your numbers out yourself. Written by Shashank Agrawal.</p></header>
-<a class="featured" href="{BLOG}{feat['slug']}.html"><img src="/images/blog/{feat['slug']}.jpg" width="1200" height="630" alt=""><div class="pc-body"><span class="pc-cat">{feat['cat']}</span><h2>{feat['h1']}</h2><p>{feat['card']}</p><span class="text-link">Read the forecast</span></div></a>
+<a class="featured" href="{BLOG}{feat['slug']}.html"><img src="/images/blog/{feat['slug']}.jpg" width="1200" height="630" alt="{esc(feat['h1'])}"><div class="pc-body"><span class="pc-cat">{feat['cat']}</span><h2>{feat['h1']}</h2><p>{feat['card']}</p><span class="text-link">Read the forecast</span></div></a>
 {"".join(groups)}
 </div>"""
     items = [{"@type": "ListItem", "position": i + 1, "url": url(f"{BLOG}{p['slug']}.html"), "name": p["h1"]} for i, p in enumerate(POSTS)]

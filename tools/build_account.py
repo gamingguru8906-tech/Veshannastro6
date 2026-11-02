@@ -189,7 +189,7 @@ def page():
     </div>
   </main>
   <footer class="acct-foot"><div class="acct-wrap">
-    <p><a href="mailto:{br.EMAIL}">{br.EMAIL}</a><a href="{br.wa(br.ASK_MSG)}" target="_blank" rel="noopener">WhatsApp {br.WA_SHOW}</a></p>
+    <p><a href="mailto:{br.EMAIL}">{br.EMAIL}</a><a href="{br.wa(br.ASK_MSG)}" target="_blank" rel="noopener">WhatsApp {br.WA_SHOW}</a><a href="tel:+{br.PHONE2}">Phone {br.PHONE2_SHOW}</a></p>
     <p><a href="/privacy-policy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/refund-policy.html">Refunds and delivery</a><span>&copy; 2026 Veshannastro</span></p>
   </div></footer>
 </body>

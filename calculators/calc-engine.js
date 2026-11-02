@@ -12,6 +12,9 @@ const curYear = new Date().getFullYear();
    matches the calculator: the matching live consultation on WhatsApp for names and phone numbers, otherwise
    "Send my result on WhatsApp" with the result typed in. Real anchors: crawlable, and they work without more script. */
 var WA_NUMBER = '918827684725';
+/* Prices: change them here and in tools/prices.py together (python3 tools/check_prices.py compares every page). */
+var REPORT_FROM_INR = 499;   /* lowest 2027 report price */
+var CONSULT_INR = 555;       /* Online Numerology Consultation, one service */
 var CALC_NAMES = { loshu: 'Lo Shu grid', lifepath: 'Life Path number', lucky: 'lucky number', colour: 'lucky colour',
   planet: 'ruling planet', name: 'name number', destiny: 'Destiny number', compound: 'compound number',
   business: 'business name number', mobile: 'mobile number', house: 'house number', vehicle: 'vehicle number', bank: 'account number' };
@@ -19,17 +22,17 @@ var REPORT_2027 = { label: 'See the 2027 report', href: '/2027-numerology-report
 function waLink(text){ return 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(text); }
 function nextStep(calcType){
   if(['loshu','lifepath','lucky','colour','planet'].indexOf(calcType) !== -1){
-    return { msg: 'This is one number. The 2027 Personal Year Report reads it with your Mulank, Lo Shu grid and all twelve months of 2027, with remedies. From ₹499.' };
+    return { msg: 'This is one number. The 2027 Personal Year Report reads it with your Mulank, Lo Shu grid and all twelve months of 2027, with remedies. From ₹' + REPORT_FROM_INR + '.' };
   }
   if(['name','destiny','compound'].indexOf(calcType) !== -1){
-    return { msg: 'The 2027 Personal Year Report reads your numbers together for every month of 2027, with remedies. From ₹499. For your name itself, Name Frequency Alignment is a 20-minute live consultation, ₹974, on WhatsApp.',
-      alt: { label: 'Book Name Frequency Alignment', href: waLink('Hi, I would like to book Name Frequency Alignment (20 min, ₹974).') } };
+    return { msg: 'The 2027 Personal Year Report reads your numbers together for every month of 2027, with remedies. From ₹' + REPORT_FROM_INR + '. For your name itself, Name Frequency Alignment is a 20-minute live consultation, ₹' + CONSULT_INR + ', on WhatsApp.',
+      alt: { label: 'Book Name Frequency Alignment', href: waLink('Hi, I would like to book Name Frequency Alignment (20 min, ₹' + CONSULT_INR + ').') } };
   }
   if(calcType === 'mobile'){
-    return { msg: 'The 2027 Personal Year Report reads your own numbers for every month of 2027, with remedies. From ₹499. For this phone number itself, the Mobile Number Energy Audit is a 20-minute live consultation, ₹824, on WhatsApp.',
-      alt: { label: 'Book the Mobile Number Audit', href: waLink('Hi, I would like to book the Mobile Number Energy Audit (20 min, ₹824).') } };
+    return { msg: 'The 2027 Personal Year Report reads your own numbers for every month of 2027, with remedies. From ₹' + REPORT_FROM_INR + '. For this phone number itself, the Mobile Number Energy Audit is a 20-minute live consultation, ₹' + CONSULT_INR + ', on WhatsApp.',
+      alt: { label: 'Book the Mobile Number Audit', href: waLink('Hi, I would like to book the Mobile Number Energy Audit (20 min, ₹' + CONSULT_INR + ').') } };
   }
-  return { msg: 'Whether this number suits you depends on your own birth numbers. The 2027 Personal Year Report reads them for every month of 2027, with remedies. From ₹499.' };
+  return { msg: 'Whether this number suits you depends on your own birth numbers. The 2027 Personal Year Report reads them for every month of 2027, with remedies. From ₹' + REPORT_FROM_INR + '.' };
 }
 function resultSummary(resEl, calcType){
   var num = resEl.querySelector('.calc-result-num'), label = resEl.querySelector('.calc-result-label');
@@ -45,6 +48,10 @@ function appendGuideMe(resEl, calcType){
   var existing = resEl.parentElement.querySelector('.calc-upsell');
   if(existing) existing.remove();
   var step = nextStep(calcType);
+  if(calcType === 'name'){
+    var numEl = resEl.querySelector('.calc-result-num');
+    if(numEl) step.msg = 'Your name number is ' + numEl.textContent.trim() + '. Is it aligned with your birth pattern? ' + step.msg;
+  }
   var div = document.createElement('div');
   div.className = 'calc-upsell';
   var p = document.createElement('p');
@@ -53,6 +60,7 @@ function appendGuideMe(resEl, calcType){
   var a = document.createElement('a');
   a.className = 'guide-me-btn';
   a.href = REPORT_2027.href;
+  a.setAttribute('data-cta', 'result');
   a.textContent = REPORT_2027.label;
   var send = document.createElement('a');
   send.className = 'guide-me-btn guide-me-secondary';
@@ -305,4 +313,21 @@ window.runCalc=function(type){
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount);
   else mount();
+})();
+
+/* 2027 report clicks (which box sent them) and the phone sticky bar. The calculator pages do not load assets/site.js. */
+(function(){
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a[href*="/2027-numerology-report/"]');
+    if(!a) return;
+    var pos = a.getAttribute('data-cta') || (a.closest('.site-nav') ? 'header' : a.closest('.site-foot') ? 'footer' : 'in-text');
+    if(typeof window.gtag === 'function') window.gtag('event', 'report_click', { cta_position: pos, page_path: location.pathname });
+  });
+  var bar = document.querySelector('.sticky-cta');
+  if(!bar || !('IntersectionObserver' in window)) return;
+  var mark = document.querySelector(bar.getAttribute('data-after') || '.calc-card'), foot = document.querySelector('.site-foot');
+  var past = false, atFoot = false;
+  function show(){ bar.classList.toggle('on', past && !atFoot); }
+  if(mark) new IntersectionObserver(function(en){ past = !en[0].isIntersecting && en[0].boundingClientRect.top < 0; show(); }).observe(mark);
+  if(foot) new IntersectionObserver(function(en){ atFoot = en[0].isIntersecting; show(); }).observe(foot);
 })();

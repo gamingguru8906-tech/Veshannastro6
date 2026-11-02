@@ -11,15 +11,15 @@ BASE = "https://www.veshannastro.co.in"
 WA_NUMBER = "918827684725"
 WA_DISPLAY = "+91 88276 84725"
 EMAIL = "assist@veshannastro.co.in"
-PHONE2 = "918827684725"
-PHONE2_DISPLAY = "+91 88276 84725"
+PHONE2 = "917646952745"
+PHONE2_DISPLAY = "+91 76469 52745"
 BOOK_URL = "https://amzn.in/d/05h90t9v"
 BOOK_TITLE = "Numbers &amp; Navgraha: Untold Secret of Numerology"
 SHOP = "https://shop.veshannastro.co.in"
 PRICE_INR = 1999
 PRICE_USD = 30
 UPDATED = "2026-10-24"
-ASSET_V = "2026-11-02d"  # bump when assets/site.css or site.js change
+ASSET_V = "2026-11-02e"  # bump when assets/site.css or site.js change
 OG_DEFAULT = "/images/og-image.png"
 
 NAV = [
@@ -178,7 +178,7 @@ def footer():
 
 def page(path, title, description, body, *, crumbs=None, schema=None, robots="index, follow",
          og_image=OG_DEFAULT, og_type="website", scripts=(), wa_text=ORDER_TEXT, wa_label="WhatsApp",
-         active=None, head_extra="", preload=None):
+         active=None, head_extra="", preload=None, sticky=None):
     canonical = url(path)
     graph = list(schema or [])
     if crumbs:
@@ -186,6 +186,9 @@ def page(path, title, description, body, *, crumbs=None, schema=None, robots="in
     ld_block = ld({"@context": "https://schema.org", "@graph": graph}) if graph else ""
     script_tags = "".join(f'<script src="{s}" defer></script>' for s in (f"/assets/site.js?v={ASSET_V}", *scripts))
     pre = f'<link rel="preload" href="{preload}" as="image">' if preload else ""
+    # sticky = (label, href, selector it appears after): a slim report bar on phones (assets/site.js shows it).
+    bar = (f'<div class="sticky-cta" data-after="{esc(sticky[2])}"><a class="btn btn-gold" href="{esc(sticky[1])}" data-cta="sticky-bar">{sticky[0]}</a></div>'
+           if sticky else "")
     return f"""<!doctype html>
 <html lang="en-IN">
 <head>
@@ -229,7 +232,7 @@ def page(path, title, description, body, *, crumbs=None, schema=None, robots="in
 {body}
 </main>
 {footer()}
-<a class="wa-float" href="{esc(wa(wa_text))}" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">{WA_ICON}<span>{wa_label}</span></a>
+{bar}<a class="wa-float" href="{esc(wa(wa_text))}" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">{WA_ICON}<span>{wa_label}</span></a>
 {script_tags}
 </body>
 </html>

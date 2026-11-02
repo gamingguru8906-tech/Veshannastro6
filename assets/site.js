@@ -34,6 +34,25 @@
     if (window.vsLog) window.vsLog('whatsapp_click', { link_text: (a.textContent || '').trim().slice(0, 60) });
   });
 
+  /* ---------- 2027 report click tracking: which page and which box sent the click ---------- */
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href*="/2027-numerology-report/"]');
+    if (!a || location.pathname.indexOf('/2027-numerology-report/') === 0) return;
+    var pos = a.getAttribute('data-cta') || (a.closest('.site-head') ? 'header' : a.closest('.site-foot') ? 'footer' : a.closest('.mobile-menu') ? 'menu' : 'in-text');
+    if (typeof window.gtag === 'function') window.gtag('event', 'report_click', { cta_position: pos, page_path: location.pathname });
+    if (window.vsLog) window.vsLog('report_click', { cta_position: pos });
+  });
+
+  /* ---------- sticky report bar on phones: shows once the reader is past the first calculator or section ---------- */
+  var bar = $('.sticky-cta');
+  if (bar && 'IntersectionObserver' in window) {
+    var mark = $(bar.getAttribute('data-after') || '.finder') || $('.article h2');
+    var foot = $('.site-foot'), past = false, atFoot = false;
+    var show = function () { var on = past && !atFoot; bar.classList.toggle('on', on); document.body.classList.toggle('has-sticky', on); };
+    if (mark) new IntersectionObserver(function (en) { var r = en[0]; past = !r.isIntersecting && r.boundingClientRect.top < 0; show(); }).observe(mark);
+    if (foot) new IntersectionObserver(function (en) { atFoot = en[0].isIntersecting; show(); }).observe(foot);
+  }
+
   /* ---------- night sky ----------
      Drawn once: each star's steady part on the base canvas, its twinkling part on one of two layers that fade in
      and out in CSS (site.css), so nothing redraws while the page is open. */
@@ -109,11 +128,13 @@
   $$('[data-finder]').forEach(function (box) {
     var form = $('form', box), out = $('.finder-result', box);
     var orderHref = box.getAttribute('data-order') || '/2027-numerology-report/#register';
+    var waNum = box.getAttribute('data-wa'), fromInr = box.getAttribute('data-from');
     fillMonthSelect(form.elements.month);
     var run = function () {
-      var d = +form.elements.day.value, m = +form.elements.month.value, y = +form.elements.year.value;
-      if (!d || !m || !y || !validDate(d, m, y)) {
-        out.innerHTML = '<p class="finder-empty">Enter your birth day, month and year to see your 2027 Personal Year number.</p>';
+      /* The Personal Year needs only the birth day and month; the year field is optional (2000 lets 29 February through). */
+      var d = +form.elements.day.value, m = +form.elements.month.value;
+      if (!d || !m || !validDate(d, m, 2000)) {
+        out.innerHTML = '<p class="finder-empty">Enter your birth day and month to see your 2027 Personal Year number. The year is not needed.</p>';
         return;
       }
       var dd = toSingle(d), mm = toSingle(m), py = toSingle(dd + mm + 2);
@@ -123,9 +144,11 @@
         '<h3>Personal Year ' + py + ' in 2027</h3>' +
         '<p>' + PY_THEME[py] + '</p>' +
         '<p class="finder-work">Day ' + d + (d > 9 ? ' (' + dd + ')' : '') + ' + month ' + m + (m > 9 ? ' (' + mm + ')' : '') + ' + 2027 (2) = ' + (dd + mm + 2) + (dd + mm + 2 > 9 ? ' = ' + py : '') + '. Ruled by ' + PLANET[py] + '. Sun sign ' + sign + '.</p>' +
-        '<p><a class="text-link" href="/blog/personal-year-' + py + '-in-2027.html">Read Personal Year ' + py + ' in 2027</a></p>' +
-        '<a class="btn btn-gold" href="' + orderHref.replace(/"/g, '&quot;') + '"' + (/^https?:/.test(orderHref) ? ' target="_blank" rel="noopener"' : '') + '>Get my full 2027 report</a>' +
-        '</div></div>';
+        (location.pathname.indexOf('personal-year-' + py + '-in-2027') === -1 ? '<p><a class="text-link" href="/blog/personal-year-' + py + '-in-2027.html">Read the full Personal Year ' + py + ' in 2027 forecast</a></p>' : '') +
+        (fromInr ? '<p>Your whole 2027, month by month, from &#8377;' + (+fromInr) + '.</p>' : '') +
+        '<div class="finder-actions"><a class="btn btn-gold" data-cta="result" href="' + orderHref.replace(/"/g, '&quot;') + '"' + (/^https?:/.test(orderHref) ? ' target="_blank" rel="noopener"' : '') + '>Get my full 2027 report</a>' +
+        (waNum ? '<a class="btn btn-line" target="_blank" rel="noopener" href="https://wa.me/' + waNum.replace(/\D/g, '') + '?text=' + encodeURIComponent('Hi Veshannastro, I used the 2027 Personal Year calculator. My 2027 Personal Year is ' + py + ' (born ' + d + ' ' + MONTHS[m - 1] + '). Please send me my result.') + '">Send my result on WhatsApp</a>' : '') +
+        '</div></div></div>';
       if (typeof window.gtag === 'function') window.gtag('event', 'personal_year_calculated', { personal_year: py });
       if (window.vsLog && run.lastPy !== py) { run.lastPy = py; window.vsLog('personal_year_calculated', { personal_year: py }); }
     };
