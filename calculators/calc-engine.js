@@ -13,7 +13,7 @@ const curYear = new Date().getFullYear();
    "Send my result on WhatsApp" with the result typed in. Real anchors: crawlable, and they work without more script. */
 var WA_NUMBER = '918827684725';
 /* Prices: change them here and in tools/prices.py together (python3 tools/check_prices.py compares every page). */
-var REPORT_FROM_INR = 499;   /* lowest 2027 report price */
+var REPORT_FROM_INR = 199;   /* lowest 2027 report price */
 var CONSULT_INR = 555;       /* Online Numerology Consultation, one service */
 var CALC_NAMES = { loshu: 'Lo Shu grid', lifepath: 'Life Path number', lucky: 'lucky number', colour: 'lucky colour',
   planet: 'ruling planet', name: 'name number', destiny: 'Destiny number', compound: 'compound number',

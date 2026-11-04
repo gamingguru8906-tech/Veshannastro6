@@ -9,7 +9,7 @@ REPORTS = {
     "blend": {"name": "Astro-Numero Blend", "inr": 599, "inr_mrp": 856, "usd": 30, "usd_mrp": 43, "needs_time": True,
               "line": "12 parameters, including Transit, Varshaphal and Dasha. Needs your time of birth.",
               "pb": "Your year measured through 12 unique parameters."},
-    "classic": {"name": "Classics", "inr": 499, "inr_mrp": 713, "usd": 20, "usd_mrp": 29, "needs_time": False,
+    "classic": {"name": "Classics", "inr": 199, "inr_mrp": 284, "usd": 20, "usd_mrp": 29, "needs_time": False,
                 "line": "10 parameters, built around your action plan and remedies. No birth time needed.",
                 "pb": "Your year measured through 10 unique parameters."},
 }

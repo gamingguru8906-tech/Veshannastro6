@@ -10,8 +10,8 @@
     },
     "classic": {
       "name": "Classics",
-      "inr": 499,
-      "inr_mrp": 713,
+      "inr": 199,
+      "inr_mrp": 284,
       "usd": 20,
       "usd_mrp": 29,
       "needs_time": false
